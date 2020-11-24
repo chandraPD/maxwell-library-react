@@ -4,16 +4,21 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Footer from '../Screens/Footer/Footer'
 import Navbar from '../Screens/Navbar/Navbar'
 import Sidebar from '../Screens/SideBar/Sidebar'
+import Detail from '../Screens/Contents/Detail'
 
 class MainNavigation extends Component {
   render() {
     return(
       <Router>
-        <Route path='/'>
-          <Navbar />
-          <Sidebar />
-          <Footer />
+        <Navbar />
+        <Sidebar /> 
+        <Route path='/'>          
+                                           
         </Route>
+        <Route path='/detail'>
+          <Detail />          
+        </Route>
+        <Footer />    
       </Router>
     )
   }
