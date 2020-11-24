@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
-import NavBar from '../Screens/Navbar/NavBar'
+import NavBar from '../Screens/NavBar/NavBar'
 import SideBar from '../Screens/SideBar/SideBar'
 import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 import Home from '../Screens/Contents/Home/Home'
