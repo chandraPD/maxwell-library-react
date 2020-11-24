@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
 import Navbar from '../Screens/NavBar/NavBar'
-import Detail from '../Screens/Contents/Detail/Detail'
 import SideBar from '../Screens/SideBar/SideBar'
 import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
+import Home from '../Screens/Contents/Home/Home'
+import Detail from '../Screens/Contents/Detail/Detail'
 
 class MainNavigation extends Component {
   render() {
@@ -13,10 +14,12 @@ class MainNavigation extends Component {
       <Router>
         <Navbar />
         <SideBar /> 
-        <Route path='/'>          
-        </Route>
+        <Route path='/'>
+          <Route path='/' >
+              <Home />
+          </Route>
         <Route path='/detail'>
-          <Detail />          
+          <Detail />      
         </Route>
         <Route path='/RentManagement'>
           <RentManagement/>

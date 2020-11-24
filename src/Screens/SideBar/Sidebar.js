@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import './SideBar.style.css'
-import Profile from '../../Assets/Media/user/profile.png'
+import avatarUser from '../../Assets/Media/user/profile.png'
 
 export default class Sidebar extends Component {
     render() {
@@ -28,7 +28,7 @@ export default class Sidebar extends Component {
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image my-center">
               <a href="Profile.html">
-                <img src={Profile} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
+                <img src={avatarUser} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
               </a>
             </div>
             <div className="info">
