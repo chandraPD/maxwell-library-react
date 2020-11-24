@@ -90,6 +90,15 @@ h1.statustext{
   margin-left: 30px;
 }
 
+a.button-arrow{
+  font-size: 20px;    
+}
+
+i.arrow{
+  margin: -15px;    
+  
+}
+
 p.date{
   text-align: left;
   margin-left: 70px;
@@ -102,7 +111,7 @@ p.date{
   font-size: 15px;
 }
 
-img.small-preview{
+img.small-preview{    
   right: 3rem;
   margin-top: -7rem;
   position: absolute;
