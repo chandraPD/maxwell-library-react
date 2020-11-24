@@ -69,7 +69,7 @@ h1.title-text{
 
 .card.card-info{
   margin-left: 7.5px;
-  margin-right: 7.5px;
+  margin-right: 7.5px; 
 }
 h3
 button#button_borrow{
@@ -90,6 +90,15 @@ h1.statustext{
   margin-left: 30px;
 }
 
+a.button-arrow{
+  font-size: 20px;    
+}
+
+i.arrow{
+  margin: -15px;    
+  
+}
+
 p.date{
   text-align: left;
   margin-left: 70px;
@@ -102,7 +111,7 @@ p.date{
   font-size: 15px;
 }
 
-img.small-preview{
+img.small-preview{    
   right: 3rem;
   margin-top: -7rem;
   position: absolute;
@@ -279,7 +288,7 @@ a#toggle{
 
 }
 
-@media (max-width: 800px){
+@media (max-width: 800px){   
 
   img.big-preview{
       background-size: cover;
@@ -334,10 +343,10 @@ a#toggle{
 @media (max-width: 450px){
   p.date{
       margin-left: 10px;
-  }
+  }        
 
   .category {
-      margin-left: 10px;
+      margin-left: 10px;  
   }
 
   h1.titletext{
@@ -514,12 +523,12 @@ a#toggle{
 .filtr-item.col-sm-4.list-book {
   padding: 15px 7.5px;
   max-width: 360px;
-
+  
 }
 
 img.img-fluid.img-book {
   border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-right-radius: 10px; 
   height: 15rem; width: 100%;
   box-shadow: 10px 0 5px 0.5px #888;
 }
@@ -528,7 +537,7 @@ img.img-fluid.img-book {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-
+  
 }
 
 .desc-book {
@@ -657,7 +666,7 @@ h3.book-not-found {
   border-color: #ffc929;
   color: rgb(255, 255, 255);
   font-size: 1.2rem;
-}
+} 
 
 
 .profile-section {
@@ -669,7 +678,7 @@ flex-direction: column !important;
 margin: 1rem;
 }
 
-.main-carousel .carousel-cell {
+.carousel-cell {
 width: 37.5rem;
 height: 300px;
 margin-right: 68px !important;
@@ -677,7 +686,7 @@ background: #fff;
 counter-increment: carousel-cell;
 }
 
-.main-carousel .carousel .carousel-info {
+.carousel .carousel-info {
 border-radius: 0 0 5px 5px;
 bottom: 0px;
 position: absolute;
@@ -687,17 +696,17 @@ height: 50%;
 background: rgba(0, 0, 0, 0.2);
 }
 
-.main-carousel .carousel .carousel-info .carousel-text {
+.carousel .carousel-info .carousel-text {
 float: left !important;
 margin-top: 1rem;
 }
 
-.main-carousel .carousel .carousel-info h2 {
+.carousel .carousel-info h2 {
 color: #fff;
 font-weight: 600;
 }
 
-.main-carousel .carousel .carousel-info h3 {
+.carousel .carousel-info h3 {
 color: #fff;
 font-size: 1.3rem;
 }
@@ -747,7 +756,7 @@ button.edit-profile {
   border-radius: 50%;
   background-color: white;
   opacity: 0.5;
-
+  
 }
 
 .profile-account small {
@@ -804,7 +813,7 @@ section.padding-editform {
   display: none;
   border-radius: 5px;
   box-shadow:  0 5px 10px 0 gray;
-
+  
 }
 
 .form-item {
@@ -830,13 +839,13 @@ section.padding-editform {
   /* .container-profile {
       margin: 20px;
       margin-top: 20px;
-      margin-left: 20px;
+      margin-left: 20px; 
   }*/
-/*
+/* 
   .content-user {
       margin: 0;
   } */
-/*
+/* 
   .container-changepwd {
       border: 3px solid;
       margin: 0;;
@@ -848,7 +857,7 @@ section.padding-editform {
       border: 3px solid;
   } */
 
-
+  
 
 }
 
