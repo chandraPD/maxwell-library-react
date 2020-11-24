@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Detail.style.css'
+// import './Detail.style.css'
 import swal from 'sweetalert'
 import foto from '../../../Assets/Media/books/covernya2.png'
 import foto2 from '../../../Assets/Media/books/novel-dilan.jpg'

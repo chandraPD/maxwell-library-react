@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import './SideBar.style.css'
 import avatarUser from '../../Assets/Media/user/profile.png'
 
-export default class Sidebar extends Component {
+export default class SideBar extends Component {
     render() {
         return (
             <aside className="main-sidebar elevation-4 sidebar-light-primary">

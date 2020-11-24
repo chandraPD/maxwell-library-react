@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import './NavBar.style.css'
-export default class Navbar extends Component {
+export default class NavBar extends Component {
     render() {
         return (
             <nav className="main-header navbar navbar-expand navbar-light navbar-white d-flex flex-row">
