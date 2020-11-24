@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import '../Contents/Detail.style.css'
+import swal from 'sweetalert';
+
 
 class Detail extends Component {
     render () {
       return (
         
       <div>
-      <div className="wrapper">
-        <div w3-include-html="include_navbar.html" />
-        <div w3-include-html="include_sidebar.html" />
+      <div className="wrapper">        
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
           {/* Content Header (Page header) */}
@@ -112,8 +112,7 @@ class Detail extends Component {
           </section>
           {/* /.content */}
         </div>
-      </div>
-      <div w3-include-html="include_footer.html" />
+      </div>      
       {/* /.modal */}
       <div className="modal fade" id="deleteModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
         <div className="modal-dialog" role="document">
@@ -127,7 +126,7 @@ class Detail extends Component {
             <div className="modal-body">If you delete this, you can't be returned</div>
             <div className="modal-footer">
               <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" data-toggle="modal" data-target="#BerhasilModal">Delete</a>
+              <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" onClick={()=>swal('Success!','Success Delete Book!','Success')}>Delete</a>
             </div>
           </div>
         </div>
@@ -148,62 +147,7 @@ class Detail extends Component {
             </div>
           </div>
         </div>
-      </div>
-      <div className="modal fade" id="BerhasilModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Delete Complete!</h5>
-              <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <img className="check" src="./assets/media/check.png" />
-              <p>Data has been deleted</p>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="modal fade" id="BerhasilModal2" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Save Complete!</h5>
-              <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body"><img className="check" src="./assets/media/check.png" /></div>
-            <p>Data already saved</p>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="modal fade" id="BerhasilModal3" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Borrow Complete!</h5>
-              <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <img className="check" src="./assets/media/check.png" />
-              <p>Book already success to borrow</p>
-            </div>
-            <div className="modal-footer">
-              <button id="btn" className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      </div>      
       <div className="modal fade" id="CancelModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
