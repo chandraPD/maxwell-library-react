@@ -3,25 +3,27 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
 import Navbar from '../Screens/NavBar/NavBar'
-import Sidebar from '../Screens/SideBar/SideBar'
-import Detail from '../Screens/Contents/Detail'
+import Detail from '../Screens/Contents/Detail/Detail'
+import SideBar from '../Screens/SideBar/SideBar'
+import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 
 class MainNavigation extends Component {
   render() {
-    return(
+    return (
       <Router>
         <Navbar />
-        <Sidebar /> 
+        <SideBar /> 
         <Route path='/'>          
-
         </Route>
         <Route path='/detail'>
           <Detail />          
         </Route>
-        <Footer />    
+        <Route path='/RentManagement'>
+          <RentManagement/>
+        </Route>
+        <Footer />
       </Router>
     )
   }
 }
-
 export default MainNavigation
