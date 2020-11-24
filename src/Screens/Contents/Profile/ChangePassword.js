@@ -1,5 +1,5 @@
 // import { render } from '@testing-library/react'
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 class ChangePassword extends Component {
     render(){

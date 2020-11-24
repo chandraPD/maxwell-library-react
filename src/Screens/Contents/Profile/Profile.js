@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
-// import ChangePassword from '../Profile/ChangePassword'
 class Profile extends Component {
     render(){
         return(
@@ -16,7 +15,9 @@ class Profile extends Component {
                                         {/* <img src="/assets/media/user/profile.png" alt=""> */}
                                     </div>
                                     <Link to='/edit_profile'>
-                                    <button type="button" className="btn btn-primary edit-profile">Edit Profile</button>
+                                    <button type="button" className="btn btn-primary edit-profile">
+                                        Edit Profile
+                                    </button>
                                     </Link>
                                 </div>
                             </div>

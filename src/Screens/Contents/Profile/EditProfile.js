@@ -1,12 +1,11 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 class EditProfile extends Component {
     render(){
         return(
-        <Fragment>
         <section className="padding-editform">
             <div id="container-editform">
-            <h3 className='button-edit-profile'>Edit Your Profile</h3>
+            <h3 style={{textAlign: 'center'}}>Edit Your Profile</h3>
                 <div className="form-item">
                 <div className="row">
                     <div className="col-lg-8">
@@ -79,7 +78,7 @@ class EditProfile extends Component {
                 </div>
             </div>
         </section>
-        </Fragment>
+        
         )
     }
 }
