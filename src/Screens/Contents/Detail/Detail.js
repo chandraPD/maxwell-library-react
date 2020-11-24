@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
-import '../Contents/Detail.style.css'
-import swal from 'sweetalert';
-
+import './Detail.style.css'
+import swal from 'sweetalert'
+import foto from '../../../Assets/Media/books/covernya2.png'
+import foto2 from '../../../Assets/Media/books/novel-dilan.jpg'
+import foto3 from '../../../Assets/Media/books/buku-seni-minimalis.jpg'
+import foto4 from '../../../Assets/Media/books/novel-milea.jpg'
+import { Link } from 'react-router-dom'
 
 class Detail extends Component {
+
+//   showModal1(arg) {
+//     if (arg == 'borrow') {                
+//         $('#BorrowModal').modal('show');
+//     } else if (arg == 'borrowed') {
+//         $('#cancelModal').modal('show');
+//     }
+// }
+  
     render () {
       return (
         
@@ -16,7 +29,7 @@ class Detail extends Component {
             <div className="container-fluid">
               <div className="button">
                 <div className="back-btn">
-                  <a href="index.html" role="button"><i className="fas fa-arrow-left" /></a>
+                  <Link to='/'><a className="button-arrow" role="button"><i className="fas fa-arrow-left arrow" /></a></Link>
                 </div>
               </div>
               <div className="row">
@@ -24,10 +37,10 @@ class Detail extends Component {
                   <img className="big-preview" width="1600px" height="1200px" />
                   <div className="menu-right">
                     <ul className="menuhead">
-                      <li><a href="#" onclick="showModal('edit')">Edit</a></li>
+                      <li><a href="#" data-toggle="modal" data-target="#ModalBook">Edit</a></li>
                       <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a></li>
                     </ul>
-                    <img className="small-preview" src="./assets/media/books/covernya2.png" />
+                    <img className="small-preview" src={foto} />
                   </div>
                 </div>
               </div>
@@ -65,7 +78,7 @@ class Detail extends Component {
                 </div>
               </div>
               <div className="borrowbutton">
-                <button id="button_borrow" value="borrow" className="btn btn-warning" href="#" onclick="showModal1(value)">Borrow</button>
+                <button id="button_borrow" value="borrow" className="btn btn-warning" href="#" data-toggle="modal" data-target="#ModalBook">Borrow</button>
               </div>
             </div>
           </section>
@@ -77,7 +90,7 @@ class Detail extends Component {
             <div className="row" id="recomended">
               <div className="col-xs-4 col-sm-4 col-lg-4">
                 <div className="card" id="recomendedcard">
-                  <img src="../../Assets/Media/books/novel-dilan.jpg" className="card-img-top" alt="Dilan 1991" />
+                  <img src={foto2} className="card-img-top" alt="Dilan 1991" />
                   <div className="card-body">
                     <h5 className="recommend-title">Dilan 1991</h5>
                     <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati aspernatur enim
@@ -88,7 +101,7 @@ class Detail extends Component {
               </div>
               <div className="col-xs-4 col-sm-4 col-lg-4">
                 <div className="card" id="recomendedcard">
-                  <img src="./assets/media/books/buku-seni-minimalis.jpg" className="card-img-top" alt="Dilan 1991" />
+                  <img src={foto3} className="card-img-top" alt="Dilan 1991" />
                   <div className="card-body">
                     <h5 className="recommend-title">Seni Hidup Minimalis</h5>
                     <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati aspernatur enim
@@ -99,7 +112,7 @@ class Detail extends Component {
               </div>
               <div className="col-xs-4 col-sm-4 col-lg-4">
                 <div className="card" id="recomendedcard">
-                  <img src="./assets/media/books/novel-milea.jpg" className="card-img-top" alt="Milea" />
+                  <img src={foto4} className="card-img-top" alt="Milea" />
                   <div className="card-body">
                     <h5 className="recommend-title">Milea</h5>
                     <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati aspernatur enim
@@ -126,7 +139,7 @@ class Detail extends Component {
             <div className="modal-body">If you delete this, you can't be returned</div>
             <div className="modal-footer">
               <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" onClick={()=>swal('Success!','Success Delete Book!','Success')}>Delete</a>
+              <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" onClick={()=>swal('Success!','Success Delete Book!','success')}>Delete</a>
             </div>
           </div>
         </div>
@@ -240,7 +253,7 @@ class Detail extends Component {
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-              <button id="confirmBook" className="btn btn-warning" onclick="confirmBook()">Save</button>
+              <button id="confirmBook" className="btn btn-warning" data-dismiss="modal" onClick={()=>swal('Success!','Success Save Borrow Book!','success')}>Save</button>
             </div>
           </div>
         </div>

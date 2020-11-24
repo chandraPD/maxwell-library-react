@@ -5,7 +5,7 @@ import Footer from '../Screens/Footer/Footer'
 import Navbar from '../Screens/Navbar/Navbar'
 import SideBar from '../Screens/SideBar/SideBar'
 import Home from '../Screens/Contents/Home/Home'
-import Detail from '../Screens/Contents/Detail'
+import Detail from '../Screens/Contents/Detail/Detail'
 
 class MainNavigation extends Component {
   render() {
@@ -14,7 +14,7 @@ class MainNavigation extends Component {
         <Route path='/'>
           <Navbar />
           <Sidebar />
-          <Route patah='/' >
+          <Route path='/' >
               <Home />
           </Route>
         <Route path='/detail'>

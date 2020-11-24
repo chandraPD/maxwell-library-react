@@ -21,7 +21,7 @@ p{
 img.big-preview{
     width: 100%;
     background-size: cover;
-    background-image: url(../../Assets/Media/books/covernya.png);
+    background-image: url(../../../Assets/Media/books/covernya.png);
     max-height: 350px;
     max-width: 100%;
 
@@ -90,6 +90,15 @@ h1.statustext{
     margin-left: 30px;
 }
 
+a.button-arrow{
+    font-size: 20px;    
+}
+
+i.arrow{
+    margin: -15px;    
+    
+}
+
 p.date{
     text-align: left;
     margin-left: 70px;
@@ -102,7 +111,7 @@ p.date{
     font-size: 15px;
 }
 
-img.small-preview{
+img.small-preview{    
     right: 3rem;
     margin-top: -7rem;
     position: absolute;
@@ -283,7 +292,7 @@ a#toggle{
 
     img.big-preview{
         background-size: cover;
-        background-image: url(../../Assets/Media/books/novel-dilanmini.jpg);
+        background-image: url(../../../Assets/Media/books/novel-dilanmini.jpg);
         max-height: 350px;
         max-width: 100%;
     }
