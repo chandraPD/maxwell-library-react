@@ -1,13 +1,14 @@
 
 import React, { Component } from 'react';
 import './SideBar.style.css'
+import avatarUser from '../../Assets/Media/user/profile.png'
 
 export default class Sidebar extends Component {
     render() {
         return (
     <aside className="main-sidebar elevation-4 sidebar-light-primary">
     <a href="index.html" className="brand-link">
-        {/* <img src="./auth/assets/images/bookshelf.png" alt="Maxwell Library" style="height: 2rem; margin-left: .7rem;"> */}
+        <img src="https://chandrapd.github.io/maxwell-library/auth/assets/images/bookshelf.png" alt="Maxwell Library" style={{height: '2rem', marginLeft: '.7rem'}} />
         <span className="brand-text font-weight-light">Maxwell Library</span>
     </a>
 
@@ -26,7 +27,7 @@ export default class Sidebar extends Component {
             <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div className="image my-center">
                 <a href="Profile.html">
-                {/* <img src="./assets/media/user/profile.png" className="img-circle elevation-2 profile-img-custom"alt="User Image"> */}
+                <img src={avatarUser} classname="img-circle elevation-2 profile-img-custom" alt="User Image" />
                 </a>
                 </div>
                 <div className="info">
