@@ -1,0 +1,71 @@
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #000;
+    color: #fff;
+}
+
+[class*=sidebar-light] .user-panel {
+    border-bottom: 0;
+    flex-direction: column;
+    text-align:center;
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+[class*="sidebar-light"] .brand-link {
+    border-bottom: 0;
+}
+
+ul#topup{    
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+u#topup li{
+    display: inline ;        
+}
+
+ul#topup p{
+    font-size: 18px;
+}
+
+.my-center{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.my-center img {
+    width: 7rem;
+}
+
+.user-panel .image {
+    padding-left: 0.3rem;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar .user-panel .image img {
+    width: 2.1rem;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .user-panel, .sidebar-mini.sidebar-collapse .main-sidebar:hover .user-panel {
+    text-align:left;
+    flex-direction: row;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .user-panel .image, .sidebar-mini.sidebar-collapse .main-sidebar:hover .user-panel .image {
+    margin-top: 5%;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .sidebar-form, .sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .user-panel > .info, .sidebar-mini.sidebar-collapse .main-sidebar:hover .sidebar-form, .sidebar-mini.sidebar-collapse .main-sidebar:hover .user-panel > .info {
+    margin-right: 5%;
+}
+
+.user-panel .info {
+    margin-top: 4%;
+}
+
+.user-panel, .user-panel .info {
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+}

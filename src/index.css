@@ -1,0 +1,888 @@
+*{
+  margin:"0";
+}
+
+.button{
+  margin-left: 20px;
+  margin-top: 10px;
+  position: absolute;
+  z-index: 100;
+}
+
+img.check{
+  margin-left: 120px;
+}
+
+p{
+  text-align: center;
+  margin-left: 0.2rem;
+}
+
+img.big-preview{
+  width: 100%;
+  background-size: cover;
+  background-image: url(./Assets/Media/books/covernya.png);
+  max-height: 350px;
+  max-width: 100%;
+
+}
+
+.category {
+width:60px;
+height:20px;
+bottom:40px;
+  right:40px;
+  margin-left: 70px;
+background-color:yellow;
+  border-radius:50px;
+  text-align: center;
+  transition: 0.6s ease;
+}
+
+p.content{
+  text-align: justify;
+  margin-left: 70px;
+}
+
+.list-reason{
+  padding-left: 1rem;
+
+}
+
+h1.titletext{
+  color: black;
+  margin-left: 70px;
+  font-weight: bold;
+}
+
+h1.title-text{
+  color: black;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+#reason.row{
+  margin-left: 7.5px;
+  margin-right: 7.5px;
+}
+
+.card.card-info{
+  margin-left: 7.5px;
+  margin-right: 7.5px; 
+}
+h3
+button#button_borrow{
+
+  position: absolute;
+  top: 40%;
+  left: 67%;
+  color: white;
+  font-size: 25px;
+  width: 150px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+h1.statustext{
+  color: green;
+  font-size: 20px;
+  margin-left: 30px;
+}
+
+p.date{
+  text-align: left;
+  margin-left: 70px;
+  font-weight: bold;
+}
+
+.category p{
+  color: black;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+img.small-preview{
+  right: 3rem;
+  margin-top: -7rem;
+  position: absolute;
+  height: 14rem;
+  width: 10rem;
+  filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
+  border-radius: 15px;
+}
+
+
+ul.menuhead {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+}
+
+ul.menuhead li{
+  display: inline;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+ul.menuhead li a:hover {
+  background-color: transparent;
+  color: blue;
+}
+
+.list-title{
+  margin-top: 30px;
+  margin-left: 70px;
+  display:flex;
+  justify-content: center;
+}
+
+.list-content{
+  margin: 20px;
+}
+
+#recomendedcard img{
+  height: 18rem;
+  width: 100%;
+  margin: auto;
+}
+
+a#toggle{
+  color: black;
+  float: right;
+  margin-left: 1000px;
+  text-decoration: none;
+  position: absolute;
+}
+
+@media (max-width: 1920px){
+  /* ul.menuhead{
+      margin-left: 900px;
+      float: right;
+              */
+  }
+
+  /* img.small-preview{
+      top: 35%;
+      left: 80%;
+      transform: translate(-50%,-50%);
+      position: absolute;
+      height: 150px;
+      width: 100px
+  } */
+
+  a#toggle{
+      color: black;
+      float: right;
+      margin-left: 500px;
+      text-decoration: none;
+      position: absolute;
+  }
+
+  .row#recomended{
+      text-decoration: none;
+  }
+
+  button#button_borrow{
+      position: absolute;
+      top: 50%;
+      left: 75%;
+      color: white;
+      font-size: 25px;
+      width: 150px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+
+
+@media (max-width: 1440px){
+  /* ul.menuhead{
+      margin-left: 800px;
+      float: right; */
+
+  }
+
+  /* img.small-preview{
+      top: 30%;
+      left: 90%;
+      transform: translate(-50%,-50%);
+      position: absolute;
+      height: 150px;
+      width: 100px
+
+  } */
+
+  a#toggle{
+      color: black;
+      float: right;
+      margin-left: 500px;
+      text-decoration: none;
+      position: absolute;
+  }
+
+  .row#recomended{
+      text-decoration: none;
+  }
+
+  button#button_borrow{
+      position: absolute;
+      top: 55%;
+      left: 80%;
+      color: white;
+      font-size: 25px;
+      width: 150px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+
+
+@media (max-width: 1220px){
+  /* ul.menuhead{
+      margin-left: 700px;
+      float: right;
+
+  } */
+
+}
+
+@media (max-width: 1024px){
+  /* ul.menuhead{
+      margin-left: 500px;
+      float: right;
+
+  } */
+
+  /* img.small-preview{
+      top: 30%;
+      left: 90%;
+      transform: translate(-50%,-50%);
+      position: absolute;
+      height: 150px;
+      width: 100px
+
+  } */
+
+  a#toggle{
+      color: black;
+      float: right;
+      margin-left: 500px;
+      text-decoration: none;
+      position: absolute;
+  }
+
+  .row#recomended{
+      text-decoration: none;
+  }
+
+}
+
+@media (max-width: 800px){   
+
+  img.big-preview{
+      background-size: cover;
+      background-image: url(./Assets/Media/books/novel-dilanmini.jpg);
+      max-height: 350px;
+      max-width: 100%;
+  }
+
+  /* ul.menuhead{
+      margin-left: 500px;
+      float: right;
+  } */
+
+  a#toggle{
+      color: black;
+      float: right;
+      margin-left: 500px;
+      text-decoration: none;
+  }
+
+  /* img.small-preview{
+      top:17%;
+      left: 90%;
+      transform: translate(-50%,-50%);
+      position: absolute;
+      height: 150px;
+      width: 100px
+
+  } */
+
+  .row#recomended{
+      text-decoration: none;
+      margin-left: 200px;
+      display: flex;
+      color: black;
+      list-style-type:none;
+      justify-content: space-evenly;
+  }
+
+  button#button_borrow{
+      position: absolute;
+      /* top: 30%; */
+      left: 75%;
+      color: white;
+      font-size: 25px;
+      width: 150px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+}
+
+@media (max-width: 450px){
+  p.date{
+      margin-left: 10px;
+  }        
+
+  .category {
+      margin-left: 10px;  
+  }
+
+  h1.titletext{
+      margin-left: 10px;
+  }
+
+  p.content{
+      margin-left: 10px;
+  }
+      /* ul.menuhead{
+          margin-left: 200px;
+          float: right;
+      } */
+
+      img.check{
+          margin-left: 80px;
+      }
+
+      button#button_borrow{
+
+          position: absolute;
+          top: 22%;
+          left: 65%;
+          color: white;
+          font-size: 20px;
+
+          width: 85px;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+      }
+
+      img.small-preview{
+          position: absolute;
+          height: 150px;
+          width: 100px
+
+      }
+
+      h1.statustext{
+          color: green;
+          font-size: 20px;
+          margin-left: 10px;
+      }
+
+      .row#recomended{
+          text-decoration: none;
+          margin-left: 60px;
+          display: list-item;
+          color: black;
+      }
+
+      a#toggle{
+          color: black;
+          float: right;
+          margin-left: 300px;
+          text-decoration: none;
+          position: absolute;
+      }
+}
+
+@media (max-width: 380px){
+  img.check{
+      margin-left: 65px;
+  }
+
+  button#button_borrow{
+
+      position: absolute;
+      top: 21%;
+      left: 65%;
+      color: white;
+      font-size: 20px;
+
+      width: 85px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+}
+
+@media (max-width: 330px){
+  /* ul.menuhead{
+      margin-left: 150px;
+      float: right;
+      display: list-item;
+      color: transparent;
+  } */
+
+  img.check{
+      margin-left: 40px;
+  }
+
+  button#button_borrow{
+      position: absolute;
+      top: 21%;
+      left: 65%;
+      color: white;
+      font-size: 20px;
+      width: 90px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  /* img.small-preview{
+      top: 14%;
+      left: 80%;
+      transform: translate(-50%,-50%);
+      position: absolute;
+      height: 100px;
+      width: 75px
+
+  } */
+
+  .row#recomended{
+      text-decoration: none;
+      margin-left: 15px;
+      orientation: auto;
+      color: black;
+  }
+
+  a#toggle{
+      color: black;
+      float: right;
+      margin-left: 250px;
+      text-decoration: none;
+      position: absolute;
+  }
+}
+
+/* slick slider */
+
+.slider {
+  width: 50%;
+  margin: 100px auto;
+}
+
+.slick-slide {
+  margin: 0px 20px;
+}
+
+.slick-slide img {
+  width: 100%;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+
+
+.slick-slide {
+  transition: all ease-in-out .3s;
+  opacity: .2;
+}
+
+.slick-active {
+  opacity: .5;
+}
+
+.slick-current {
+  opacity: 1;
+}
+
+.title-book {
+  margin-bottom: .5rem;
+  font-weight: bold;
+  text-align: center;
+  font-size: larger;
+}
+
+.list-book-detail {
+  padding: 10px;
+}
+
+.filtr-item.col-sm-4.list-book {
+  padding: 15px 7.5px;
+  max-width: 360px;
+  
+}
+
+img.img-fluid.img-book {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px; 
+  height: 15rem; width: 100%;
+  box-shadow: 10px 0 5px 0.5px #888;
+}
+
+.custom-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  
+}
+
+.desc-book {
+  text-align: justify
+}
+
+.list-book-detail {
+  padding: 1.2rem !important;
+  background: white;
+  padding-top: 0px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 10px 0 5px 0.5px #888;
+}
+
+/* Add Styline */
+.list-title h4 {
+  text-align: center;
+}
+
+h5.card-title {
+  font-size: 20px;
+  margin-left: 30px;
+}
+
+
+a.recomendedcard1 {
+  margin-left: 80px;
+}
+
+.recommend-title{
+  font-weight: 600;
+  text-align: center;
+}
+
+h2.title-container {
+  font-weight: bold;
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+#input-search{
+  border-radius: 22px;
+}
+
+form#search-books {
+  margin-left: 20%;
+}
+
+.list-book-content {
+  padding: 20px;;
+}
+
+.books-nf {
+  width: 100%;
+  margin: 10px;
+  background: white;
+  border-radius: 15px;
+}
+
+h3.book-not-found {
+  text-align: center;
+}
+.menuhead a {
+  color: white;
+  font-weight: 600;
+}
+
+.back-btn {
+  position: relative;
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+}
+
+.back-btn a {
+  color: black;
+  position: absolute;
+  margin-left: 1rem;
+  margin-top: .6rem;
+}
+
+.row#recomended {
+  margin: 2rem;
+}
+
+.list-title h4 {
+  float: left;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.recomendedcard img {
+  width: 100%;
+}
+
+.card-text {
+  text-align: left;
+}
+
+.book-list {
+  margin-top: 0px !important;
+}
+
+.recomendedcard-read {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffc107;
+  border-color: #ffc929;
+  color: rgb(255, 255, 255);
+  font-size: 1.2rem;
+} 
+
+
+.profile-section {
+display: flex !important;
+flex-direction: column !important;
+}
+
+.main-carousel {
+margin: 1rem;
+}
+
+.carousel-cell {
+width: 37.5rem;
+height: 300px;
+margin-right: 68px !important;
+background: #fff;
+counter-increment: carousel-cell;
+}
+
+.carousel .carousel-info {
+border-radius: 0 0 5px 5px;
+bottom: 0px;
+position: absolute;
+padding: 1rem;
+width: 100%;
+height: 50%;
+background: rgba(0, 0, 0, 0.2);
+}
+
+.carousel .carousel-info .carousel-text {
+float: left !important;
+margin-top: 1rem;
+}
+
+.carousel .carousel-info h2 {
+color: #fff;
+font-weight: 600;
+}
+
+.carousel .carousel-info h3 {
+color: #fff;
+font-size: 1.3rem;
+}
+
+/* fade in lazy loaded image */
+.carousel-cell-image.flickity-lazyloaded,
+.carousel-cell-image.flickity-lazyerror {
+opacity: 1;
+}
+
+.container-fluid.book-list {
+margin-top: 3rem;
+/* margin-bottom: 3rem; */
+}
+
+
+
+/* Syle User Profil & Change Password */
+
+.content-user {
+  padding-top: 20px;
+}
+.container-profile {
+  background-color:white;
+  margin: 20px;
+  border-radius: 50px;
+  padding: 50px;
+  box-shadow: 5px 5px 10px 1px gray;
+}
+
+.profile-account {
+  /* padding: 35px; */
+  text-align: center;
+}
+
+button.edit-profile {
+  font-size: 10px;
+  margin-top: 10px;
+}
+.edit-photo {
+  margin-top: -20px;
+}
+.edit-photo i {
+  padding: 5px;
+  margin-top: -50px;
+  margin-left: 75px;
+  border-radius: 50%;
+  background-color: white;
+  opacity: 0.5;
+  
+}
+
+.profile-account small {
+  text-align: center;
+}
+
+.title-profile {
+  margin: 10px 0 20px 30px;
+}
+.data-user {
+  padding-top: 5px;
+  padding-left: 30px;
+}
+
+.data a{
+  color: black;
+  text-decoration: none;
+  transition: .8s ease;
+}
+
+.data a:hover {
+  margin-top: 5px;
+  font-size: 15px;
+  color: blue;
+  background-color: #D6DCE4;
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 1px 2px 10px  gray;
+}
+.edit-btn {
+  padding: 25px;
+}
+
+.edit-btn a {
+  font-size: 25px;
+}
+
+.form-editprofile {
+  margin-left: 275px;
+}
+
+
+/* FORM EDIT PROFILE */
+section.padding-editform {
+  padding: 1px;
+}
+
+#container-editform {
+  width: 50%;
+  background-color: white;
+  margin: 40px auto;
+  padding: 20px 20px 75px 20px;
+  position: relative;
+  display: none;
+  border-radius: 5px;
+  box-shadow:  0 5px 10px 0 gray;
+  
+}
+
+.form-item {
+  margin: 10px;
+}
+
+.form-item .input-value {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #D6DCE4;
+}
+
+.btn-editform {
+  position: absolute;
+  right: 5px;
+  bottom: 20px;
+  margin-top: 10px;
+  margin-right: 20px;
+  float: right;
+}
+
+@media (max-width: 989px){
+  /* .container-profile {
+      margin: 20px;
+      margin-top: 20px;
+      margin-left: 20px; 
+  }*/
+/* 
+  .content-user {
+      margin: 0;
+  } */
+/* 
+  .container-changepwd {
+      border: 3px solid;
+      margin: 0;;
+  }
+
+
+  .content-changepwd {
+      margin-left: 0;
+      border: 3px solid;
+  } */
+
+  
+
+}
+
+@media (max-width: 989px) {}
+
+
+/* Style Change_Password */
+
+.container-changepwd {
+  padding: 20px 50px 20px 50px;
+}
+
+.content-changepwd {
+  width: 75%;
+  padding: 30px 0 60px 30px;
+  position: relative;
+  background-color: white;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 3px 3px 5px 2px gray;
+}
+
+h3.changepwd-title {
+  margin-bottom: 20px;
+}
+small.passwordHelpBlock{
+  font-size: 5px;
+}
+.save-pwd {
+  bottom: 20px;
+  right: 10px;
+  position: absolute;
+}
+
+.save-pwd button {
+  margin-right: 10px;
+}
