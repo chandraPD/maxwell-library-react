@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import UburLemburImg from '../../../Assets/Media/books/uburlembur.png'
 import LaskarPelangiImg from '../../../Assets/Media/books/laskar.png'
 import DilanImg from '../../../Assets/Media/books/dilan.png'
+import SuccessImg from '../../../Assets/Media/check.png'
 
 class SlideShowManagement extends Component {
   render() {
@@ -134,6 +135,145 @@ class SlideShowManagement extends Component {
           </div>
         </div>
       </section>
+
+        {/* Modal Add */}
+      <div class="modal fade" id="modal-add">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add new Slideshow Image</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form role="form" id="addSlideshow">
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="inputTitle">Title</label>
+                  <input type="text" class="form-control" name="slideshowTitle" id="inputTitle"
+                    placeholder="Enter Title"/>
+                </div>
+                <div class="form-group">
+                  <label for="inputSubTitle">Sub Title</label>
+                  <input type="text" class="form-control" name="slideshowSubTitle" id="inputSubTitle"
+                    placeholder="Enter Sub Title"/>
+                </div>
+                <div class="form-group">
+                  <label for="addSlideshowImg">Choose Image</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="addSlideshowImg" name="slideshowImage"/>
+                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                    </div>
+                  </div>
+                  <span class="text-danger">Minimum size is 300x100 px</span>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetModal()">Close</button>
+              <button type="submit" class="btn btn-warning">Add</button>
+            </div>
+          </form>
+        </div>
+        {/* <!-- /.modal-content --> */}
+      </div>
+      {/* <!-- /.modal-dialog --> */}
+    </div>
+
+    {/* <!--Modal Edit--> */}
+    <div class="modal fade" id="modal-edit">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Slideshow</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form role="form" id="editSlideshow">
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="editTitle">Title</label>
+                  <input type="text" class="form-control" name="slideshowTitle" id="editTitle"
+                    value="Ubur-ubur Lembur"/>
+                </div>
+                <div class="form-group">
+                  <label for="inputSubTitle">Sub Title</label>
+                  <input type="text" class="form-control" name="slideshowSubTitle" id="inputCategoryName"
+                    value="Raditya Dika"/>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputFile">Change Image</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="exampleInputFile" name="slideshowImage"/>
+                      <label class="custom-file-label" for="exampleInputFile">uburlembur.png</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-warning">Save changes</button>
+            </div>
+          </form>
+        </div>
+        {/* <!-- /.modal-content --> */}
+      </div>
+      {/* <!-- /.modal-dialog --> */}
+    </div>
+
+    {/* <!--Modal Delete--> */}
+    <div class="modal fade" id="modal-delete">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Slideshow</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            If you Delete this, you can't be returned
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#DeleteSuccess"
+              data-dismiss="modal">Delete</button>
+          </div>
+        </div>
+        {/* <!-- /.modal-content --> */}
+      </div>
+      {/* <!-- /.modal-dialog --> */}
+    </div>
+
+    {/* <!--Delete Completed--> */}
+    <div class="modal fade" id="DeleteSuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabesl"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Complete!</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img class="check" src={SuccessImg}/>
+            <p>Data has been deleted</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
       </div>
     );
   }

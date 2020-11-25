@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import './customtable.css'
+import SuccessImg from '../../../Assets/Media/check.png'
 
 class CategoryManagement extends Component {
   render() {
@@ -584,6 +585,125 @@ class CategoryManagement extends Component {
             </div>
           </div>
         </section>
+
+        {/* <!--Modal Add--> */}
+        <div class="modal fade" id="modal-add">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Category</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form role="form" id="addCategory">
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="inputCategoryId">Category ID</label>
+                                    <input type="text" class="form-control" id="inputCategoryId" name="categoryId"
+                                        placeholder="Enter ID"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputCategoryName">Category Name</label>
+                                    <input type="text" class="form-control" id="inputCategoryName" name="categoryName"
+                                        placeholder="Enter Category"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetModal()">Close</button>
+                            <button type="submit" class="btn btn-warning">Add</button>
+                        </div>
+                    </form>
+                </div>
+                {/* <!-- /.modal-content --> */}
+            </div>
+            {/* <!-- /.modal-dialog --> */}
+        </div>
+        {/* <!-- /.modal --> */}
+
+        {/* <!--Modal Edit--> */}
+        <div class="modal fade" id="modal-edit">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Category</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form role="form" id="editCategory">
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="editCategoryId">Category ID</label>
+                                    <input type="text" class="form-control" name="categoryId" id="editCategoryId" value="CTG0001"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editCategoryName">Category Name</label>
+                                    <input type="text" class="form-control" name="categoryName" id="editCategoryName" value="Fantasy"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-warning">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+                {/* <!-- /.modal-content --> */}
+            </div>
+            {/* <!-- /.modal-dialog --> */}
+        </div>
+        {/* <!-- /.modal --> */}
+
+        {/* <!--Modal Delete--> */}
+        <div class="modal fade" id="modal-delete">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Category</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        If you Delete this, you can't be returned
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#deleteSuccess"
+                            data-dismiss="modal">Delete</button>
+                    </div>
+                </div>
+                {/* <!-- /.modal-content --> */}
+            </div>
+            {/* <!-- /.modal-dialog --> */}
+        </div>
+        {/* <!-- /.modal --> */}
+
+        {/* <!--Delete Completed--> */}
+        <div class="modal fade" id="deleteSuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabesl"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Complete!</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="check" src={SuccessImg}/>
+                        <p>Data has been deleted</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
       </div>
     );
   }
