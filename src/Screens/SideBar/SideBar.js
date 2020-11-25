@@ -35,7 +35,7 @@ export default class SideBar extends Component {
             <div className="info">
               <a href="Profile.html" className="d-block user-name">Niki Zefanya</a>
               <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>Rp. 50.000,-</p>
-              <a href="./top_up.html" className="btn btn-sm btn-primary" style={{color: 'white'}}>
+              <a href="/TopUp" className="btn btn-sm btn-primary" style={{color: 'white'}}>
                 <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
               </a>
             </div>
