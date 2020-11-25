@@ -6,7 +6,6 @@ import NavBar from '../Screens/Navbar/NavBar'
 import SideBar from '../Screens/SideBar/SideBar'
 import Profile from '../Screens/Contents/Profile/Profile'
 import ChangePassword from '../Screens/Contents/Profile/ChangePassword'
-import EditProfile from '../Screens/Contents/Profile/EditProfile'
 import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 import Home from '../Screens/Contents/Home/Home'
 import Detail from '../Screens/Contents/Detail/Detail'
@@ -30,9 +29,6 @@ class MainNavigation extends Component {
                                 <Route path='/profile'>
                                     <Profile />
                                 </Route>
-                                {/* <Route path='/edit_profile'>
-                                    <EditProfile/>
-                                </Route> */}
                                 <Route path='/change_password'>
                                     <ChangePassword/>
                                 </Route>

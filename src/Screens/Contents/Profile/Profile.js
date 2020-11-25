@@ -6,10 +6,15 @@ import swal from 'sweetalert'
 
 class Profile extends Component {
 
-    editForm() {
+    displayEditForm() {
         const editForm = document.querySelector('#container-editform');
         editForm.style.display = 'block';
 
+    }
+
+    hiddenEditForm(){
+        const editForm = document.querySelector('#container-editform');
+        editForm.style.display = 'none';
     }
 
     submitEditProfile() {
@@ -27,14 +32,14 @@ class Profile extends Component {
         var phoneNumber = document.getElementById('user-number').value;
     
         if (firstName == '' || lastName == '' || dateOfBirth == '' || emailUser == '' || addressUser == '' || phoneNumber == ''){
-                swal.fire(
+                swal(
                     'Submit Failed !',
                     'You should fill in the blank',
                     'error'
                 );
                 editForm.style.display = 'none';
             }else{
-                swal.fire(
+                swal(
                     'Submitted !',
                     'You clicked the button!',
                     'success'
@@ -62,11 +67,14 @@ class Profile extends Component {
                                     <div className="picture">
                                         <img src={avatarUser} alt=""/>
                                     </div>
-                                    <Link to='/edit_profile'>
-                                    <button type="button" className="btn btn-primary edit-profile">
-                                        Edit Profile
+                                    <button 
+                                    type="button" 
+                                    className="btn btn-primary edit-profile"
+                                    name="editProfile"
+                                    onClick={() => this.displayEditForm()}
+                                    >
+                                    Edit Profile
                                     </button>
-                                    </Link>
                                 </div>
                             </div>
                         
@@ -195,8 +203,8 @@ class Profile extends Component {
                     </div>
 
                     <div className="btn-editform">
-                    <input className="btn btn-primary" type="submit" value="Submit" onClick={()=> this.submitEditProfile()}/>
-                    <button type="button" className="btn btn-secondary">Close</button>
+                    <input className="btn btn-primary mr-2" type="submit" value="Submit" onClick={()=> this.submitEditProfile()}/>
+                    <button type="button" className="btn btn-secondary" onClick={() => this.hiddenEditForm()}>Close</button>
                     </div>
                 </div>
             </section>
