@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DataTable from '../../../Components/Datatable/Table'
 
 class RentManagement extends Component {
+    
     render() {
         const headings = [
             'No',
@@ -19,12 +20,14 @@ class RentManagement extends Component {
             'Status'
         ];
 
+        const Action = props => <a href="#" className={"btn btn-"+props.type} onclick={props.doAct+"()"} title={props.title}><i className={"fas fa-"+props.icon} /></a>
+        const Status = props => <span className={"badge bg-"+props.type} >{props.val}</span>
         const rows = [
             [
                 1,
                 <div className="btn-group btn-group-sm">
-                    <a href="#" className="btn btn-primary" onclick="acceptRent()" title="Accept"><i className="fas fa-check-square" /></a>
-                    <a href="#" className="btn btn-danger" onclick="cancelRent()" title="Cancel"><i className="fas fa-window-close" /></a>
+                    <Action type="primary" doClick="acceptRent" title="Accept" icon="check-square" />
+                    <Action type="danger" doClick="cancelRent" title="Cancel" icon="window-close" />
                 </div>,
                 '001',
                 'Chandra',
@@ -36,7 +39,7 @@ class RentManagement extends Component {
                 '-',
                 '-',
                 '-',
-                <span className="badge bg-primary">Waiting Given By Librarian</span>
+                <Status type="primary" val="Waiting Given By Librarian"/>
             ],
             [
                 2,
@@ -51,12 +54,12 @@ class RentManagement extends Component {
                 '-',
                 '-',
                 '-',
-                <span className="badge bg-danger">Canceled</span>
+                <Status type="danger" val="Canceled"/>
             ],
             [
                 3,
                 <div className="btn-group btn-group-sm">
-                    <a href="return_book.html" className="btn btn-info" title="Return"><i className="fas fa-exchange-alt" /></a>
+                    <Action type="info" doClick="acceptRent" title="Return" icon="exchange-alt" />
                 </div>,
                 '003',
                 'Chandra',
@@ -68,12 +71,12 @@ class RentManagement extends Component {
                 '-',
                 '-',
                 '-',
-                <span className="badge bg-info">Waiting For Return</span>
+                <Status type="info" val="Waiting For Return"/>
             ],
             [
                 4,
                 <div className="btn-group btn-group-sm">
-                    <a href="return_book.html" className="btn btn-info" title="Return"><i className="fas fa-exchange-alt" /></a>
+                    <Action type="info" doClick="acceptRent" title="Return" icon="exchange-alt" />
                 </div>,
                 '004',
                 'Chandra',
@@ -85,13 +88,13 @@ class RentManagement extends Component {
                 '-',
                 '-',
                 '-',
-                <span className="badge bg-orange">Need Immediate Returns</span>
+                <Status type="orange" val="Need Immediate Returns"/>
             ],
             [
                 5,
                 <div className="btn-group btn-group-sm">
-                    <a href="#" className="btn btn-primary" onclick="acceptRent()" title="Accept"><i className="fas fa-check-square" /></a>
-                    <a href="#" className="btn btn-danger" onclick="cancelRent()" title="Cancel"><i className="fas fa-window-close" /></a>
+                    <Action type="primary" doClick="acceptRent" title="Accept" icon="check-square" />
+                    <Action type="danger" doClick="cancelRent" title="Cancel" icon="window-close" />
                 </div>,
                 '005',
                 'Chandra',
@@ -103,12 +106,12 @@ class RentManagement extends Component {
                 '-',
                 '-',
                 '-',
-                <span className="badge bg-primary">Waiting Taken By Librarian</span>
+                <Status type="primary" val="Waiting Taken By Librarian"/>
             ],
             [
                 6,
                 <div className="btn-group btn-group-sm">
-                    <a href="payment.html" className="btn btn-secondary" title="Payment"><i className="fas fa-file-invoice" /></a>
+                    <Action type="secondary" title="Payment" icon="file-invoice" />
                 </div>,
                 '006',
                 'Chandra',
@@ -120,7 +123,7 @@ class RentManagement extends Component {
                 '24 Nov 2020',
                 'Librarian',
                 'Rp 4.000,-',
-                <span className="badge bg-warning">Waiting for Payment of Fines</span>
+                <Status type="warning" val="Waiting for Payment of Fines"/>
             ],
             [
                 7,
@@ -135,9 +138,12 @@ class RentManagement extends Component {
                 '24 Nov 2020',
                 'Librarian',
                 'Rp 4.000,-',
-                <span className="badge bg-success">Returned</span>
+                <Status type="success" val="Returned"/>
             ],
         ];
+
+        
+
         return (
             <div className="content-wrapper">
                 <section className="content-header">
