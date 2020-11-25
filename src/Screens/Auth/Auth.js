@@ -2,9 +2,160 @@ import React, { Component } from "react";
 import "./Assets/Css/login.css";
 import LoginImage from "./Assets/Images/cover.png";
 import BookShelfImage from "./Assets/Images/bookshelf.png";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Auth extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       fields: {},
+       errors: {}
+    }
+  }
+
+  handleValidationSignUp() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //username
+    if(!fields["userNameSignUp"]) {
+      formIsValid = false;
+      errors["userNameSignUp"] = "Username cannot be empty"
+    }
+
+    //name
+    if(!fields["fullNameSignUp"]) {
+      formIsValid = false;
+      errors["fullNameSignUp"] = "Name cannot be empty"
+    }
+
+    //email
+    if(!fields["emailSignUp"]) {
+      formIsValid = false
+      errors["emailSignUp"] = "Cannot be empty"
+    }
+
+    if(typeof fields["emailSignUp"] !== "undefined") {
+      let lastAtPos = fields["emailSignUp"].lastIndexOf('@')
+      let lastDotPos = fields["emailSignUp"].lastIndexOf('.')
+
+      if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailSignUp"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailSignUp"].length - lastDotPos) > 2)) {
+        formIsValid = false;
+        errors["emailSignUp"] = "Email is not valid"
+      }
+    }
+
+    this.setState({errors: errors})
+    return formIsValid
+  }
+
+  handleValidationSignIn() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //email
+    if(!fields["emailSignIn"]) {
+      formIsValid = false
+      errors["emailSignIn"] = "Email cannot be empty"
+    }
+
+    if(typeof fields["emailSignIn"] !== "undefined") {
+      let lastAtPos = fields["emailSignIn"].lastIndexOf('@')
+      let lastDotPos = fields["emailSignIn"].lastIndexOf('.')
+
+      if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailSignIn"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailSignIn"].length - lastDotPos) > 2)) {
+        formIsValid = false;
+        errors["emailSignIn"] = "Email is not valid"
+      }
+    }
+
+    this.setState({errors: errors})
+    return formIsValid
+  }
+
+  handleValidationForgotPass() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //username
+    if(!fields["userNameForgotPass"]) {
+      formIsValid = false;
+      errors["userNameForgotPass"] = "Username cannot be empty"
+    }
+
+    //email
+    if(!fields["emailForgotPass"]) {
+      formIsValid = false
+      errors["emailForgotPass"] = "Cannot be empty"
+    }
+
+    if(typeof fields["emailForgotPass"] !== "undefined") {
+      let lastAtPos = fields["emailForgotPass"].lastIndexOf('@')
+      let lastDotPos = fields["emailForgotPass"].lastIndexOf('.')
+
+      if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailForgotPass"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailForgotPass"].length - lastDotPos) > 2)) {
+        formIsValid = false;
+        errors["emailForgotPass"] = "Email is not valid"
+      }
+    }
+
+    this.setState({errors: errors})
+    return formIsValid
+  }
+
+  contactSubmitSignUp(e) {
+    e.preventDefault()
+
+    if(this.handleValidationSignUp()){
+      alert("Success!")
+    } else {
+      alert("Form error")
+    }
+  }
+
+  contactSubmitSignIn(e) {
+    e.preventDefault()
+
+    if(this.handleValidationSignIn()){
+      alert("Success!")
+      
+    } else {
+      alert("Form error")
+    }
+  }
+
+  contactSubmitForgotPass(e) {
+    e.preventDefault()
+
+    if(this.handleValidationForgotPass()){
+      alert("Success!")
+    } else {
+      alert("Form error")
+    }
+  }
+
+  handleChangeSignUp(field, e) {
+    let fields = this.state.fields
+    fields[field] = e.target.value
+    this.setState({fields})
+  }
+
+  handleChangeSignIn(field, e) {
+    let fields = this.state.fields
+    fields[field] = e.target.value
+    this.setState({fields})
+  }
+
+  handleChangeForgotPass(field, e) {
+    let fields = this.state.fields
+    fields[field] = e.target.value
+    this.setState({fields})
+  }
+  
 
   displaySignUp() {
       var login = document.getElementById("login")
@@ -58,13 +209,13 @@ class Auth extends Component {
               </div>
 
               {/* <!--Login Form--> */}
-              <div className="login-wrapper my-auto" id="login">
+              <div className="login-wrapper my-auto" id="login" onSubmit={this.contactSubmitSignIn.bind(this)}>
                 <h1 className="form-title">Login</h1>
                 <p className="form-subtitle">
                   Welcome Back, Please Login to your Account
                 </p>
 
-                <form action="#" id="loginForm">
+                <form action="#" id="loginForm" >
                   <div className="container-form">
                     <div className="form-group bottom-label">
                       <label for="exampleInputEmail1" className="label-login">
@@ -72,11 +223,14 @@ class Auth extends Component {
                       </label>
                       <input
                         type="email"
-                        name="email"
+                        name="emailSignIn"
                         className="form-control custom-form"
                         id="exampleInputEmail1"
                         placeholder="Enter email"
+                        onChange={this.handleChangeSignUp.bind(this, "emailSignIn")}
+                        value={this.state.fields["emailSignIn"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignIn"]}</span>
                     </div>
                     <div className="form-group bottom-label">
                       <label
@@ -113,15 +267,13 @@ class Auth extends Component {
                   </div>
                   <div className="container-btn">
                     <div className="row">
-                    <Link to="/">
-                      <input
+                      <button
                         name="login"
-                        id="login"
+                        id="submit"
                         className="btn login-btn"
                         type="submit"
                         value="Login"
-                      />
-                      </Link>
+                      >Login</button>
                       <input
                         name="signup"
                         id="signup"
@@ -136,7 +288,7 @@ class Auth extends Component {
               </div>
 
               {/* <!--Register Form--> */}
-              <div className="register-wrapper my-auto" id="register">
+              <div className="register-wrapper my-auto" id="register" onSubmit={this.contactSubmitSignUp.bind(this)}>
                 <h1 className="form-title">Register</h1>
                 <p className="form-subtitle">
                   Welcome! Please Register to your Account
@@ -150,12 +302,15 @@ class Auth extends Component {
                       </label>
                       <input
                         type="text"
-                        name="userName"
+                        name="userNameSignUp"
                         className="form-control custom-form"
                         id="inputUsername"
                         placeholder="Enter username"
                         autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "userNameSignUp")}
+                        value={this.state.fields["userNameSignUp"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["userNameSignUp"]}</span>
                     </div>
                     <div className="form-group bottom-label">
                       <label for="inputFullName" className="label-login">
@@ -163,12 +318,15 @@ class Auth extends Component {
                       </label>
                       <input
                         type="text"
-                        name="fullName"
+                        name="fullNameSignUp"
                         className="form-control custom-form"
                         id="inputFullName"
                         placeholder="Enter full name"
                         autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "fullNameSignUp")}
+                        value={this.state.fields["fullNameSignUp"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["fullNameSignUp"]}</span>
                     </div>
                     <div className="form-group bottom-label">
                       <label for="inputEmail" className="label-login">
@@ -176,12 +334,15 @@ class Auth extends Component {
                       </label>
                       <input
                         type="email"
-                        name="email"
+                        name="emailSignUp"
                         className="form-control custom-form"
                         id="inputEmail"
                         placeholder="Enter email"
                         autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "emailSignUp")}
+                        value={this.state.fields["emailSignUp"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignUp"]}</span>
                     </div>
                     <div className="form-group bottom-label">
                       <label for="inputPassword" className="label-login">
@@ -189,7 +350,7 @@ class Auth extends Component {
                       </label>
                       <input
                         type="password"
-                        name="password"
+                        name="passwordSignUp"
                         className="form-control custom-form"
                         id="exampleInputPassword"
                         placeholder="Password"
@@ -198,13 +359,13 @@ class Auth extends Component {
                   </div>
                   <div className="container-btn">
                     <div className="row ">
-                      <input
+                      <button
                         name="signup"
                         id="signup"
                         className="btn signup-btn"
                         type="submit"
                         value="Sign Up"
-                      />
+                      >Sign Up</button>
                       <input
                         name="login"
                         id="login"
@@ -219,7 +380,7 @@ class Auth extends Component {
               </div>
 
               {/* <!--Form Forgot Password--> */}
-              <div className="forgot-wrapper my-auto" id="forgotPassword">
+              <div className="forgot-wrapper my-auto" id="forgotPassword" onSubmit={this.contactSubmitForgotPass.bind(this)}>
                 <h1 className="form-title">Forgot Password</h1>
                 <p className="form-subtitle">
                   Forgot your password? Don't worry, we got you covered.
@@ -233,12 +394,15 @@ class Auth extends Component {
                       </label>
                       <input
                         type="text"
-                        name="userName"
+                        name="userNameForgotPass"
                         className="form-control custom-form"
                         id="inputUsername"
                         placeholder="Enter username"
                         autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "userNameForgotPass")}
+                        value={this.state.fields["userNameForgotPass"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["userNameForgotPass"]}</span>
                     </div>
                     <div className="form-group bottom-label">
                       <label for="inputEmail" className="label-login">
@@ -246,23 +410,26 @@ class Auth extends Component {
                       </label>
                       <input
                         type="email"
-                        name="email"
+                        name="emailForgotPass"
                         className="form-control custom-form"
                         id="inputEmail"
                         placeholder="Enter email"
                         autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "emailForgotPass")}
+                        value={this.state.fields["emailForgotPass"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailForgotPass"]}</span>
                     </div>
                   </div>
                   <div className="container-btn">
                     <div className="row ">
-                      <input
+                      <button
                         name="submit"
                         id="submit"
                         className="btn submit-btn"
                         type="submit"
                         value="Submit"
-                      />
+                      >Submit</button>
                       <input
                         name="login"
                         id="login"
@@ -288,4 +455,4 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+export default withRouter(Auth);
