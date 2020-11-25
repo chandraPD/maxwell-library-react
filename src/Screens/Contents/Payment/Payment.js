@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './payment.css'
 import $ from 'jquery'
 import MaxIcon from '../../Auth/Assets/Images/bookshelf.png'
+import { Link } from 'react-router-dom';
 
 class Payment extends Component {
 
@@ -176,8 +177,9 @@ class Payment extends Component {
                   {/* <!-- this row will not appear when printing --> */}
                   <div className="row no-print">
                     <div className="col-12">
-                      <a href="payment_invoice_print.html" target="_blank" className="btn btn-default"><i
-                          className="fas fa-print"></i> Print</a>
+                        <Link to='/PaymentPrint'>
+                      <a target="_blank" className="btn btn-default"><i
+                          className="fas fa-print"></i> Print</a></Link>
                       <button type="submit" data-toggle="modal" data-target="#modal-confirm" className="btn btn-success float-right"><i
                           className="far fa-credit-card"></i> Pay
                       </button>
