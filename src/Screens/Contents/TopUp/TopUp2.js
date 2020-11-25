@@ -9,6 +9,11 @@ import {
 } from 'reactstrap';
 import { ProgressBar } from 'react-bootstrap';
 
+function click(){
+    this.parent().find('.radio1').removeClass('selected');
+    this.addClass('selected');
+    };
+
 const TopUp2 = (props) => {
     const { handleSubmit, pristine, previousPage, submitting } = props;
     return (
@@ -27,7 +32,7 @@ const TopUp2 = (props) => {
                             <h5 className="steps">Step 2 - 4</h5>
                         </div>
                     </div>
-                    <div className="radio-group2">
+                    <div className="radio-group2" onclick={click}>
                         <div className="row row-cols-md-3" style={{ justifyContent: 'center' }}>
                             <a className="btn btn-app radio1" name="payment1" data-id="Credit Card" style={{ marginRight: '3.5rem' }}>
                                 <img src="https://www.pinclipart.com/picdir/big/48-488752_credit-card-atm-card-logo-png-clipart.png" alt="" style={{ height: '2rem' }} /> &nbsp; Card
