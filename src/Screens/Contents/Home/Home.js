@@ -77,7 +77,7 @@ class Home extends Component {
                         className="img-fluid img-book"
                         alt="white sample"
                       />
-                      <span className="badge badge-success category-book">
+                      <span className="badge  category-book">
                         fiction
                       </span>
                     </a>
@@ -90,7 +90,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge badge-success category-book">
+                    <span className="badge  category-book">
                       romance
                     </span>
                   </div>
@@ -102,7 +102,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge badge-success category-book">
+                    <span className="badge  category-book">
                       fantasy
                     </span>
                   </div>
@@ -114,7 +114,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge badge-success category-book">
+                    <span className="badge  category-book">
                       novel
                     </span>
                   </div>
@@ -126,7 +126,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge badge-success category-book">
+                    <span className="badge  category-book">
                       novel
                     </span>
                   </div>
@@ -173,14 +173,8 @@ class Home extends Component {
                     bangkit untuk adik-adiknya. Chayla berusaha mengembalikan
                     takdir...
                   </p>
-                  <span className="badge badge-success category-book">
+                  <span className="badge category-book">
                     fiction
-                  </span>
-                  <span className="badge badge-success category-book">
-                    romance
-                  </span>
-                  <span className="badge badge-success category-book">
-                    fantasy
                   </span>
                 </div>
               </div>
@@ -194,7 +188,7 @@ class Home extends Component {
                     className="img-fluid img-book"
                     alt="white sample"
                   />
-                  <span className="badge badge-success category-book">
+                  <span className="badge  category-book">
                     fiction
                   </span>
                 </a>
@@ -207,7 +201,7 @@ class Home extends Component {
                     alt="white sample"
                   />
                 </a>
-                <span className="badge badge-success category-book">
+                <span className="badge  category-book">
                   romance
                 </span>
               </div>
@@ -219,7 +213,7 @@ class Home extends Component {
                     alt="white sample"
                   />
                 </a>
-                <span className="badge badge-success category-book">
+                <span className="badge  category-book">
                   fantasy
                 </span>
               </div>
@@ -231,7 +225,7 @@ class Home extends Component {
                     alt="white sample"
                   />
                 </a>
-                <span className="badge badge-success category-book">novel</span>
+                <span className="badge  category-book">novel</span>
               </div>
               <div className="filtr-item list-book">
                 <a href="detail.html">
@@ -241,7 +235,7 @@ class Home extends Component {
                     alt="white sample"
                   />
                 </a>
-                <span className="badge badge-success category-book">novel</span>
+                <span className="badge  category-book">novel</span>
               </div>
             </div>
             <div className="books-nf" style={{ display: 'none' }}>

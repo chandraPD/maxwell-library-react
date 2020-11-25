@@ -2,6 +2,10 @@
   margin:"0";
 }
 
+.content-wrapper {
+min-height: 100% !important;
+}
+
 .button{
   margin-left: 20px;
   margin-top: 10px;
@@ -48,7 +52,7 @@ h1.title-text{
 
 .card.card-info{
   margin-left: 7.5px;
-  margin-right: 7.5px; 
+  margin-right: 7.5px;
 }
 
 p.date{
@@ -142,12 +146,12 @@ a#toggle{
 .filtr-item.col-sm-4.list-book {
   padding: 15px 7.5px;
   max-width: 360px;
-  
+
 }
 
 img.img-fluid.img-book {
   border-top-left-radius: 10px;
-  border-top-right-radius: 10px; 
+  border-top-right-radius: 10px;
   height: 15rem; width: 100%;
   box-shadow: 10px 0 5px 0.5px #888;
 }
@@ -156,7 +160,7 @@ img.img-fluid.img-book {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  
+
 }
 
 .desc-book {
@@ -274,7 +278,7 @@ h3.book-not-found {
   border-color: #ffc929;
   color: rgb(255, 255, 255);
   font-size: 1.2rem;
-} 
+}
 
 
 .profile-section {
@@ -286,7 +290,7 @@ flex-direction: column !important;
 margin: 1rem;
 }
 
-.carousel-cell {
+.main-carousel .carousel-cell {
 width: 37.5rem;
 height: 300px;
 margin-right: 68px !important;
@@ -294,7 +298,7 @@ background: #fff;
 counter-increment: carousel-cell;
 }
 
-.carousel .carousel-info {
+.main-carousel .carousel .carousel-info {
 border-radius: 0 0 5px 5px;
 bottom: 0px;
 position: absolute;
@@ -304,24 +308,24 @@ height: 50%;
 background: rgba(0, 0, 0, 0.2);
 }
 
-.carousel .carousel-info .carousel-text {
+.main-carousel .carousel .carousel-info .carousel-text {
 float: left !important;
 margin-top: 1rem;
 }
 
-.carousel .carousel-info h2 {
+.main-carousel .carousel .carousel-info h2 {
 color: #fff;
 font-weight: 600;
 }
 
-.carousel .carousel-info h3 {
+.main-carousel .carousel .carousel-info h3 {
 color: #fff;
 font-size: 1.3rem;
 }
 
 /* fade in lazy loaded image */
-.carousel-cell-image.flickity-lazyloaded,
-.carousel-cell-image.flickity-lazyerror {
+.main-carousel .carousel-cell-image.flickity-lazyloaded,
+.main-carousel .carousel-cell-image.flickity-lazyerror {
 opacity: 1;
 }
 
@@ -364,7 +368,7 @@ button.edit-profile {
   border-radius: 50%;
   background-color: white;
   opacity: 0.5;
-  
+
 }
 
 .profile-account small {
@@ -421,7 +425,7 @@ section.padding-editform {
   display: none;
   border-radius: 5px;
   box-shadow:  0 5px 10px 0 gray;
-  
+
 }
 
 .form-item {
@@ -447,13 +451,13 @@ section.padding-editform {
   /* .container-profile {
       margin: 20px;
       margin-top: 20px;
-      margin-left: 20px; 
+      margin-left: 20px;
   }*/
-/* 
+/*
   .content-user {
       margin: 0;
   } */
-/* 
+/*
   .container-changepwd {
       border: 3px solid;
       margin: 0;;
@@ -465,7 +469,7 @@ section.padding-editform {
       border: 3px solid;
   } */
 
-  
+
 
 }
 
