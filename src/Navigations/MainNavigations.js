@@ -10,6 +10,7 @@ import Detail from '../Screens/Contents/Detail/Detail'
 import Auth from '../Screens/Auth/Auth'
 import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryManagement'
 import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
+import Payment from '../Screens/Contents/Payment/Payment'
 
 class MainNavigation extends Component {
     render() {
@@ -37,6 +38,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/SlideShowManagement'>
                                     <SlideShowManagement />
+                                </Route>
+                                <Route path='/Payment'>
+                                    <Payment />
                                 </Route>
                             </Switch>
                             <Footer />
