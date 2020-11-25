@@ -1,0 +1,35 @@
+.hd-payment {
+    display: none
+}
+
+.balance-value {
+    border: 1px solid #ffc107;
+    border-radius: 5px;
+}
+
+.inv-selector {
+    width: 50%;
+}
+
+.balance-display {
+    float: right;
+}
+
+.custom-dcl {
+    margin-right: 20px
+}
+
+@media (max-width: 575px) {
+    .inv-selector {
+        width: 100%;
+    }
+
+    .balance-display {
+        float:initial;
+    }
+
+    .custom-dcl {
+        margin-right: 0;
+        margin-top: 2px;
+    }
+}
