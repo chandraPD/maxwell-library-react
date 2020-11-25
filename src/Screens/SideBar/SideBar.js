@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import './SideBar.style.css'
 import avatarUser from '../../Assets/Media/user/profile.png'
+import logo from '../../Assets/Media/icon/bookshelf.png'
 
 export default class SideBar extends Component {
     render() {
@@ -9,7 +10,7 @@ export default class SideBar extends Component {
             <aside className="main-sidebar elevation-4 sidebar-light-primary">
   {/* Brand Logo */}
   <a href="index.html" className="brand-link">
-    <img src="./auth/assets/images/bookshelf.png" alt="Maxwell Library" style={{height: '2rem', marginLeft: '.7rem'}} />
+    <img src={logo} alt="Maxwell Library" style={{height: '2rem', marginLeft: '.7rem'}} />
     <span className="brand-text font-weight-light">Maxwell Library</span>
   </a>
   {/* Sidebar */}
@@ -35,7 +36,7 @@ export default class SideBar extends Component {
               <a href="Profile.html" className="d-block user-name">Niki Zefanya</a>
               <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>Rp. 50.000,-</p>
               <a href="./top_up.html" className="btn btn-sm btn-primary" style={{color: 'white'}}>
-                <i className="fas fa-plus-square" /> &nbsp; Top Up
+                <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
               </a>
             </div>
           </div>

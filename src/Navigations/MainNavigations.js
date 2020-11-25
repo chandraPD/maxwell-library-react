@@ -10,6 +10,10 @@ import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 import Home from '../Screens/Contents/Home/Home'
 import Detail from '../Screens/Contents/Detail/Detail'
 import Auth from '../Screens/Auth/Auth'
+import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryManagement'
+import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
+import Payment from '../Screens/Contents/Payment/Payment'
+import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint";
 
 class MainNavigation extends Component {
     render() {
@@ -18,6 +22,9 @@ class MainNavigation extends Component {
                 <Switch>
                     <Route path='/auth'>
                         <Auth />
+                    </Route>
+                    <Route path='/PaymentPrint'>
+                        <PaymentInvoicePrint />
                     </Route>
                     <Route path='/'>
                             <NavBar />
@@ -37,6 +44,15 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/RentManagement'>
                                     <RentManagement />
+                                </Route>
+                                <Route path='/CategoryManagement'>
+                                    <CategoryManagement />
+                                </Route>
+                                <Route path='/SlideShowManagement'>
+                                    <SlideShowManagement />
+                                </Route>
+                                <Route path='/Payment'>
+                                    <Payment />
                                 </Route>
                             </Switch>
                             <Footer />
