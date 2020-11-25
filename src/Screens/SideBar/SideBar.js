@@ -121,7 +121,7 @@ export default class SideBar extends Component {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a href="top_up_management.html" className="nav-link">
+                    <a href="/TopUpManagement" className="nav-link">
                       <i className="fa fa-credit-card nav-icon" />
                       <p>Top Up Management</p>
                     </a>
