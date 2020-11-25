@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
-import NavBar from '../Screens/NavBar/NavBar'
+import NavBar from '../Screens/Navbar/NavBar'
 import SideBar from '../Screens/SideBar/SideBar'
+import Profile from '../Screens/Contents/Profile/Profile'
+import ChangePassword from '../Screens/Contents/Profile/ChangePassword'
 import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 import Home from '../Screens/Contents/Home/Home'
 import Detail from '../Screens/Contents/Detail/Detail'
@@ -30,6 +32,12 @@ class MainNavigation extends Component {
                             <Switch>
                                 <Route exact path='/'>
                                     <Home />
+                                </Route>
+                                <Route path='/profile'>
+                                    <Profile />
+                                </Route>
+                                <Route path='/change_password'>
+                                    <ChangePassword/>
                                 </Route>
                                 <Route path='/detail'>
                                     <Detail />
