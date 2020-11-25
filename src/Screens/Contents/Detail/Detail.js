@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import './Detail.style.css'
+import './Detail.style.css'
 import swal from 'sweetalert'
 import foto from '../../../Assets/Media/books/covernya2.png'
 import foto2 from '../../../Assets/Media/books/novel-dilan.jpg'
@@ -29,7 +29,7 @@ class Detail extends Component {
             <div className="container-fluid">
               <div className="button">
                 <div className="back-btn">
-                  <Link to='/'><a className="button-arrow" role="button"><i className="fas fa-arrow-left arrow" /></a></Link>
+                  <a href="/" className="button-arrow" role="button"><i className="fas fa-arrow-left arrow" /></a>
                 </div>
               </div>
               <div className="row">
