@@ -189,7 +189,7 @@ class Auth extends Component {
 
   render() {
     return (
-      <main>
+      <main className="main-style">
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-7 px-0 d-none d-sm-block">
