@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Assets/Css/login.css";
 import LoginImage from "./Assets/Images/cover.png";
 import BookShelfImage from "./Assets/Images/bookshelf.png";
-import { Link, withRouter } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 
 class Auth extends Component {
   constructor(props) {
@@ -47,6 +47,11 @@ class Auth extends Component {
       }
     }
 
+    if(!fields["PasswordSignUp"]) {
+      formIsValid = false
+      errors["PasswordSignUp"] = "Password cannot be empty"
+    }
+
     this.setState({errors: errors})
     return formIsValid
   }
@@ -70,6 +75,11 @@ class Auth extends Component {
         formIsValid = false;
         errors["emailSignIn"] = "Email is not valid"
       }
+    }
+
+    if(!fields["PasswordSignIn"]) {
+      formIsValid = false
+      errors["PasswordSignIn"] = "Password cannot be empty"
     }
 
     this.setState({errors: errors})
@@ -121,8 +131,8 @@ class Auth extends Component {
     e.preventDefault()
 
     if(this.handleValidationSignIn()){
-      alert("Success!")
-      
+      this.props.history.push('/')
+      window.location.reload()
     } else {
       alert("Form error")
     }
@@ -245,7 +255,10 @@ class Auth extends Component {
                         className="form-control custom-form"
                         id="exampleInputPassword1"
                         placeholder="Password"
+                        onChange={this.handleChangeSignUp.bind(this, "PasswordSignIn")}
+                        value={this.state.fields["PasswordSignIn"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignIn"]}</span>
                     </div>
                   </div>
                   <div className="pass-manager">
@@ -354,7 +367,10 @@ class Auth extends Component {
                         className="form-control custom-form"
                         id="exampleInputPassword"
                         placeholder="Password"
+                        onChange={this.handleChangeSignUp.bind(this, "PasswordSignUp")}
+                        value={this.state.fields["PasswordSignUp"]}
                       />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignUp"]}</span>
                     </div>
                   </div>
                   <div className="container-btn">
