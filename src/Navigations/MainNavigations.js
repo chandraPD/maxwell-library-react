@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
-import NavBar from '../Screens/Navbar/NavBar'
+import NavBar from '../Screens/NavBar/NavBar'
 import SideBar from '../Screens/SideBar/SideBar'
 import Profile from '../Screens/Contents/Profile/Profile'
 import ChangePassword from '../Screens/Contents/Profile/ChangePassword'
