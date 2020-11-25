@@ -41,7 +41,7 @@ class MainNavigation extends Component {
                                 <Route path='/change_password'>
                                     <ChangePassword/>
                                 </Route>
-                                <Route path='/detail'>
+                                <Route path='/Detail'>
                                     <Detail />
                                 </Route>
                                 <Route path='/RentManagement'>
