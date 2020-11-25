@@ -8,6 +8,8 @@ import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 import Home from '../Screens/Contents/Home/Home'
 import Detail from '../Screens/Contents/Detail/Detail'
 import Auth from '../Screens/Auth/Auth'
+import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryManagement'
+import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
 
 class MainNavigation extends Component {
     render() {
@@ -29,6 +31,12 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/RentManagement'>
                                     <RentManagement />
+                                </Route>
+                                <Route path='/CategoryManagement'>
+                                    <CategoryManagement />
+                                </Route>
+                                <Route path='/SlideShowManagement'>
+                                    <SlideShowManagement />
                                 </Route>
                             </Switch>
                             <Footer />
