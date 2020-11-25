@@ -47,6 +47,14 @@ class Auth extends Component {
       }
     }
 
+    if(fields["PasswordSignUp"] != null) {
+      let lengthPass = fields["PasswordSignUp"].length
+      if(lengthPass < 8) {
+        formIsValid = false
+        errors["PasswordSignUp"] = "Your password must be at least 8 characters long"
+      }
+    }
+
     if(!fields["PasswordSignUp"]) {
       formIsValid = false
       errors["PasswordSignUp"] = "Password cannot be empty"
