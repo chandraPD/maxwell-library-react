@@ -15,6 +15,7 @@ import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryM
 import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
 import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint";
+import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 
 class MainNavigation extends Component {
     render() {
@@ -51,6 +52,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
+                                </Route>
+                                <Route path='/TopUpManagement'>
+                                    <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>
                                     <SlideShowManagement />
