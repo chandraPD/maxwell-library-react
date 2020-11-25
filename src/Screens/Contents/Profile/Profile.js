@@ -1,7 +1,55 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
+import avatarUser from '../../../Assets/Media/user/profile.png'
+import swal from 'sweetalert'
+
 
 class Profile extends Component {
+
+    editForm() {
+        const editForm = document.querySelector('#container-editform');
+        editForm.style.display = 'block';
+
+    }
+
+    submitEditProfile() {
+        const editButton = document.querySelector('button.edit-profile');
+        const editForm = document.querySelector('#container-editform');
+        const cancelForm = document.querySelector('.btn-editform button');
+        
+        editForm.style.display = 'none';
+    
+        var firstName = document.getElementById('user-firstname').value;
+        var lastName = document.getElementById('user-lastname').value;
+        var dateOfBirth = document.getElementById('date-birth').value;
+        var emailUser = document.getElementById('user-email').value;
+        var addressUser = document.getElementById('user-address').value;
+        var phoneNumber = document.getElementById('user-number').value;
+    
+        if (firstName == '' || lastName == '' || dateOfBirth == '' || emailUser == '' || addressUser == '' || phoneNumber == ''){
+                swal.fire(
+                    'Submit Failed !',
+                    'You should fill in the blank',
+                    'error'
+                );
+                editForm.style.display = 'none';
+            }else{
+                swal.fire(
+                    'Submitted !',
+                    'You clicked the button!',
+                    'success'
+                );
+    
+                document.getElementById('firstname').innerHTML = firstName;
+                document.getElementById('lastname').innerHTML = lastName;
+                document.getElementById('birthday').innerHTML = dateOfBirth;
+                document.getElementById('email').innerHTML = emailUser;
+                document.getElementById('address').innerHTML = addressUser;
+                document.getElementById('phonenumber').innerHTML = phoneNumber;
+                
+            }
+    
+    }
     render(){
         return(
             <Fragment>
@@ -12,7 +60,7 @@ class Profile extends Component {
                             <div className="col-lg-12">
                                 <div className="profile-account">
                                     <div className="picture">
-                                        {/* <img src="/assets/media/user/profile.png" alt=""> */}
+                                        <img src={avatarUser} alt=""/>
                                     </div>
                                     <Link to='/edit_profile'>
                                     <button type="button" className="btn btn-primary edit-profile">
@@ -75,6 +123,83 @@ class Profile extends Component {
                         </div>  
                     </div>
                 </section>
+
+                {/* Edit Form  */}
+                <section className="padding-editform">
+                <div id="container-editform">
+                <h3 style={{textAlign: 'center'}}>Edit Your Profile</h3>
+                    <div className="form-item">
+                    <div className="row">
+                        <div className="col-lg-8">
+                        <label className="input-title">First Name</label>
+                        </div>
+                        <div className="col-lg-12">
+                        <input className="input-value" id="user-firstname" type="text" name="user-firstname"/>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="form-item">
+                    <div className="row">
+                        <div className="col-lg-8">
+                        <label className="input-title">Last Name</label>
+                        </div>
+                        <div className="col-lg-12">
+                        <input className="input-value" id="user-lastname" type="text" name="user-lastname"/>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="form-item">
+                    <div className="row">
+                        <div className="col-lg-8">
+                        <label className="input-title">Date of Birth</label>
+                        </div>
+                        <div className="col-lg-12">
+                        <input className="input-value" id="date-birth" type="text" name="date-birth" placeholder="dd/mm/yyyy"/>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="form-item">
+                    <div className="row">
+                        <div className="col-lg-8">
+                        <label className="input-title">Address</label>
+                        </div>
+                        <div className="col-lg-12">
+                        <input className="input-value" id="user-address" type="text" name="user-address"/>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="form-item">
+                    <div className="row">
+                        <div className="col-lg-8">
+                        <label className="input-title">Email</label>
+                        </div>
+                        <div className="col-lg-12">
+                        <input className="input-value" id="user-email" type="email" name="user-email" placeholder="example@gmail.com"/>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="form-item">
+                    <div className="row">
+                        <div className="col-lg-8">
+                        <label className="input-title">Phone Number</label>
+                        </div>
+                        <div className="col-lg-12">
+                        <input className="input-value" id="user-number" type="text" name="user-number" placeholder="+62-812-345-6789"/>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="btn-editform">
+                    <input className="btn btn-primary" type="submit" value="Submit" onClick={()=> this.submitEditProfile()}/>
+                    <button type="button" className="btn btn-secondary">Close</button>
+                    </div>
+                </div>
+            </section>
             </div>
             </Fragment>
 

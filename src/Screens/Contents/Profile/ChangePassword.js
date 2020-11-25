@@ -1,5 +1,7 @@
 // import { render } from '@testing-library/react'
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import swal from 'sweetalert'
 
 class ChangePassword extends Component {
     render(){
@@ -9,13 +11,14 @@ class ChangePassword extends Component {
                     <div className="content-changepwd">
                         <h3 className="changepwd-title">Change Password</h3>
                         <form id="changePwdForm">
-                            <div className="form-group row">
+                            <div className="form-group row mb-3">
                                 <label className="col-sm-3 col-form-label">Email</label>
                                 <div className="col-sm-8">
                                     <input type="email" name="email" className="form-control" placeholder="example@gmail.com" id="email"/>
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            <br/>
+                            <div className="form-group row mb-3">
                                 <label for="inputPassword3" className="col-sm-3 col-form-label">Old Password</label>
                                 <div className="col-sm-8">
                                     <input type="password" name="oldPassword" className="form-control" id="oldPassword"/>
@@ -24,7 +27,7 @@ class ChangePassword extends Component {
                                     </small>
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            <div className="form-group row mb-3">
                                 <label for="inputPassword3" className="col-sm-3 col-form-label">New Password</label>
                                 <div className="col-sm-8">
                                     <input type="password" name="newPassword" className="form-control" id="newPassword"/>
@@ -33,7 +36,7 @@ class ChangePassword extends Component {
                                     </small>
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            <div className="form-group row mb-3">
                                 <label for="inputPassword3" className="col-sm-3 col-form-label">Verify Password</label>
                                 <div className="col-sm-8">
                                     <input type="password" name="verifyPassword" className="form-control" id="verifyPassword"/>
@@ -42,9 +45,11 @@ class ChangePassword extends Component {
                                     </small>
                                 </div>
                             </div>
-                            <div className="save-pwd">
-                                <input id="save-change" type="submit" value="Confirm" className="btn btn-primary" onclick="submitChangePassword()"/>
-                                <a href="Profile.html"><button id="close-change" type="button" className="btn btn-light">Close</button></a>
+                            <br/>
+                            <div className="save-pwd mr-3">
+                                <input id="save-change" type="submit" value="Confirm" className="btn btn-primary mr-2" onClick={()=>swal('Submitted!','Success to Change Your Password','success')}/>
+                                {/* <a href="Profile.html"> */}
+                                <Link to='/profile'><button id="close-change" type="button" className="btn btn-light">Close</button></Link>
                             </div>
                         </form>
                     </div>
