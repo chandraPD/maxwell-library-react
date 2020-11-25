@@ -2,6 +2,10 @@
   margin:"0";
 }
 
+.content-wrapper {
+min-height: 100% !important;
+}
+
 .button{
   margin-left: 20px;
   margin-top: 10px;
@@ -16,27 +20,6 @@ img.check{
 p{
   text-align: center;
   margin-left: 0.2rem;
-}
-
-img.big-preview{
-  width: 100%;
-  background-size: cover;
-  background-image: url(./Assets/Media/books/covernya.png);
-  max-height: 350px;
-  max-width: 100%;
-
-}
-
-.category {
-width:60px;
-height:20px;
-bottom:40px;
-  right:40px;
-  margin-left: 70px;
-background-color:yellow;
-  border-radius:50px;
-  text-align: center;
-  transition: 0.6s ease;
 }
 
 p.content{
@@ -69,34 +52,7 @@ h1.title-text{
 
 .card.card-info{
   margin-left: 7.5px;
-  margin-right: 7.5px; 
-}
-h3
-button#button_borrow{
-
-  position: absolute;
-  top: 40%;
-  left: 67%;
-  color: white;
-  font-size: 25px;
-  width: 150px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-h1.statustext{
-  color: green;
-  font-size: 20px;
-  margin-left: 30px;
-}
-
-a.button-arrow{
-  font-size: 20px;    
-}
-
-i.arrow{
-  margin: -15px;    
-  
+  margin-right: 7.5px;
 }
 
 p.date{
@@ -104,23 +60,6 @@ p.date{
   margin-left: 70px;
   font-weight: bold;
 }
-
-.category p{
-  color: black;
-  text-decoration: none;
-  font-size: 15px;
-}
-
-img.small-preview{    
-  right: 3rem;
-  margin-top: -7rem;
-  position: absolute;
-  height: 14rem;
-  width: 10rem;
-  filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
-  border-radius: 15px;
-}
-
 
 ul.menuhead {
   position: absolute;
@@ -151,328 +90,12 @@ ul.menuhead li a:hover {
   margin: 20px;
 }
 
-#recomendedcard img{
-  height: 18rem;
-  width: 100%;
-  margin: auto;
-}
-
 a#toggle{
   color: black;
   float: right;
   margin-left: 1000px;
   text-decoration: none;
   position: absolute;
-}
-
-@media (max-width: 1920px){
-  /* ul.menuhead{
-      margin-left: 900px;
-      float: right;
-              */
-  }
-
-  /* img.small-preview{
-      top: 35%;
-      left: 80%;
-      transform: translate(-50%,-50%);
-      position: absolute;
-      height: 150px;
-      width: 100px
-  } */
-
-  a#toggle{
-      color: black;
-      float: right;
-      margin-left: 500px;
-      text-decoration: none;
-      position: absolute;
-  }
-
-  .row#recomended{
-      text-decoration: none;
-  }
-
-  button#button_borrow{
-      position: absolute;
-      top: 50%;
-      left: 75%;
-      color: white;
-      font-size: 25px;
-      width: 150px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-
-
-
-@media (max-width: 1440px){
-  /* ul.menuhead{
-      margin-left: 800px;
-      float: right; */
-
-  }
-
-  /* img.small-preview{
-      top: 30%;
-      left: 90%;
-      transform: translate(-50%,-50%);
-      position: absolute;
-      height: 150px;
-      width: 100px
-
-  } */
-
-  a#toggle{
-      color: black;
-      float: right;
-      margin-left: 500px;
-      text-decoration: none;
-      position: absolute;
-  }
-
-  .row#recomended{
-      text-decoration: none;
-  }
-
-  button#button_borrow{
-      position: absolute;
-      top: 55%;
-      left: 80%;
-      color: white;
-      font-size: 25px;
-      width: 150px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-
-
-
-@media (max-width: 1220px){
-  /* ul.menuhead{
-      margin-left: 700px;
-      float: right;
-
-  } */
-
-}
-
-@media (max-width: 1024px){
-  /* ul.menuhead{
-      margin-left: 500px;
-      float: right;
-
-  } */
-
-  /* img.small-preview{
-      top: 30%;
-      left: 90%;
-      transform: translate(-50%,-50%);
-      position: absolute;
-      height: 150px;
-      width: 100px
-
-  } */
-
-  a#toggle{
-      color: black;
-      float: right;
-      margin-left: 500px;
-      text-decoration: none;
-      position: absolute;
-  }
-
-  .row#recomended{
-      text-decoration: none;
-  }
-
-}
-
-@media (max-width: 800px){   
-
-  img.big-preview{
-      background-size: cover;
-      background-image: url(./Assets/Media/books/novel-dilanmini.jpg);
-      max-height: 350px;
-      max-width: 100%;
-  }
-
-  /* ul.menuhead{
-      margin-left: 500px;
-      float: right;
-  } */
-
-  a#toggle{
-      color: black;
-      float: right;
-      margin-left: 500px;
-      text-decoration: none;
-  }
-
-  /* img.small-preview{
-      top:17%;
-      left: 90%;
-      transform: translate(-50%,-50%);
-      position: absolute;
-      height: 150px;
-      width: 100px
-
-  } */
-
-  .row#recomended{
-      text-decoration: none;
-      margin-left: 200px;
-      display: flex;
-      color: black;
-      list-style-type:none;
-      justify-content: space-evenly;
-  }
-
-  button#button_borrow{
-      position: absolute;
-      /* top: 30%; */
-      left: 75%;
-      color: white;
-      font-size: 25px;
-      width: 150px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-}
-
-@media (max-width: 450px){
-  p.date{
-      margin-left: 10px;
-  }        
-
-  .category {
-      margin-left: 10px;  
-  }
-
-  h1.titletext{
-      margin-left: 10px;
-  }
-
-  p.content{
-      margin-left: 10px;
-  }
-      /* ul.menuhead{
-          margin-left: 200px;
-          float: right;
-      } */
-
-      img.check{
-          margin-left: 80px;
-      }
-
-      button#button_borrow{
-
-          position: absolute;
-          top: 22%;
-          left: 65%;
-          color: white;
-          font-size: 20px;
-
-          width: 85px;
-          border-radius: 10px;
-          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-      }
-
-      img.small-preview{
-          position: absolute;
-          height: 150px;
-          width: 100px
-
-      }
-
-      h1.statustext{
-          color: green;
-          font-size: 20px;
-          margin-left: 10px;
-      }
-
-      .row#recomended{
-          text-decoration: none;
-          margin-left: 60px;
-          display: list-item;
-          color: black;
-      }
-
-      a#toggle{
-          color: black;
-          float: right;
-          margin-left: 300px;
-          text-decoration: none;
-          position: absolute;
-      }
-}
-
-@media (max-width: 380px){
-  img.check{
-      margin-left: 65px;
-  }
-
-  button#button_borrow{
-
-      position: absolute;
-      top: 21%;
-      left: 65%;
-      color: white;
-      font-size: 20px;
-
-      width: 85px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-}
-
-@media (max-width: 330px){
-  /* ul.menuhead{
-      margin-left: 150px;
-      float: right;
-      display: list-item;
-      color: transparent;
-  } */
-
-  img.check{
-      margin-left: 40px;
-  }
-
-  button#button_borrow{
-      position: absolute;
-      top: 21%;
-      left: 65%;
-      color: white;
-      font-size: 20px;
-      width: 90px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-
-  /* img.small-preview{
-      top: 14%;
-      left: 80%;
-      transform: translate(-50%,-50%);
-      position: absolute;
-      height: 100px;
-      width: 75px
-
-  } */
-
-  .row#recomended{
-      text-decoration: none;
-      margin-left: 15px;
-      orientation: auto;
-      color: black;
-  }
-
-  a#toggle{
-      color: black;
-      float: right;
-      margin-left: 250px;
-      text-decoration: none;
-      position: absolute;
-  }
 }
 
 /* slick slider */
@@ -523,12 +146,12 @@ a#toggle{
 .filtr-item.col-sm-4.list-book {
   padding: 15px 7.5px;
   max-width: 360px;
-  
+
 }
 
 img.img-fluid.img-book {
   border-top-left-radius: 10px;
-  border-top-right-radius: 10px; 
+  border-top-right-radius: 10px;
   height: 15rem; width: 100%;
   box-shadow: 10px 0 5px 0.5px #888;
 }
@@ -537,7 +160,7 @@ img.img-fluid.img-book {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  
+
 }
 
 .desc-book {
@@ -629,17 +252,6 @@ h3.book-not-found {
   width: 3rem;
 }
 
-.back-btn a {
-  color: black;
-  position: absolute;
-  margin-left: 1rem;
-  margin-top: .6rem;
-}
-
-.row#recomended {
-  margin: 2rem;
-}
-
 .list-title h4 {
   float: left;
   font-weight: 700;
@@ -666,7 +278,7 @@ h3.book-not-found {
   border-color: #ffc929;
   color: rgb(255, 255, 255);
   font-size: 1.2rem;
-} 
+}
 
 
 .profile-section {
@@ -678,7 +290,7 @@ flex-direction: column !important;
 margin: 1rem;
 }
 
-.carousel-cell {
+.main-carousel .carousel-cell {
 width: 37.5rem;
 height: 300px;
 margin-right: 68px !important;
@@ -686,7 +298,7 @@ background: #fff;
 counter-increment: carousel-cell;
 }
 
-.carousel .carousel-info {
+.main-carousel .carousel .carousel-info {
 border-radius: 0 0 5px 5px;
 bottom: 0px;
 position: absolute;
@@ -696,24 +308,24 @@ height: 50%;
 background: rgba(0, 0, 0, 0.2);
 }
 
-.carousel .carousel-info .carousel-text {
+.main-carousel .carousel .carousel-info .carousel-text {
 float: left !important;
 margin-top: 1rem;
 }
 
-.carousel .carousel-info h2 {
+.main-carousel .carousel .carousel-info h2 {
 color: #fff;
 font-weight: 600;
 }
 
-.carousel .carousel-info h3 {
+.main-carousel .carousel .carousel-info h3 {
 color: #fff;
 font-size: 1.3rem;
 }
 
 /* fade in lazy loaded image */
-.carousel-cell-image.flickity-lazyloaded,
-.carousel-cell-image.flickity-lazyerror {
+.main-carousel .carousel-cell-image.flickity-lazyloaded,
+.main-carousel .carousel-cell-image.flickity-lazyerror {
 opacity: 1;
 }
 
@@ -756,7 +368,7 @@ button.edit-profile {
   border-radius: 50%;
   background-color: white;
   opacity: 0.5;
-  
+
 }
 
 .profile-account small {
@@ -813,7 +425,7 @@ section.padding-editform {
   display: none;
   border-radius: 5px;
   box-shadow:  0 5px 10px 0 gray;
-  
+
 }
 
 .form-item {
@@ -839,13 +451,13 @@ section.padding-editform {
   /* .container-profile {
       margin: 20px;
       margin-top: 20px;
-      margin-left: 20px; 
+      margin-left: 20px;
   }*/
-/* 
+/*
   .content-user {
       margin: 0;
   } */
-/* 
+/*
   .container-changepwd {
       border: 3px solid;
       margin: 0;;
@@ -857,7 +469,7 @@ section.padding-editform {
       border: 3px solid;
   } */
 
-  
+
 
 }
 
