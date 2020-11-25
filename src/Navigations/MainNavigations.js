@@ -7,18 +7,21 @@ import SideBar from '../Screens/SideBar/SideBar'
 import Profile from '../Screens/Contents/Profile/Profile'
 import ChangePassword from '../Screens/Contents/Profile/ChangePassword'
 import EditProfile from '../Screens/Contents/Profile/EditProfile'
-import Detail from '../Screens/Contents/Detail'
+import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
+import Home from '../Screens/Contents/Home/Home'
+import Detail from '../Screens/Contents/Detail/Detail'
 
 class MainNavigation extends Component {
   render() {
-    return(
+    return (
       <Router>
         <NavBar />
         <SideBar /> 
-        <Route path='/'>
+        <Route exact path='/'>
+          <Home />
         </Route>
         <Route path='/detail'>
-          <Detail />          
+          <Detail />      
         </Route>
         <Route path='/profile'>
           <Profile />
@@ -30,9 +33,12 @@ class MainNavigation extends Component {
           <ChangePassword/>
         </Route>
         <Footer />    
+        <Route path='/RentManagement'>
+          <RentManagement/>
+        </Route>
+        <Footer />
       </Router>
     )
   }
 }
-
 export default MainNavigation
