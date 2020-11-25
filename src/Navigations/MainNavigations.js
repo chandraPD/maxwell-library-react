@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
 import NavBar from '../Screens/NavBar/NavBar'
@@ -10,36 +10,32 @@ import Detail from '../Screens/Contents/Detail/Detail'
 import Auth from '../Screens/Auth/Auth'
 
 class MainNavigation extends Component {
-  render() {
-    return (
-      <Router>
-        <Route exact path='/auth'>
-          <Auth />
-        </Route>
-        
-        <Route exact path='/'>
-          <NavBar />
-          <SideBar /> 
-          <Home />
-           <Footer />
-          </Route>
-
-        <Route path='/detail'>
-          <NavBar />
-          <SideBar /> 
-          <Detail />    
-          <Footer />  
-        </Route>
-
-        <Route path='/RentManagement'>
-          <NavBar />
-          <SideBar /> 
-          <RentManagement/>
-          <Footer /> 
-        </Route>
-        
-      </Router>
-    )
-  }
+    render() {
+        return (
+            <Router>
+                <Switch>
+                    <Route path='/auth'>
+                        <Auth />
+                    </Route>
+                    <Route path='/'>
+                            <NavBar />
+                            <SideBar />
+                            <Switch>
+                                <Route exact path='/'>
+                                    <Home />
+                                </Route>
+                                <Route path='/detail'>
+                                    <Detail />
+                                </Route>
+                                <Route path='/RentManagement'>
+                                    <RentManagement />
+                                </Route>
+                            </Switch>
+                            <Footer />
+                    </Route>
+                </Switch>
+            </Router>
+        )
+    }
 }
 export default MainNavigation
