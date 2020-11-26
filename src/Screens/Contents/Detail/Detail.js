@@ -8,14 +8,6 @@ import foto4 from '../../../Assets/Media/books/novel-milea.jpg'
 import { Link } from 'react-router-dom'
 
 class Detail extends Component {
-
-//   showModal1(arg) {
-//     if (arg == 'borrow') {                
-//         $('#BorrowModal').modal('show');
-//     } else if (arg == 'borrowed') {
-//         $('#cancelModal').modal('show');
-//     }
-// }
   
     render () {
       return (
