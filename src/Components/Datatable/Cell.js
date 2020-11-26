@@ -10,9 +10,7 @@ export default function Cell({
         {content}
       </th>
     ) : (
-      <td>
-        {content}
-      </td>
+        content
     );
   
     return (cellMarkup);
