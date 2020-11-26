@@ -1,0 +1,76 @@
+.method .gopay{
+    margin-left: -15px;        
+}
+
+.method .dana{
+    margin-left: 6px;        
+}
+
+.method .cash{
+    margin-left: 9px;
+}
+
+@media (max-width: 430px){
+
+    .radio-group .icheck-primary{
+        margin-left: 40px;
+    }
+
+    .method .icheck-primary{
+        margin-left: 50px;
+    }
+
+    .method .dana{
+        margin-left: 82px;
+    }
+
+    .method .cash{
+        margin-left: 67px;
+    }
+}
+
+@media (max-width: 380px){
+
+    .radio-group .icheck-primary{
+        margin-left: 60px;
+    }
+
+    .method .icheck-primary{
+        margin-left: 50px;
+    }
+
+    .method .dana{
+        margin-left: 50px;
+    }
+
+    .method .cash{
+        margin-left: 90px;
+    }
+
+    .method .gopay{
+        margin-left: 97px;
+    }
+}
+
+@media (max-width: 330px){
+
+    .radio-group .icheck-primary{
+        margin-left: 40px;
+    }
+
+    .method .icheck-primary{
+        margin-left: 50px;
+    }
+
+    .method .dana{
+        margin-left: 50px;
+    }
+
+    .method .cash{
+        margin-left: 90px;
+    }
+
+    .method .gopay{
+        margin-left: 97px;
+    }
+}
