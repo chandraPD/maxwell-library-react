@@ -1,11 +1,141 @@
 import React, { Component } from "react";
-import UburLemburImg from '../../../Assets/Media/books/uburlembur.png'
-import LaskarPelangiImg from '../../../Assets/Media/books/laskar.png'
-import DilanImg from '../../../Assets/Media/books/dilan.png'
 import SuccessImg from '../../../Assets/Media/check.png'
+import DataTable from "../../../Components/Datatable/Table";
+import Action from "../../../Components/Datatable/Action";
+import $ from 'jquery'
+import swal from 'sweetalert'
+import 'bootstrap'
+import { Link } from "react-router-dom";
 
 class SlideShowManagement extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      fields: {},
+      errors: {},
+      data: [],
+      rows: [],
+      results: [],
+    }
+  }
+
+  componentDidMount() {
+    this.fetchData()
+  }
+
+  async fetchData() {
+    const results = [] 
+    const result = [{
+      no : 1,
+      title: "Ubur-ubur Lembur",
+      subtitle: "Raditya Dika",
+      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/uburlembur.png"
+    },
+    {
+      no : 2,
+      title: "Laskar Pelangi",
+      subtitle: "Andrea Hirata",
+      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/laskar.png"
+    },
+    {
+      no : 3,
+      title: "Dilan 1990",
+      subtitle: "Raditya Dika",
+      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/dilan.png"
+    }]
+
+    result.map((slideshow) => {
+      var row = []
+
+      row.push(<td className="text-center">{slideshow.no}</td>);
+      row.push(
+        <td className="text-center py-0 align-middle">
+          <div className="btn-group btn-group-sm">
+            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
+            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
+          </div>
+        </td>
+      );
+      row.push(<td className="text-center py-0 align-middle">
+      <select className="custom-select">
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </td>)
+      row.push(<td>{slideshow.title}</td>)
+      row.push(<td>{slideshow.subtitle}</td>)
+      row.push(<td><img src={slideshow.image} style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
+      results.push(row)
+    })
+    this.setState({ rows: results });
+  }
+
+  handleValidation() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //Title
+    if (!fields["slideshowTitle"]) {
+      formIsValid = false;
+      errors["slideshowTitle"] = "Slideshow Title cannot be empty";
+    }
+
+    //Subtitle
+    if (!fields["slideshowSubTitle"]) {
+      formIsValid = false;
+      errors["slideshowSubTitle"] = "Slideshow Subtitle cannot be empty";
+    }
+
+    //Image
+    if (!fields["slideshowImage"]) {
+      formIsValid = false;
+      errors["slideshowImage"] = "Image cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
+  contactSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      $('#modal-add').modal('toggle');
+      swal({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your Data has been Added',
+        buttons: {
+          catch: {
+            text: "OK",
+            value: "catch"
+          }
+        }
+      }).then((value) => {
+        switch(value) {
+          case "catch":
+            window.location.reload()
+            break;
+        }
+      })
+        
+    } else {
+
+    }
+  }
+  
+
+  handleChange(field, e) {
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
+  
+
   render() {
+    const { rows } = this.state
+    const headings = ["No.", "Action", "Status", "Title", "Sub Title", "Image"]
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}
@@ -16,7 +146,7 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a href='/'>Home</a>
                   </li>
                   <li className="breadcrumb-item active">Slideshow</li>
                 </ol>
@@ -45,92 +175,7 @@ class SlideShowManagement extends Component {
             </div>
 
             <div className="card-body">
-              <div className="card-body">
-                <table id="example1" className="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th className="head-number">No.</th>
-                      <th className="action-col">Action</th>
-                      <th style={{width:"10px"}}>Status</th>
-                      <th>Title</th>
-                      <th>Sub Title</th>
-                      <th>Image</th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td className="text-center py-0 align-middle">
-                        <div className="btn-group btn-group-sm">
-                          <button data-toggle="modal" data-target="#modal-edit" title="Edit" className="btn btn-success"><i
-                              className="fas fa-pen"></i></button>
-                          <button data-toggle="modal" data-target="#modal-delete" title="Delete"
-                            className="btn btn-danger"><i className="fas fa-trash"></i></button>
-                        </div>
-                      </td>
-                      <td className="text-center py-0 align-middle">
-                      <select className="custom-select">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </td>
-                      <td>Ubur-ubur Lembur</td>
-                      <td>Raditya Dika</td>
-                      <td><img src={UburLemburImg}
-                          style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>
-
-                    </tr>
-
-                    <tr>
-                      <td>2</td>
-                      <td className="text-center py-0 align-middle">
-                        <div className="btn-group btn-group-sm">
-                          <button data-toggle="modal" data-target="#modal-edit" title="Edit" className="btn btn-success"><i
-                              className="fas fa-pen"></i></button>
-                          <button data-toggle="modal" data-target="#modal-delete" title="Delete"
-                            className="btn btn-danger"><i className="fas fa-trash"></i></button>
-                        </div>
-                      </td>
-                      <td className="text-center py-0 align-middle">
-                      <select className="custom-select">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </td>
-                      <td>Laskar Pelangi</td>
-                      <td>Andrea Hirata</td>
-                      <td><img src={LaskarPelangiImg}
-                          style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>
-
-                    </tr>
-
-                    <tr>
-                      <td>3</td>
-                      <td className="text-center py-0 align-middle">
-                        <div className="btn-group btn-group-sm">
-                          <button data-toggle="modal" data-target="#modal-edit" title="Edit" className="btn btn-success"><i
-                              className="fas fa-pen"></i></button>
-                          <button data-toggle="modal" data-target="#modal-delete" title="Delete"
-                            className="btn btn-danger"><i className="fas fa-trash"></i></button>
-                        </div>
-                      </td>
-                      <td className="text-center py-0 align-middle">
-                      <select className="custom-select">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </td>
-                      <td>Dilan 1990</td>
-                      <td>Raditya Dika</td>
-                      <td><img src={DilanImg}
-                          style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>
-
-                    </tr>
-
-                  </tbody>
-                </table>
-              </div>
+            <DataTable headings={headings} rows={rows} />
             </div>
           </div>
         </div>
@@ -146,28 +191,41 @@ class SlideShowManagement extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form role="form" id="addSlideshow">
+          <form role="form" id="addSlideshow" onSubmit={this.contactSubmit.bind(this)}>
             <div class="modal-body">
               <div class="card-body">
                 <div class="form-group">
                   <label for="inputTitle">Title</label>
                   <input type="text" class="form-control" name="slideshowTitle" id="inputTitle"
-                    placeholder="Enter Title"/>
+                    placeholder="Enter Title" onChange={this.handleChange.bind(this, "slideshowTitle")}
+                    value={this.state.fields["slideshowTitle"]}/>
+                    <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowTitle"]}
+                      </span>
                 </div>
+                
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
                   <input type="text" class="form-control" name="slideshowSubTitle" id="inputSubTitle"
-                    placeholder="Enter Sub Title"/>
+                    placeholder="Enter Sub Title" onChange={this.handleChange.bind(this, "slideshowSubTitle")} value={this.state.fields["slideshowSubTitle"]}/>
+                    <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowSubTitle"]}
+                      </span>
                 </div>
+                
                 <div class="form-group">
                   <label for="addSlideshowImg">Choose Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="addSlideshowImg" name="slideshowImage"/>
-                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="slideshowImage" onChange={this.handleChange.bind(this, "slideshowImage")}
+                    value={this.state.fields["slideshowImage"]}/>
+                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>                   
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span>
+                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
+                  <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowImage"]}
+                      </span>
                 </div>
 
               </div>

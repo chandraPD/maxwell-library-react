@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import avatarUser from '../../../Assets/Media/user/profile.png'
+import avatarUser from '../../../Assets/Media/admin.png'
 import swal from 'sweetalert'
 
 
@@ -65,7 +65,7 @@ class Profile extends Component {
                             <div className="col-lg-12">
                                 <div className="profile-account">
                                     <div className="picture">
-                                        <img src={avatarUser} alt=""/>
+                                        <img src={avatarUser} alt="Admin Profile" width='300' height='300'/>
                                     </div>
                                     <button 
                                     type="button" 
@@ -86,13 +86,13 @@ class Profile extends Component {
                             <div className="row">
                                 <div className="col-lg-6">
                                 <div className="data">
-                                    <h5 >First Name</h5>
-                                    <span id="firstname">Niki</span>
+                                    <h5 >Full Name</h5>
+                                    <span id="firstname">Admin</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
-                                    <h5 >Last Name</h5>
-                                    <span id="lastname">Zefanya</span>
+                                    <h5 >ID Admin</h5>
+                                    <span id="lastname">01</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
@@ -118,11 +118,6 @@ class Profile extends Component {
                                     <hr/>
                                 </div>
                                 <div className="data">
-                                    <h5 >Your Balance</h5>
-                                    <span id="mybalance">Rp 50.000,-</span>
-                                    <hr/>
-                                </div>
-                                <div className="data">
                                     {/* <a href="change_password.html"><strong><u>Change Password</u></strong></a> */}
                                     <Link to='/ChangePassword'>Change Password</Link>
                                 </div>
@@ -135,11 +130,11 @@ class Profile extends Component {
                 {/* Edit Form  */}
                 <section className="padding-editform">
                 <div id="container-editform">
-                <h3 style={{textAlign: 'center'}}>Edit Your Profile</h3>
+                <h3 style={{textAlign: 'center'}}>Edit Admin Profile</h3>
                     <div className="form-item">
                     <div className="row">
                         <div className="col-lg-8">
-                        <label className="input-title">First Name</label>
+                        <label className="input-title">Full Name</label>
                         </div>
                         <div className="col-lg-12">
                         <input className="input-value" id="user-firstname" type="text" name="user-firstname"/>
@@ -150,7 +145,7 @@ class Profile extends Component {
                     <div className="form-item">
                     <div className="row">
                         <div className="col-lg-8">
-                        <label className="input-title">Last Name</label>
+                        <label className="input-title">ID Admin</label>
                         </div>
                         <div className="col-lg-12">
                         <input className="input-value" id="user-lastname" type="text" name="user-lastname"/>
