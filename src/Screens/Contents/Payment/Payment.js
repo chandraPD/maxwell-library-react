@@ -44,21 +44,21 @@ class Payment extends Component {
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}
-        <section class="content-header">
-          <div class="container-fluid">
-            <div class="row mb-2">
-              <div class="col-sm-6">
+        <section className="content-header">
+          <div className="container-fluid">
+            <div className="row mb-2">
+              <div className="col-sm-6">
                 <h1>Fine Payment</h1>
               </div>
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item">
-                    <a href="index.html">Home</a>
+              <div className="col-sm-6">
+                <ol className="breadcrumb float-sm-right">
+                  <li className="breadcrumb-item">
+                    <a href="/">Home</a>
                   </li>
-                  <li class="breadcrumb-item">
-                    <a href="fine_management.html">Fine Management</a>
+                  <li className="breadcrumb-item">
+                    <a href="/FineManagement">Fine Management</a>
                   </li>
-                  <li class="breadcrumb-item active">Fine Payment</li>
+                  <li className="breadcrumb-item active">Fine Payment</li>
                 </ol>
               </div>
             </div>
@@ -543,23 +543,23 @@ class Payment extends Component {
         </section>
 
         {/* <!--Modal Add--> */}
-        <div class="modal fade" id="modal-confirm">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Confirm Payment</h4>
+        <div className="modal fade" id="modal-confirm">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Confirm Payment</h4>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-                <div class="card-body">
-                  <table class="table table-bordered table-striped">
+              <div className="modal-body">
+                <div className="card-body">
+                  <table className="table table-bordered table-striped">
                     <tbody>
                       <tr>
                         <td>Your Current Balance</td>
@@ -575,17 +575,17 @@ class Payment extends Component {
                   </table>
                 </div>
               </div>
-              <div class="modal-footer justify-content-between">
+              <div className="modal-footer justify-content-between">
                 <button
                   type="button"
-                  class="btn btn-default"
+                  className="btn btn-default"
                   data-dismiss="modal"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-warning"
+                  className="btn btn-warning"
                   id="btn-pay"
                   data-dismiss="modal"
                   onClick={() => this.paymentSuccessful()}
@@ -601,23 +601,23 @@ class Payment extends Component {
         {/* <!-- /.modal --> */}
 
         {/* <!--Modal Declined--> */}
-        <div class="modal fade" id="modal-decline">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Confirm Payment</h4>
+        <div className="modal fade" id="modal-decline">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Confirm Payment</h4>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-                <div class="card-body">
-                  <table class="table table-bordered table-striped">
+              <div className="modal-body">
+                <div className="card-body">
+                  <table className="table table-bordered table-striped">
                     <tbody>
                       <tr>
                         <td>Your Current Balance</td>
@@ -633,17 +633,17 @@ class Payment extends Component {
                   </table>
                 </div>
               </div>
-              <div class="modal-footer justify-content-between">
+              <div className="modal-footer justify-content-between">
                 <button
                   type="button"
-                  class="btn btn-default"
+                  className="btn btn-default"
                   data-dismiss="modal"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-warning"
+                  className="btn btn-warning"
                   id="btn-declined"
                   data-dismiss="modal"
                   onClick={() => this.paymentDeclined()}
