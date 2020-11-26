@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import avatarUser from '../../../Assets/Media/user/profile.png'
+import avatarUser from '../../../Assets/Media/admin.png'
 import swal from 'sweetalert'
 
 
@@ -118,13 +118,8 @@ class Profile extends Component {
                                     <hr/>
                                 </div>
                                 <div className="data">
-                                    <h5 >Your Balance</h5>
-                                    <span id="mybalance">Rp 50.000,-</span>
-                                    <hr/>
-                                </div>
-                                <div className="data">
                                     {/* <a href="change_password.html"><strong><u>Change Password</u></strong></a> */}
-                                    <Link to='/ChangePassword'>Change Password</Link>
+                                    <Link to='/change_password'>Change Password</Link>
                                 </div>
                                 </div>
                             </div>
