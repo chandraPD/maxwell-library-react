@@ -11,12 +11,12 @@ import Auth from '../Screens/Auth/Auth'
 import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryManagement'
 import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
 import Payment from '../Screens/Contents/Payment/Payment'
-import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint";
+import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
+import History from '../Screens/Contents/History/History';
 
 class MainNavigation extends Component {
     render() {
-        return (
-            <Router>
+        return ( <Router>
                 <Switch>
                     <Route path='/auth'>
                         <Auth />
@@ -45,6 +45,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/Payment'>
                                     <Payment />
+                                </Route>
+                                <Route path='/History'>
+                                    <History />
                                 </Route>
                             </Switch>
                             <Footer />
