@@ -3,9 +3,77 @@ import UburLemburImg from '../../../Assets/Media/books/uburlembur.png'
 import LaskarPelangiImg from '../../../Assets/Media/books/laskar.png'
 import DilanImg from '../../../Assets/Media/books/dilan.png'
 import SuccessImg from '../../../Assets/Media/check.png'
+import DataTable from "../../../Components/Datatable/Table";
+import Action from "../../../Components/Datatable/Action";
 
 class SlideShowManagement extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      fields: {},
+      errors: {},
+      data: [],
+      rows: [],
+      results: [],
+    }
+  }
+
+  componentDidMount() {
+    this.fetchData()
+  }
+
+  async fetchData() {
+    const results = [] 
+    const result = [{
+      no : 1,
+      title: "Ubur-ubur Lembur",
+      subtitle: "Raditya Dika",
+      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/uburlembur.png"
+    },
+    {
+      no : 2,
+      title: "Laskar Pelangi",
+      subtitle: "Andrea Hirata",
+      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/laskar.png"
+    },
+    {
+      no : 3,
+      title: "Dilan 1990",
+      subtitle: "Raditya Dika",
+      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/dilan.png"
+    }]
+
+    result.map((slideshow) => {
+      var row = []
+
+      row.push(<td className="text-center">{slideshow.no}</td>);
+      row.push(
+        <td className="text-center py-0 align-middle">
+          <div className="btn-group btn-group-sm">
+            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
+            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
+          </div>
+        </td>
+      );
+      row.push(<td className="text-center py-0 align-middle">
+      <select className="custom-select">
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </td>)
+      row.push(<td>{slideshow.title}</td>)
+      row.push(<td>{slideshow.subtitle}</td>)
+      row.push(<td><img src={slideshow.image} style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
+      results.push(row)
+    })
+    this.setState({ rows: results });
+  }
+  
+
   render() {
+    const { rows } = this.state
+    const headings = ["No.", "Action", "Status", "Title", "Sub Title", "Image"]
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}
@@ -45,92 +113,7 @@ class SlideShowManagement extends Component {
             </div>
 
             <div className="card-body">
-              <div className="card-body">
-                <table id="example1" className="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th className="head-number">No.</th>
-                      <th className="action-col">Action</th>
-                      <th style={{width:"10px"}}>Status</th>
-                      <th>Title</th>
-                      <th>Sub Title</th>
-                      <th>Image</th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td className="text-center py-0 align-middle">
-                        <div className="btn-group btn-group-sm">
-                          <button data-toggle="modal" data-target="#modal-edit" title="Edit" className="btn btn-success"><i
-                              className="fas fa-pen"></i></button>
-                          <button data-toggle="modal" data-target="#modal-delete" title="Delete"
-                            className="btn btn-danger"><i className="fas fa-trash"></i></button>
-                        </div>
-                      </td>
-                      <td className="text-center py-0 align-middle">
-                      <select className="custom-select">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </td>
-                      <td>Ubur-ubur Lembur</td>
-                      <td>Raditya Dika</td>
-                      <td><img src={UburLemburImg}
-                          style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>
-
-                    </tr>
-
-                    <tr>
-                      <td>2</td>
-                      <td className="text-center py-0 align-middle">
-                        <div className="btn-group btn-group-sm">
-                          <button data-toggle="modal" data-target="#modal-edit" title="Edit" className="btn btn-success"><i
-                              className="fas fa-pen"></i></button>
-                          <button data-toggle="modal" data-target="#modal-delete" title="Delete"
-                            className="btn btn-danger"><i className="fas fa-trash"></i></button>
-                        </div>
-                      </td>
-                      <td className="text-center py-0 align-middle">
-                      <select className="custom-select">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </td>
-                      <td>Laskar Pelangi</td>
-                      <td>Andrea Hirata</td>
-                      <td><img src={LaskarPelangiImg}
-                          style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>
-
-                    </tr>
-
-                    <tr>
-                      <td>3</td>
-                      <td className="text-center py-0 align-middle">
-                        <div className="btn-group btn-group-sm">
-                          <button data-toggle="modal" data-target="#modal-edit" title="Edit" className="btn btn-success"><i
-                              className="fas fa-pen"></i></button>
-                          <button data-toggle="modal" data-target="#modal-delete" title="Delete"
-                            className="btn btn-danger"><i className="fas fa-trash"></i></button>
-                        </div>
-                      </td>
-                      <td className="text-center py-0 align-middle">
-                      <select className="custom-select">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                      </td>
-                      <td>Dilan 1990</td>
-                      <td>Raditya Dika</td>
-                      <td><img src={DilanImg}
-                          style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>
-
-                    </tr>
-
-                  </tbody>
-                </table>
-              </div>
+            <DataTable headings={headings} rows={rows} />
             </div>
           </div>
         </div>
