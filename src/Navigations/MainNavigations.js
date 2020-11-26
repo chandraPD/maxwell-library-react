@@ -17,6 +17,7 @@ import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
 import History from '../Screens/Contents/History/History';
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
+import AdminProfile from '../Screens/Contents/Profile/AdminProfile'
 import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
 import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 
@@ -42,6 +43,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/ChangePassword'>
                                     <ChangePassword/>
+                                </Route>
+                                <Route path='/AdminProfile'>
+                                    <AdminProfile/>
                                 </Route>
                                 <Route path='/Detail'>
                                     <Detail />
