@@ -5,6 +5,8 @@ import swal from "sweetalert";
 import "bootstrap";
 import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
+import $ from 'jquery'
+import 'bootstrap'
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -170,18 +172,38 @@ class CategoryManagement extends Component {
 
   contactSubmit(e) {
     e.preventDefault();
-
     if (this.handleValidation()) {
-      swal("Success", "Your Category has been Added!", "success");
+      $('#modal-add').modal('toggle');
+      swal({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your Data has been Added',
+        buttons: {
+          catch: {
+            text: "OK",
+            value: "catch"
+          }
+        }
+      }).then((value) => {
+        switch(value) {
+          case "catch":
+            window.location.reload()
+            break;
+        }
+      })
+        
     } else {
+
     }
   }
+  
 
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
   }
+  
 
   render() {
     const { rows } = this.state;

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import UburLemburImg from '../../../Assets/Media/books/uburlembur.png'
-import LaskarPelangiImg from '../../../Assets/Media/books/laskar.png'
-import DilanImg from '../../../Assets/Media/books/dilan.png'
 import SuccessImg from '../../../Assets/Media/check.png'
 import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
+import $ from 'jquery'
+import swal from 'sweetalert'
+import 'bootstrap'
 
 class SlideShowManagement extends Component {
   constructor(props) {
@@ -69,6 +69,67 @@ class SlideShowManagement extends Component {
     })
     this.setState({ rows: results });
   }
+
+  handleValidation() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //Title
+    if (!fields["slideshowTitle"]) {
+      formIsValid = false;
+      errors["slideshowTitle"] = "Slideshow Title cannot be empty";
+    }
+
+    //Subtitle
+    if (!fields["slideshowSubTitle"]) {
+      formIsValid = false;
+      errors["slideshowSubTitle"] = "Slideshow Subtitle cannot be empty";
+    }
+
+    //Image
+    if (!fields["slideshowImage"]) {
+      formIsValid = false;
+      errors["slideshowImage"] = "Image cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
+  contactSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      $('#modal-add').modal('toggle');
+      swal({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your Data has been Added',
+        buttons: {
+          catch: {
+            text: "OK",
+            value: "catch"
+          }
+        }
+      }).then((value) => {
+        switch(value) {
+          case "catch":
+            window.location.reload()
+            break;
+        }
+      })
+        
+    } else {
+
+    }
+  }
+  
+
+  handleChange(field, e) {
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+    this.setState({ fields });
+  }
   
 
   render() {
@@ -129,28 +190,41 @@ class SlideShowManagement extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form role="form" id="addSlideshow">
+          <form role="form" id="addSlideshow" onSubmit={this.contactSubmit.bind(this)}>
             <div class="modal-body">
               <div class="card-body">
                 <div class="form-group">
                   <label for="inputTitle">Title</label>
                   <input type="text" class="form-control" name="slideshowTitle" id="inputTitle"
-                    placeholder="Enter Title"/>
+                    placeholder="Enter Title" onChange={this.handleChange.bind(this, "slideshowTitle")}
+                    value={this.state.fields["slideshowTitle"]}/>
+                    <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowTitle"]}
+                      </span>
                 </div>
+                
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
                   <input type="text" class="form-control" name="slideshowSubTitle" id="inputSubTitle"
-                    placeholder="Enter Sub Title"/>
+                    placeholder="Enter Sub Title" onChange={this.handleChange.bind(this, "slideshowSubTitle")} value={this.state.fields["slideshowSubTitle"]}/>
+                    <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowSubTitle"]}
+                      </span>
                 </div>
+                
                 <div class="form-group">
                   <label for="addSlideshowImg">Choose Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="addSlideshowImg" name="slideshowImage"/>
-                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="slideshowImage" onChange={this.handleChange.bind(this, "slideshowImage")}
+                    value={this.state.fields["slideshowImage"]}/>
+                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>                   
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span>
+                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
+                  <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowImage"]}
+                      </span>
                 </div>
 
               </div>
