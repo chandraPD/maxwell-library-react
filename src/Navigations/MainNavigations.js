@@ -16,6 +16,7 @@ import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideSh
 import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint";
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
+import AdminProfile from '../Screens/Contents/Profile/AdminProfile'
 
 class MainNavigation extends Component {
     render() {
@@ -40,6 +41,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/ChangePassword'>
                                     <ChangePassword/>
+                                </Route>
+                                <Route path='/AdminProfile'>
+                                    <AdminProfile/>
                                 </Route>
                                 <Route path='/Detail'>
                                     <Detail />
