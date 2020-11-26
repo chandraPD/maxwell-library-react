@@ -4,14 +4,18 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from '../Screens/Footer/Footer'
 import NavBar from '../Screens/NavBar/NavBar'
 import SideBar from '../Screens/SideBar/SideBar'
+import Profile from '../Screens/Contents/Profile/Profile'
+import ChangePassword from '../Screens/Contents/Profile/ChangePassword'
 import RentManagement from '../Screens/Contents/RentManagement/RentManagement'
 import Home from '../Screens/Contents/Home/Home'
 import Detail from '../Screens/Contents/Detail/Detail'
 import Auth from '../Screens/Auth/Auth'
+import TopUp from '../Screens/Contents/TopUp/TopUp'
 import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryManagement'
 import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
 import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint";
+import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 
 class MainNavigation extends Component {
     render() {
@@ -31,14 +35,26 @@ class MainNavigation extends Component {
                                 <Route exact path='/'>
                                     <Home />
                                 </Route>
-                                <Route path='/detail'>
+                                <Route path='/profile'>
+                                    <Profile />
+                                </Route>
+                                <Route path='/change_password'>
+                                    <ChangePassword/>
+                                </Route>
+                                <Route path='/Detail'>
                                     <Detail />
                                 </Route>
                                 <Route path='/RentManagement'>
                                     <RentManagement />
                                 </Route>
+                                <Route path='/TopUp'>
+                                    <TopUp />
+                                </Route>
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
+                                </Route>
+                                <Route path='/TopUpManagement'>
+                                    <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>
                                     <SlideShowManagement />

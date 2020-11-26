@@ -1,0 +1,271 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+html {
+    height: 100%
+}
+
+p {
+    color: grey
+}
+
+#heading {
+    text-transform: uppercase;
+    color: black;
+    font-weight: bold
+}
+
+#msform {
+    text-align: center;
+    position: relative;
+    margin-top: 20px
+}
+
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 20px;
+    position: relative
+}
+
+.form-card {
+    text-align: left
+}
+
+#msform fieldset:not(:first-of-type) {
+    display: none
+}
+
+/* #msform input,
+#msform textarea {
+    padding: 8px 15px 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    margin-bottom: 25px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    background-color: #ECEFF1;
+    font-size: 16px;
+    letter-spacing: 1px
+} */
+
+#msform input:focus,
+#msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid black;
+    outline-width: 0
+}
+
+#msform .action-button {
+    width: 8rem;
+    background: black;
+    font-weight: bold;
+    color: white;
+    /* border: 0 none;
+    border-radius: 0px; */ 
+    cursor: pointer;
+    padding: 10px 5px;
+    margin-top: 1.5rem;
+    float: right;
+}
+
+#msform .action-button:hover,
+#msform .action-button:focus {
+    background-color: grey
+}
+
+#msform .action-button-previous {
+    width: 8rem;
+    background: #616161;
+    font-weight: bold;
+    color: white;
+    /* border: 0 none;
+    border-radius: 0px; */
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 1.5rem 1.5rem;
+    float: right
+}
+
+#msform .action-button-previous:hover,
+#msform .action-button-previous:focus {
+    background-color: #000000
+}
+
+.card {
+    z-index: 0;
+    border: none;
+    position: relative
+}
+
+.fs-title {
+    color: black;
+    margin-bottom: 15px;
+    font-weight: normal;
+    text-align: left
+}
+
+.purple-text {
+    color:black;
+    font-weight: normal
+}
+
+.steps {
+    color: gray;
+    font-weight: normal;
+    text-align: right
+}
+
+.fieldlabels {
+    color: gray;
+    text-align: left
+}
+
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgrey
+}
+
+#progressbar .active {
+    color: black
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 15px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400
+}
+
+#progressbar #nominal:before {
+    font-family: "Font Awesome 5 Free";  
+    font-weight: 900; 
+    content: "\f53a"
+}
+
+#progressbar #payment:before {
+    font-family: "Font Awesome 5 Free";    
+    content: "\f09d"
+}
+
+#progressbar #confirm:before {
+    font-family: "Font Awesome 5 Free";    
+    content: "\f058"
+}
+
+#progressbar #password:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900; 
+    content: "\f4fc"
+}
+
+#progressbar li:before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px
+}
+
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+    background: black
+}
+
+.progress {
+    height: 20px
+}
+
+.progress-bar {
+    background-color:black
+}
+
+.fit-image {
+    width: 100%;
+    object-fit: cover
+}
+
+/* .radio-group2 {
+    position: relative;
+    margin-bottom: 25px
+}
+
+.radio1 {
+    display: inline;
+    width: 204;
+    height: 104;
+    border-radius: 0;
+    background: lightblue;
+    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    cursor: pointer;
+    margin: 8px 2px
+}*/
+
+.radio1:hover {
+    box-shadow: 2px 2px 2px 2px rgba(107, 67, 67, 0.3)
+}
+
+.radio1.selected {
+    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.2)
+}
+
+@media (max-width: 430px){
+    .radio-group .icheck-primary{
+        margin-left: 25px;
+    }
+}
+
+@media (max-width: 380px){
+    .radio-group .icheck-primary{
+        margin-left: 50px;        
+    }
+
+    #msform .action-button-previous{
+        margin:1.5rem 1.0rem;
+    }
+}
+
+@media (max-width: 320px){
+    .radio-group .icheck-primary{
+        margin-left: 30px;        
+    }
+
+    #msform .action-button-previous{
+        margin:-2.9rem 8.3rem;
+    }
+
+    #msform .past{
+        margin:1.5rem 1.0rem;
+    }
+}
