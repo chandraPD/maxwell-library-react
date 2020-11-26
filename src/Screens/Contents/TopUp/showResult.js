@@ -1,9 +1,9 @@
-import swal from 'sweetalert'
+import Swal from 'sweetalert2';
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export default (async function showResults(values) {  
-  swal({
+  Swal.fire({
     title: "Success Save Top Up Data!",
     text: "You Already Success to save this data!",
     icon: "success",

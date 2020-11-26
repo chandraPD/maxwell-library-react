@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './Detail.style.css'
-import swal from 'sweetalert'
+import Swal from 'sweetalert2';
 import foto from '../../../Assets/Media/books/covernya2.png'
 import foto2 from '../../../Assets/Media/books/novel-dilan.jpg'
 import foto3 from '../../../Assets/Media/books/buku-seni-minimalis.jpg'
 import foto4 from '../../../Assets/Media/books/novel-milea.jpg'
-import { Link } from 'react-router-dom'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class Detail extends Component {
   
-    render () {
+    render () {      
       return (
         
       <div>
@@ -17,13 +18,13 @@ class Detail extends Component {
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
           {/* Content Header (Page header) */}
-          <section className="content-header">
-            <div className="container-fluid">
+          <section className="content-header">            
+            <div className="container-fluid">              
               <div className="button">
                 <div className="back-btn">
                   <a href="/" className="button-arrow" role="button"><i className="fas fa-arrow-left arrow" /></a>
                 </div>
-              </div>
+              </div>              
               <div className="row">
                 <div className="col-sm-12">
                   <img className="big-preview" width="1600px" height="1200px" />
@@ -70,7 +71,7 @@ class Detail extends Component {
                 </div>
               </div>
               <div className="borrowbutton">
-                <button id="button_borrow" value="borrow" className="btn btn-warning" href="#" data-toggle="modal" data-target="#ModalBook">Borrow</button>
+                <button id="button_borrow" value="borrow" className="btn btn-warning" href="#" data-toggle="modal" data-target="#BorrowModal">Borrow</button>
               </div>
             </div>
           </section>
@@ -131,7 +132,7 @@ class Detail extends Component {
             <div className="modal-body">If you delete this, you can't be returned</div>
             <div className="modal-footer">
               <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" onClick={()=>swal('Success!','Success Delete Book!','success')}>Delete</a>
+              <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" onClick={()=>Swal.fire('Success!','Success Delete Book!','success')}>Delete</a>
             </div>
           </div>
         </div>
@@ -245,7 +246,7 @@ class Detail extends Component {
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-              <button id="confirmBook" className="btn btn-warning" data-dismiss="modal" onClick={()=>swal('Success!','Success Save Borrow Book!','success')}>Save</button>
+              <button id="confirmBook" className="btn btn-warning" data-dismiss="modal" onClick={()=>Swal.fire('Success!','Success Save Borrow Book!','success')}>Save</button>
             </div>
           </div>
         </div>
