@@ -14,13 +14,13 @@ import TopUp from '../Screens/Contents/TopUp/TopUp'
 import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryManagement'
 import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
 import Payment from '../Screens/Contents/Payment/Payment'
-import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint";
+import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
+import History from '../Screens/Contents/History/History';
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 
 class MainNavigation extends Component {
     render() {
-        return (
-            <Router>
+        return ( <Router>
                 <Switch>
                     <Route path='/auth'>
                         <Auth />
@@ -35,10 +35,10 @@ class MainNavigation extends Component {
                                 <Route exact path='/'>
                                     <Home />
                                 </Route>
-                                <Route path='/profile'>
+                                <Route path='/Profile'>
                                     <Profile />
                                 </Route>
-                                <Route path='/change_password'>
+                                <Route path='/ChangePassword'>
                                     <ChangePassword/>
                                 </Route>
                                 <Route path='/Detail'>
@@ -61,6 +61,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/Payment'>
                                     <Payment />
+                                </Route>
+                                <Route path='/History'>
+                                    <History />
                                 </Route>
                             </Switch>
                             <Footer />
