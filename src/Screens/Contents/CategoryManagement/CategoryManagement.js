@@ -7,6 +7,7 @@ import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
+import { Link } from "react-router-dom";
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -220,7 +221,7 @@ class CategoryManagement extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a href='/'>Home</a>
                   </li>
                   <li className="breadcrumb-item active">Category</li>
                 </ol>
