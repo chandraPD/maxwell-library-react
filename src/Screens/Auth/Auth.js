@@ -131,7 +131,7 @@ class Auth extends Component {
     if(this.handleValidationSignUp()){
       alert("Success!")
     } else {
-      alert("Form error")
+
     }
   }
 
@@ -142,7 +142,7 @@ class Auth extends Component {
       this.props.history.push('/')
       window.location.reload()
     } else {
-      alert("Form error")
+
     }
   }
 
@@ -152,7 +152,6 @@ class Auth extends Component {
     if(this.handleValidationForgotPass()){
       alert("Success!")
     } else {
-      alert("Form error")
     }
   }
 

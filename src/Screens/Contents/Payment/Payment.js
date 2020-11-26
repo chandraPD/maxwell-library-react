@@ -215,7 +215,7 @@ class Payment extends Component {
                     {/* <!-- this row will not appear when printing --> */}
                     <div className="row no-print">
                       <div className="col-12">
-                        <Link to="/PaymentPrint">
+                        <Link to="/PaymentPrint" target="_blank">
                           <a target="_blank" className="btn btn-default">
                             <i className="fas fa-print"></i> Print
                           </a>
