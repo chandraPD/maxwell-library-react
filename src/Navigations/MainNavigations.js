@@ -17,6 +17,8 @@ import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
 import History from '../Screens/Contents/History/History';
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
+import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
+import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 
 class MainNavigation extends Component {
     render() {
@@ -64,6 +66,12 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/History'>
                                     <History />
+                                </Route>
+                                <Route path='/usermanagement'>
+                                    <UserManagement />
+                                </Route>
+                                <Route path='/bookmanagement'>
+                                    <BookManagement />
                                 </Route>
                             </Switch>
                             <Footer />
