@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import DataTable from '../../../Components/Datatable/Table'
 import Action from '../../../Components/Datatable/Action'
 import Status from '../../../Components/Datatable/Status'
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom'
 
 class RentManagement extends Component {
 
@@ -16,6 +18,24 @@ class RentManagement extends Component {
     componentDidMount() {
         this.fetchData();
     }
+
+    acceptRent() {
+        Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
+    }
+
+    cancelRent() {
+        Swal.fire({
+            title: 'Do you want to Cancel this Rent?',
+            showCancelButton: true,
+            confirmButtonText: `Yes`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
+            }
+        });
+    }
+
 
     async fetchData() {
         const results = [];
@@ -165,20 +185,20 @@ class RentManagement extends Component {
             var actVal, statusVal = '';
             if (rent.status == 'Waiting Given By Librarian') {
                 actVal = <div className="btn-group btn-group-sm">
-                    <Action type="primary" doClick="acceptRent" title="Accept" icon="check-square" />
-                    <Action type="danger" doClick="cancelRent" title="Cancel" icon="window-close" /></div>
+                    <Action type="primary" onClick={this.acceptRent} title="Accept" icon="check-square" />
+                    <Action type="danger" onClick={this.cancelRent}  title="Cancel" icon="window-close" /></div>
                 statusVal = <Status type="primary" val="Waiting Given By Librarian" />
             } else if (rent.status == 'Waiting For Return') {
-                actVal = <div className="btn-group btn-group-sm"><Action type="info" doClick="acceptRent" title="Return" icon="exchange-alt" /></div>
+                actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
                 statusVal = <Status type="info" val="Waiting For Return" />
             } else if (rent.status == 'Need Immediate Returns') {
-                actVal = <div className="btn-group btn-group-sm"><Action type="info" doClick="acceptRent" title="Return" icon="exchange-alt" /></div>
+                actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" onClick={this.acceptRent} title="Return" icon="exchange-alt" /></div>
                 statusVal = <Status type="orange" val="Need Immediate Returns" />
             } else if (rent.status == 'Waiting Taken By Librarian') {
-                actVal = <div className="btn-group btn-group-sm"><Action type="primary" doClick="acceptRent" title="Accept" icon="check-square" /><Action type="danger" doClick="cancelRent" title="Cancel" icon="window-close" /></div>
+                actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={this.acceptRent}  title="Accept" icon="check-square" /><Action type="danger" onClick={this.cancelRent}  title="Cancel" icon="window-close" /></div>
                 statusVal = <Status type="primary" val="Waiting Taken By Librarian" />
             } else if (rent.status == 'Waiting for Payment of Fines') {
-                actVal = <div className="btn-group btn-group-sm"><Action type="secondary" title="Payment" icon="file-invoice" /></div>
+                actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link="Payment" title="Payment" icon="file-invoice" /></div>
                 statusVal = <Status type="warning" val="Waiting for Payment of Fines" />
             } else if (rent.status == 'Returned' || rent.status == 'Canceled') {
                 actVal = '-';
@@ -208,6 +228,7 @@ class RentManagement extends Component {
         });
         this.setState({ rows: results });
     }
+
 
     render() {
         const { rows } = this.state;
@@ -253,7 +274,7 @@ class RentManagement extends Component {
                                     <div className="card-header">
                                         <h3 className="card-title">Rent List</h3>
                                         <div className="card-tools">
-                                            <a href="return_book.html" className="btn-xs btn-block bg-gradient-primary">Return</a>
+                                            <Link to="ReturnBook" className="btn-xs btn-block bg-gradient-primary">Return</Link>
                                         </div>
                                     </div>
                                     {/* /.card-header */}
