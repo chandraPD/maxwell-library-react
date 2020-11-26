@@ -17,6 +17,9 @@ import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
 import History from '../Screens/Contents/History/History';
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
+import AdminProfile from '../Screens/Contents/Profile/AdminProfile'
+import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
+import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 
 class MainNavigation extends Component {
     render() {
@@ -41,6 +44,9 @@ class MainNavigation extends Component {
                                 <Route path='/ChangePassword'>
                                     <ChangePassword/>
                                 </Route>
+                                <Route path='/AdminProfile'>
+                                    <AdminProfile/>
+                                </Route>
                                 <Route path='/Detail'>
                                     <Detail />
                                 </Route>
@@ -64,6 +70,12 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/History'>
                                     <History />
+                                </Route>
+                                <Route path='/usermanagement'>
+                                    <UserManagement />
+                                </Route>
+                                <Route path='/bookmanagement'>
+                                    <BookManagement />
                                 </Route>
                             </Switch>
                             <Footer />
