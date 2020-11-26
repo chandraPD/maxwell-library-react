@@ -19,6 +19,7 @@ import History from '../Screens/Contents/History/History';
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
 import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
+import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 
 class MainNavigation extends Component {
     render() {
@@ -48,6 +49,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/RentManagement'>
                                     <RentManagement />
+                                </Route>
+                                <Route path='/FineManagement'>
+                                    <FineManagement />
                                 </Route>
                                 <Route path='/TopUp'>
                                     <TopUp />
