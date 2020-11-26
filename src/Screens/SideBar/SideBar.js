@@ -80,62 +80,62 @@ export default class SideBar extends Component {
                 </a>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <a href="/UserManagement" className="nav-link">
+                    <Link to="/UserManagement" className="nav-link">
                       <i className="fas fa-users nav-icon" />
                       <p>User Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/BookManagement" className="nav-link">
+                    <Link to="/BookManagement" className="nav-link">
                       <i className="fas fa-book nav-icon" />
                       <p>Book Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/RentManagement" className="nav-link">
+                    <Link to="/RentManagement" className="nav-link">
                       <i className="far fa-hourglass nav-icon" />
                       <p>Rent Management </p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/FineManagement" className="nav-link">
+                    <Link to="/FineManagement" className="nav-link">
                       <i className="fas fa-gavel nav-icon" />
                       <p>Fine Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/CategoryManagement" className="nav-link">
+                    <Link to="/CategoryManagement" className="nav-link">
                       <i className="fas fa-th nav-icon" />
                       <p>Category Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/SlideShowManagement" className="nav-link">
+                    <Link to="/SlideShowManagement" className="nav-link">
                       <i className="far fa-images nav-icon" />
                       <p>Slide Show Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/DonateManagement" className="nav-link">
+                    <Link to="/DonateManagement" className="nav-link">
                       <i className="fa fa-hands-helping nav-icon" />
                       <p>Donation Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/TopUpManagement" className="nav-link">
+                    <Link to="/TopUpManagement" className="nav-link">
                       <i className="fa fa-credit-card nav-icon" />
                       <p>Top Up Management</p>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
               <li className="nav-item">
-                <a href="/Donation" className="nav-link">
+                <Link to="/Donation" className="nav-link">
                   <i className="nav-icon fas fa-people-carry" />
                   <p>
                     Donation
                   </p>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link to="/Auth" className="nav-link" data-target="#modal-xl">

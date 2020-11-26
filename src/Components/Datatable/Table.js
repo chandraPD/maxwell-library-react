@@ -7,10 +7,18 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 export default class Table extends Component {
 
     componentDidMount() {
-        $(document).ready(function () {
-            $('#example1').DataTable();
+       this.setTable();
+      }
+  
+      setTable() {
+        $(function () {
+            $("#example1").DataTable({
+                responsive: true,
+                autoWidth: false,
+            });
         });
-    }
+      }
+    
     renderHeadingRow = (_cell, cellIndex) => {
         const { headings } = this.props;
         return (
