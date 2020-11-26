@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import './TopUp.style.css'
-import swal from 'sweetalert'
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import Stepper from 'react-stepper-horizontal';
 import TopUp1 from '../TopUp/TopUp1'
 import TopUp2 from '../TopUp/TopUp2'
@@ -23,9 +20,7 @@ class Card extends Component {
             {title: 'Password'},
           ]
         };
-      }
-    
-      
+      }    
     
       nextPage() {
         this.setState({ page: this.state.page + 1 });
@@ -47,7 +42,8 @@ class Card extends Component {
                   <h2 id="heading">Top Up Your User Account</h2>
                   <p>Fill all form field to go to next step</p>
         <Stepper steps={ steps } activeStep={ page } />                       
-        {page === 0 && <TopUp1 onSubmit={this.nextPage} /> }
+
+        {page === 0 && <TopUp1 onSubmit={this.nextPage}  /> }
         {page === 1 && (
           <TopUp2
             previousPage={this.previousPage}

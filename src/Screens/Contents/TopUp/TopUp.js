@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './TopUp.style.css'
-import swal from 'sweetalert'
-import { Link } from 'react-router-dom'
 import Card from '../TopUp/Card';
+import showResults from "./showResult";
 
 class TopUp extends Component {
 
@@ -12,8 +11,7 @@ class TopUp extends Component {
 
 
       return (        
-        <Card>
-         
+        <Card onSubmit={showResults} >               
         </Card>
       )
     }
