@@ -3,6 +3,10 @@ import DataTable from '../../../Components/Datatable/Table';
 import Status from '../../../Components/Datatable/Status';
 import axios from 'axios';
 
+import $ from 'jquery'
+import "datatables.net-responsive/js/dataTables.responsive"
+import "datatables.net-dt/css/jquery.dataTables.css"
+
 class BookManagement extends Component {
   constructor() {
     super();
@@ -26,7 +30,12 @@ class BookManagement extends Component {
     this.setState.isLoading = false;
     const resultUser = fetchedData.data.items;
     this.setState({ data: resultUser });
+    $('#example1').DataTable().destroy();
     this.fetchData();
+    $("#example1").DataTable({
+      responsive: true,
+      autoWidth: false,
+    });
   }
 
   fetchData() {
