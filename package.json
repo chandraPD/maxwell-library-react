@@ -9,6 +9,7 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "datatables.net-dt": "^1.10.22",
+    "datatables.net-responsive": "^2.2.6",
     "flickity": "^2.2.1",
     "gridjs": "^3.0.2",
     "gridjs-react": "^3.0.2",

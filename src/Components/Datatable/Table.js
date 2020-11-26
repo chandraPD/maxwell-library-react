@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Cell from './Cell';
 import $ from 'jquery'
-import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 
 export default class Table extends Component {
@@ -63,7 +63,7 @@ export default class Table extends Component {
                 <thead>{theadMarkup}</thead>
                 <tbody>{tbodyMarkup}</tbody>
             </table>
-        );
+        )
     }
 }
 
