@@ -124,7 +124,7 @@ class Profile extends Component {
                                 </div>
                                 <div className="data">
                                     {/* <a href="change_password.html"><strong><u>Change Password</u></strong></a> */}
-                                    <Link to='/change_password'>Change Password</Link>
+                                    <Link to='/ChangePassword'>Change Password</Link>
                                 </div>
                                 </div>
                             </div>

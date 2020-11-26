@@ -120,10 +120,6 @@ class ChangePassword extends Component {
     contactSubmitChangePassword(e) {
         e.preventDefault();
         let fields = this.state.fields;
-        // var email = document.getElementById('email').value;
-        // var oldPassword = document.getElementById('oldPassword').value;
-        // var newPassword = document.getElementById('newPassword').value;
-        // var verifyPassword = document.getElementById('verifyPassword').value;
     
         if(this.handleValidationChangePassword()){
             swal(
@@ -132,38 +128,7 @@ class ChangePassword extends Component {
                 'success'
                 ).then(()=> this.props.history.push('/profile')) 
             }
-            // if (email == '' || oldPassword == '' || newPassword == '' || verifyPassword == ''){
-            //     swal(
-            //         'Submit Failed !',
-            //         'You should fill in the blank',
-            //         'error'
-            //         );
-            // }else if(fields['oldPassword'].length<8 || fields['oldPassword'].length>20 ) {
-                // swal(
-                //     'Submit Failed !',
-                //     'You must fill password according to the requirement',
-                //     'error'
-                //     );
-            // }else if(fields['newPassword'].length<8 || fields['newPassword'].length>20 ) {
-            //     swal(
-            //         'Submit Failed !',
-            //         'You must fill password according to the requirement',
-            //         'error'
-            //         );
-            // }else if(fields['verifyPassword'].length<8 || fields['verifyPassword'].length>20 ) {
-            //     swal(
-            //         'Submit Failed !',
-            //         'You must fill password according to the requirement',
-            //         'error'
-            //         );
-            // }else{
-            //     swal(
-            //         'Submitted',
-            //         'You clicked the button!',
-            //         'success'
-            //     ).then(()=> this.props.history.push('/profile')) 
-            //     }
-    //         }
+            
 
     }
 
@@ -193,47 +158,6 @@ class ChangePassword extends Component {
     //         document.getElementById('notMatchPassword').style.display = 'block'
     //     }
     // }
-
-    // submitChangePassword(length) {
-    //     let fields = this.state.fields;
-
-    //     var email = document.getElementById('email').value;
-    //     var oldPassword = document.getElementById('oldPassword').value;
-    //     var newPassword = document.getElementById('newPassword').value;
-    //     var verifyPassword = document.getElementById('verifyPassword').value;
-      
-    //     if (email == '' || oldPassword == '' || newPassword == '' || verifyPassword == ''){
-    //         swal(
-    //             'Submit Failed !',
-    //             'You should fill in the blank',
-    //             'error'
-    //           );
-    //       }else if(fields['oldPassword'].length<8 || fields['oldPassword'].length>20 ) {
-    //         swal(
-    //             'Submit Failed !',
-    //             'You must fill password according to the requirement',
-    //             'error'
-    //           );
-    //       }else if(fields['newPassword'].length<8 || fields['newPassword'].length>20 ) {
-    //         swal(
-    //             'Submit Failed !',
-    //             'You must fill password according to the requirement',
-    //             'error'
-    //           );
-    //       }else if(fields['verifyPassword'].length<8 || fields['verifyPassword'].length>20 ) {
-    //         swal(
-    //             'Submit Failed !',
-    //             'You must fill password according to the requirement',
-    //             'error'
-    //           );
-    //       }else{
-    //         swal(
-    //           'Submitted',
-    //           'You clicked the button!',
-    //           'success'
-    //         ).then(()=> this.props.history.push('/profile')) 
-    //         }
-    //       }
         
     render(){
         return(
@@ -310,7 +234,7 @@ class ChangePassword extends Component {
                             <div className="save-pwd mr-3">
                                 <input id="save-change" type="submit" value="Confirm" className="btn btn-primary mr-2" onClick={()=> this.contactSubmitChangePassword.bind(this)}/>
                                 {/* <a href="Profile.html"> */}
-                                <Link to='/profile'><button id="close-change" type="button" className="btn btn-light">Close</button></Link>
+                                <Link to='/Profile'><button id="close-change" type="button" className="btn btn-light">Close</button></Link>
                             </div>
                         </form>
                     </div>

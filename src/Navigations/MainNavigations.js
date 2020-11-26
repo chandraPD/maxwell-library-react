@@ -35,10 +35,10 @@ class MainNavigation extends Component {
                                 <Route exact path='/'>
                                     <Home />
                                 </Route>
-                                <Route path='/profile'>
+                                <Route path='/Profile'>
                                     <Profile />
                                 </Route>
-                                <Route path='/change_password'>
+                                <Route path='/ChangePassword'>
                                     <ChangePassword/>
                                 </Route>
                                 <Route path='/Detail'>
