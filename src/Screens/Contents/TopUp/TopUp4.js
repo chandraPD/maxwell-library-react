@@ -28,19 +28,34 @@ const TopUp4 = (props) => {
           </div>
           <div className="row row-cols-1 row-cols-md-1">
             <div className="form-group">
-              <label>
+              <div className="row">
+              <div className="col-md-4">
+              <label style={{marginLeft: "1rem"}}>
                 Password
                 {' '}
-                <Field name="passwordconfirm" component="input" type="password"  />
               </label>
+              </div>
+              <div className="col-sm-8 float-right">
+              <Field name="passwordconfirm" component="input" type="password"  />
+              </div>
+              </div>
             </div>
+
             <div className="form-group">
-              <label>
+              <div className="row">
+              <div className="col-md-4">
+              <label style={{marginLeft: "1rem"}}>
                 Confirm Password
-                {' '}
-                <Field name="passwordconfirm2" component="input" type="password" />
+                {' '}     
               </label>
+              </div>
+
+              <div className="col-md-8 float-right">
+              <Field name="passwordconfirm2" component="input" type="password" />
+              </div>
+              </div>
             </div>
+
           </div>
         </div>
         <Button color="dark" className="btn-pill pull-right action-button" type="submit" disabled={pristine || submitting}>

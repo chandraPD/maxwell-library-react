@@ -33,7 +33,7 @@ class Card extends Component {
         const { onSubmit } = this.props;
     const { page, steps } = this.state;
       return (
-        <div className="content-wrapper">
+        <div className="content-wrapper ctm-wrap-tpup">
         <section className="signup-step-container">
           <div className="container-fluid">
             <div className="row justify-content-center">

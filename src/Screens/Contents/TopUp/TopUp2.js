@@ -31,7 +31,9 @@ const TopUp2 = (props) => {
                         </div>
                     </div>
                     <div className="radio-group2">
-            <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
+            <div className="d-flex justify-content-center">
+                <div className="row">
+                <div class="d-flex flex-column ctm-wt-pm">
               <div className="btn btn-app radio1">
                 <label >
                   <Field name="payment" component="input" type="radio" value="Credit Card" />
@@ -56,6 +58,8 @@ const TopUp2 = (props) => {
             OVO
           </label>
               </div>
+              </div>
+              <div class="d-flex flex-column ctm-wt-pm">
               <div className="btn btn-app radio1">
               <label>
                   <Field name="payment" component="input" type="radio" value="Gopay" />
@@ -79,6 +83,8 @@ const TopUp2 = (props) => {
         <img src="https://www.clipartmax.com/png/middle/223-2235279_cash-in-hand-icon.png" alt="" style={{ height: '2rem' }} />
             Cash
           </label>
+              </div>
+              </div>
               </div>
             </div>
           </div>
