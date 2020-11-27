@@ -1,11 +1,10 @@
-// import { render } from '@testing-library/react'
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import swal from 'sweetalert'
+import { Link,  withRouter } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 class ChangePassword extends Component {
-    constructor(props){
-        super(props)
+    constructor(){
+        super()
         
         this.state = {
             fields: {},
@@ -28,7 +27,7 @@ class ChangePassword extends Component {
             let lastAtPos = fields['email'].lastIndexOf('@')
             let lastDotPos = fields['email'].lastIndexOf('.')
       
-            if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields['email'].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
+            if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields['email'].indexOf('@@') === -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
               formIsValid = false;
               errors['email'] = "Email is not valid"
             }
@@ -40,7 +39,7 @@ class ChangePassword extends Component {
             if(lengthPass < 8) {
                 formIsValid = false
                 errors['oldPassword'] = "Your Password Must Be At Least 8 Character Long"
-                swal(
+                Swal.fire(
                     'Submit Failed !',
                     'You must fill password according to the requirement',
                     'error'
@@ -48,7 +47,7 @@ class ChangePassword extends Component {
             } else if(lengthPass > 20){
                 formIsValid = false
                 errors['oldPassword'] = "Your Password Must Be More Than 20 Character Long"
-                swal(
+                Swal.fire(
                     'Submit Failed !',
                     'You must fill password according to the requirement',
                     'error'
@@ -66,7 +65,7 @@ class ChangePassword extends Component {
             if(lengthPass < 8) {
                 formIsValid = false
                 errors['newPassword'] = "Your Password Must Be At Least 8 Character Long"
-                swal(
+                Swal.fire(
                     'Submit Failed !',
                     'You must fill password according to the requirement',
                     'error'
@@ -74,7 +73,7 @@ class ChangePassword extends Component {
             }else if(lengthPass > 20){
                 formIsValid = false
                 errors['newPassword'] = "Your Password Must Be More Than 20 Character Long"
-                swal(
+                Swal.fire(
                     'Submit Failed !',
                     'You must fill password according to the requirement',
                     'error'
@@ -92,7 +91,7 @@ class ChangePassword extends Component {
             if(lengthPass < 8) {
                 formIsValid = false
                 errors['verifyPassword'] = "Your Password Must Be At Least 8 Character Long"
-                swal(
+                Swal.fire(
                     'Submit Failed !',
                     'You must fill password according to the requirement',
                     'error'
@@ -100,7 +99,7 @@ class ChangePassword extends Component {
             }else if(lengthPass > 20){
                 formIsValid = false
                 errors['verifyPassword'] = "Your Password Must Be More Than 20 Character Long"
-                swal(
+                Swal.fire(
                     'Submit Failed !',
                     'You must fill password according to the requirement',
                     'error'
@@ -119,10 +118,9 @@ class ChangePassword extends Component {
 
     contactSubmitChangePassword(e) {
         e.preventDefault();
-        let fields = this.state.fields;
     
         if(this.handleValidationChangePassword()){
-            swal(
+            Swal.fire(
                 'Submitted',
                 'You clicked the button!',
                 'success'
@@ -137,28 +135,7 @@ class ChangePassword extends Component {
         fields[field] = e.target.value
         this.setState({fields})
     }
-
-    // CheckNewPassword = (e) => {
-    //     if(document.getElementById('verifyPassword').value === e){
-    //        document.getElementById('matchPassword').style.display = 'block'
-    //        document.getElementById('notMatchPassword').style.display = 'none'
-    //     }else{
-    //         document.getElementById('matchPassword').style.display = 'none'
-    //         document.getElementById('notMatchPassword').style.display = 'block'
-    //     }
-    // }
-
-    // CheckVerifyPassword = (e) => {
-    //     if(document.getElementById('newPassword').value === e){
-    //        document.getElementById('matchPassword').style.display = 'block'
-    //        document.getElementById('passwordHelpBlock3').style.display = 'none'
-    //        document.getElementById('notMatchPassword').style.display = 'none'
-    //     }else{
-    //         document.getElementById('matchPassword').style.display = 'none'
-    //         document.getElementById('notMatchPassword').style.display = 'block'
-    //     }
-    // }
-        
+           
     render(){
         return(
             <div className="content-wrapper" onSubmit={this.contactSubmitChangePassword.bind(this)}>
@@ -202,9 +179,7 @@ class ChangePassword extends Component {
                                     name="newPassword" 
                                     className="form-control" 
                                     id="newPassword"
-                                    onChange={this.handleChangePassword.bind(this, 'newPassword')}/>
-                                        {/* // this.CheckNewPassword(e.target.value)} */}
-                                        
+                                    onChange={this.handleChangePassword.bind(this, 'newPassword')}/>                                        
                                     <small id="passwordHelpBlock2" className="form-text text-muted">
                                         Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
                                     </small>
@@ -219,9 +194,7 @@ class ChangePassword extends Component {
                                     name="verifyPassword" 
                                     className="form-control" 
                                     id="verifyPassword"
-                                    onChange={this.handleChangePassword.bind(this, 'verifyPassword')}/>
-                                        {/* // this.CheckVerifyPassword(e.target.value)} */}
-                                        
+                                    onChange={this.handleChangePassword.bind(this, 'verifyPassword')}/>                                        
                                     <small id="passwordHelpBlock3" className="form-text text-muted">
                                         Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
                                     </small>
