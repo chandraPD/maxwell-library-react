@@ -19,10 +19,10 @@ const TopUp3 = (props) => {
         </div>
         <div className="form-card">
           <div className="row">
-            <div className="col-7">
+            <div className="col-6">
               <h5 className="fs-title">Top Up Confirmation:</h5>
             </div>
-            <div className="col-5">
+            <div className="col-6">
               <h5 className="steps">Step 3 - 4</h5>
             </div>
           </div>
