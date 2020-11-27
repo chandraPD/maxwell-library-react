@@ -192,7 +192,7 @@ class RentManagement extends Component {
                 actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
                 statusVal = <Status type="info" val="Waiting For Return" />
             } else if (rent.status == 'Need Immediate Returns') {
-                actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" onClick={this.acceptRent} title="Return" icon="exchange-alt" /></div>
+                actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
                 statusVal = <Status type="orange" val="Need Immediate Returns" />
             } else if (rent.status == 'Waiting Taken By Librarian') {
                 actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={this.acceptRent}  title="Accept" icon="check-square" /><Action type="danger" onClick={this.cancelRent}  title="Cancel" icon="window-close" /></div>

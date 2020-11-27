@@ -234,7 +234,7 @@ class Auth extends Component {
 
                 <form action="#" id="loginForm" >
                   <div className="container-form">
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="exampleInputEmail1" className="label-login">
                         Email address
                       </label>
@@ -249,7 +249,7 @@ class Auth extends Component {
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignIn"]}</span>
                     </div>
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label
                         for="exampleInputPassword1"
                         className="label-login"
@@ -316,7 +316,7 @@ class Auth extends Component {
 
                 <form role="form" id="formRegister">
                   <div className="container-form">
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="inputUsername" className="label-login">
                         Username
                       </label>
@@ -332,7 +332,7 @@ class Auth extends Component {
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["userNameSignUp"]}</span>
                     </div>
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="inputFullName" className="label-login">
                         Full Name
                       </label>
@@ -348,7 +348,7 @@ class Auth extends Component {
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["fullNameSignUp"]}</span>
                     </div>
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="inputEmail" className="label-login">
                         Email address
                       </label>
@@ -364,7 +364,7 @@ class Auth extends Component {
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignUp"]}</span>
                     </div>
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="inputPassword" className="label-login">
                         Password
                       </label>
@@ -411,7 +411,7 @@ class Auth extends Component {
 
                 <form action="#" id="formForgot">
                   <div className="container-form">
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="inputUsername" className="label-login">
                         Username
                       </label>
@@ -427,7 +427,7 @@ class Auth extends Component {
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["userNameForgotPass"]}</span>
                     </div>
-                    <div className="form-group bottom-label">
+                    <div className="login form-group bottom-label">
                       <label for="inputEmail" className="label-login">
                         Email address
                       </label>
