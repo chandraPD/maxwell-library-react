@@ -19,7 +19,7 @@ const TopUp2 = (props) => {
             {/* fieldsets */}
             <fieldset>
             <div>
-  <ProgressBar variant="dark" now={50} />
+  <ProgressBar variant="dark" now={50} animated/>
   </div>
                 <div className="form-card">
                     <div className="row">
