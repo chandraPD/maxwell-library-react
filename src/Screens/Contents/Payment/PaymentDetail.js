@@ -222,10 +222,7 @@ class Payment extends Component {
           <div className="container-fluid">
             <div className="card">
               <div className="card-header">
-                <div className="row">
-                  <div className="col-sm-6">
-                    
-                  </div>
+   
                   <div className="form-group balance-display">
                       <label>Current Balance: </label>
                       <p className="balance-value">Rp. 50.000</p>
@@ -233,7 +230,7 @@ class Payment extends Component {
                   <div className="col-sm-6">
                     
                   </div>
-                </div>
+            
               </div>
 
               <div className="card-body">
