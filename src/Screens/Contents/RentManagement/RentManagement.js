@@ -163,7 +163,7 @@ class RentManagement extends Component {
             "date_of_return": "8/25/2020",
             "given_by": "Marlène",
             "fine": "3807.31",
-            "status": "Returned"
+            "status": "Waiting for Payment of Fines"
         },
         {
             "no": 10,
@@ -198,8 +198,8 @@ class RentManagement extends Component {
                 actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={this.acceptRent}  title="Accept" icon="check-square" /><Action type="danger" onClick={this.cancelRent}  title="Cancel" icon="window-close" /></div>
                 statusVal = <Status type="primary" val="Waiting Taken By Librarian" />
             } else if (rent.status == 'Waiting for Payment of Fines') {
-                actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link="Payment" title="Payment" icon="file-invoice" /></div>
-                statusVal = <Status type="warning" val="Waiting for Payment of Fines" />
+                actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link={`/PaymentDetail/${rent.rent_id}`} title="Payment" icon="file-invoice" /></div>
+                statusVal = <Status type="warning" val="Waiting for Payment of Fines" idUser={rent.rent_id}/>
             } else if (rent.status == 'Returned' || rent.status == 'Canceled') {
                 actVal = '-';
                 if (rent.status == 'Returned') {

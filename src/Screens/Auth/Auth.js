@@ -140,7 +140,6 @@ class Auth extends Component {
 
     if(this.handleValidationSignIn()){
       this.props.history.push('/')
-      window.location.reload()
     } else {
 
     }
