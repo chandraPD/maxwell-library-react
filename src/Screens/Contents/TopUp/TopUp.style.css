@@ -142,6 +142,10 @@ p {
     color: black
 }
 
+.label-nominal{    
+    font-weight: 300 !important;
+}
+
 #progressbar li {
     list-style-type: none;
     font-size: 15px;
@@ -149,28 +153,6 @@ p {
     float: left;
     position: relative;
     font-weight: 400
-}
-
-#progressbar #nominal:before {
-    font-family: "Font Awesome 5 Free";  
-    font-weight: 900; 
-    content: "\f53a"
-}
-
-#progressbar #payment:before {
-    font-family: "Font Awesome 5 Free";    
-    content: "\f09d"
-}
-
-#progressbar #confirm:before {
-    font-family: "Font Awesome 5 Free";    
-    content: "\f058"
-}
-
-#progressbar #password:before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900; 
-    content: "\f4fc"
 }
 
 #progressbar li:before {
@@ -215,22 +197,14 @@ p {
     object-fit: cover
 }
 
-/* .radio-group2 {
+ .radio-group2 {
     position: relative;
     margin-bottom: 25px
 }
 
 .radio1 {
-    display: inline;
-    width: 204;
-    height: 104;
-    border-radius: 0;
-    background: lightblue;
-    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    cursor: pointer;
-    margin: 8px 2px
-}*/
+    margin-right:'3.5rem'
+} 
 
 .radio1:hover {
     box-shadow: 2px 2px 2px 2px rgba(107, 67, 67, 0.3)
@@ -242,8 +216,10 @@ p {
 
 @media (max-width: 430px){
     .radio-group .icheck-primary{
-        margin-left: 25px;
+        margin-left: 100px;
     }
+
+
 }
 
 @media (max-width: 380px){
