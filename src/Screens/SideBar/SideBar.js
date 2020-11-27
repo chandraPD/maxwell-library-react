@@ -55,12 +55,12 @@ export default class SideBar extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <a href="/" className="nav-link" id="index" >
+               <Link to="/" className="nav-link" id="index">
                   <i className="nav-icon fas fa-book" />
                   <p>
                     Explore
                   </p>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link to="/History" className="nav-link" id="history">
