@@ -26,15 +26,18 @@ class ReturnBook extends Component {
         });
     }
     setDetail(index) {
-        const fillArray = [...this.state.listDetail]
+        let fillArray = [...this.state.listDetail]
         fillArray[index] = <div>
-  <div className="form-group row"><div className="form-group col-sm-4"><span className="info">Book Title</span><input type="text" className="form-control" name="book_title[]" defaultValue="Dilan 1990" readOnly /></div><div className="form-group col-sm-4"><span>Borrowed On</span><input type="text" className="form-control" name="borrow_date[]" defaultValue="17 Nov 2020" readOnly /></div><div className="form-group col-sm-4"><span>Due On</span><input type="text" className="form-control" name="due_on[]" defaultValue="20 Nov 2020" readOnly /></div></div><div className="form-group row"><div className="form-group col-sm-4"><span className="info">Date Of Return</span><input type="text" className="form-control" name="return_date[]" defaultValue="21 Nov 2020" readOnly /></div><div className="form-group col-sm-4"><span>Late By (Days)</span><input type="text" className="form-control" name="late_by[]" defaultValue={1} readOnly /></div><div className="form-group col-sm-4"><span>Fine</span><input type="text" className="form-control" name="fine[]" defaultValue={5000} readOnly /></div></div>
-</div>
+            <div className="form-group row"><div className="form-group col-sm-4"><span className="info">Book Title</span><input type="text" className="form-control" name="book_title[]" defaultValue="Dilan 1990" readOnly /></div><div className="form-group col-sm-4"><span>Borrowed On</span><input type="text" className="form-control" name="borrow_date[]" defaultValue="17 Nov 2020" readOnly /></div><div className="form-group col-sm-4"><span>Due On</span><input type="text" className="form-control" name="due_on[]" defaultValue="20 Nov 2020" readOnly /></div></div><div className="form-group row"><div className="form-group col-sm-4"><span className="info">Date Of Return</span><input type="text" className="form-control" name="return_date[]" defaultValue="21 Nov 2020" readOnly /></div><div className="form-group col-sm-4"><span>Late By (Days)</span><input type="text" className="form-control" name="late_by[]" defaultValue={1} readOnly /></div><div className="form-group col-sm-4"><span>Fine</span><input type="text" className="form-control" name="fine[]" defaultValue={5000} readOnly /></div></div>
+        </div>
         this.setState({ listDetail: fillArray })
     }
     deleteRow(index) {
+        let fillArray = [...this.state.listDetail]
+        fillArray[index] = ''
         this.setState({
             listItem: this.state.listItem.filter((_, i) => i !== index),
+            listDetail: fillArray
         });
     }
     saveReturn() {
