@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./payment.css";
 import $ from "jquery";
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
-import { Link } from "react-router-dom";
-import swal from "sweetalert";
+import { Link, withRouter } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 class Payment extends Component {
   componentDidMount() {
@@ -16,26 +16,24 @@ class Payment extends Component {
   }
 
   paymentSuccessful() {
-    swal("Success", "Your Payment has been Accepted", "success")
+    Swal.fire("Success", "Your Payment has been Accepted", "success")
   }
 
   paymentDeclined() {
-    swal({
+    Swal.fire({
       icon: 'error',
       title: 'Declined',
-      text: 'Sorry, Your Current Balance is Insufficient',
-      buttons: {
-        cancel: "OK",
-        catch: {
-          text: "Go to Top Up",
-          value: "catch"
-        }
+      text: 'Sorry, Your Current Balance is Insufficient.',
+      showDenyButton: true,
+      showConfirmButton: true,
+      confirmButtonText: `Top Up`,
+      denyButtonText: `OK`
+    }).then((result) => {
+      if(result.isConfirmed) {
+        this.props.history.push('/TopUp')
       }
-    }).then((value) => {
-      switch(value) {
-        case "catch":
-          window.location.href='/TopUp'
-          break;
+      else {
+
       }
     })
   }
@@ -662,4 +660,4 @@ class Payment extends Component {
   }
 }
 
-export default Payment;
+export default withRouter(Payment);
