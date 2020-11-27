@@ -68,7 +68,7 @@ p {
 }
 
 #msform .action-button {
-    width: 8rem;
+    width: 7rem;
     background: black;
     font-weight: bold;
     color: white;
@@ -86,7 +86,7 @@ p {
 }
 
 #msform .action-button-previous {
-    width: 8rem;
+    width: 7rem;
     background: #616161;
     font-weight: bold;
     color: white;
@@ -95,7 +95,7 @@ p {
     cursor: pointer;
     padding: 10px 5px;
     margin: 1.5rem 1.5rem;
-    float: right
+    float: left
 }
 
 #msform .action-button-previous:hover,
@@ -205,8 +205,20 @@ p {
 }
 
 .radio1 {
-    margin-right:'3.5rem'
+    margin-right:'3.5rem';
+    padding: 1rem;
+    display: block;
+    margin: 10px;
+    
 } 
+
+.lbl-pmt {
+    place-content: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -100px
+}
 
 .radio1:hover {
     box-shadow: 2px 2px 2px 2px rgba(107, 67, 67, 0.3)
