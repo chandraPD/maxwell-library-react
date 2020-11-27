@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import './SideBar.style.css'
 import avatarUser from '../../Assets/Media/user/profile.png'
+import logo from '../../Assets/Media/icon/bookshelf.png'
+import { Link } from 'react-router-dom';
 
 export default class SideBar extends Component {
     render() {
@@ -9,7 +11,7 @@ export default class SideBar extends Component {
             <aside className="main-sidebar elevation-4 sidebar-light-primary">
   {/* Brand Logo */}
   <a href="index.html" className="brand-link">
-    <img src="./auth/assets/images/bookshelf.png" alt="Maxwell Library" style={{height: '2rem', marginLeft: '.7rem'}} />
+    <img src={logo} alt="Maxwell Library" style={{height: '2rem', marginLeft: '.7rem'}} />
     <span className="brand-text font-weight-light">Maxwell Library</span>
   </a>
   {/* Sidebar */}
@@ -27,16 +29,16 @@ export default class SideBar extends Component {
           {/* Sidebar user panel (optional) */}
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image my-center">
-              <a href="Profile.html">
+              <Link to='/Profile'>
                 <img src={avatarUser} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
-              </a>
+                </Link>
             </div>
             <div className="info">
               <a href="Profile.html" className="d-block user-name">Niki Zefanya</a>
               <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>Rp. 50.000,-</p>
-              <a href="./top_up.html" className="btn btn-sm btn-primary" style={{color: 'white'}}>
-                <i className="fas fa-plus-square" /> &nbsp; Top Up
-              </a>
+              <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
+                <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
+              </Link>
             </div>
           </div>
           {/* Sidebar Menu */}
@@ -45,28 +47,28 @@ export default class SideBar extends Component {
               {/* Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library */}
               <li className="nav-item">
-                <a href="./profile.html" className="nav-link">
+                <Link to="/Profile" className="nav-link">
                   <i className="nav-icon fas fa-user" />
                   <p>
                     Profile
                   </p>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a href="./index.html" className="nav-link" id="index">
+               <Link to="/" className="nav-link" id="index">
                   <i className="nav-icon fas fa-book" />
                   <p>
                     Explore
                   </p>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a href="./history.html" className="nav-link" id="history">
+                <Link to="/History" className="nav-link" id="history">
                   <i className="nav-icon fas fa-history" />
                   <p>
                     History
                   </p>
-                </a>
+                </Link>
               </li>
               <li className="nav-item has-treeview menu-open">
                 <a href="#" className="nav-link">
@@ -78,70 +80,70 @@ export default class SideBar extends Component {
                 </a>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <a href="./user_management.html" className="nav-link">
+                    <Link to="/UserManagement" className="nav-link">
                       <i className="fas fa-users nav-icon" />
                       <p>User Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./book_management.html" className="nav-link">
+                    <Link to="/BookManagement" className="nav-link">
                       <i className="fas fa-book nav-icon" />
                       <p>Book Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./rent_management.html" className="nav-link">
+                    <Link to="/RentManagement" className="nav-link">
                       <i className="far fa-hourglass nav-icon" />
                       <p>Rent Management </p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./fine_management.html" className="nav-link">
+                    <Link to="/FineManagement" className="nav-link">
                       <i className="fas fa-gavel nav-icon" />
                       <p>Fine Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./category_management.html" className="nav-link">
+                    <Link to="/CategoryManagement" className="nav-link">
                       <i className="fas fa-th nav-icon" />
                       <p>Category Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./slideshow_management.html" className="nav-link">
+                    <Link to="/SlideShowManagement" className="nav-link">
                       <i className="far fa-images nav-icon" />
                       <p>Slide Show Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="donate_management.html" className="nav-link">
+                    <Link to="/DonateManagement" className="nav-link">
                       <i className="fa fa-hands-helping nav-icon" />
                       <p>Donation Management</p>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="top_up_management.html" className="nav-link">
+                    <Link to="/TopUpManagement" className="nav-link">
                       <i className="fa fa-credit-card nav-icon" />
                       <p>Top Up Management</p>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
               <li className="nav-item">
-                <a href="./donation.html" className="nav-link">
+                <Link to="/Donation" className="nav-link">
                   <i className="nav-icon fas fa-people-carry" />
                   <p>
                     Donation
                   </p>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a href="./auth/index.html" className="nav-link" data-target="#modal-xl">
+                <Link to="/Auth" className="nav-link" data-target="#modal-xl">
                   <i className="nav-icon fas fa-sign-out-alt" />
                   <p>
                     Log Out
                   </p>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
