@@ -15,12 +15,15 @@ import CategoryManagement from '../Screens/Contents/CategoryManagement/CategoryM
 import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideShowManagement'
 import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
+import PaymentInvoicePrintPaid from "../Screens/Contents/Payment/PaymentInvoicePrintPaid"
 import History from '../Screens/Contents/History/History';
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 import AdminProfile from '../Screens/Contents/Profile/AdminProfile'
 import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
 import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
+import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
+import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 
 class MainNavigation extends Component {
@@ -32,6 +35,9 @@ class MainNavigation extends Component {
                     </Route>
                     <Route path='/PaymentPrint'>
                         <PaymentInvoicePrint />
+                    </Route>
+                    <Route exact path='/PaymentPrintPaid'>
+                        <PaymentInvoicePrintPaid />
                     </Route>
                     <Route path='/'>
                             <NavBar />
@@ -84,6 +90,12 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/bookmanagement'>
                                     <BookManagement />
+                                </Route>
+                                <Route path='/DetailInvoice'>
+                                    <DetailInvoice />
+                                </Route>
+                                <Route path='/ReturnBook'>
+                                    <ReturnBook />
                                 </Route>
                             </Switch>
                             <Footer />

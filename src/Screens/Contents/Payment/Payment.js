@@ -51,10 +51,10 @@ class Payment extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="/">Home</a>
+                    <Link to="/">Home</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <a href="/FineManagement">Fine Management</a>
+                    <Link to="/FineManagement">Fine Management</Link>
                   </li>
                   <li className="breadcrumb-item active">Fine Payment</li>
                 </ol>
@@ -359,13 +359,13 @@ class Payment extends Component {
                     {/* <!-- this row will not appear when printing --> */}
                     <div className="row no-print">
                       <div className="col-12">
-                        <a
-                          href="payment_invoice_print.html"
+                        <Link
+                          to="PaymentPrint"
                           target="_blank"
                           className="btn btn-default"
                         >
                           <i className="fas fa-print"></i> Print
-                        </a>
+                        </Link>
                         <button
                           type="submit"
                           data-toggle="modal"
@@ -507,13 +507,13 @@ class Payment extends Component {
                     {/* <!-- this row will not appear when printing --> */}
                     <div className="row no-print">
                       <div className="col-12">
-                        <a
-                          href="payment_invoice_print.html"
+                        <Link
+                          to="PaymentPrint"
                           target="_blank"
                           className="btn btn-default"
                         >
                           <i className="fas fa-print"></i> Print
-                        </a>
+                        </Link>
                         <button
                           type="submit"
                           data-toggle="modal"

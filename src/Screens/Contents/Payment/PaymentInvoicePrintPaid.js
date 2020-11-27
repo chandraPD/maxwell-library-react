@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MaxIcon from '../../Auth/Assets/Images/bookshelf.png'
 
-class PaymentInvoicePrint extends Component {
+class PaymentInvoicePrintPaid extends Component {
   
   componentDidMount() {
     window.addEventListener("load", window.print());
@@ -59,7 +59,8 @@ class PaymentInvoicePrint extends Component {
             {/* <!-- /.col --> */}
             <div className="col-sm-4 invoice-col">
               <b>Invoice #007612</b>
-              <br />
+              <br /><br/>
+             <h2><font color="green">PAID</font></h2>
             </div>
             {/* <!-- /.col --> */}
           </div>
@@ -132,4 +133,4 @@ class PaymentInvoicePrint extends Component {
   }
 }
 
-export default PaymentInvoicePrint;
+export default PaymentInvoicePrintPaid;
