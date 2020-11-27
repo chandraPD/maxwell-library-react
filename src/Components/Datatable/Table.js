@@ -1,6 +1,24 @@
 import React, { Component } from 'react'
 import Cell from './Cell';
+import $ from 'jquery'
+import "datatables.net-responsive/js/dataTables.responsive"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
+
 export default class Table extends Component {
+
+    componentDidMount() {
+       this.setTable();
+      }
+  
+      setTable() {
+        $(function () {
+            $("#example1").DataTable({
+                responsive: true,
+                autoWidth: false,
+            });
+        });
+      }
+    
     renderHeadingRow = (_cell, cellIndex) => {
         const { headings } = this.props;
         return (
@@ -45,7 +63,7 @@ export default class Table extends Component {
                 <thead>{theadMarkup}</thead>
                 <tbody>{tbodyMarkup}</tbody>
             </table>
-        );
+        )
     }
 }
 

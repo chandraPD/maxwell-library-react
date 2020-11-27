@@ -5,6 +5,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import swal from 'sweetalert'
 import 'bootstrap'
+import { Link } from "react-router-dom";
 
 class SlideShowManagement extends Component {
   constructor(props) {
@@ -145,7 +146,7 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a href='/'>Home</a>
                   </li>
                   <li className="breadcrumb-item active">Slideshow</li>
                 </ol>
