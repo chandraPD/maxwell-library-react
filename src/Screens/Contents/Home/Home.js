@@ -3,17 +3,28 @@ import './Home.style.css';
 import firstHero from '../../../Assets/Media/books/hero1.png';
 import secondtHero from '../../../Assets/Media/books/hero2.png';
 import thirdHero from '../../../Assets/Media/books/hero3.png';
+import Flickity from 'react-flickity-component';
 
 class Home extends Component {
   render() {
+    const flickityOptions = {
+      wrapAround: true,
+      autoPlay: 2000,
+      pageDots: false,
+      initialIndex: 2,
+    };
+
     return (
       <div className="content-wrapper">
         <section className="content">
           {/* Flickity init */}
-          <div className="main-carousel">
-            <div
-              className="carousel carousel-main"
-              data-flickity='{ "wrapAround": true, "lazyLoad": true, "pageDots": false }'
+          <div className="carousel-main">
+            <Flickity
+              className={'main-carousel carousel'}
+              elementType={'div'}
+              options={flickityOptions}
+              static={true}
+              reloadOnUpdate={true}
             >
               <div
                 className="carousel-cell"
@@ -36,8 +47,8 @@ class Home extends Component {
               >
                 <div className="carousel-info">
                   <div className="carousel-text">
-                    <h2>Rewinds</h2>
-                    <h3>Andrea Hirata</h3>
+                    <h2>After Wedding</h2>
+                    <h3>Raditya Dika</h3>
                   </div>
                 </div>
               </div>
@@ -49,12 +60,12 @@ class Home extends Component {
               >
                 <div className="carousel-info">
                   <div className="carousel-text">
-                    <h2>Electric Books</h2>
+                    <h2>After Wedding</h2>
                     <h3>Raditya Dika</h3>
                   </div>
                 </div>
               </div>
-            </div>
+            </Flickity>
           </div>
           {/* Flickity ends */}
 
@@ -77,9 +88,7 @@ class Home extends Component {
                         className="img-fluid img-book"
                         alt="white sample"
                       />
-                      <span className="badge  category-book">
-                        fiction
-                      </span>
+                      <span className="badge  category-book">fiction</span>
                     </a>
                   </div>
                   <div className="filtr-item list-book">
@@ -90,9 +99,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge  category-book">
-                      romance
-                    </span>
+                    <span className="badge  category-book">romance</span>
                   </div>
                   <div className="filtr-item list-book">
                     <a href="detail.html">
@@ -102,9 +109,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge  category-book">
-                      fantasy
-                    </span>
+                    <span className="badge  category-book">fantasy</span>
                   </div>
                   <div className="filtr-item list-book">
                     <a href="detail.html">
@@ -114,9 +119,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge  category-book">
-                      novel
-                    </span>
+                    <span className="badge  category-book">novel</span>
                   </div>
                   <div className="filtr-item list-book">
                     <a href="detail.html">
@@ -126,9 +129,7 @@ class Home extends Component {
                         alt="white sample"
                       />
                     </a>
-                    <span className="badge  category-book">
-                      novel
-                    </span>
+                    <span className="badge  category-book">novel</span>
                   </div>
                 </div>
                 <div className="books-nf" style={{ display: 'none' }}>
@@ -173,9 +174,7 @@ class Home extends Component {
                     bangkit untuk adik-adiknya. Chayla berusaha mengembalikan
                     takdir...
                   </p>
-                  <span className="badge category-book">
-                    fiction
-                  </span>
+                  <span className="badge category-book">fiction</span>
                 </div>
               </div>
             </div>
@@ -188,9 +187,7 @@ class Home extends Component {
                     className="img-fluid img-book"
                     alt="white sample"
                   />
-                  <span className="badge  category-book">
-                    fiction
-                  </span>
+                  <span className="badge  category-book">fiction</span>
                 </a>
               </div>
               <div className="filtr-item list-book">
@@ -201,9 +198,7 @@ class Home extends Component {
                     alt="white sample"
                   />
                 </a>
-                <span className="badge  category-book">
-                  romance
-                </span>
+                <span className="badge  category-book">romance</span>
               </div>
               <div className="filtr-item list-book">
                 <a href="detail.html">
@@ -213,9 +208,7 @@ class Home extends Component {
                     alt="white sample"
                   />
                 </a>
-                <span className="badge  category-book">
-                  fantasy
-                </span>
+                <span className="badge  category-book">fantasy</span>
               </div>
               <div className="filtr-item list-book">
                 <a href="detail.html">
@@ -249,9 +242,12 @@ class Home extends Component {
                 <h2 className="title-container">Book List</h2>
                 <h4 className="title-container">Find your best reads</h4>
               </div>
-              <div
-                className="carousel carousel-main book-list-bottom"
-                data-flickity='{ "wrapAround": true,"pageDots": false, "autoPlay": 2000 }'
+              <Flickity
+                className={'carousel carousel-main book-list-bottom'}
+                elementType={'div'}
+                options={flickityOptions}
+                static={true}
+                reloadOnUpdate={true}
               >
                 <div className="carousel-cell">
                   <a href="detail.html">
@@ -334,7 +330,7 @@ class Home extends Component {
                     />
                   </a>
                 </div>
-              </div>
+              </Flickity>
             </div>
           </div>
         </section>
