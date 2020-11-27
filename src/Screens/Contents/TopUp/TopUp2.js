@@ -36,7 +36,7 @@ const TopUp2 = (props) => {
                 <div class="d-flex flex-column ctm-wt-pm">
               <div className="btn btn-app radio1">
                 <label className="lbl-pmt">
-                  <Field name="payment" component="input" type="radio" value="Credit Card" style={{display: "none"}}/>
+                  <Field name="payment" component="input" type="radio" value="Credit Card" />
                   {' '}
         <img src="https://www.pinclipart.com/picdir/big/48-488752_credit-card-atm-card-logo-png-clipart.png" alt="" style={{ height: '2rem' }} />
             Credit Card
@@ -44,7 +44,7 @@ const TopUp2 = (props) => {
               </div>
               <div className="btn btn-app radio1">
               <label>
-                  <Field name="payment" component="input" type="radio" value="Paypal" style={{display: "none"}}/>
+                  <Field name="payment" component="input" type="radio" value="Paypal" />
                   {' '}
         <img src="https://cdn0.iconfinder.com/data/icons/shift-ecommerce/32/Paypal-512.png" alt="" style={{ height: '2rem' }} />
             Paypal
@@ -52,7 +52,7 @@ const TopUp2 = (props) => {
               </div>
               <div className="btn btn-app radio1">
               <label>
-                  <Field name="payment" component="input" type="radio" value="OVO" style={{display: "none"}}/>
+                  <Field name="payment" component="input" type="radio" value="OVO" />
                   {' '}
         <img src="https://play-lh.googleusercontent.com/8zSxWSL5U-2KbIgeTHttb5FtDuW07GThugzAzyF75p-J0RQC0hZ0xZNxjZk9kpxk1Q" alt="" style={{ height: '2rem' }} />
             OVO
@@ -62,7 +62,7 @@ const TopUp2 = (props) => {
               <div class="d-flex flex-column ctm-wt-pm">
               <div className="btn btn-app radio1">
               <label>
-                  <Field name="payment" component="input" type="radio" value="Gopay" style={{display: "none"}}/>
+                  <Field name="payment" component="input" type="radio" value="Gopay" />
                   {' '}
         <img src={gopay} alt="" style={{ height: '2rem' }} />
             Gopay
@@ -70,7 +70,7 @@ const TopUp2 = (props) => {
               </div>
               <div className="btn btn-app radio1">
               <label>
-                  <Field name="payment" component="input" type="radio" value="Dana" style={{display: "none"}}/>
+                  <Field name="payment" component="input" type="radio" value="Dana" />
                   {' '}
         <img src={dana} alt="" style={{ height: '2rem' }} />
             Dana
@@ -78,7 +78,7 @@ const TopUp2 = (props) => {
               </div>
               <div className="btn btn-app radio1" >
               <label>
-                  <Field name="payment" component="input" type="radio" value="Cash" style={{display: "none"}}/>
+                  <Field name="payment" component="input" type="radio" value="Cash" />
                   {' '}
         <img src="https://www.clipartmax.com/png/middle/223-2235279_cash-in-hand-icon.png" alt="" style={{ height: '2rem' }} />
             Cash
