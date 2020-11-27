@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import "./customtable.css";
 import SuccessImg from "../../../Assets/Media/check.png";
-import swal from "sweetalert";
 import "bootstrap";
 import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
-import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -175,22 +174,15 @@ class CategoryManagement extends Component {
     e.preventDefault();
     if (this.handleValidation()) {
       $('#modal-add').modal('toggle');
-      swal({
+      Swal.fire({
         icon: 'success',
         title: 'Success',
         text: 'Your Data has been Added',
-        buttons: {
-          catch: {
-            text: "OK",
-            value: "catch"
-          }
-        }
-      }).then((value) => {
-        switch(value) {
-          case "catch":
+        confirmButtonText: `OK`
+      }).then((result) => {
+          if(result.isConfirmed) {
             window.location.reload()
-            break;
-        }
+          }
       })
         
     } else {
