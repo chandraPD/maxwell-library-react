@@ -119,7 +119,6 @@ class ChangePassword extends Component {
 
     contactSubmitChangePassword(e) {
         e.preventDefault();
-        let fields = this.state.fields;
     
         if(this.handleValidationChangePassword()){
             swal(
