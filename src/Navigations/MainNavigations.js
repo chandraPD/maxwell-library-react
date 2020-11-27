@@ -24,6 +24,7 @@ import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
+import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 
 class MainNavigation extends Component {
     render() {
@@ -77,6 +78,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/Payment'>
                                     <Payment />
+                                </Route>
+                                <Route path='/PaymentDetail/:userId'>
+                                    <PaymentDetail />
                                 </Route>
                                 <Route path='/History'>
                                     <History />

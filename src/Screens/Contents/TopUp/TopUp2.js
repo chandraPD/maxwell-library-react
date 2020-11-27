@@ -23,24 +23,24 @@ const TopUp2 = (props) => {
   </div>
                 <div className="form-card">
                     <div className="row">
-                        <div className="col-7">
+                        <div className="col-6">
                             <h5 className="fs-title">Payment Method:</h5>
                         </div>
-                        <div className="col-5">
+                        <div className="col-6">
                             <h5 className="steps">Step 2 - 4</h5>
                         </div>
                     </div>
-                    <div className="radio-group">
+                    <div className="radio-group2">
             <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
-              <div className="icheck-primary">
-                <label>
+              <div className="btn btn-app radio1">
+                <label >
                   <Field name="payment" component="input" type="radio" value="Credit Card" />
                   {' '}
         <img src="https://www.pinclipart.com/picdir/big/48-488752_credit-card-atm-card-logo-png-clipart.png" alt="" style={{ height: '2rem' }} />
             Credit Card
           </label>
               </div>
-              <div className="icheck-primary">
+              <div className="btn btn-app radio1">
               <label>
                   <Field name="payment" component="input" type="radio" value="Paypal" />
                   {' '}
@@ -48,7 +48,7 @@ const TopUp2 = (props) => {
             Paypal
           </label>
               </div>
-              <div className="icheck-primary">
+              <div className="btn btn-app radio1">
               <label>
                   <Field name="payment" component="input" type="radio" value="OVO" />
                   {' '}
@@ -56,7 +56,7 @@ const TopUp2 = (props) => {
             OVO
           </label>
               </div>
-              <div className="icheck-primary">
+              <div className="btn btn-app radio1">
               <label>
                   <Field name="payment" component="input" type="radio" value="Gopay" />
                   {' '}
@@ -64,7 +64,7 @@ const TopUp2 = (props) => {
             Gopay
           </label>
               </div>
-              <div className="icheck-primary">
+              <div className="btn btn-app radio1">
               <label>
                   <Field name="payment" component="input" type="radio" value="Dana" />
                   {' '}
@@ -72,7 +72,7 @@ const TopUp2 = (props) => {
             Dana
           </label>
               </div>
-              <div className="icheck-primary">
+              <div className="btn btn-app radio1" >
               <label>
                   <Field name="payment" component="input" type="radio" value="Cash" />
                   {' '}

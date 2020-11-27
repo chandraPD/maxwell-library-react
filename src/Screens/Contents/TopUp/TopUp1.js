@@ -20,52 +20,52 @@ const TopUp1 = (props) => {
         </div>
         <div className="form-card">
           <div className="row">
-            <div className="col-7">
+            <div className="col-6">
               <h5 className="fs-title">Total Nominal:</h5>
             </div>
-            <div className="col-5">
+            <div className="col-6">
               <h5 className="steps">Step 1 - 4</h5>
             </div>
           </div>
           <div className="radio-group">
             <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
               <div className="icheck-primary">
-                <label>
+                <label className="label-nominal" >
                   <Field name="nominal" component="input" type="radio" value="10000" />
                   {' '}
             Rp 10.000
           </label>
               </div>
               <div className="icheck-primary">
-              <label>
+              <label className="label-nominal">
                   <Field name="nominal" component="input" type="radio" value="20000" />
                   {' '}
             Rp 20.000
           </label>
               </div>
               <div className="icheck-primary">
-              <label>
+              <label className="label-nominal">
                   <Field name="nominal" component="input" type="radio" value="30000" />
                   {' '}
             Rp 30.000
           </label>
               </div>
               <div className="icheck-primary">
-              <label>
+              <label className="label-nominal">
                   <Field name="nominal" component="input" type="radio" value="50000" />
                   {' '}
             Rp 50.000
           </label>
               </div>
               <div className="icheck-primary">
-              <label>
+              <label className="label-nominal">
                   <Field name="nominal" component="input" type="radio" value="100000" />
                   {' '}
             Rp 100.000
-          </label>
+          </label  >
               </div>
               <div className="icheck-primary">
-              <label>
+              <label className="label-nominal">
                   <Field name="nominal" component="input" type="radio" value="200000" />
                   {' '}
             Rp 200.000

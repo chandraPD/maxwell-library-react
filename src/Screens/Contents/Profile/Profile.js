@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import avatarUser from '../../../Assets/Media/user/profile.png'
-import swal from 'sweetalert'
+import Swal from 'sweetalert2'
 
 
 class Profile extends Component {
@@ -18,7 +18,6 @@ class Profile extends Component {
     }
 
     submitEditProfile() {
-        const editButton = document.querySelector('button.edit-profile');
         const editForm = document.querySelector('#container-editform');
         const cancelForm = document.querySelector('.btn-editform button');
         
@@ -31,15 +30,15 @@ class Profile extends Component {
         var addressUser = document.getElementById('user-address').value;
         var phoneNumber = document.getElementById('user-number').value;
     
-        if (firstName == '' || lastName == '' || dateOfBirth == '' || emailUser == '' || addressUser == '' || phoneNumber == ''){
-                swal(
+        if (firstName === '' || lastName === '' || dateOfBirth === '' || emailUser === '' || addressUser === '' || phoneNumber === ''){
+                Swal.fire(
                     'Submit Failed !',
                     'You should fill in the blank',
                     'error'
                 );
                 editForm.style.display = 'none';
             }else{
-                swal(
+                Swal.fire(
                     'Submitted !',
                     'You clicked the button!',
                     'success'
