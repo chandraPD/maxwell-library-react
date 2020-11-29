@@ -311,7 +311,7 @@ class History extends Component {
                   <li className="page-item"><a href="#" className="page-link">«</a></li>
                   <li className="page-item"><a href="#" className="page-link">1</a></li>
                   <li className="page-item"><a href="#" className="page-link">2</a></li>
-                  <li className="page-item"><a href="#" className="page-link">4</a></li>
+                  <li className="page-item"><a href="#" className="page-link">3</a></li>
                   <li className="page-item"><a href="#" className="page-link">»</a></li>
                 </ul>
               </div>

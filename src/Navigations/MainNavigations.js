@@ -26,6 +26,7 @@ import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 // import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
+import Donation from '../Screens/Contents/Donation/Donation'
 
 class MainNavigation extends Component {
     render() {
@@ -100,6 +101,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 {/* <Route path='/DonationManagement'>
                                     <DonationManagement /> */}
+                                {/* </Route> */}
+                                 <Route path='/Donation'>
+                                    <Donation />
                                 </Route>
                             </Switch>
                             <Footer />
