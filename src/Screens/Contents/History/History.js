@@ -13,6 +13,34 @@ import photo10 from '../../../Assets/Media/books/laskar.png'
 import { Link } from 'react-router-dom'
 
 class History extends Component {
+  displayCurrentRead() {
+    var titleCurrent = document.getElementById('title-current');
+    var currentBooks = document.getElementById('current-books');
+    var titleBorrowed = document.getElementById('title-borrowed');
+    var borrowedBooks = document.getElementById('borrowed-books');
+ 
+    titleCurrent.style.display = 'block';
+    currentBooks.style.display = 'block';
+ 
+    titleBorrowed.style.display = 'none';
+    borrowedBooks.style.display = 'none';
+  }
+ 
+  displayBorrowedBooks() {
+    var titleCurrent = document.getElementById('title-current');
+    var currentBooks = document.getElementById('current-books');
+    var titleBorrowed = document.getElementById('title-borrowed');
+    var borrowedBooks = document.getElementById('borrowed-books');
+ 
+    titleBorrowed.style.display = 'block';
+    borrowedBooks.style.display = 'block';
+ 
+    titleCurrent.style.display = 'none';
+    currentBooks.style.display = 'none';
+  }
+ 
+// onClick={() => this.displayBorrowedBooks()}
+// onClick={() => this.displayCurrentRead()}
   render () {
      return (
       
@@ -37,8 +65,8 @@ class History extends Component {
                        View History
                      </button>
                      <div className="dropdown-menu">
-                       <button className="dropdown-item" href="#" onclick="displayBorrowedBooks()">Borrowed</button>
-                       <button className="dropdown-item" href="#" onclick="displayCurrentRead()">Current Read</button>
+                       <button className="dropdown-item" href="#" onClick={() => this.displayBorrowedBooks()}>Borrowed</button>
+                       <button className="dropdown-item" href="#" onClick={() => this.displayCurrentRead()}>Current Read</button>
                      </div>
                    </div>
                  </div>
