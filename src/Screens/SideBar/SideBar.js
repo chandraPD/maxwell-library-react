@@ -10,10 +10,10 @@ export default class SideBar extends Component {
         return (
             <aside className="main-sidebar elevation-4 sidebar-light-primary">
   {/* Brand Logo */}
-  <a href="index.html" className="brand-link">
+  <Link to="/" className="brand-link">
     <img src={logo} alt="Maxwell Library" style={{height: '2rem', marginLeft: '.7rem'}} />
     <span className="brand-text font-weight-light">Maxwell Library</span>
-  </a>
+  </Link>
   {/* Sidebar */}
   <div className="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
     <div className="os-resize-observer-host observed">
@@ -34,7 +34,7 @@ export default class SideBar extends Component {
                 </Link>
             </div>
             <div className="info">
-              <a href="Profile.html" className="d-block user-name">Niki Zefanya</a>
+              <Link to="Profile" className="d-block user-name">Niki Zefanya</Link>
               <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>Rp. 50.000,-</p>
               <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
                 <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
