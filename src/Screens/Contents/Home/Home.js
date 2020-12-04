@@ -4,6 +4,7 @@ import firstHero from '../../../Assets/Media/books/hero1.png';
 import secondtHero from '../../../Assets/Media/books/hero2.png';
 import thirdHero from '../../../Assets/Media/books/hero3.png';
 import Flickity from 'react-flickity-component';
+import { Link } from 'react-router-dom';
 
 class Home extends Component {
   render() {
@@ -82,53 +83,53 @@ class Home extends Component {
                 <div className="filter-container p-0 row custom-flex">
                   <div className="top-seller">
                     <div className="filtr-item list-book" />
-                    <a href="detail.html">
+                    <Link to="Detail">
                       <img
                         src="https://img.wattpad.com/cover/240316214-200-k585866.jpg"
                         className="img-fluid img-book"
                         alt="white sample"
                       />
                       <span className="badge  category-book">fiction</span>
-                    </a>
+                    </Link>
                   </div>
                   <div className="filtr-item list-book">
-                    <a href="detail.html">
+                    <Link to="Detail">
                       <img
                         src="https://img.wattpad.com/cover/167563297-200-k341133.jpg"
                         className="img-fluid img-book"
                         alt="white sample"
                       />
-                    </a>
+                    </Link>
                     <span className="badge  category-book">romance</span>
                   </div>
                   <div className="filtr-item list-book">
-                    <a href="detail.html">
+                    <Link to="Detail">
                       <img
                         src="https://img.wattpad.com/cover/148969091-200-k416704.jpg"
                         className="img-fluid img-book"
                         alt="white sample"
                       />
-                    </a>
+                    </Link>
                     <span className="badge  category-book">fantasy</span>
                   </div>
                   <div className="filtr-item list-book">
-                    <a href="detail.html">
+                    <Link to="Detail">
                       <img
                         src="https://img.wattpad.com/cover/185980135-200-k264509.jpg"
                         className="img-fluid img-book"
                         alt="white sample"
                       />
-                    </a>
+                    </Link>
                     <span className="badge  category-book">novel</span>
                   </div>
                   <div className="filtr-item list-book">
-                    <a href="detail.html">
+                    <Link to="Detail">
                       <img
                         src="https://img.wattpad.com/cover/31317290-200-k37192.jpg"
                         className="img-fluid img-book"
                         alt="white sample"
                       />
-                    </a>
+                    </Link>
                     <span className="badge  category-book">novel</span>
                   </div>
                 </div>
@@ -148,12 +149,12 @@ class Home extends Component {
               </div>
               <div className="hero-book">
                 <div className="hero-book-cover">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/235119477-416-k713259.jpg"
                       alt="Conquer Dream, With Bos! cover"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div>
                   <a
@@ -181,53 +182,53 @@ class Home extends Component {
             <div className="filter-container p-0 row custom-flex">
               <div className="top-seller">
                 <div className="filtr-item list-book" />
-                <a href="detail.html">
+                <Link to="Detail">
                   <img
                     src="https://img.wattpad.com/cover/138766480-200-k262515.jpg"
                     className="img-fluid img-book"
                     alt="white sample"
                   />
                   <span className="badge  category-book">fiction</span>
-                </a>
+                </Link>
               </div>
               <div className="filtr-item list-book">
-                <a href="detail.html">
+                <Link to="Detail">
                   <img
                     src="https://img.wattpad.com/cover/225027823-200-k139088.jpg"
                     className="img-fluid img-book"
                     alt="white sample"
                   />
-                </a>
+                </Link>
                 <span className="badge  category-book">romance</span>
               </div>
               <div className="filtr-item list-book">
-                <a href="detail.html">
+                <Link to="Detail">
                   <img
                     src="https://img.wattpad.com/cover/142217672-200-k469744.jpg"
                     className="img-fluid img-book"
                     alt="white sample"
                   />
-                </a>
+                </Link>
                 <span className="badge  category-book">fantasy</span>
               </div>
               <div className="filtr-item list-book">
-                <a href="detail.html">
+                <Link to="Detail">
                   <img
                     src="https://img.wattpad.com/cover/164853306-200-k69310.jpg"
                     className="img-fluid img-book"
                     alt="white sample"
                   />
-                </a>
+                </Link>
                 <span className="badge  category-book">novel</span>
               </div>
               <div className="filtr-item list-book">
-                <a href="detail.html">
+                <Link to="Detail">
                   <img
                     src="https://img.wattpad.com/cover/143926052-200-k378110.jpg"
                     className="img-fluid img-book"
                     alt="white sample"
                   />
-                </a>
+                </Link>
                 <span className="badge  category-book">novel</span>
               </div>
             </div>
@@ -250,85 +251,85 @@ class Home extends Component {
                 reloadOnUpdate={true}
               >
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/217637593-176-k15446.jpg"
                       className="list-book-bottom carousel-cell-image"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cel">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/246598854-176-k420616.jpg"
                       className="list-book-bottom carousel-cell-image"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/240583823-176-k468965.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/164853306-200-k69310.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/247987794-176-k469618.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/143926052-200-k378110.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/244632227-176-k857341.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/216207581-176-k651777.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="carousel-cell">
-                  <a href="detail.html">
+                  <Link to="Detail">
                     <img
                       src="https://img.wattpad.com/cover/224935763-352-k438274.jpg"
                       className="carousel-cell-image list-book-bottom"
                       alt="white sample"
                     />
-                  </a>
+                  </Link>
                 </div>
               </Flickity>
             </div>
