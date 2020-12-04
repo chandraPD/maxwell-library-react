@@ -116,7 +116,7 @@ export default class SideBar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/DonateManagement" className="nav-link">
+                    <Link to="/DonationManagement" className="nav-link">
                       <i className="fa fa-hands-helping nav-icon" />
                       <p>Donation Management</p>
                     </Link>
