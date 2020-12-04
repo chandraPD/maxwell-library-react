@@ -25,7 +25,7 @@ import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
-// import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
+import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
 import Donation from '../Screens/Contents/Donation/Donation'
 
 class MainNavigation extends Component {
@@ -99,10 +99,10 @@ class MainNavigation extends Component {
                                 <Route path='/ReturnBook'>
                                     <ReturnBook />
                                 </Route>
-                                {/* <Route path='/DonationManagement'>
+                                <Route path='/DonationManagement'>
                                     <DonationManagement /> */}
-                                {/* </Route> */}
-                                 <Route path='/Donation'>
+                                </Route>
+                                 <Route path='/Donation'> */}
                                     <Donation />
                                 </Route>
                             </Switch>
