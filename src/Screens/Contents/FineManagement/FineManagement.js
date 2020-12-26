@@ -4,19 +4,22 @@ import Action from '../../../Components/Datatable/Action'
 import Status from '../../../Components/Datatable/Status'
 import { Link } from 'react-router-dom'
 import swal from 'sweetalert'
-
+import Axios from 'axios';
+import $ from 'jquery'
+import "datatables.net-responsive/js/dataTables.responsive"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
 class FineManagement extends Component {
 
     constructor() {
         super();
         this.state = {
-            data: [], 
+            data: [],
             rows: [],
             results: [],
         };
     }
     componentDidMount() {
-        this.fetchData();
+        this.fetchDataBook();
     }
 
     acceptRent() {
@@ -34,36 +37,33 @@ class FineManagement extends Component {
             'success'
         );
     }
-    async fetchData() {
-        const results = [];
-        const result = [{
-            "no": 1,
-            "borrower": "Rocky",
-            "no_invoice": 'Invoice 1',
-            "fine_ammount": "Rp 4.000,-",
-            "librarian": "Nélie",
-            "payment_date": "-",
-            "status": "Waiting For Payment"
-        },
-        {
-            "no": 2,
-            "borrower": "Chandra",
-            "no_invoice": 'Invoice 2',
-            "fine_ammount": "Rp 4.000,-",
-            "librarian": "Nélie",
-            "payment_date": "17/21/2020",
-            "status": "Paid"
-        }]
+    async fetchDataBook() {
+        const getData = await Axios.get('http://localhost:8080/invoice/get-all');
+        console.log(getData);
+        const resultBook = getData.data.data;
 
-        result.map((rent) => {
+        this.setState({ data: resultBook });
+        $('#example1').DataTable().destroy();
+        this.fetchData();
+        $("#example1").DataTable({
+            responsive: true,
+            autoWidth: false,
+        });
+    }
+
+    fetchData = () => {
+        let results = [];
+        let result = this.state.data;
+        var no = 1;
+        result.forEach(rent => {
             var row = [];
             var actVal, statusVal = '';
-            if (rent.status == 'Waiting For Payment') {
+            if (rent.statusInvoice === 'Waiting For Payment') {
                 actVal = <div className="btn-group btn-group-sm">
                     <Action link="Payment" type="primary" title="Accept" icon="check-square" />
-                    <Action link="DetailInvoice" type="info" title="Detail" icon="eye" /></div>
+                    <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
                 statusVal = <Status type="primary" val="Waiting For Payment" />
-            } else if (rent.status == 'Paid') {
+            } else if (rent.statusInvoice === 'Paid') {
                 actVal = <div className="btn-group btn-group-sm"><Action link="DetailInvoice" type="info" title="Detail" icon="eye" /></div>
                 statusVal = <Status type="info" val="Paid" />
             } else {
@@ -71,13 +71,17 @@ class FineManagement extends Component {
                 statusVal = '';
             }
 
-            row.push(<td className="text-center" >{rent.no}</td>);
+            row.push(<td className="text-center" >{no++}</td>);
             row.push(<td className="text-center" >{actVal}</td>);
-            row.push(<td className="text-center" >{rent.borrower}</td>);
-            row.push(<td>{rent.no_invoice}</td>);
-            row.push(<td>{rent.fine_ammount}</td>);
-            row.push(<td>{rent.librarian}</td>);
-            row.push(<td>{rent.payment_date}</td>);
+            row.push(<td className="text-center" >{rent.firstName + " " + rent.lastName}</td>);
+            row.push(<td>{rent.noInvoice}</td>);
+            row.push(<td>{rent.grandTotal}</td>);
+            row.push(<td>{rent.borrowerEntity.email}</td>);
+            if (rent.paymentDate === null) {
+                row.push(<td>-</td>);
+            } else {
+                row.push(<td>{rent.paymentDate}</td>);
+            }
             row.push(<td className="text-center" >{statusVal}</td>);
             results.push(row);
         });

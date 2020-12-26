@@ -1,9 +1,29 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
+import Axios from 'axios';
 
 class DetailInvoice extends Component {
+    constructor() {
+        super();
+        this.state = {
+            invoiceId: '',
+            detailInvoice: {}
+        };
+    }
+    componentDidMount() {
+        const invoiceId = this.props.match.params.invoiceId;
+        this.getDetailInvoice(invoiceId);
+    }
+
+    async getDetailInvoice(invoiceId) {
+        const result = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`)
+        this.setState({ detailInvoice: result.data.data })
+    }
+
     render() {
+        const { detailInvoice } = this.state;
+        console.log(detailInvoice);
         return (
             < div className="content-wrapper" >
                 {/* Content Header (Page header) */}
@@ -70,7 +90,7 @@ class DetailInvoice extends Component {
                                                     </div>
                                                     {/* /.col */}
                                                     <div className="col-sm-4 invoice-col">
-                                                        <b>Invoice #007612</b><br />
+                                                        <b>Invoice {detailInvoice.noInvoice}</b><br />
                                                     </div>
                                                     {/* /.col */}
                                                 </div>
@@ -157,4 +177,4 @@ class DetailInvoice extends Component {
     }
 }
 
-export default DetailInvoice
+export default withRouter(DetailInvoice)
