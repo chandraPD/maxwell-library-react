@@ -8,6 +8,7 @@ import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import Status from '../../../Components/Datatable/Status'
+import Axios from 'axios';
 
 class TopUpManagement extends Component {
   constructor(props) {
@@ -18,227 +19,131 @@ class TopUpManagement extends Component {
       data: [],
       rows: [],
       results: [],
+      result: [],
+      data: []
     };
   }
   componentDidMount() {
+    this.getAll();
+  }
+
+  async getAll(){
+    const getData = await Axios.get('http://localhost:8080/top_up_management/getAll');
+    
+    const result_topup = getData.data;
+    console.log(result_topup);
+
+    this.setState({ data: result_topup });
     this.fetchData();
   }
 
-  async fetchData() {
-    const results = [];
-    const result = [
-      {
-        no: 1,
-        id: 1,
-        userName: "Kevin",
-        totalNominal: "10000",
-        paymentMethod: "OVO",
-        status: "Success",
-      },
-      {
-        no: 2,
-        id: 2,
-        userName: "Jenifer",
-        totalNominal: "200000",
-        paymentMethod: "Cash",
-        status: "Success",
-      },
-      {
-        no: 3,
-        id: 3,
-        userName: "James",
-        totalNominal: "10000",
-        paymentMethod: "Gopay",
-        status: "Cancelled",
-      },
-      {
-        no: 4,
-        id: 3,
-        userName: "James",
-        totalNominal: "20000",
-        paymentMethod: "OVO",
-        status: "Pending",
-      },
-      {
-        no: 5,
-        id: 10,
-        userName: "Antonio",
-        totalNominal: "50000",
-        paymentMethod: "Dana",
-        status: "Pending",
-      },
-      {
-        no: 6,
-        id: 21,
-        userName: "Fudi",
-        totalNominal: "10000",
-        paymentMethod: "Cash",
-        status: "Pending",
-      },
-      {
-        no: 7,
-        id: 10,
-        userName: "Chelsea",
-        totalNominal: "30000",
-        paymentMethod: "Credit Card",
-        status: "Success",
-      },
-      {
-        no: 8,
-        id: 50,
-        userName: "Budi",
-        totalNominal: "10000",
-        paymentMethod: "Cash",
-        status: "Cancelled",
-      },
-      {
-        no: 9,
-        id: 12,
-        userName: "Bryan",
-        totalNominal: "100000",
-        paymentMethod: "Dana",
-        status: "Success",
-      },
-      {
-        no: 10,
-        id: 15,
-        userName: "Triyudha",
-        totalNominal: "20000",
-        paymentMethod: "OVO",
-        status: "Success",
-      },
-      {
-        no: 11,
-        id: 1,
-        userName: "Kevin",
-        totalNominal: "200000",
-        paymentMethod: "OVO",
-        status: "Success",
-      },
-      {
-        no: 12,
-        id: 20,
-        userName: "Claudia",
-        totalNominal: "10000",
-        paymentMethod: "OVO",
-        status: "Pending",
-      },
-      {
-        no: 13,
-        id: 19,
-        userName: "Clarice",
-        totalNominal: "30000",
-        paymentMethod: "Gopay",
-        status: "Cancelled",
-      },
-      {
-        no: 14,
-        id: 19,
-        userName: "Clarice",
-        totalNominal: "10000",
-        paymentMethod: "OVO",
-        status: "Success",
-      },
-      {
-        no: 15,
-        id: 8,
-        userName: "Budiman",
-        totalNominal: "100000",
-        paymentMethod: "Cash",
-        status: "Pending",
-      },
-      {
-        no: 16,
-        id: 1,
-        userName: "Kevin",
-        totalNominal: "10000",
-        paymentMethod: "Paypal",
-        status: "Success",
-      },
-      {
-        no: 17,
-        id: 6,
-        userName: "Yuri",
-        totalNominal: "100000",
-        paymentMethod: "OVO",
-        status: "Pending",
-      },
-      {
-        no: 18,
-        id: 39,
-        userName: "Pessi",
-        totalNominal: "50000",
-        paymentMethod: "Cash",
-        status: "Cancelled",
-      },
-      {
-        no: 19,
-        id: 2,
-        userName: "Jenifer",
-        totalNominal: "100000",
-        paymentMethod: "Paypal",
-        status: "Success",
-      },
-      {
-        no: 20,
-        id: 40,
-        userName: "Renhard",
-        totalNominal: "10000",
-        paymentMethod: "Paypal",
-        status: "Pending",
-      },
-    ];
+  getId = (id) => {
+    Axios.get('http://localhost:8080/top_up_management/getId/' + id)
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          nominal:res.data.nominal,
+          paymentMethod:res.data.paymentMethod
+        })   
+    Swal.fire({
+      icon: 'warning',
+      title: 'Warning!',
+      showCancelButton: true,
+      text: 'Are you sure want to confirm this?',
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {         
+        Axios.put('http://localhost:8080/top_up/accept/' + id, res)
+        .then((response) => {
+          console.log(response);
+        })
+        Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        showCancelButton: false,
+        text:  'Confirm Top Up Already Success!',
+        }).then((result)=>{
+          if(result.isConfirmed){
+            window.location.reload(); 
+          }
+        })    
+      }                    
+    }) 
+      })
+  }
 
-    result.map((topup) => {
+  getId2 = (id) => {
+    Axios.get('http://localhost:8080/top_up_management/getId/' + id)
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          nominal:res.data.nominal,
+          paymentMethod:res.data.paymentMethod
+        })   
+    Swal.fire({
+      icon: 'warning',
+      title: 'Warning!',
+      showCancelButton: true,
+      text: 'Are you sure want to Cancel this?',
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {         
+        Axios.put('http://localhost:8080/top_up/cancel/' + id, res)
+        .then((response) => {
+          console.log(response);
+        })
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          showCancelButton: false,
+          text:  'Cancel Top Up Already Success!',
+          }).then((result)=>{
+            if(result.isConfirmed){
+              window.location.reload(); 
+            }
+          })
+      }             
+    }) 
+      })
+  }
+
+  fetchData() {
+    let results = [];    
+    let result = this.state.data;
+    var no=1;
+    
+
+    result.forEach( topup => {
       var row = [];
       var actVal, statusVal = '';
-      if (topup.status == 'Success') {
+      if (topup.statusPayment == 'Success') {
+        actVal = <td className="text-center py-0 align-middle">
+          <div className="btn-group btn-group-sm">
+            -
+          </div>
+        </td>
         statusVal = <Status type="success" val="Success" />
-      } else if (topup.status == 'Cancelled') {
+      } else if (topup.statusPayment == 'Cancelled') {
+        actVal = <td className="text-center py-0 align-middle">
+          <div className="btn-group btn-group-sm">
+            -
+          </div>
+        </td>
         statusVal = <Status type="danger" val="Cancelled" />
       } else {
         actVal = <td className="text-center py-0 align-middle">
           <div className="btn-group btn-group-sm">
-            <Action type="success" title="Edit" icon="fas fa-check" onClick={() => Swal.fire({
-              icon: 'warning',
-              title: 'Warning!',
-              showCancelButton: true,
-              text: 'Are you sure want to confirm this?',
-            }).then((result) => {
-              /* Read more about isConfirmed, isDenied below */
-              if (result.isConfirmed) {
-                Swal.fire(
-                  'Success!',
-                  'Confirm Top Up Already Success!',
-                  'success'
-                )
-              }
-            })} />
-            <Action type="danger" title="Delete" icon="fas fa-ban" onClick={() => Swal.fire({
-
-              icon: 'warning',
-              title: 'Warning!',
-              showCancelButton: true,
-              text: 'Are you sure want to cancel this?',
-            }).then((result) => {
-              /* Read more about isConfirmed, isDenied below */
-              if (result.isConfirmed) {
-                Swal.fire(
-                  'Success!',
-                  'Cancel Top Up Already Success!',
-                  'success'
-                )
-              }
-            })} />
+            <Action type="success" title="Edit" icon="fas fa-check" onClick={() => this.getId(topup.historyBalanceId)} />
+            <Action type="danger" title="Delete" icon="fas fa-ban" onClick={() => this.getId2(topup.historyBalanceId)} />
           </div>
         </td>
         statusVal = <Status type="warning" val="Pending" />
       }
-      row.push(<td className="text-center" >{topup.no}</td>);
-      row.push(<td className="text-center" >{topup.id}</td>);
+      row.push(<td className="text-center" >{no++}</td>);
+      row.push(<td className="text-center" >{topup.historyBalanceId}</td>);
       row.push(<td className="text-center" >{actVal}</td>);
       row.push(<td className="text-center" >{topup.userName}</td>);
-      row.push(<td>{topup.totalNominal}</td>);
+      row.push(<td>{topup.nominal}</td>);
       row.push(<td>{topup.paymentMethod}</td>);
       row.push(<td className="text-center" >{statusVal}</td>);
       results.push(row);
@@ -272,10 +177,20 @@ class TopUpManagement extends Component {
     return formIsValid;
   }
 
-  contactSubmit2(e) {
+  contactSubmit2(e) {   
+    let fields = this.state.fields; 
     e.preventDefault();
     if (this.handleValidation2()) {
-      $('#passwordModal').modal('hide');      
+      $('#passwordModal').modal('hide');     
+      const topup = {
+        nominal: fields["Nominal"],
+        paymentMethod: fields["Payment"],
+      }
+      console.log(topup)
+      Axios.post('http://localhost:8080/top_up/post', topup)
+            .then((response) => {
+              console.log(response);
+            }) 
       Swal.fire({
         title: "Success Save Top Up Data!",
         text: "You Already Success to save this data!",
@@ -588,13 +503,14 @@ class TopUpManagement extends Component {
                   <button className="btn btn-secondary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#checkModal">
                     Back
                   </button>
-                  <button className="btn btn-success" id="btn-delete" type="submit" >Confirm</button>
+                  <button className="btn btn-success" id="btn-delete" type="submit">Confirm</button>
                 </div>
                 </form>
               </div>
             </div>
           </div>
           {/* Main content */}
+          
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
