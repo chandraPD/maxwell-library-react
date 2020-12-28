@@ -30,7 +30,7 @@ import Donation from '../Screens/Contents/Donation/Donation'
 
 class MainNavigation extends Component {
     render() {
-        return ( <Router>
+        return ( <Router >
                 <Switch>
                     <Route path='/auth'>
                         <Auth />
@@ -93,16 +93,16 @@ class MainNavigation extends Component {
                                 <Route path='/bookmanagement'>
                                     <BookManagement />
                                 </Route>
-                                <Route path='/DetailInvoice'>
+                                <Route path='/DetailInvoice/:invoiceId'>
                                     <DetailInvoice />
                                 </Route>
                                 <Route path='/ReturnBook'>
                                     <ReturnBook />
                                 </Route>
                                 <Route path='/DonationManagement'>
-                                    <DonationManagement /> */}
+                                    <DonationManagement /> 
                                 </Route>
-                                 <Route path='/Donation'> */}
+                                 <Route path='/Donation'> 
                                     <Donation />
                                 </Route>
                             </Switch>
