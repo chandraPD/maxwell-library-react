@@ -1,9 +1,33 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
+import Axios from 'axios';
 
 class DetailInvoice extends Component {
+    constructor() {
+        super();
+        this.state = {
+            invoiceId: '',
+            dataInvoice: {},
+            dataDetailInvoice: {}
+        };
+    }
+    componentDidMount() {
+        const invoiceId = this.props.match.params.invoiceId;
+        this.getDetailInvoice(invoiceId);
+    }
+
+    async getDetailInvoice(invoiceId) {
+        const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`)
+        const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`)
+        console.log(getInvoice);
+        console.log(getInvoiceDetail);
+        this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
+    }
+
     render() {
+        const { dataInvoice, dataDetailInvoice } = this.state;
+        console.log(dataInvoice);
         return (
             < div className="content-wrapper" >
                 {/* Content Header (Page header) */}
@@ -61,7 +85,7 @@ class DetailInvoice extends Component {
                                                     <div className="col-sm-4 invoice-col">
                                                         To
                       <address>
-                                                            <strong>Niki Zefanya</strong><br />
+                                                            <strong>{dataInvoice.firstName + " " + dataInvoice.lastName}</strong><br />
                         795 Folsom Ave, Suite 600<br />
                         San Francisco, CA 94107<br />
                         Phone: (555) 539-1037<br />
@@ -70,7 +94,7 @@ class DetailInvoice extends Component {
                                                     </div>
                                                     {/* /.col */}
                                                     <div className="col-sm-4 invoice-col">
-                                                        <b>Invoice #007612</b><br />
+                                                        <b>Invoice {dataInvoice.noInvoice}</b><br />
                                                     </div>
                                                     {/* /.col */}
                                                 </div>
@@ -90,6 +114,20 @@ class DetailInvoice extends Component {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+                                                                {/* {
+                                                                    dataDetailInvoice.map((i, v) =>{
+                                                                        return (
+                                                                            <tr>
+                                                                                <td>1</td>
+                                                                                <td>{v.borrowedBookEntity.bookDetailEntity.bookEntity.title}</td>
+                                                                                <td>16/11/2020</td>
+                                                                                <td>18/11/2020</td>
+                                                                                <td>2 Days</td>
+                                                                                <td>Rp. 10.000</td>
+                                                                            </tr>
+                                                                        )
+                                                                    })
+                                                                } */}
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>Dilan 1990</td>
@@ -157,4 +195,4 @@ class DetailInvoice extends Component {
     }
 }
 
-export default DetailInvoice
+export default withRouter(DetailInvoice)

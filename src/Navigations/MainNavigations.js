@@ -16,7 +16,7 @@ import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideSh
 import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
 import PaymentInvoicePrintPaid from "../Screens/Contents/Payment/PaymentInvoicePrintPaid"
-import History from '../Screens/Contents/History/History';
+import History from '../Screens/Contents/History/History'
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 import AdminProfile from '../Screens/Contents/Profile/AdminProfile'
 import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
@@ -25,10 +25,12 @@ import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
+import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
+import Donation from '../Screens/Contents/Donation/Donation'
 
 class MainNavigation extends Component {
     render() {
-        return ( <Router>
+        return ( <Router >
                 <Switch>
                     <Route path='/auth'>
                         <Auth />
@@ -91,11 +93,17 @@ class MainNavigation extends Component {
                                 <Route path='/bookmanagement'>
                                     <BookManagement />
                                 </Route>
-                                <Route path='/DetailInvoice'>
+                                <Route path='/DetailInvoice/:invoiceId'>
                                     <DetailInvoice />
                                 </Route>
                                 <Route path='/ReturnBook'>
                                     <ReturnBook />
+                                </Route>
+                                <Route path='/DonationManagement'>
+                                    <DonationManagement /> 
+                                </Route>
+                                 <Route path='/Donation'> 
+                                    <Donation />
                                 </Route>
                             </Switch>
                             <Footer />
