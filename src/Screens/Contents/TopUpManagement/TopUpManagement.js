@@ -38,6 +38,10 @@ class TopUpManagement extends Component {
   }
 
   getId = (id) => {
+    const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MjMyOTg0LCJleHAiOjE2MDk4Mzc3ODR9.WUiF-BCMaDvKynePQobdmP_ACMe_zBcSaVPaYjU2hVNVIkTVKAzUZgW2grbfrA1Ev7cdKWP6NqMu2yeDjx4hAg"
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+}
     Axios.get('http://localhost:8080/top_up_management/getId/' + id)
       .then((res) => {
         console.log(res);
@@ -53,7 +57,7 @@ class TopUpManagement extends Component {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {         
-        Axios.put('http://localhost:8080/top_up/accept/' + id, res)
+        Axios.put('http://localhost:8080/top_up/accept/' + id, res,config)
         .then((response) => {
           console.log(response);
         })
@@ -246,20 +250,6 @@ class TopUpManagement extends Component {
     if (this.handleValidation()) {
       $('#topupModal').modal('hide');
       $('#checkModal').modal('show');
-      // Swal.fire({
-      //   title: "Success Save Top Up Data!",
-      //   text: "You Already Success to save this data!",
-      //   icon: "success",
-      //   buttons: true,    
-      // })
-      // .then((isConfirmed) => {
-      //   if (isConfirmed) {
-      //     window.location.reload();
-      // } 
-      // })
-
-    } else {
-
     }
   }  
   
