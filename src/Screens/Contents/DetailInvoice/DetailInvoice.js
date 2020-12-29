@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import NumberFormat from 'react-number-format';
 import { Link, withRouter } from 'react-router-dom'
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
 import Axios from 'axios';
@@ -8,8 +9,8 @@ class DetailInvoice extends Component {
         super();
         this.state = {
             invoiceId: '',
-            dataInvoice: {},
-            dataDetailInvoice: {}
+            dataInvoice: [],
+            dataDetailInvoice: []
         };
     }
     componentDidMount() {
@@ -18,16 +19,20 @@ class DetailInvoice extends Component {
     }
 
     async getDetailInvoice(invoiceId) {
+
         const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`)
         const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`)
-        console.log(getInvoice);
         console.log(getInvoiceDetail);
         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
     }
 
+    formatRupiah = (nilai)=> {
+       return <NumberFormat value={nilai} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />
+    }
+
     render() {
         const { dataInvoice, dataDetailInvoice } = this.state;
-        console.log(dataInvoice);
+        console.log(dataDetailInvoice);
         return (
             < div className="content-wrapper" >
                 {/* Content Header (Page header) */}
@@ -64,7 +69,7 @@ class DetailInvoice extends Component {
                                                 <div className="row">
                                                     <div className="col-12">
                                                         <h4>
-                                                            <img src={MaxIcon} style={{ height: '2rem' }} /> Maxwell Library <small className="float-right">Date: 19/11/2020</small>
+                                                            <img src={MaxIcon} style={{ height: '2rem' }} /> Maxwell Library <small className="float-right">Date: {dataInvoice.invoiceDate}</small>
                                                         </h4>
                                                     </div>
                                                     {/* /.col */}
@@ -85,11 +90,10 @@ class DetailInvoice extends Component {
                                                     <div className="col-sm-4 invoice-col">
                                                         To
                       <address>
-                                                            <strong>{dataInvoice.firstName + " " + dataInvoice.lastName}</strong><br />
-                        795 Folsom Ave, Suite 600<br />
-                        San Francisco, CA 94107<br />
-                        Phone: (555) 539-1037<br />
-                        Email: john.doe@example.com
+                                                            <strong>{dataInvoice.borrower}</strong><br />
+                        {dataInvoice.address}<br />
+                        Phone: {dataInvoice.phone}<br />
+                        Email: {dataInvoice.email}
                       </address>
                                                     </div>
                                                     {/* /.col */}
@@ -114,36 +118,20 @@ class DetailInvoice extends Component {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {/* {
-                                                                    dataDetailInvoice.map((i, v) =>{
+                                                                {
+                                                                    dataDetailInvoice.map((val, index) =>{
                                                                         return (
-                                                                            <tr>
-                                                                                <td>1</td>
-                                                                                <td>{v.borrowedBookEntity.bookDetailEntity.bookEntity.title}</td>
-                                                                                <td>16/11/2020</td>
-                                                                                <td>18/11/2020</td>
-                                                                                <td>2 Days</td>
-                                                                                <td>Rp. 10.000</td>
+                                                                            <tr key={index}>
+                                                                                <td>{index+1}</td>
+                                                                                <td>{val.title}</td>
+                                                                                <td>{val.borrowedDate}</td>
+                                                                                <td>{val.treshold}</td>
+                                                                                <td>{val.late} Days</td>
+                                                                                <td>{val.grandTotal}</td>                                                                                
                                                                             </tr>
                                                                         )
                                                                     })
-                                                                } */}
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>Dilan 1990</td>
-                                                                    <td>16/11/2020</td>
-                                                                    <td>18/11/2020</td>
-                                                                    <td>2 Days</td>
-                                                                    <td>Rp. 10.000</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>Harry Potter</td>
-                                                                    <td>16/11/2020</td>
-                                                                    <td>18/11/2020</td>
-                                                                    <td>2 Days</td>
-                                                                    <td>Rp. 10.000</td>
-                                                                </tr>
+                                                                }
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -156,12 +144,12 @@ class DetailInvoice extends Component {
                                                     </div>
                                                     {/* /.col */}
                                                     <div className="col-6">
-                                                        <p className="lead" style={{ float: 'right' }}>Amount Due 25/11/2020</p>
+                                                        <p className="lead" style={{ float: 'right' }}>Amount Due {dataInvoice.treshold}</p>
                                                         <div className="table-responsive">
                                                             <table className="table">
                                                                 <tbody><tr>
                                                                     <th style={{ width: '59%' }}>Total:</th>
-                                                                    <td>Rp. 20.000</td>
+                                                                    <td>{this.formatRupiah(`${dataInvoice.grandTotal}`)}</td>
                                                                 </tr>
                                                                 </tbody></table>
                                                         </div>
