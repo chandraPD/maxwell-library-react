@@ -7,6 +7,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
+import axios from 'axios'
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -18,122 +19,41 @@ class CategoryManagement extends Component {
       data: [],
       rows: [],
       results: [],
+      isLoading: true,
+      categoryName: ""
     };
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchDataCategory();
   }
 
-  async fetchData() {
+  async fetchDataCategory() {
+    let fetchedData = await axios.get(
+      'http://localhost:8080/category/get-all-active'
+    );
+    console.log(fetchedData)
+    this.setState.isLoading = false;
+    const resultCategory = fetchedData.data;
+    this.setState({ data: resultCategory });
+    
+    $('#example1').DataTable().destroy();
+    this.fetchData();
+    $("#example1").DataTable({
+      responsive: true,
+      autoWidth: false,
+    });
+  }
+
+  fetchData() {
     const results = [];
-    const result = [
-      {
-        no: 1,
-        categoryId: "CTG0001",
-        categoryName: "Fantasy",
-      },
-      {
-        no: 2,
-        categoryId: "CTG0002",
-        categoryName: "Adventure",
-      },
-      {
-        no: 3,
-        categoryId: "CTG0003",
-        categoryName: "Romance",
-      },
-      {
-        no: 4,
-        categoryId: "CTG0004",
-        categoryName: "Contemporary",
-      },
-      {
-        no: 5,
-        categoryId: "CTG0005",
-        categoryName: "Dystopian",
-      },
-      {
-        no: 6,
-        categoryId: "CTG0006",
-        categoryName: "Mystery",
-      },
-      {
-        no: 7,
-        categoryId: "CTG0007",
-        categoryName: "Horror",
-      },
-      {
-        no: 8,
-        categoryId: "CTG0008",
-        categoryName: "Thriller",
-      },
-      {
-        no: 9,
-        categoryId: "CTG0009",
-        categoryName: "Paranormal",
-      },
-      {
-        no: 10,
-        categoryId: "CTG0010",
-        categoryName: "Historical Fiction",
-      },
-      {
-        no: 11,
-        categoryId: "CTG0011",
-        categoryName: "Science Fiction",
-      },
-      {
-        no: 12,
-        categoryId: "CTG0012",
-        categoryName: "Memoir",
-      },
-      {
-        no: 13,
-        categoryId: "CTG0013",
-        categoryName: "Cooking",
-      },
-      {
-        no: 14,
-        categoryId: "CTG0014",
-        categoryName: "Art",
-      },
-      {
-        no: 15,
-        categoryId: "CTG0015",
-        categoryName: "Self-help",
-      },
-      {
-        no: 16,
-        categoryId: "CTG0016",
-        categoryName: "Development",
-      },
-      {
-        no: 17,
-        categoryId: "CTG0017",
-        categoryName: "Motivational",
-      },
-      {
-        no: 18,
-        categoryId: "CTG0018",
-        categoryName: "Health",
-      },
-      {
-        no: 19,
-        categoryId: "CTG0019",
-        categoryName: "History",
-      },
-      {
-        no: 20,
-        categoryId: "CTG0020",
-        categoryName: "Travel",
-      },
-    ];
+    const result = this.state.data
 
     result.map((category) => {
+      this.setState({ isLoading: true });
       var row = [];
 
-      row.push(<td className="text-center">{category.no}</td>);
+      row.push(<td className="text-center">{category.categoryId}</td>);
       row.push(
         <td className="text-center py-0 align-middle">
           <div className="btn-group btn-group-sm">
@@ -143,22 +63,27 @@ class CategoryManagement extends Component {
         </td>
       );
       row.push(<td>{category.categoryId}</td>);
-      row.push(<td>{category.categoryName}</td>);
+      row.push(<td>{category.category}</td>);
       results.push(row);
     });
     this.setState({ rows: results });
+  }
+
+  submitCategory = () => {
+      const category = {
+        categoryName: this.state.categoryName
+      }
+
+      axios.post('http://localhost:8800/category/add-category', category)
+           .then((response) => {
+             console.log(response)
+           })
   }
 
   handleValidation() {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
-
-    //Category ID
-    if (!fields["CategoryId"]) {
-      formIsValid = false;
-      errors["CategoryId"] = "Category ID cannot be empty";
-    }
 
     //Category Name
     if (!fields["CategoryName"]) {
@@ -251,14 +176,14 @@ class CategoryManagement extends Component {
         </section>
 
         {/* <!--Modal Add--> */}
-        <div class="modal fade" id="modal-add">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Add Category</h4>
+        <div className="modal fade" id="modal-add">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Add Category</h4>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
@@ -270,30 +195,15 @@ class CategoryManagement extends Component {
                 id="addCategory"
                 onSubmit={this.contactSubmit.bind(this)}
               >
-                <div class="modal-body">
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="inputCategoryId">Category ID</label>
+                <div className="modal-body">
+                  <div className="card-body">
+                    <div className="form-group">
+                      <label htmlFor="inputCategoryName">Category Name</label>
                       <input
                         type="text"
-                        class="form-control"
-                        id="inputCategoryId"
-                        name="categoryId"
-                        placeholder="Enter ID"
-                        onChange={this.handleChange.bind(this, "CategoryId")}
-                        value={this.state.fields["CategoryId"]}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["CategoryId"]}
-                      </span>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputCategoryName">Category Name</label>
-                      <input
-                        type="text"
-                        class="form-control"
+                        className="form-control"
                         id="inputCategoryName"
-                        name="categoryName"
+                        name="category"
                         placeholder="Enter Category"
                         onChange={this.handleChange.bind(this, "CategoryName")}
                         value={this.state.fields["CategoryName"]}
@@ -304,16 +214,16 @@ class CategoryManagement extends Component {
                     </div>
                   </div>
                 </div>
-                <div class="modal-footer justify-content-between">
+                <div className="modal-footer justify-content-between">
                   <button
                     type="button"
-                    class="btn btn-default"
+                    className="btn btn-default"
                     data-dismiss="modal"
-                    onclick="resetModal()"
+                    onClick="resetModal()"
                   >
                     Close
                   </button>
-                  <button type="submit" class="btn btn-warning">
+                  <button type="submit" className="btn btn-warning" onClick={this.submitCategory}>
                     Add
                   </button>
                 </div>
@@ -326,14 +236,14 @@ class CategoryManagement extends Component {
         {/* <!-- /.modal --> */}
 
         {/* <!--Modal Edit--> */}
-        <div class="modal fade" id="modal-edit">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Edit Category</h4>
+        <div className="modal fade" id="modal-edit">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Edit Category</h4>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
@@ -341,39 +251,29 @@ class CategoryManagement extends Component {
                 </button>
               </div>
               <form role="form" id="editCategory">
-                <div class="modal-body">
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="editCategoryId">Category ID</label>
+                <div className="modal-body">
+                  <div className="card-body">
+                    <div className="form-group">
+                      <label htmlFor="editCategoryName">Category Name</label>
                       <input
                         type="text"
-                        class="form-control"
-                        name="categoryId"
-                        id="editCategoryId"
-                        value="CTG0001"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="editCategoryName">Category Name</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="categoryName"
+                        className="form-control"
+                        name="category"
                         id="editCategoryName"
-                        value="Fantasy"
+                        value={this.state.categoryName}
                       />
                     </div>
                   </div>
                 </div>
-                <div class="modal-footer justify-content-between">
+                <div className="modal-footer justify-content-between">
                   <button
                     type="button"
-                    class="btn btn-default"
+                    className="btn btn-default"
                     data-dismiss="modal"
                   >
                     Cancel
                   </button>
-                  <button type="submit" class="btn btn-warning">
+                  <button type="submit" className="btn btn-warning">
                     Save changes
                   </button>
                 </div>
@@ -386,34 +286,34 @@ class CategoryManagement extends Component {
         {/* <!-- /.modal --> */}
 
         {/* <!--Modal Delete--> */}
-        <div class="modal fade" id="modal-delete">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Delete Category</h4>
+        <div className="modal fade" id="modal-delete">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Delete Category</h4>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 If you Delete this, you can't be returned
               </div>
-              <div class="modal-footer justify-content-between">
+              <div className="modal-footer justify-content-between">
                 <button
                   type="button"
-                  class="btn btn-default"
+                  className="btn btn-default"
                   data-dismiss="modal"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-warning"
+                  className="btn btn-warning"
                   data-toggle="modal"
                   data-target="#deleteSuccess"
                   data-dismiss="modal"
@@ -430,21 +330,21 @@ class CategoryManagement extends Component {
 
         {/* <!--Delete Completed--> */}
         <div
-          class="modal fade"
+          className="modal fade"
           id="deleteSuccess"
-          tabindex="-1"
+          tabIndex="-1"
           role="dialog"
           aria-labelledby="exampleModalLabesl"
           aria-hidden="true"
         >
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
                   Delete Complete!
                 </h5>
                 <button
-                  class="close"
+                  className="close"
                   type="button"
                   data-dismiss="modal"
                   aria-label="Close"
@@ -452,13 +352,13 @@ class CategoryManagement extends Component {
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
-              <div class="modal-body">
-                <img class="check" src={SuccessImg} />
+              <div className="modal-body">
+                <img className="check" src={SuccessImg} />
                 <p>Data has been deleted</p>
               </div>
-              <div class="modal-footer">
+              <div className="modal-footer">
                 <button
-                  class="btn btn-secondary"
+                  className="btn btn-secondary"
                   type="button"
                   data-dismiss="modal"
                 >
