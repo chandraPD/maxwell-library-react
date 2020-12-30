@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import DataTable from '../../../Components/Datatable/Table';
-import Status from '../../../Components/Datatable/Status';
 import axios from 'axios';
 
 import $ from 'jquery'
@@ -19,16 +18,16 @@ class BookManagement extends Component {
   }
 
   componentDidMount() {
-    this.fetchDataUser();
+    this.fetchDataBook();
   }
 
-  async fetchDataUser() {
+  async fetchDataBook() {
     let fetchedData = await axios.get(
-      'https://www.googleapis.com/books/v1/volumes?q=search-terms&key=AIzaSyBHK4rd4qp4AVCEkutrS4c3m5n7_QzwzQ8'
+      'http://localhost:8080/book/get-all-active'
     );
-
+      console.log(fetchedData)
     this.setState.isLoading = false;
-    const resultUser = fetchedData.data.items;
+    const resultUser = fetchedData.data;
     this.setState({ data: resultUser });
     $('#example1').DataTable().destroy();
     this.fetchData();
@@ -41,22 +40,19 @@ class BookManagement extends Component {
   fetchData() {
     let results = [];
     let result = this.state.data;
-    result.map((book) => {
+    result.forEach((book) => {
       this.setState({ isLoading: true });
       let row = [];
 
-      row.push(<td className="text-center">{book.volumeInfo.title}</td>);
-      row.push(
-        <td class="user-info">
-          <img src={book.volumeInfo.imageLinks.thumbnail} alt="" />
-        </td>
-      );
-      row.push(<td className="text-center">{book.volumeInfo.authors[0]}</td>);
-      row.push(
-        <td className="text-center">{book.volumeInfo.categories[0]}</td>
-      );
-      row.push(<td className="text-center">{book.volumeInfo.subtitle}</td>);
-      row.push(<td className="text-center">{book.volumeInfo.publisher}</td>);
+      row.push(<td className="text-center">{book.bookId}</td>);
+      row.push(<td className="text-center">{book.title}</td>);
+      row.push(<td className="text-center">{book.author}</td>);
+      row.push(<td className="text-justify">{book.description}</td>);
+      row.push(<td className="text-center">{book.imgBanner}</td>);
+      row.push(<td className="text-center">{book.imgDetail}</td>);
+      row.push(<td className="text-center">{book.publishDate}</td>);
+      row.push(<td className="text-center">{book.qty}</td>);
+      row.push(<td className="text-center">{book.categoryEntity.category}</td>);
       results.push(row);
     });
     this.setState({ rows: results });
@@ -66,12 +62,15 @@ class BookManagement extends Component {
   render() {
     const { rows } = this.state;
     const headings = [
+      'Book ID',
       'Title',
-      'Photo',
       'Author',
-      'Category',
       'Description',
-      'Date Added',
+      'Image Banner',
+      'Image Detail',
+      'Publish Date',
+      'Quantity',
+      'Category'
     ];
 
     return (
