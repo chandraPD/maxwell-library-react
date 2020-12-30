@@ -20,8 +20,9 @@ class CategoryManagement extends Component {
       rows: [],
       results: [],
       isLoading: true,
-      categoryName: ""
     };
+
+    this.categoryChange = this.categoryChange.bind(this)
   }
 
   componentDidMount() {
@@ -48,17 +49,18 @@ class CategoryManagement extends Component {
   fetchData() {
     const results = [];
     const result = this.state.data
+    var no = 1;
 
-    result.map((category) => {
+    result.forEach((category) => {
       this.setState({ isLoading: true });
       var row = [];
 
-      row.push(<td className="text-center">{category.categoryId}</td>);
+      row.push(<td className="text-center">{no++}</td>);
       row.push(
         <td className="text-center py-0 align-middle">
           <div className="btn-group btn-group-sm">
-            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
-            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
+            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" onClick={() => this.getCategory(category.categoryId)}/>
+            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" onClick={() => this.getCategory(category.categoryId)}/>
           </div>
         </td>
       );
@@ -69,15 +71,43 @@ class CategoryManagement extends Component {
     this.setState({ rows: results });
   }
 
-  submitCategory = () => {
-      const category = {
-        categoryName: this.state.categoryName
-      }
+  getCategory = (id) => {
+    axios.get('http://localhost:8080/category/get-by-id/' + id)
+          .then((response) => {
+            console.log(response);
+            this.setState({
+              category: response.data.category,
+              categoryId: id
+            })
+          })
+  }
 
-      axios.post('http://localhost:8800/category/add-category', category)
-           .then((response) => {
-             console.log(response)
-           })
+  updateCategory = (id) => {
+    const category = {
+      category: this.state.category
+    }
+
+    axios.put('http://localhost:8080/category/update-category/' + id, category)
+      .then((response) => {
+        console.log(response)
+      })
+
+  }
+
+  deleteCategory = (id) => {
+
+    axios.put('http://localhost:8080/category/delete-category/' + id)
+         .then((response) => {
+           console.log(response)
+           window.location.reload()
+         })
+
+  }
+
+  categoryChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
   }
 
   handleValidation() {
@@ -96,9 +126,20 @@ class CategoryManagement extends Component {
   }
 
   contactSubmit(e) {
+    let fields = this.state.fields;
     e.preventDefault();
     if (this.handleValidation()) {
       $('#modal-add').modal('toggle');
+
+      const category = {
+        category: fields["CategoryName"]
+      }
+      console.log(category)
+      axios.post('http://localhost:8080/category/add-category', category)
+           .then((response) => {
+             console.log(response)
+           })
+
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -191,7 +232,6 @@ class CategoryManagement extends Component {
                 </button>
               </div>
               <form
-                role="form"
                 id="addCategory"
                 onSubmit={this.contactSubmit.bind(this)}
               >
@@ -219,11 +259,11 @@ class CategoryManagement extends Component {
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
-                    onClick="resetModal()"
+                    // onClick={resetModal()}
                   >
                     Close
                   </button>
-                  <button type="submit" className="btn btn-warning" onClick={this.submitCategory}>
+                  <button type="submit" className="btn btn-warning">
                     Add
                   </button>
                 </div>
@@ -250,7 +290,7 @@ class CategoryManagement extends Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form role="form" id="editCategory">
+              <form id="editCategory">
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
@@ -260,7 +300,8 @@ class CategoryManagement extends Component {
                         className="form-control"
                         name="category"
                         id="editCategoryName"
-                        value={this.state.categoryName}
+                        value={this.state.category}
+                        onChange={this.categoryChange}
                       />
                     </div>
                   </div>
@@ -273,7 +314,7 @@ class CategoryManagement extends Component {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-warning">
+                  <button onClick={() => this.updateCategory(this.state.categoryId)} className="btn btn-warning">
                     Save changes
                   </button>
                 </div>
@@ -312,11 +353,11 @@ class CategoryManagement extends Component {
                   Cancel
                 </button>
                 <button
-                  type="submit"
                   className="btn btn-warning"
                   data-toggle="modal"
                   data-target="#deleteSuccess"
                   data-dismiss="modal"
+                  onClick={() => this.deleteCategory(this.state.categoryId)}
                 >
                   Delete
                 </button>
@@ -353,7 +394,7 @@ class CategoryManagement extends Component {
                 </button>
               </div>
               <div className="modal-body">
-                <img className="check" src={SuccessImg} />
+                <img className="check" src={SuccessImg} alt="description"/>
                 <p>Data has been deleted</p>
               </div>
               <div className="modal-footer">
