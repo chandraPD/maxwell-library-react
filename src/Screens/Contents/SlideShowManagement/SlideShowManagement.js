@@ -5,6 +5,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
+import axios from 'axios'
 
 class SlideShowManagement extends Component {
   constructor(props) {
@@ -16,60 +17,128 @@ class SlideShowManagement extends Component {
       data: [],
       rows: [],
       results: [],
+      isLoading : true,
+      title: "",
+      subTitle: "",
+      img: ""
     }
   }
 
+  // componentDidMount() {
+  //   this.fetchData()
+  // }
+
+  // async fetchData() {
+  //   const results = [] 
+  //   const result = [{
+  //     no : 1,
+  //     title: "Ubur-ubur Lembur",
+  //     subtitle: "Raditya Dika",
+  //     image: "https://chandrapd.github.io/maxwell-library/assets/media/books/uburlembur.png"
+  //   },
+  //   {
+  //     no : 2,
+  //     title: "Laskar Pelangi",
+  //     subtitle: "Andrea Hirata",
+  //     image: "https://chandrapd.github.io/maxwell-library/assets/media/books/laskar.png"
+  //   },
+  //   {
+  //     no : 3,
+  //     title: "Dilan 1990",
+  //     subtitle: "Raditya Dika",
+  //     image: "https://chandrapd.github.io/maxwell-library/assets/media/books/dilan.png"
+  //   }]
+
+  //   result.map((slideshow) => {
+  //     var row = []
+
+  //     row.push(<td className="text-center">{slideshow.no}</td>);
+  //     row.push(
+  //       <td className="text-center py-0 align-middle">
+  //         <div className="btn-group btn-group-sm">
+  //           <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
+  //           <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
+  //         </div>
+  //       </td>
+  //     );
+  //     row.push(<td className="text-center py-0 align-middle">
+  //     <select className="custom-select">
+  //         <option>Active</option>
+  //         <option>Inactive</option>
+  //       </select>
+  //     </td>)
+  //     row.push(<td>{slideshow.title}</td>)
+  //     row.push(<td>{slideshow.subtitle}</td>)
+  //     row.push(<td><img src={slideshow.image} style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
+  //     results.push(row)
+  //   })
+  //   this.setState({ rows: results });
+  // }
+
+
+  //METHOD TAMBAHAN GET POST UPDATE DELETE  
   componentDidMount() {
-    this.fetchData()
+    this.fetchDataSlideShow();
   }
 
-  async fetchData() {
-    const results = [] 
-    const result = [{
-      no : 1,
-      title: "Ubur-ubur Lembur",
-      subtitle: "Raditya Dika",
-      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/uburlembur.png"
-    },
-    {
-      no : 2,
-      title: "Laskar Pelangi",
-      subtitle: "Andrea Hirata",
-      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/laskar.png"
-    },
-    {
-      no : 3,
-      title: "Dilan 1990",
-      subtitle: "Raditya Dika",
-      image: "https://chandrapd.github.io/maxwell-library/assets/media/books/dilan.png"
-    }]
+  async fetchDataSlideShow() {
+    let fetchedData = await axios.get('http://localhost:8080/slideshow/get-all-slideshow');
+
+    console.log(fetchedData)
+    // this.setState.isLoading = false;
+    const resultSlideShow = fetchedData.data;
+    this.setState({ data : resultSlideShow });
+
+    $('#example1').DataTable().destroy();
+    this.fetchData();
+    $('#example1').DataTable({
+      responsive: true,
+      autoWidth: false,
+    });
+  }
+
+  fetchData() {
+    const results = []
+    const result = this.state.data
 
     result.map((slideshow) => {
-      var row = []
-
-      row.push(<td className="text-center">{slideshow.no}</td>);
-      row.push(
-        <td className="text-center py-0 align-middle">
-          <div className="btn-group btn-group-sm">
-            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
-            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
-          </div>
-        </td>
-      );
-      row.push(<td className="text-center py-0 align-middle">
-      <select className="custom-select">
-          <option>Active</option>
-          <option>Inactive</option>
-        </select>
-      </td>)
-      row.push(<td>{slideshow.title}</td>)
-      row.push(<td>{slideshow.subtitle}</td>)
-      row.push(<td><img src={slideshow.image} style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
-      results.push(row)
-    })
-    this.setState({ rows: results });
+          var row = []
+    
+          row.push(<td className="text-center">{slideshow.slideShowId}</td>);
+          row.push(
+            <td className="text-center py-0 align-middle">
+              <div className="btn-group btn-group-sm">
+                <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
+                <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
+              </div>
+            </td>
+          );
+          row.push(<td className="text-center py-0 align-middle">
+          <select className="custom-select">
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+          </td>)
+          row.push(<td>{slideshow.title}</td>)
+          row.push(<td>{slideshow.subTitle}</td>)
+          row.push(<td><img src={slideshow.img} alt ="gambar buku"              style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
+          results.push(row)
+        })
+        this.setState({ rows: results });
   }
 
+  submitSlideShow = () => {
+  const slideshow = {
+      title : this.state.title,
+      subTitle : this.state.subTitle,
+      img : this.state.img
+    }
+
+    axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
+      .then((response) => {
+        console.log(response)
+      })
+  }
   handleValidation() {
     let fields = this.state.fields;
     let errors = {};
@@ -99,8 +168,20 @@ class SlideShowManagement extends Component {
 
   contactSubmit(e) {
     e.preventDefault();
+    const fields = this.state.fields;
     if (this.handleValidation()) {
       $('#modal-add').modal('toggle');
+
+      const slideshow = {
+        title : fields["slideshowTitle"], 
+        subTitle : fields["slideshowSubTitle"],
+        img : fields["slideshowImage"]
+      }
+      console.log(slideshow)
+      axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
+          .then((response) => {
+            console.log(response)
+          })
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -108,6 +189,7 @@ class SlideShowManagement extends Component {
         confirmButtonText: `OK`
       }).then((result) => {
           if(result.isConfirmed) {
+            console.log(result)
             window.location.reload()
           }
       })
@@ -116,14 +198,12 @@ class SlideShowManagement extends Component {
 
     }
   }
-  
 
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
   }
-  
 
   render() {
     const { rows } = this.state
