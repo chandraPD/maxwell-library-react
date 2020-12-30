@@ -16,7 +16,7 @@ const TopUp1 = (props) => {
       {/* fieldsets */}
       <fieldset>
         <div>
-          <ProgressBar variant="dark" now={25} />
+          <ProgressBar variant="dark" now={25} animated/>
         </div>
         <div className="form-card">
           <div className="row">
@@ -74,12 +74,6 @@ const TopUp1 = (props) => {
             </div>            
           </div>
           
-          {/* <div className="input-group" style={{ marginTop: '1rem' }}>
-            <div className="input-group-prepend">
-              <span className="input-group-text"><Field name="nominal" component="input" type="radio" value=""/></span>
-            </div>
-            <Field name="nominalany" component="input" type="text" />
-          </div> */}
         </div> <Button color="dark" className="btn-pill pull-right action-button" type="submit" style={{}}>
           Next &nbsp;
               <i className="fa fa-chevron-right" />

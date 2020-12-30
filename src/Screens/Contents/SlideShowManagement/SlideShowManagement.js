@@ -178,7 +178,12 @@ class SlideShowManagement extends Component {
         img : fields["slideshowImage"]
       }
       console.log(slideshow)
-      axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
+
+      const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
+      const config = {
+          headers: { Authorization: `Bearer ${token}` }
+      };
+      axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow, config)
           .then((response) => {
             console.log(response)
           })

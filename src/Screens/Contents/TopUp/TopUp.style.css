@@ -68,7 +68,7 @@ p {
 }
 
 #msform .action-button {
-    width: 8rem;
+    width: 7rem;
     background: black;
     font-weight: bold;
     color: white;
@@ -86,7 +86,7 @@ p {
 }
 
 #msform .action-button-previous {
-    width: 8rem;
+    width: 7rem;
     background: #616161;
     font-weight: bold;
     color: white;
@@ -95,7 +95,7 @@ p {
     cursor: pointer;
     padding: 10px 5px;
     margin: 1.5rem 1.5rem;
-    float: right
+    float: left
 }
 
 #msform .action-button-previous:hover,
@@ -106,7 +106,8 @@ p {
 .card {
     z-index: 0;
     border: none;
-    position: relative
+    position: relative;
+    box-shadow: 3px 3px 5px rgb(105, 105, 105)
 }
 
 .fs-title {
@@ -185,7 +186,8 @@ p {
 }
 
 .progress {
-    height: 20px
+    height: 20px;
+    margin-bottom: 20px
 }
 
 .progress-bar {
@@ -203,8 +205,20 @@ p {
 }
 
 .radio1 {
-    margin-right:'3.5rem'
+    margin-right:'3.5rem';
+    padding: 1rem;
+    display: block;
+    margin: 10px;
+    
 } 
+
+.lbl-pmt {
+    place-content: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -100px
+}
 
 .radio1:hover {
     box-shadow: 2px 2px 2px 2px rgba(107, 67, 67, 0.3)
@@ -212,6 +226,10 @@ p {
 
 .radio1.selected {
     box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.2)
+}
+
+.ctm-wrap-tpup {
+    background-color: #f4f6f9!important
 }
 
 @media (max-width: 430px){
@@ -243,5 +261,36 @@ p {
 
     #msform .past{
         margin:1.5rem 1.0rem;
+    }
+}
+
+@media (max-width: 366px) {
+    .ctm-wt-pm {
+        width: 100%!important
+    }
+    
+    #msform .action-button-previous {
+        width: 6rem;
+        background: #616161;
+        font-weight: bold;
+        color: white;
+        /* border: 0 none;
+        border-radius: 0px; */
+        cursor: pointer;
+        padding: 10px 5px;
+        margin: 1.5rem 1.5rem;
+    }
+
+    #msform .action-button {
+        width: 6rem;
+        background: black;
+        font-weight: bold;
+        color: white;
+        /* border: 0 none;
+        border-radius: 0px; */ 
+        cursor: pointer;
+        padding: 10px 5px;
+        margin-top: 1.5rem;
+        float: right;
     }
 }
