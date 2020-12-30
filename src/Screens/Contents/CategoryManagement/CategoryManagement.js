@@ -203,7 +203,7 @@ class CategoryManagement extends Component {
                       style={{ float: "right" }}
                     >
                       <i className="nav-icon fas fa-plus"></i>
-                      Add Category
+                      &nbsp; Add Category
                     </button>
                   </div>
                 </div>

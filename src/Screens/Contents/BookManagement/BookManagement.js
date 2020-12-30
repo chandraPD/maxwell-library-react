@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import DataTable from '../../../Components/Datatable/Table';
-import axios from 'axios';
-
-import $ from 'jquery'
-import "datatables.net-responsive/js/dataTables.responsive"
-import "datatables.net-dt/css/jquery.dataTables.css"
+import React, { Component } from "react";
+import DataTable from "../../../Components/Datatable/Table";
+import axios from "axios";
+import Action from "../../../Components/Datatable/Action";
+import $ from "jquery";
+import "datatables.net-responsive/js/dataTables.responsive";
+import "datatables.net-dt/css/jquery.dataTables.css";
 
 class BookManagement extends Component {
   constructor() {
@@ -23,13 +23,13 @@ class BookManagement extends Component {
 
   async fetchDataBook() {
     let fetchedData = await axios.get(
-      'http://localhost:8080/book/get-all-active'
+      "http://localhost:8080/book/get-all-active"
     );
-      console.log(fetchedData)
+    console.log(fetchedData);
     this.setState.isLoading = false;
     const resultUser = fetchedData.data;
     this.setState({ data: resultUser });
-    $('#example1').DataTable().destroy();
+    $("#example1").DataTable().destroy();
     this.fetchData();
     $("#example1").DataTable({
       responsive: true,
@@ -40,11 +40,21 @@ class BookManagement extends Component {
   fetchData() {
     let results = [];
     let result = this.state.data;
+    var no = 1;
     result.forEach((book) => {
       this.setState({ isLoading: true });
       let row = [];
-
-      row.push(<td className="text-center">{book.bookId}</td>);
+  
+      row.push(<td className="text-center">{no++}</td>);
+      row.push(
+        <td className="text-center py-0 align-middle">
+          <div className="btn-group btn-group-sm">
+            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" />
+            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" />
+            <Action type="info" title="Detail" icon="eye"/>
+          </div>
+        </td>
+      );
       row.push(<td className="text-center">{book.title}</td>);
       row.push(<td className="text-center">{book.author}</td>);
       row.push(<td className="text-justify">{book.description}</td>);
@@ -62,15 +72,16 @@ class BookManagement extends Component {
   render() {
     const { rows } = this.state;
     const headings = [
-      'Book ID',
-      'Title',
-      'Author',
-      'Description',
-      'Image Banner',
-      'Image Detail',
-      'Publish Date',
-      'Quantity',
-      'Category'
+      "Book ID",
+      "Action",
+      "Title",
+      "Author",
+      "Description",
+      "Image Banner",
+      "Image Detail",
+      "Publish Date",
+      "Quantity",
+      "Category"
     ];
 
     return (
@@ -98,6 +109,22 @@ class BookManagement extends Component {
             <div className="row">
               <div className="col-12">
                 <div className="card">
+                  <div className="card-header">
+                    <div className="row">
+                      <div className="col-md-12 ctm-responsive">
+                        <button
+                          type="button"
+                          className="btn btn-primary add-btn"
+                          data-toggle="modal"
+                          data-target="#modal-add"
+                          style={{ float: "right" }}
+                        >
+                          <i className="nav-icon fas fa-plus"></i>
+                          &nbsp; Add Book
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   {/* /.card-header */}
                   <div className="card-body">
                     <DataTable headings={headings} rows={rows} />
