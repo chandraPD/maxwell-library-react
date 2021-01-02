@@ -9,6 +9,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import Status from '../../../Components/Datatable/Status'
 import Axios from 'axios';
+import NumberFormat from 'react-number-format';
 
 class TopUpManagement extends Component {
   constructor(props) {
@@ -28,7 +29,12 @@ class TopUpManagement extends Component {
   }
 
   async getAll(){
-    const getData = await Axios.get('http://localhost:8080/top_up_management/getAll');
+  const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
+  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+}
+    const getData = await Axios.get('http://localhost:8080/top_up_management/getAll',config);
     
     const result_topup = getData.data;
     console.log(result_topup);
@@ -38,9 +44,10 @@ class TopUpManagement extends Component {
   }
 
   getId = (id) => {
-    const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MjMyOTg0LCJleHAiOjE2MDk4Mzc3ODR9.WUiF-BCMaDvKynePQobdmP_ACMe_zBcSaVPaYjU2hVNVIkTVKAzUZgW2grbfrA1Ev7cdKWP6NqMu2yeDjx4hAg"
+  const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
+  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
   const config = {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token2}` }
 }
     Axios.get('http://localhost:8080/top_up_management/getId/' + id)
       .then((res) => {
@@ -77,6 +84,11 @@ class TopUpManagement extends Component {
   }
 
   getId2 = (id) => {
+    const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
+  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"    
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  }
     Axios.get('http://localhost:8080/top_up_management/getId/' + id)
       .then((res) => {
         console.log(res);
@@ -92,7 +104,7 @@ class TopUpManagement extends Component {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {         
-        Axios.put('http://localhost:8080/top_up/cancel/' + id, res)
+        Axios.put('http://localhost:8080/top_up/cancel/' + id, res,config)
         .then((response) => {
           console.log(response);
         })
@@ -117,7 +129,7 @@ class TopUpManagement extends Component {
     var no=1;
     
 
-    result.forEach( topup => {
+    result.forEach( topup => {      
       var row = [];
       var actVal, statusVal = '';
       if (topup.statusPayment == 'Success') {
@@ -146,8 +158,8 @@ class TopUpManagement extends Component {
       row.push(<td className="text-center" >{no++}</td>);
       row.push(<td className="text-center" >{topup.historyBalanceId}</td>);
       row.push(<td className="text-center" >{actVal}</td>);
-      row.push(<td className="text-center" >{topup.userName}</td>);
-      row.push(<td>{topup.nominal}</td>);
+      row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
+      row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'Rp. '}/>}</td>);
       row.push(<td>{topup.paymentMethod}</td>);
       row.push(<td className="text-center" >{statusVal}</td>);
       results.push(row);
@@ -182,6 +194,11 @@ class TopUpManagement extends Component {
   }
 
   contactSubmit2(e) {   
+    const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
+  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
+    const config = {
+      headers: { Authorization: `Bearer ${token2}` }
+  }
     let fields = this.state.fields; 
     e.preventDefault();
     if (this.handleValidation2()) {
@@ -189,9 +206,10 @@ class TopUpManagement extends Component {
       const topup = {
         nominal: fields["Nominal"],
         paymentMethod: fields["Payment"],
+        user_balance_id: fields["Name"]
       }
       console.log(topup)
-      Axios.post('http://localhost:8080/top_up/post', topup)
+      Axios.post('http://localhost:8080/top_up/post2', topup,config)
             .then((response) => {
               console.log(response);
             }) 
@@ -262,7 +280,7 @@ class TopUpManagement extends Component {
 
   render() {
     const { rows } = this.state;
-    const headings = ["No", "ID", "Action", "Username", "Total Nominal (Rp)", "Payment Method", "Status"];
+    const headings = ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"];
 
     return (
       <div className="wrapper">
