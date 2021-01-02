@@ -18,65 +18,12 @@ class SlideShowManagement extends Component {
       rows: [],
       results: [],
       isLoading : true,
-      title: "",
-      subTitle: "",
-      img: ""
-    }
+    };
+
+    this.slideShowChange = this.slideShowChange.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.fetchData()
-  // }
-
-  // async fetchData() {
-  //   const results = [] 
-  //   const result = [{
-  //     no : 1,
-  //     title: "Ubur-ubur Lembur",
-  //     subtitle: "Raditya Dika",
-  //     image: "https://chandrapd.github.io/maxwell-library/assets/media/books/uburlembur.png"
-  //   },
-  //   {
-  //     no : 2,
-  //     title: "Laskar Pelangi",
-  //     subtitle: "Andrea Hirata",
-  //     image: "https://chandrapd.github.io/maxwell-library/assets/media/books/laskar.png"
-  //   },
-  //   {
-  //     no : 3,
-  //     title: "Dilan 1990",
-  //     subtitle: "Raditya Dika",
-  //     image: "https://chandrapd.github.io/maxwell-library/assets/media/books/dilan.png"
-  //   }]
-
-  //   result.map((slideshow) => {
-  //     var row = []
-
-  //     row.push(<td className="text-center">{slideshow.no}</td>);
-  //     row.push(
-  //       <td className="text-center py-0 align-middle">
-  //         <div className="btn-group btn-group-sm">
-  //           <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
-  //           <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
-  //         </div>
-  //       </td>
-  //     );
-  //     row.push(<td className="text-center py-0 align-middle">
-  //     <select className="custom-select">
-  //         <option>Active</option>
-  //         <option>Inactive</option>
-  //       </select>
-  //     </td>)
-  //     row.push(<td>{slideshow.title}</td>)
-  //     row.push(<td>{slideshow.subtitle}</td>)
-  //     row.push(<td><img src={slideshow.image} style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
-  //     results.push(row)
-  //   })
-  //   this.setState({ rows: results });
-  // }
-
-
-  //METHOD TAMBAHAN GET POST UPDATE DELETE  
+   //METHOD TAMBAHAN GET POST UPDATE DELETE  
   componentDidMount() {
     this.fetchDataSlideShow();
   }
@@ -98,18 +45,19 @@ class SlideShowManagement extends Component {
   }
 
   fetchData() {
-    const results = []
-    const result = this.state.data
+    const results = [];
+    const result = this.state.data;
+    var number = 1;
 
     result.map((slideshow) => {
-          var row = []
+          var row = [];
     
-          row.push(<td className="text-center">{slideshow.slideShowId}</td>);
+          row.push(<td className="text-center">{number++}</td>);
           row.push(
             <td className="text-center py-0 align-middle">
               <div className="btn-group btn-group-sm">
-                <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit"/>
-                <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete"/>
+                <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" onClick={() => this.getSlideShowById(slideshow.slideShowId)}/>
+                <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" onClick={() => this.getSlideShowById(slideshow.slideShowId)}/>
               </div>
             </td>
           );
@@ -132,13 +80,14 @@ class SlideShowManagement extends Component {
       title : this.state.title,
       subTitle : this.state.subTitle,
       img : this.state.img
-    }
+    };
 
     axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
       .then((response) => {
         console.log(response)
       })
   }
+
   handleValidation() {
     let fields = this.state.fields;
     let errors = {};
@@ -194,14 +143,75 @@ class SlideShowManagement extends Component {
         confirmButtonText: `OK`
       }).then((result) => {
           if(result.isConfirmed) {
-            console.log(result)
-            window.location.reload()
+            console.log(result);
+            window.location.reload();
           }
       })
         
     } else {
 
     }
+  }
+
+  //METHOD UNTUK GET-BY-ID
+  getSlideShowById = (id) => {
+    axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id)
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          slideshow : response.data.slideshow,
+          slideShowId : id
+        })
+      })
+  }
+
+  //METHOD UNTUK UPDATE
+  editSlideShow = (id) => {
+    const slideshow = {
+      title : this.state.title,
+      subTitle : this.state.subTitle,
+      img : this.state.img
+    }
+
+    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow)
+      .then((response) => {
+        console.log(response)
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your Data has been Update',
+        confirmButtonText: `OK`
+      }).then((result) => {
+          if(result.isConfirmed) {
+            console.log(result);
+            window.location.reload();
+          }
+      })
+  }
+
+  //METHOD DELETE MENGGUNAKAN SOFTDELETE
+  deleteSlideShow = (id) => {
+    axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+        })
+  }
+
+  //METHOD DELETE DATA
+  deleteDataSlideShow = (id) => {
+    axios.delete('http://localhost:8080/slideshow/delete-data-slideshow/'+ id)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+  }
+  //METHOD Perubahan Inputan di SlideShow
+  slideShowChange = (event) => {
+    this.setState({
+      [event.target.name] : event.target.value
+    })
   }
 
   handleChange(field, e) {
@@ -328,25 +338,24 @@ class SlideShowManagement extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form role="form" id="editSlideshow">
+          <form id="editSlideshow">
             <div class="modal-body">
               <div class="card-body">
                 <div class="form-group">
                   <label for="editTitle">Title</label>
-                  <input type="text" class="form-control" name="slideshowTitle" id="editTitle"
-                    value="Ubur-ubur Lembur"/>
+                  <input type="text" class="form-control" name="slideshowTitle" id="editTitle" value ={this.state.slideshow} onChange={this.slideShowChange}/>
                 </div>
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
                   <input type="text" class="form-control" name="slideshowSubTitle" id="inputCategoryName"
-                    value="Raditya Dika"/>
+                    value={this.state.slideshow} onChange={this.slideShowChange}/>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputFile">Change Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="exampleInputFile" name="slideshowImage"/>
-                      <label class="custom-file-label" for="exampleInputFile">uburlembur.png</label>
+                      <input type="file" class="custom-file-input" id="exampleInputFile" name="slideshowImage" value = {this.state.slideshow} onChange={this.slideShowChange}/>
+                      <label class="custom-file-label" for="exampleInputFile">choose file</label>
                     </div>
                   </div>
                 </div>
@@ -354,7 +363,7 @@ class SlideShowManagement extends Component {
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-warning">Save changes</button>
+              <button onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
             </div>
           </form>
         </div>
@@ -378,8 +387,8 @@ class SlideShowManagement extends Component {
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#DeleteSuccess"
-              data-dismiss="modal">Delete</button>
+            <button class="btn btn-warning" data-toggle="modal" data-target="#DeleteSuccess"
+              data-dismiss="modal" onClick={() => this.deleteDataSlideShow(this.state.slideShowId)}>Delete</button>
           </div>
         </div>
         {/* <!-- /.modal-content --> */}
