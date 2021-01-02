@@ -70,7 +70,7 @@ class BookManagement extends Component {
               dataTarget="#modal-delete"
               onClick = {() => this.getBook(book.bookId)}
             />
-            <Action type="info" title="Detail" icon="eye" />
+            <Action type="info" title="Detail" icon="eye" link={`BookDetail/${book.bookId}`}/>
           </div>
         </td>
       );
