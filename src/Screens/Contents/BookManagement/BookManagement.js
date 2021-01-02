@@ -182,12 +182,6 @@ class BookManagement extends Component {
       errors["publishDate"] = "Publish Date cannot be empty";
     }
 
-    //Quantity
-    if (!fields["qty"]) {
-      formIsValid = false;
-      errors["qty"] = "Quantity cannot be empty";
-    }
-
     //Status Book
     if (!fields["statusBook"]) {
       formIsValid = false;
@@ -225,6 +219,7 @@ class BookManagement extends Component {
         statusBook: fields["statusBook"],
         title: fields["title"],
         categoryId: fields["categoryId"],
+        publishDate: fields["publishDate"]
       };
 
       console.log(book);
@@ -443,22 +438,6 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputQty">Quantity</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputQty"
-                        name="qty"
-                        placeholder="Enter Quantity"
-                        onChange={this.handleChange.bind(this, "qty")}
-                        value={this.state.fields["qty"]}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["qty"]}
-                      </span>
-                    </div>
-
-                    <div className="form-group">
                       <label htmlFor="inputStatusBook">Status Book</label>
                       <input
                         type="text"
@@ -629,22 +608,6 @@ class BookManagement extends Component {
                       />
                       <span style={{ color: "red" }}>
                         {this.state.errors["publishDate"]}
-                      </span>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="editQty">Quantity</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="editQty"
-                        name="qty"
-                        placeholder="Enter Quantity"
-                        onChange={this.bookChange}
-                        value={this.state.qty}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["qty"]}
                       </span>
                     </div>
 

@@ -21,7 +21,7 @@ class BookDetail extends Component {
       rows: [],
       results: [],
       isLoading: true,
-      title: ""
+      title: "",
     };
 
     this.detailBookChange = this.detailBookChange.bind(this)
@@ -38,6 +38,18 @@ class BookDetail extends Component {
       `http://localhost:8080/book-detail/get-by-book-id/${bookId}`
     );
     console.log(fetchedData);
+    
+    var jumlah = fetchedData.data.length
+
+    const count = {
+      qty: jumlah
+    }
+
+    axios.put("http://localhost:8080/book/update-qty-book/" + bookId, count)
+      .then((response) => {
+        console.log(response)
+      })  
+
     this.setState.isLoading = false;
     const resultDetailBook = fetchedData.data;
     this.setState({ data: resultDetailBook });
@@ -170,15 +182,15 @@ class BookDetail extends Component {
             .then((response)=> {
                 console.log(response)
                 Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: "Your Data has been Added",
-                    confirmButtonText: `OK`,
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      window.location.reload();
-                    }
-                  });
+                  icon: "success",
+                  title: "Success",
+                  text: "Your Data has been Added",
+                  confirmButtonText: `OK`,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.reload();
+                  }
+                });
             })
       } else {
 
