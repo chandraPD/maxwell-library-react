@@ -157,26 +157,34 @@ class SlideShowManagement extends Component {
   getSlideShowById = (id) => {
     axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id)
       .then((response) => {
-        console.log(response);
+        console.log(response.data.data);
         this.setState({
-          slideshow : response.data.slideshow,
-          slideShowId : id
+          slideshow : response.data.data,
+          slideShowId : response.data.data.slideShowId,
+          title : response.data.data.title,
+          subTitle : response.data.data.subTitle,
+          img : response.data.data.img
         })
+        console.log(this.state.slideshow.title);
       })
   }
 
   //METHOD UNTUK UPDATE
   editSlideShow = (id) => {
     const slideshow = {
-      title : this.state.title,
-      subTitle : this.state.subTitle,
-      img : this.state.img
+      slideshow : this.state.slideshow
     }
 
     axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow)
       .then((response) => {
-        console.log(response)
+        console.log(response);
+        this.setState({
+          title : this.state.title,
+          subTitle : this.state.subTitle,
+          img : this.state.img
       })
+    })
+
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -343,18 +351,18 @@ class SlideShowManagement extends Component {
               <div class="card-body">
                 <div class="form-group">
                   <label for="editTitle">Title</label>
-                  <input type="text" class="form-control" name="slideshowTitle" id="editTitle" value ={this.state.slideshow} onChange={this.slideShowChange}/>
+                  <input type="text" class="form-control" name="slideshowTitle" id="editTitle" value ={this.state.title} onChange={this.slideShowChange}/>
                 </div>
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
                   <input type="text" class="form-control" name="slideshowSubTitle" id="inputCategoryName"
-                    value={this.state.slideshow} onChange={this.slideShowChange}/>
+                    value={this.state.subTitle} onChange={this.slideShowChange}/>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputFile">Change Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="exampleInputFile" name="slideshowImage" value = {this.state.slideshow} onChange={this.slideShowChange}/>
+                      <input type="file" class="custom-file-input" id="exampleInputFile" name="slideshowImage" onChange={this.slideShowChange}/>
                       <label class="custom-file-label" for="exampleInputFile">choose file</label>
                     </div>
                   </div>
