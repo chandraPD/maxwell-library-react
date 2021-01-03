@@ -69,7 +69,7 @@ class SlideShowManagement extends Component {
           </td>)
           row.push(<td>{slideshow.title}</td>)
           row.push(<td>{slideshow.subTitle}</td>)
-          row.push(<td><img src={slideshow.img} alt ="gambar buku"              style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
+          row.push(<td><img src={slideshow.img} alt ="gambar buku" style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
           results.push(row)
         })
         this.setState({ rows: results });
@@ -159,32 +159,29 @@ class SlideShowManagement extends Component {
       .then((response) => {
         console.log(response.data.data);
         this.setState({
-          slideshow : response.data.data,
+          slideshow : response.data.data.slideshow,
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
           subTitle : response.data.data.subTitle,
           img : response.data.data.img
         })
-        console.log(this.state.slideshow.title);
+        // console.log(this.state.slideshow.title);
       })
   }
 
   //METHOD UNTUK UPDATE
   editSlideShow = (id) => {
+    
     const slideshow = {
-      slideshow : this.state.slideshow
+      title : this.state.title,
+      subTitle : this.state.subTitle,
+      img : this.state.img
     }
-
+    console.log(slideshow);
     axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow)
       .then((response) => {
         console.log(response);
-        this.setState({
-          title : this.state.title,
-          subTitle : this.state.subTitle,
-          img : this.state.img
-      })
     })
-
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -351,18 +348,18 @@ class SlideShowManagement extends Component {
               <div class="card-body">
                 <div class="form-group">
                   <label for="editTitle">Title</label>
-                  <input type="text" class="form-control" name="slideshowTitle" id="editTitle" value ={this.state.title} onChange={this.slideShowChange}/>
+                  <input type="text" class="form-control" name="title" id="editTitle" value ={this.state.title} onChange={this.slideShowChange}/>
                 </div>
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
-                  <input type="text" class="form-control" name="slideshowSubTitle" id="inputCategoryName"
+                  <input type="text" class="form-control" name="subTitle" id="inputCategoryName"
                     value={this.state.subTitle} onChange={this.slideShowChange}/>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputFile">Change Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="exampleInputFile" name="slideshowImage" onChange={this.slideShowChange}/>
+                      <input type="file" class="custom-file-input" id="exampleInputFile" name="img" onChange={this.slideShowChange}/>
                       <label class="custom-file-label" for="exampleInputFile">choose file</label>
                     </div>
                   </div>
@@ -371,7 +368,7 @@ class SlideShowManagement extends Component {
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
+              <button id="submitEdit" type="submit" onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
             </div>
           </form>
         </div>
