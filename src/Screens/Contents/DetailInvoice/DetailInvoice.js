@@ -19,9 +19,12 @@ class DetailInvoice extends Component {
     }
 
     async getDetailInvoice(invoiceId) {
-
-        const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`)
-        const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`)
+        const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzAzODE1LCJleHAiOjE2MDk5MDg2MTV9.NX3s9uot5rwxJa_cBldLesOsR5nms6JieIqwYMZ9Y4O1ZnFSd9sqpn5ljawyXP7bcxPRFzJfRdiJ0r9F3bUnvQ"
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+      }
+        const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`, config)
+        const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
         console.log(getInvoiceDetail);
         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
     }

@@ -38,8 +38,11 @@ class FineManagement extends Component {
         );
     }
     async fetchDataBook() {
-        const getData = await Axios.get('http://localhost:8080/invoice/get-all');
-        console.log(getData);
+        const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzAzODE1LCJleHAiOjE2MDk5MDg2MTV9.NX3s9uot5rwxJa_cBldLesOsR5nms6JieIqwYMZ9Y4O1ZnFSd9sqpn5ljawyXP7bcxPRFzJfRdiJ0r9F3bUnvQ"
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+      }
+        const getData = await Axios.get('http://localhost:8080/invoice/admin/get-all', config);
         const resultBook = getData.data.data;
 
         this.setState({ data: resultBook });
@@ -73,10 +76,10 @@ class FineManagement extends Component {
 
             row.push(<td className="text-center" >{no++}</td>);
             row.push(<td className="text-center" >{actVal}</td>);
-            row.push(<td className="text-center" >{rent.firstName + " " + rent.lastName}</td>);
+            row.push(<td className="text-center" >{rent.borrower}</td>);
             row.push(<td>{rent.noInvoice}</td>);
             row.push(<td>{rent.grandTotal}</td>);
-            row.push(<td>{rent.borrowerEntity.email}</td>);
+            row.push(<td>{rent.email}</td>);
             if (rent.paymentDate === null) {
                 row.push(<td>-</td>);
             } else {
