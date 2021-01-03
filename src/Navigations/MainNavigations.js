@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
 import NavBar from '../Screens/NavBar/NavBar'
@@ -28,8 +28,17 @@ import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
+import PrivateRoute from './PrivateRoute'
 
 class MainNavigation extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            isAuthenticated :  localStorage.getItem('user')
+        };
+      }
+
     render() {
         return ( <Router >
                 <Switch>
@@ -46,9 +55,10 @@ class MainNavigation extends Component {
                             <NavBar />
                             <SideBar />
                             <Switch>
-                                <Route exact path='/'>
-                                    <Home />
-                                </Route>
+                                <PrivateRoute exact path='/'
+                                authenticated={this.state.isAuthenticated}
+                                component={Home}>
+                                </PrivateRoute>
                                 <Route path='/Profile'>
                                     <Profile />
                                 </Route>
@@ -104,9 +114,9 @@ class MainNavigation extends Component {
                                     <ReturnBook />
                                 </Route>
                                 <Route path='/DonationManagement'>
-                                    <DonationManagement /> 
+                                    <DonationManagement />
                                 </Route>
-                                 <Route path='/Donation'> 
+                                 <Route path='/Donation'>
                                     <Donation />
                                 </Route>
                             </Switch>

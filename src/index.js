@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { reducer as reducerForm } from 'redux-form';
+import { BrowserRouter } from "react-router-dom";
+
 
 const rootReducer = combineReducers({
   form: reducerForm
@@ -15,10 +17,12 @@ const store = createStore(rootReducer);
 
 
 ReactDOM.render(
-  
+
   <Provider store={store}>
   <React.StrictMode>
+  <BrowserRouter>
     <App />
+  </BrowserRouter>
   </React.StrictMode>
   </Provider>,
   document.getElementById('root')

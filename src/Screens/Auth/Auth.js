@@ -3,11 +3,14 @@ import "./Assets/Css/login.css";
 import LoginImage from "./Assets/Images/cover.png";
 import BookShelfImage from "./Assets/Images/bookshelf.png";
 import { Link, Redirect, withRouter } from "react-router-dom";
+import AuthService from '../../Services/auth.service'
+import Swal from 'sweetalert2'
 
 class Auth extends Component {
   constructor(props) {
     super(props)
-  
+    this.handleLogin = this.handleLogin.bind(this);
+
     this.state = {
        fields: {},
        errors: {}
@@ -171,7 +174,7 @@ class Auth extends Component {
     fields[field] = e.target.value
     this.setState({fields})
   }
-  
+
 
   displaySignUp() {
       var login = document.getElementById("login")
@@ -203,6 +206,25 @@ class Auth extends Component {
     forgotPassword.style.display = "block";
   }
 
+  handleLogin(e) {
+    e.preventDefault()
+
+    let email = this.state.fields["emailSignIn"]
+    let password = this.state.fields["PasswordSignIn"]
+
+
+    AuthService.login(email, password).then(
+      () => {
+        this.props.history.push("/");
+        window.location.reload();
+      }
+    ).catch(error => Swal.fire(
+      'Login Failed !',
+      'Either email or password is incorrect',
+      'error'
+  ))
+  }
+
   render() {
     return (
       <main className="main-style">
@@ -225,7 +247,7 @@ class Auth extends Component {
               </div>
 
               {/* <!--Login Form--> */}
-              <div className="login-wrapper my-auto" id="login" onSubmit={this.contactSubmitSignIn.bind(this)}>
+              <div className="login-wrapper my-auto" id="login" onSubmit={this.handleLogin}>
                 <h1 className="form-title">Login</h1>
                 <p className="form-subtitle">
                   Welcome Back, Please Login to your Account
@@ -274,7 +296,7 @@ class Auth extends Component {
                       name="rememberPassword"
                     />
                     <label for="rememberPassword">Remember Password</label>
-                    
+
                     <button
                       type="button"
                       className="forgot-btn"
@@ -282,7 +304,7 @@ class Auth extends Component {
                     >
                       Forgot Password
                     </button>
-                    
+
                   </div>
                   <div className="container-btn">
                     <div className="row">
