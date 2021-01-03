@@ -7,6 +7,13 @@ import Flickity from 'react-flickity-component';
 import { Link } from 'react-router-dom';
 
 class Home extends Component {
+
+  componentDidMount() {
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+  }
+
   render() {
     const flickityOptions = {
       wrapAround: true,
