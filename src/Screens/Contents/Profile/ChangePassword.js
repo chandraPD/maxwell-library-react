@@ -48,8 +48,8 @@ class ChangePassword extends Component {
                 formIsValid = false
                 errors['oldPassword'] = "Your Password Must Be More Than 20 Character Long"
                 Swal.fire(
-                    'Submit Failed !',
-                    'You must fill password according to the requirement',
+                    'YSubmit Failed !',
+                    'ou must fill password according to the requirement',
                     'error'
                 );
             }
