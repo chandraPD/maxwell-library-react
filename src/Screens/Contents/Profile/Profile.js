@@ -5,6 +5,17 @@ import Swal from 'sweetalert2'
 
 
 class Profile extends Component {
+    constructor(){
+        super()
+        this.state = {
+            firstname: 'Niki',
+            lastname: 'Zefanya',
+            datebirth: '19/06/2020',
+            email: 'example@gmail.com',
+            address: 'Indonesia',
+            number: '+628123456789'
+        }
+    }
 
     displayEditForm() {
         const editForm = document.querySelector('#container-editform');
@@ -86,34 +97,34 @@ class Profile extends Component {
                                 <div className="col-lg-6">
                                 <div className="data">
                                     <h5 >First Name</h5>
-                                    <span id="firstname">Niki</span>
+                                    <span id="firstname">{this.state.firstname}</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
                                     <h5 >Last Name</h5>
-                                    <span id="lastname">Zefanya</span>
+                                    <span id="lastname">{this.state.lastname}</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
                                     <h5>Date of Birth</h5>
-                                    <span id="birthday">19/06/2020</span>
+                                    <span id="birthday">{this.state.datebirth}</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
                                     <h5>Address</h5>
-                                    <span id="address">Indonesia</span>
+                                    <span id="address">{this.state.address}</span>
                                     <hr/>
                                 </div>
                                 </div>
                                 <div className="col-lg-6">
                                 <div className="data">
                                     <h5>Email</h5>
-                                    <span id="email">example@gmail.com</span>
+                                    <span id="email">{this.state.email}</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
                                     <h5 >Phone Number</h5>
-                                    <span id="phonenumber">+628123456789</span>
+                                    <span id="phonenumber">{this.state.number}</span>
                                     <hr/>
                                 </div>
                                 <div className="data">
