@@ -1,10 +1,15 @@
+import React, { Component } from "react";
 import MainNavigation from './Navigations/MainNavigations'
 
+import AuthService from "./Services/auth.service";
 
-function App() {
-  return (    
-    <MainNavigation />    
-  );
+class App extends Component {
+
+  render() {
+    return(
+      <MainNavigation/>
+    )
+  }
+
 }
-
 export default App;

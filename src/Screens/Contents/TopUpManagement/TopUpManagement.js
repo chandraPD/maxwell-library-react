@@ -13,7 +13,7 @@ import NumberFormat from 'react-number-format';
 
 class TopUpManagement extends Component {
   constructor(props) {
-    super(props);      
+    super(props);
     this.state = {
       fields: {},
       errors: {},
@@ -35,7 +35,7 @@ class TopUpManagement extends Component {
     headers: { Authorization: `Bearer ${token}` }
 }
     const getData = await Axios.get('http://localhost:8080/top_up_management/getAll',config);
-    
+
     const result_topup = getData.data;
     console.log(result_topup);
 
@@ -55,7 +55,7 @@ class TopUpManagement extends Component {
         this.setState({
           nominal:res.data.nominal,
           paymentMethod:res.data.paymentMethod
-        })   
+        })
     Swal.fire({
       icon: 'warning',
       title: 'Warning!',
@@ -63,7 +63,7 @@ class TopUpManagement extends Component {
       text: 'Are you sure want to confirm this?',
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {         
+      if (result.isConfirmed) {
         Axios.put('http://localhost:8080/top_up/accept/' + id, res,config)
         .then((response) => {
           console.log(response);
@@ -75,17 +75,17 @@ class TopUpManagement extends Component {
         text:  'Confirm Top Up Already Success!',
         }).then((result)=>{
           if(result.isConfirmed){
-            window.location.reload(); 
+            window.location.reload();
           }
-        })    
-      }                    
-    }) 
+        })
+      }
+    })
       })
   }
 
   getId2 = (id) => {
     const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
-  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"    
+  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   }
@@ -95,7 +95,7 @@ class TopUpManagement extends Component {
         this.setState({
           nominal:res.data.nominal,
           paymentMethod:res.data.paymentMethod
-        })   
+        })
     Swal.fire({
       icon: 'warning',
       title: 'Warning!',
@@ -103,7 +103,7 @@ class TopUpManagement extends Component {
       text: 'Are you sure want to Cancel this?',
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {         
+      if (result.isConfirmed) {
         Axios.put('http://localhost:8080/top_up/cancel/' + id, res,config)
         .then((response) => {
           console.log(response);
@@ -115,21 +115,21 @@ class TopUpManagement extends Component {
           text:  'Cancel Top Up Already Success!',
           }).then((result)=>{
             if(result.isConfirmed){
-              window.location.reload(); 
+              window.location.reload();
             }
           })
-      }             
-    }) 
+      }
+    })
       })
   }
 
   fetchData() {
-    let results = [];    
+    let results = [];
     let result = this.state.data;
     var no=1;
-    
 
-    result.forEach( topup => {      
+
+    result.forEach( topup => {
       var row = [];
       var actVal, statusVal = '';
       if (topup.statusPayment == 'Success') {
@@ -193,16 +193,16 @@ class TopUpManagement extends Component {
     return formIsValid;
   }
 
-  contactSubmit2(e) {   
+  contactSubmit2(e) {
     const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
   const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
     const config = {
       headers: { Authorization: `Bearer ${token2}` }
   }
-    let fields = this.state.fields; 
+    let fields = this.state.fields;
     e.preventDefault();
     if (this.handleValidation2()) {
-      $('#passwordModal').modal('hide');     
+      $('#passwordModal').modal('hide');
       const topup = {
         nominal: fields["Nominal"],
         paymentMethod: fields["Payment"],
@@ -212,24 +212,24 @@ class TopUpManagement extends Component {
       Axios.post('http://localhost:8080/top_up/post2', topup,config)
             .then((response) => {
               console.log(response);
-            }) 
+            })
       Swal.fire({
         title: "Success Save Top Up Data!",
         text: "You Already Success to save this data!",
         icon: "success",
-        buttons: true,    
+        buttons: true,
       })
       .then((isConfirmed) => {
         if (isConfirmed) {
           window.location.reload();
-      } 
+      }
       })
 
     } else {
 
     }
-  }  
-  
+  }
+
   handleChange2(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
@@ -269,8 +269,8 @@ class TopUpManagement extends Component {
       $('#topupModal').modal('hide');
       $('#checkModal').modal('show');
     }
-  }  
-  
+  }
+
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
@@ -370,7 +370,7 @@ class TopUpManagement extends Component {
                               <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Rp. 200000</label>
                             </div>
                           </div>
-                        </div>                        
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -413,7 +413,7 @@ class TopUpManagement extends Component {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">
                     Close
@@ -518,7 +518,7 @@ class TopUpManagement extends Component {
             </div>
           </div>
           {/* Main content */}
-          
+
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
