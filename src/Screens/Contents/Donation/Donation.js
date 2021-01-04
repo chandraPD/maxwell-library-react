@@ -4,8 +4,18 @@ import photo1 from '../../../Assets/Media/books/donate2.jpg'
 import photo2 from '../../../Assets/Media/books/donate3.jpg'
 import Swal from 'sweetalert2'
 import Reactdom from 'react-dom'
+import axios from 'axios'
 
 class Donation extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fields: {},     
+    };
+
+    this.postDonate = this.postDonate.bind(this)
+  }
     submitdonate() {
 
     var Email = document.getElementById('inputEmail').value;
@@ -26,6 +36,50 @@ class Donation extends Component {
             'success'
         );
     }
+    }
+    postDonate(e) {
+      let fields = this.state.fields;
+      e.preventDefault();
+        const donate = {
+          email : fields["Email"],
+          name : fields["Name"],
+          donationType : fields["DonationType"],
+          totalBook : fields["TotalBook"],
+          statusDonate : "waiting",
+          phoneNumber : fields["PhoneNumber"]
+        }
+        console.log(fields)
+        console.log(donate)
+        axios.post('http://localhost:8080/donate', donate)
+             .then((response) => {
+               console.log(response)
+             })
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Your Data has been Added',
+          confirmButtonText: `OK`
+        }).then((result) => {
+            if(result.isConfirmed) {
+          
+            }
+        }).catch((error) => {
+          Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Your Data Has Not Been Successfully Added ',
+          confirmButtonText: `OK`
+        })
+        }) 
+          
+    }
+
+
+    handleChange(field, e) {
+      let fields = this.state.fields;
+      fields[field] = e.target.value;
+      this.setState({ fields });
     }
 
 
@@ -127,7 +181,8 @@ class Donation extends Component {
             </div>
             {/* /.card-header */}
             {/* form start */}
-            <form className="form-horizontal">
+            <form className="form-horizontal"
+            onSubmit={this.postDonate.bind(this)}>
               <div className="card-body">
                 <div className="donate form-group row">
                   <label
@@ -143,6 +198,8 @@ class Donation extends Component {
                       className="form-control"
                       id="inputEmail"
                       placeholder="Email"
+                      onChange={this.handleChange.bind(this, "Email")}
+                      value={this.state.fields["Email"]}
                     />
                   </div>
                 </div>
@@ -160,6 +217,8 @@ class Donation extends Component {
                       className="form-control"
                       id="inputName"
                       placeholder="Name"
+                      onChange={this.handleChange.bind(this, "Name")}
+                      value={this.state.fields["Name"]}
                     />
                   </div>
                 </div>
@@ -171,9 +230,9 @@ class Donation extends Component {
                     Donation Type
                   </label>
                   <div className="col-sm-10">
-                      <select class="custom-select">
-                        <option>Person</option>
-                        <option>Organization</option>
+                      <select class="custom-select" onChange={this.handleChange.bind(this, "DonationType")}>
+                        <option value = "person">Person</option>
+                        <option value = "organization">Organization</option>
                       </select>
                   </div>
                 </div>
@@ -181,6 +240,7 @@ class Donation extends Component {
                   <label
                     htmlFor="inputNumberofphone3"
                     className="col-sm-2 col-form-label"
+
                   >
                     Phone Number
                   </label>
@@ -191,6 +251,8 @@ class Donation extends Component {
                       className="form-control"
                       id="inputPhone"
                       placeholder="Phone Number"
+                      onChange={this.handleChange.bind(this, "PhoneNumber")}
+                      value={this.state.fields["PhoneNumber"]}
                     />
                   </div>
                 </div>
@@ -208,20 +270,21 @@ class Donation extends Component {
                       className="form-control"
                       id="inputBookbybook"
                       placeholder="1,2,3,..."
+                       onChange={this.handleChange.bind(this, "TotalBook")}
+                        value={this.state.fields["TotalBook"]}
                     />
                   </div>
                 </div>
               </div>
               {/* /.card-body */}
               <div className="card-footer">
-                <div className="btn-submitform">
+                <button type="submit" className="btn-submitform">
                   <a
                     className="btn btn-info float-right"
-                      onClick={() => this.submitdonate()}
                   >
                     Submit
                   </a>
-                </div>
+                </button>
               </div>
               {/* /.card-footer */}
             </form>
