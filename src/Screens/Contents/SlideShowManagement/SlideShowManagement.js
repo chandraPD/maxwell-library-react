@@ -128,10 +128,18 @@ class SlideShowManagement extends Component {
       }
       console.log(slideshow)
 
-      const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
+      // const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
+      // const config = {
+      //     headers: { Authorization: `Bearer ${token}` }
+      // };
+
+      let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
       const config = {
-          headers: { Authorization: `Bearer ${token}` }
-      };
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
       axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow, config)
           .then((response) => {
             console.log(response)
@@ -155,7 +163,15 @@ class SlideShowManagement extends Component {
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
-    axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id)
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+
+    axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id, config)
       .then((response) => {
         console.log(response.data.data);
         this.setState({
@@ -178,7 +194,15 @@ class SlideShowManagement extends Component {
       img : this.state.img
     }
     console.log(slideshow);
-    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow)
+
+    let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
+      const config = {
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
+    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
     })
@@ -197,7 +221,14 @@ class SlideShowManagement extends Component {
 
   //METHOD DELETE MENGGUNAKAN SOFTDELETE
   deleteSlideShow = (id) => {
-    axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id)
+    let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
+      const config = {
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
+    axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id,config)
       .then((response) => {
         console.log(response);
         window.location.reload();
@@ -206,7 +237,14 @@ class SlideShowManagement extends Component {
 
   //METHOD DELETE DATA
   deleteDataSlideShow = (id) => {
-    axios.delete('http://localhost:8080/slideshow/delete-data-slideshow/'+ id)
+    let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
+      const config = {
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
+    axios.delete('http://localhost:8080/slideshow/delete-data-slideshow/'+ id, config)
       .then((response) => {
         console.log(response);
         window.location.reload();
