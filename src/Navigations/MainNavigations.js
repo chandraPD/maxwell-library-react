@@ -89,7 +89,7 @@ class MainNavigation extends Component {
                                 <Route path='/SlideShowManagement'>
                                     <SlideShowManagement />
                                 </Route>
-                                <Route path='/Payment'>
+                                <Route path='/Payment/:invoiceId?'>
                                     <Payment />
                                 </Route>
                                 <Route path='/PaymentDetail/:userId'>

@@ -12,14 +12,17 @@ class FineManagement extends Component {
 
     constructor() {
         super();
+        let user = JSON.parse(localStorage.getItem('user'))
+        const userToken = user.token;
         this.state = {
             data: [],
             rows: [],
             results: [],
+            userToken : userToken
         };
     }
     componentDidMount() {
-        this.fetchDataBook();
+        this.fetchDataInvoice();
     }
 
     acceptRent() {
@@ -37,12 +40,16 @@ class FineManagement extends Component {
             'success'
         );
     }
-    async fetchDataBook() {
-        const getData = await Axios.get('http://localhost:8080/invoice/get-all');
-        console.log(getData);
-        const resultBook = getData.data.data;
+    async fetchDataInvoice() {
 
-        this.setState({ data: resultBook });
+        const token = this.state.userToken;
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        const getData = await Axios.get('http://localhost:8080/invoice/user/get-all', config);
+        const resultInvoice = getData.data.data;
+
+        this.setState({ data: resultInvoice });
         $('#example1').DataTable().destroy();
         this.fetchData();
         $("#example1").DataTable({
@@ -60,7 +67,7 @@ class FineManagement extends Component {
             var actVal, statusVal = '';
             if (rent.statusInvoice === 'Waiting For Payment') {
                 actVal = <div className="btn-group btn-group-sm">
-                    <Action link="Payment" type="primary" title="Accept" icon="check-square" />
+                    <Action link={`Payment/${rent.invoiceId}`} type="primary" title="Pay" icon="check-square" />
                     <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
                 statusVal = <Status type="primary" val="Waiting For Payment" />
             } else if (rent.statusInvoice === 'Paid') {
@@ -73,10 +80,10 @@ class FineManagement extends Component {
 
             row.push(<td className="text-center" >{no++}</td>);
             row.push(<td className="text-center" >{actVal}</td>);
-            row.push(<td className="text-center" >{rent.firstName + " " + rent.lastName}</td>);
+            row.push(<td className="text-center" >{rent.borrower}</td>);
             row.push(<td>{rent.noInvoice}</td>);
             row.push(<td>{rent.grandTotal}</td>);
-            row.push(<td>{rent.borrowerEntity.email}</td>);
+            row.push(<td>{rent.email}</td>);
             if (rent.paymentDate === null) {
                 row.push(<td>-</td>);
             } else {
