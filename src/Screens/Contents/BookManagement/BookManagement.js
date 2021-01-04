@@ -17,12 +17,14 @@ class BookManagement extends Component {
       rows: [],
       results: [],
       isLoading: true,
+      category: []
     };
 
     this.bookChange = this.bookChange.bind(this)
   }
 
   componentDidMount() {
+    this.getCategory();
     this.fetchDataBook();
   }
 
@@ -40,6 +42,13 @@ class BookManagement extends Component {
       responsive: true,
       autoWidth: false,
     });
+  }
+
+  async getCategory() {
+    let fetchCategory = await axios.get('http://localhost:8080/category/get-all-active')
+    console.log(fetchCategory)
+    const resultCategory = fetchCategory.data    
+    this.setState({category: resultCategory})    
   }
 
   fetchData() {
@@ -74,6 +83,7 @@ class BookManagement extends Component {
           </div>
         </td>
       );
+      row.push(<td className="text-center">{book.bookId}</td>);
       row.push(<td className="text-center">{book.title}</td>);
       row.push(<td className="text-center">{book.author}</td>);
       row.push(<td className="text-justify">{book.description}</td>);
@@ -112,6 +122,8 @@ class BookManagement extends Component {
             })
           })
   }
+
+ 
 
   updateBook = (id) => {
     const token =
@@ -188,20 +200,15 @@ class BookManagement extends Component {
       errors["statusBook"] = "Status Book cannot be empty";
     }
 
-    //Category ID
-    if (!fields["categoryId"]) {
-      formIsValid = false;
-      errors["categoryId"] = "Category ID cannot be empty";
-    }
-
     this.setState({ errors: errors });
     return formIsValid;
   }
 
   contactSubmit(e) {
     let fields = this.state.fields;
-    const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MjQwMTkxLCJleHAiOjE2MDk4NDQ5OTF9.bWFIxMvfoxByjHi6u7SHJH8xBwed44RmK2SAt69HsaZ5JwaO9eECOCxUW74vQoLthrthuLAiIIgyoY41qB1EpQ";
+    let user = JSON.parse(localStorage.getItem('user'));
+    const token = user.token;
+    console.log(token)
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -245,10 +252,11 @@ class BookManagement extends Component {
   }
 
   render() {
-    const { rows } = this.state;
+    const { rows, category } = this.state;
     const headings = [
-      "Book ID",
+      "No.",
       "Action",
+      "Book ID",
       "Title",
       "Author",
       "Description",
@@ -372,6 +380,37 @@ class BookManagement extends Component {
                       </div>
                     </div>
 
+                    {/* <div className="form-group">
+                      <label htmlFor="inputCategoryId">Category ID</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="inputCategoryId"
+                        name="categoryId"
+                        placeholder="Enter Category ID"
+                        onChange={this.handleChange.bind(this, "categoryId")}
+                        value={this.state.fields["categoryId"]}
+                      />
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["categoryId"]}
+                      </span>
+                    </div> */}
+
+                    <div className="form-group">
+                      <label htmlFor="inputCategoryId">Category</label>
+                      <select name="categoryId" className="form-control" id="inputCategoryId" value={this.state.fields["categoryId"]} onChange={this.handleChange.bind(this, "categoryId")}>
+                        <option value="null">Choose Category</option>
+                        {category.map((category) => {
+                          return (
+                            <option value={category.categoryId}>{category.category}</option>
+                          )
+                        })}
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["categoryId"]}
+                      </span>
+                    </div>
+
                     <div className="form-group">
                       <label htmlFor="inputDescription">Description</label>
                       <textarea
@@ -437,7 +476,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label htmlFor="inputStatusBook">Status Book</label>
                       <input
                         type="text"
@@ -451,23 +490,21 @@ class BookManagement extends Component {
                       <span style={{ color: "red" }}>
                         {this.state.errors["statusBook"]}
                       </span>
-                    </div>
+                    </div> */}
 
                     <div className="form-group">
-                      <label htmlFor="inputCategoryId">Category ID</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputCategoryId"
-                        name="categoryId"
-                        placeholder="Enter Category ID"
-                        onChange={this.handleChange.bind(this, "categoryId")}
-                        value={this.state.fields["categoryId"]}
-                      />
+                    <label htmlFor="inputStatusBook">Status Book</label>
+                      <select name="statusBook" className="form-control" id="inputStatusBook" value={this.state.fields["statusBook"]} onChange={this.handleChange.bind(this, "statusBook")}>
+                        <option value="null">Choose Status</option>
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                      </select>
                       <span style={{ color: "red" }}>
                         {this.state.errors["categoryId"]}
                       </span>
                     </div>
+
+                    
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">

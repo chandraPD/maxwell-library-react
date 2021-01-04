@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import './Detail.style.css'
 import Swal from 'sweetalert2';
 import foto from '../../../Assets/Media/books/covernya2.png'
@@ -6,11 +6,37 @@ import foto2 from '../../../Assets/Media/books/novel-dilan.jpg'
 import foto3 from '../../../Assets/Media/books/buku-seni-minimalis.jpg'
 import foto4 from '../../../Assets/Media/books/novel-milea.jpg'
 import Date from '../../../Components/Datepicker/Dates'
+import axios from 'axios'
+import { withRouter } from "react-router-dom";
 
 class Detail extends Component {
 
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       data: [],
+       category: []
+    }
+  }
+  
+
+  componentDidMount() {
+    const bookId = this.props.match.params.bookId;
+    console.log(bookId);
+    this.fetchData(bookId);
+  }
+
+  async fetchData(bookId) {
+    let fetchData = await axios.get('http://localhost:8080/book/get-by-id/' + bookId)
+    console.log(fetchData)
+    this.setState({data: fetchData.data})
+    this.setState({category: fetchData.data.categoryEntity})
+  }
+
   render() {
 
+    const {data, category} = this.state
     return (
 
       <div>
@@ -43,31 +69,22 @@ class Detail extends Component {
             {/* Main content */}
             <section className="content">
               <div className="category">
-                <p>Novel</p>
+                <p>{category.category}</p>
               </div>
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-sm-6">
-                    <h1 className="titletext">Dilan 1991</h1>
+                    <h1 className="titletext">{data.title}</h1>
                   </div>
                   <div className="col-sm-6">
-                    <h1 className="statustext">Available</h1>
+                    <h1 className="statustext">{data.statusBook}</h1>
                   </div>
                 </div>
-                <p className="date">08 November 2020</p>
+                <p className="date">{data.publishDate}</p>
                 <div className="row">
                   <div className="col-sm-8">
                     <p className="content">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac diam eget est rutrum ultrices. Donec
-                      laoreet enim a massa dapibus, cursus egestas dui pulvinar. Proin sit amet accumsan lectus. Nullam auctor
-                      auctor consequat. Donec semper magna erat, sed fringilla lacus pretium eget. Cras porttitor, nibh sit
-                      amet interdum bibendum, nibh velit accumsan tellus, vel vehicula tellus leo vitae ipsum. Praesent sit
-                      amet libero sed orci ullamcorper efficitur. Pellentesque in euismod purus, sit amet ultrices tortor.
-                      Vestibulum ante dui, tempor at dui id, tincidunt euismod diam. Integer pellentesque massa nibh, ac
-                      eleifend odio malesuada sed. Phasellus orci sem, cursus nec orci ut, accumsan facilisis lacus. Nullam at
-                      elementum nibh, ac gravida felis. In sagittis rhoncus nisi tempus dignissim. Sed fringilla consequat
-                      ante vitae lobortis. Cras posuere ligula vel enim suscipit malesuada. Vivamus non nulla ut ante
-                      imperdiet euismod quis nec massa.
+                      {data.description}
                   </p>
                   </div>
                 </div>
@@ -300,4 +317,4 @@ class Detail extends Component {
   }
 }
 
-export default Detail;
+export default withRouter(Detail);

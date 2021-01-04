@@ -5,13 +5,37 @@ import secondtHero from '../../../Assets/Media/books/hero2.png';
 import thirdHero from '../../../Assets/Media/books/hero3.png';
 import Flickity from 'react-flickity-component';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
 
 class Home extends Component {
 
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       dataTop: [],
+       allBook: []
+    }
+  }
+  
+
   componentDidMount() {
+    this.getTopFive();
+    this.getAllBook();
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
+  }
+
+  async getTopFive() {
+    let fetchTop = await Axios.get('http://localhost:8080/book/get-recent-five')
+    const resultTop = fetchTop.data      
+    this.setState({dataTop: resultTop})      
+  }
+
+  async getAllBook() {
+    let fetchBook = await Axios.get('http://localhost:8080/book/get-all')
+    this.setState({allBook: fetchBook.data})
   }
 
   render() {
@@ -21,6 +45,8 @@ class Home extends Component {
       pageDots: false,
       initialIndex: 2,
     };
+
+    const { dataTop, allBook } = this.state
 
     return (
       <div className="content-wrapper">
@@ -88,57 +114,23 @@ class Home extends Component {
                   </h4>
                 </div>
                 <div className="filter-container p-0 row custom-flex">
-                  <div className="top-seller">
-                    <div className="filtr-item list-book" />
-                    <Link to="Detail">
-                      <img
-                        src="https://img.wattpad.com/cover/240316214-200-k585866.jpg"
-                        className="img-fluid img-book"
-                        alt="white sample"
-                      />
-                      <span className="badge  category-book">fiction</span>
-                    </Link>
-                  </div>
-                  <div className="filtr-item list-book">
-                    <Link to="Detail">
-                      <img
-                        src="https://img.wattpad.com/cover/167563297-200-k341133.jpg"
-                        className="img-fluid img-book"
-                        alt="white sample"
-                      />
-                    </Link>
-                    <span className="badge  category-book">romance</span>
-                  </div>
-                  <div className="filtr-item list-book">
-                    <Link to="Detail">
-                      <img
-                        src="https://img.wattpad.com/cover/148969091-200-k416704.jpg"
-                        className="img-fluid img-book"
-                        alt="white sample"
-                      />
-                    </Link>
-                    <span className="badge  category-book">fantasy</span>
-                  </div>
-                  <div className="filtr-item list-book">
-                    <Link to="Detail">
-                      <img
-                        src="https://img.wattpad.com/cover/185980135-200-k264509.jpg"
-                        className="img-fluid img-book"
-                        alt="white sample"
-                      />
-                    </Link>
-                    <span className="badge  category-book">novel</span>
-                  </div>
-                  <div className="filtr-item list-book">
-                    <Link to="Detail">
-                      <img
-                        src="https://img.wattpad.com/cover/31317290-200-k37192.jpg"
-                        className="img-fluid img-book"
-                        alt="white sample"
-                      />
-                    </Link>
-                    <span className="badge  category-book">novel</span>
-                  </div>
+
+                  {dataTop.map((data) => {
+                    return (
+                      <div className="top-seller">
+                        <div className="filtr-item list-book" />
+                        <Link to={`Detail/${data.bookId}`}>
+                          <img
+                            src="https://aimint.org/za/wp-content/uploads/sites/16/2016/04/image-placeholder-vertical.jpg"
+                            className="img-fluid img-book"
+                            alt="white sample"
+                          />
+                          <span className="badge category-book">{data.categoryEntity.category}</span>
+                        </Link>
+                    </div>
+                    )
+                  })}
+                  
                 </div>
                 <div className="books-nf" style={{ display: 'none' }}>
                   <h3 className="book-not-found">Oops, Book Not Found</h3>
@@ -257,87 +249,20 @@ class Home extends Component {
                 static={true}
                 reloadOnUpdate={true}
               >
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/217637593-176-k15446.jpg"
-                      className="list-book-bottom carousel-cell-image"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cel">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/246598854-176-k420616.jpg"
-                      className="list-book-bottom carousel-cell-image"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/240583823-176-k468965.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/164853306-200-k69310.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/247987794-176-k469618.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/143926052-200-k378110.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/244632227-176-k857341.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/216207581-176-k651777.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
-                <div className="carousel-cell">
-                  <Link to="Detail">
-                    <img
-                      src="https://img.wattpad.com/cover/224935763-352-k438274.jpg"
-                      className="carousel-cell-image list-book-bottom"
-                      alt="white sample"
-                    />
-                  </Link>
-                </div>
+
+                {allBook.map((data) => {
+                    return (
+                      <div className="carousel-cell">
+                        <Link to={`Detail/${data.bookId}`}>
+                          <img
+                            src="https://img.wattpad.com/cover/217637593-176-k15446.jpg"
+                            className="list-book-bottom carousel-cell-image"
+                            alt="white sample"
+                          />
+                        </Link>
+                      </div>
+                    )
+                  })}
               </Flickity>
             </div>
           </div>

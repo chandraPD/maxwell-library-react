@@ -4,10 +4,10 @@ import SuccessImg from "../../../Assets/Media/check.png";
 import "bootstrap";
 import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
-import $ from 'jquery'
-import 'bootstrap'
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import $ from "jquery";
+import "bootstrap";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -20,9 +20,10 @@ class CategoryManagement extends Component {
       rows: [],
       results: [],
       isLoading: true,
+      category: ''
     };
 
-    this.categoryChange = this.categoryChange.bind(this)
+    this.categoryChange = this.categoryChange.bind(this);
   }
 
   componentDidMount() {
@@ -31,14 +32,14 @@ class CategoryManagement extends Component {
 
   async fetchDataCategory() {
     let fetchedData = await axios.get(
-      'http://localhost:8080/category/get-all-active'
+      "http://localhost:8080/category/get-all-active"
     );
-    console.log(fetchedData)
+    console.log(fetchedData);
     this.setState.isLoading = false;
     const resultCategory = fetchedData.data;
     this.setState({ data: resultCategory });
-    
-    $('#example1').DataTable().destroy();
+
+    $("#example1").DataTable().destroy();
     this.fetchData();
     $("#example1").DataTable({
       responsive: true,
@@ -48,7 +49,7 @@ class CategoryManagement extends Component {
 
   fetchData() {
     const results = [];
-    const result = this.state.data
+    const result = this.state.data;
     var no = 1;
 
     result.forEach((category) => {
@@ -59,8 +60,22 @@ class CategoryManagement extends Component {
       row.push(
         <td className="text-center py-0 align-middle">
           <div className="btn-group btn-group-sm">
-            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" onClick={() => this.getCategory(category.categoryId)}/>
-            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" onClick={() => this.getCategory(category.categoryId)}/>
+            <Action
+              type="success"
+              title="Edit"
+              icon="pen"
+              dataToggle="modal"
+              dataTarget="#modal-edit"
+              onClick={() => this.getCategory(category.categoryId)}
+            />
+            <Action
+              type="danger"
+              title="Delete"
+              icon="trash"
+              dataToggle="modal"
+              dataTarget="#modal-delete"
+              onClick={() => this.getCategory(category.categoryId)}
+            />
           </div>
         </td>
       );
@@ -72,43 +87,43 @@ class CategoryManagement extends Component {
   }
 
   getCategory = (id) => {
-    axios.get('http://localhost:8080/category/get-by-id/' + id)
-          .then((response) => {
-            console.log(response);
-            this.setState({
-              category: response.data.category,
-              categoryId: id
-            })
-          })
-  }
+    axios
+      .get("http://localhost:8080/category/get-by-id/" + id)
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          category: response.data.category,
+          categoryId: id,
+        });
+      });
+  };
 
   updateCategory = (id) => {
     const category = {
-      category: this.state.category
-    }
+      category: this.state.category,
+    };
 
-    axios.put('http://localhost:8080/category/update-category/' + id, category)
+    axios
+      .put("http://localhost:8080/category/update-category/" + id, category)
       .then((response) => {
-        console.log(response)
-      })
-
-  }
+        console.log(response);
+      });
+  };
 
   deleteCategory = (id) => {
-
-    axios.put('http://localhost:8080/category/delete-category/' + id)
-         .then((response) => {
-           console.log(response)
-           window.location.reload()
-         })
-
-  }
+    axios
+      .put("http://localhost:8080/category/delete-category/" + id)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      });
+  };
 
   categoryChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
+      [event.target.name]: event.target.value,
+    });
+  };
 
   handleValidation() {
     let fields = this.state.fields;
@@ -129,40 +144,46 @@ class CategoryManagement extends Component {
     let fields = this.state.fields;
     e.preventDefault();
     if (this.handleValidation()) {
-      $('#modal-add').modal('toggle');
+      $("#modal-add").modal("toggle");
 
       const category = {
-        category: fields["CategoryName"]
-      }
-      console.log(category)
-      axios.post('http://localhost:8080/category/add-category', category)
-           .then((response) => {
-             console.log(response)
-           })
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your Data has been Added',
-        confirmButtonText: `OK`
-      }).then((result) => {
-          if(result.isConfirmed) {
-            window.location.reload()
-          }
-      })
-        
-    } else {
-
+        category: fields["CategoryName"],
+      };
+      console.log(category);
+      axios
+        .post("http://localhost:8080/category/add-category", category)
+        .then((response) => {
+          console.log(response);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Your Data has been Added",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        })
+        .catch((error) =>
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Category already exist!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          })
+        );
     }
   }
-  
 
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
   }
-  
 
   render() {
     const { rows } = this.state;
@@ -179,7 +200,7 @@ class CategoryManagement extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href='/'>Home</a>
+                    <a href="/">Home</a>
                   </li>
                   <li className="breadcrumb-item active">Category</li>
                 </ol>
@@ -231,10 +252,7 @@ class CategoryManagement extends Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form
-                id="addCategory"
-                onSubmit={this.contactSubmit.bind(this)}
-              >
+              <form id="addCategory" onSubmit={this.contactSubmit.bind(this)}>
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
@@ -314,7 +332,10 @@ class CategoryManagement extends Component {
                   >
                     Cancel
                   </button>
-                  <button onClick={() => this.updateCategory(this.state.categoryId)} className="btn btn-warning">
+                  <button
+                    onClick={() => this.updateCategory(this.state.categoryId)}
+                    className="btn btn-warning"
+                  >
                     Save changes
                   </button>
                 </div>
@@ -394,7 +415,7 @@ class CategoryManagement extends Component {
                 </button>
               </div>
               <div className="modal-body">
-                <img className="check" src={SuccessImg} alt="description"/>
+                <img className="check" src={SuccessImg} alt="description" />
                 <p>Data has been deleted</p>
               </div>
               <div className="modal-footer">
