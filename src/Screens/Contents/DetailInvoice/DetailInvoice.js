@@ -7,10 +7,13 @@ import Axios from 'axios';
 class DetailInvoice extends Component {
     constructor() {
         super();
+        let user = JSON.parse(localStorage.getItem('user'))
+        const userToken = user.token;
         this.state = {
             invoiceId: '',
             dataInvoice: [],
-            dataDetailInvoice: []
+            dataDetailInvoice: [],
+            userToken : userToken
         };
     }
     componentDidMount() {
@@ -19,7 +22,8 @@ class DetailInvoice extends Component {
     }
 
     async getDetailInvoice(invoiceId) {
-        const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzAzODE1LCJleHAiOjE2MDk5MDg2MTV9.NX3s9uot5rwxJa_cBldLesOsR5nms6JieIqwYMZ9Y4O1ZnFSd9sqpn5ljawyXP7bcxPRFzJfRdiJ0r9F3bUnvQ"
+        
+        const token = this.state.userToken;
         const config = {
           headers: { Authorization: `Bearer ${token}` }
       }

@@ -12,14 +12,17 @@ class FineManagement extends Component {
 
     constructor() {
         super();
+        let user = JSON.parse(localStorage.getItem('user'))
+        const userToken = user.token;
         this.state = {
             data: [],
             rows: [],
             results: [],
+            userToken : userToken
         };
     }
     componentDidMount() {
-        this.fetchDataBook();
+        this.fetchDataInvoice();
     }
 
     acceptRent() {
@@ -37,15 +40,16 @@ class FineManagement extends Component {
             'success'
         );
     }
-    async fetchDataBook() {
-        const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzAzODE1LCJleHAiOjE2MDk5MDg2MTV9.NX3s9uot5rwxJa_cBldLesOsR5nms6JieIqwYMZ9Y4O1ZnFSd9sqpn5ljawyXP7bcxPRFzJfRdiJ0r9F3bUnvQ"
-        const config = {
-          headers: { Authorization: `Bearer ${token}` }
-      }
-        const getData = await Axios.get('http://localhost:8080/invoice/admin/get-all', config);
-        const resultBook = getData.data.data;
+    async fetchDataInvoice() {
 
-        this.setState({ data: resultBook });
+        const token = this.state.userToken;
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        const getData = await Axios.get('http://localhost:8080/invoice/user/get-all', config);
+        const resultInvoice = getData.data.data;
+
+        this.setState({ data: resultInvoice });
         $('#example1').DataTable().destroy();
         this.fetchData();
         $("#example1").DataTable({
@@ -63,7 +67,7 @@ class FineManagement extends Component {
             var actVal, statusVal = '';
             if (rent.statusInvoice === 'Waiting For Payment') {
                 actVal = <div className="btn-group btn-group-sm">
-                    <Action link="Payment" type="primary" title="Accept" icon="check-square" />
+                    <Action link={`Payment/${rent.invoiceId}`} type="primary" title="Pay" icon="check-square" />
                     <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
                 statusVal = <Status type="primary" val="Waiting For Payment" />
             } else if (rent.statusInvoice === 'Paid') {

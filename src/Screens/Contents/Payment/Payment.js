@@ -1,663 +1,422 @@
 import React, { Component } from "react";
 import "./payment.css";
-import $ from "jquery";
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
 import { Link, withRouter } from "react-router-dom";
 import Swal from 'sweetalert2'
+import Axios from 'axios';
+import NumberFormat from 'react-number-format';
 
 class Payment extends Component {
-  componentDidMount() {
-    $("#selector").on("change", function () {
-      var divClass = $(this).val();
-      $(".detail").hide();
-      console.log(divClass);
-      $("." + divClass).slideDown("medium");
-    });
-  }
+   constructor() {
+      super();
+      let user = JSON.parse(localStorage.getItem('user'))
+      const userToken = user.token;
+      this.state = {
+         invoiceId: '',
+         invoiceNeedPaid: [],
+         dataInvoice: [],
+         dataDetailInvoice: [],
+         userToken: userToken
+      };
+   }
 
-  paymentSuccessful() {
-    Swal.fire("Success", "Your Payment has been Accepted", "success")
-  }
+   componentDidMount() {
+      let user = JSON.parse(localStorage.getItem('user'))
+      const userToken = user.token;
+      const invoiceId = this.props.match.params.invoiceId;
+      this.fetchDataInvoiceNeedPaid();
 
-  paymentDeclined() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Declined',
-      text: 'Sorry, Your Current Balance is Insufficient.',
-      showDenyButton: true,
-      showConfirmButton: true,
-      confirmButtonText: `Top Up`,
-      denyButtonText: `OK`
-    }).then((result) => {
-      if(result.isConfirmed) {
-        this.props.history.push('/TopUp')
+      if (invoiceId) {
+         this.setState({ invoiceId: invoiceId });
+         this.getDetailInvoiceByInvoiceId(invoiceId);
+      } else {
+         this.setState({ invoiceId: "" });
       }
-      else {
+   }
 
+   formatRupiah = (nilai) => {
+      return <NumberFormat value={nilai} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />
+   }
+
+   handleChange = (event) => {
+      var invoiceId = event.target.value;
+      if (invoiceId === "") {
+         return this.setState({ dataInvoice: "", dataDetailInvoice: "" });
+      } else {
+         this.getDetailInvoiceByInvoiceId(invoiceId);
       }
-    })
-  }
+   }
 
-  render() {
-    return (
-      <div className="content-wrapper">
-        {/* <!-- Content Header (Page header) --> */}
-        <section className="content-header">
-          <div className="container-fluid">
-            <div className="row mb-2">
-              <div className="col-sm-6">
-                <h1>Fine Payment</h1>
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <Link to="/FineManagement">Fine Management</Link>
-                  </li>
-                  <li className="breadcrumb-item active">Fine Payment</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-          {/* <!-- /.container-fluid --> */}
-        </section>
+   async fetchDataInvoiceNeedPaid() {
+      const token = this.state.userToken;
+      const config = {
+         headers: { Authorization: `Bearer ${token}` }
+      }
+      const getData = await Axios.get('http://localhost:8080/invoice/user/get-all-need-paid', config);
+      this.setState({ invoiceNeedPaid: getData.data.data });
+   }
 
-        <section className="content">
-          <div className="container-fluid">
-            <div className="card">
-              <div className="card-header">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label>Select Invoice: </label>
-                      <select
-                        className="form-control inv-selector"
-                        id="selector"
-                      >
-                        <option>Select Invoice</option>
-                        <option value="invoice-1">Invoice #007612</option>
-                        <option value="invoice-2">Invoice #007783</option>
-                        <option value="invoice-3">Invoice #007790</option>
-                      </select>
-                    </div>
-                  </div>
+   async getDetailInvoiceByInvoiceId(invoiceId) {
+      try {
+         const token = this.state.userToken;
+         const config = {
+            headers: { Authorization: `Bearer ${token}` }
+         }
+         const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`, config)
+         const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
+         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
+      } catch (err) {
+         console.log(err);
+      }
+   }
 
-                  <div className="col-sm-6">
-                    <div className="form-group balance-display">
-                      <label>Current Balance: </label>
-                      <p className="balance-value">Rp. 50.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+   paymentSuccessful() {
+      Swal.fire("Success", "Your Payment has been Accepted", "success")
+   }
 
-              <div className="card-body">
-                <div className="hd-payment invoice-1 detail">
-                  <h3>Invoice</h3>
-                  <div className="invoice p-3 mb-3">
-                    {/* <!-- title row --> */}
-                    <div className="row">
-                      <div className="col-12">
+   paymentDeclined() {
+      Swal.fire({
+         icon: 'error',
+         title: 'Declined',
+         text: 'Sorry, Your Current Balance is Insufficient.',
+         showDenyButton: true,
+         showConfirmButton: true,
+         confirmButtonText: `Top Up`,
+         denyButtonText: `OK`
+      }).then((result) => {
+         if (result.isConfirmed) {
+            this.props.history.push('/TopUp')
+         }
+         else {
+
+         }
+      })
+   }
+
+   render() {
+      const { invoiceId, invoiceNeedPaid, dataInvoice, dataDetailInvoice } = this.state;
+      let cardBody, action;
+      if (dataInvoice != "") {
+
+         if (dataInvoice.statusInvoice === "Waiting For Payment") {
+            action =
+               <button
+                  type="submit"
+                  data-toggle="modal"
+                  data-target="#modal-confirm"
+                  className="btn btn-success float-right"
+               >
+                  <i className="far fa-credit-card"></i> Pay
+               </button>
+         } else {
+            action = ""
+         }
+         cardBody = <div className="card-body">
+            <div>
+               <div className="invoice p-3 mb-3">
+                  {/* <!-- title row --> */}
+                  <div className="row">
+                     <div className="col-12">
                         <h4>
-                          <img src={MaxIcon} style={{ height: "2rem" }} />{" "}
-                          Maxwell Library
-                          <small className="float-right">
-                            Date: 19/11/2020
-                          </small>
+                           <img src={MaxIcon} style={{ height: '2rem' }} /> Maxwell Library <small className="float-right">Date: {dataInvoice.invoiceDate}</small>
                         </h4>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- info row --> */}
-                    <div className="row invoice-info">
-                      <div className="col-sm-4 invoice-col">
+                     </div>
+                     {/* <!-- /.col --> */}
+                  </div>
+                  {/* <!-- info row --> */}
+                  <div className="row invoice-info">
+                     <div className="col-sm-4 invoice-col">
                         From
-                        <address>
-                          <strong>Maxwell Library</strong>
-                          <br />
-                          795 Folsom Ave, Suite 600
-                          <br />
-                          San Francisco, CA 94107
-                          <br />
-                          Phone: (804) 123-5432
-                          <br />
-                          Email: maxwell@library.com
-                        </address>
-                      </div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-sm-4 invoice-col">
+         <address>
+                           <strong>Maxwell Library</strong>
+                           <br />
+           795 Folsom Ave, Suite 600
+           <br />
+           San Francisco, CA 94107
+           <br />
+           Phone: (804) 123-5432
+           <br />
+           Email: maxwell@library.com
+         </address>
+                     </div>
+                     {/* <!-- /.col --> */}
+                     <div className="col-sm-4 invoice-col">
                         To
-                        <address>
-                          <strong>Niki Zefanya</strong>
-                          <br />
-                          795 Folsom Ave, Suite 600
-                          <br />
-                          San Francisco, CA 94107
-                          <br />
-                          Phone: (555) 539-1037
-                          <br />
-                          Email: john.doe@example.com
+                     <address>
+                           <strong>{dataInvoice.borrower}</strong><br />
+                           {dataInvoice.address}<br />
+         Phone: {dataInvoice.phone}<br />
+         Email: {dataInvoice.email}
                         </address>
-                      </div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-sm-4 invoice-col">
-                        <b>Invoice #007612</b>
+                     </div>
+                     {/* <!-- /.col --> */}
+                     <div className="col-sm-4 invoice-col">
+                        <b>Invoice {dataInvoice.noInvoice}</b><br />
                         <br />
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
+                     </div>
+                     {/* <!-- /.col --> */}
+                  </div>
+                  {/* <!-- /.row --> */}
 
-                    {/* <!-- Table row --> */}
-                    <div className="row">
-                      <div className="col-12 table-responsive">
+                  {/* <!-- Table row --> */}
+                  <div className="row">
+                     <div className="col-12 table-responsive">
                         <table className="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>No.</th>
-                              <th>Book Title</th>
-                              <th>Borrowed On</th>
-                              <th>Due On</th>
-                              <th>Late By</th>
-                              <th>Fine Amount</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>Dilan 1990</td>
-                              <td>16/11/2020</td>
-                              <td>18/11/2020</td>
-                              <td>2 Days</td>
-                              <td>Rp. 10.000</td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                              <td>Harry Potter</td>
-                              <td>16/11/2020</td>
-                              <td>18/11/2020</td>
-                              <td>2 Days</td>
-                              <td>Rp. 10.000</td>
-                            </tr>
-                          </tbody>
+                           <thead>
+                              <tr>
+                                 <th>No.</th>
+                                 <th>Book Title</th>
+                                 <th>Borrowed On</th>
+                                 <th>Due On</th>
+                                 <th>Late By</th>
+                                 <th>Fine Amount</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {
+                                 dataDetailInvoice.map((val, index) => {
+                                    return (
+                                       <tr key={index}>
+                                          <td>{index + 1}</td>
+                                          <td>{val.title}</td>
+                                          <td>{val.borrowedDate}</td>
+                                          <td>{val.treshold}</td>
+                                          <td>{val.late} Days</td>
+                                          <td>{val.grandTotal}</td>
+                                       </tr>
+                                    )
+                                 })
+                              }
+                           </tbody>
                         </table>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
+                     </div>
+                     {/* <!-- /.col --> */}
+                  </div>
+                  {/* <!-- /.row --> */}
 
-                    <div className="row">
-                      {/* <!-- accepted payments column --> */}
-                      <div className="col-6"></div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-6">
-                        <p className="lead" style={{ float: "right" }}>
-                          Amount Due 25/11/2020
-                        </p>
-
+                  <div className="row">
+                     {/* <!-- accepted payments column --> */}
+                     <div className="col-6"></div>
+                     {/* <!-- /.col --> */}
+                     <div className="col-6">
+                        <p className="lead" style={{ float: 'right' }}>Amount Due {dataInvoice.treshold}</p>
                         <div className="table-responsive">
-                          <table className="table">
-                            <tr>
-                              <th style={{ width: "59%" }}>Total:</th>
-                              <td>Rp. 20.000</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
+                           <table className="table">
+                              <thead>
+                                 <tr>
+                                    <th style={{ width: "59%" }}>Total:</th>
+                                    <td>{this.formatRupiah(`${dataInvoice.grandTotal}`)}</td>
+                                 </tr>
+                              </thead>
 
-                    {/* <!-- this row will not appear when printing --> */}
-                    <div className="row no-print">
-                      <div className="col-12">
+                           </table>
+                        </div>
+                     </div>
+                     {/* <!-- /.col --> */}
+                  </div>
+                  {/* <!-- /.row --> */}
+
+                  {/* <!-- this row will not appear when printing --> */}
+                  <div className="row no-print">
+                     <div className="col-12">
                         <Link to="/PaymentPrint" target="_blank">
-                          <a target="_blank" className="btn btn-default">
-                            <i className="fas fa-print"></i> Print
-                          </a>
+                           <i className="fas fa-print"></i> Print
                         </Link>
-                        <button
-                          type="submit"
-                          data-toggle="modal"
-                          data-target="#modal-confirm"
-                          className="btn btn-success float-right"
-                        >
-                          <i className="far fa-credit-card"></i> Pay
-                        </button>
-                        <button
-                          type="submit"
-                          data-toggle="modal"
-                          data-target="#modal-decline"
-                          className="btn btn-danger float-right custom-dcl"
-                        >
-                          <i className="far fa-credit-card"></i> Pay (Declined)
-                        </button>
-                      </div>
-                    </div>
+                        {action}
+                     </div>
                   </div>
-                </div>
+               </div>
+            </div>
+         </div>
 
-                <div className="hd-payment invoice-2 detail">
-                  <h3>Invoice</h3>
-                  <div className="invoice p-3 mb-3">
-                    {/* <!-- title row --> */}
-                    <div className="row">
-                      <div className="col-12">
-                        <h4>
-                          <img src={MaxIcon} style={{ height: "2rem" }} />{" "}
-                          Maxwell Library
-                          <small className="float-right">
-                            Date: 18/11/2020
-                          </small>
-                        </h4>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- info row --> */}
-                    <div className="row invoice-info">
-                      <div className="col-sm-4 invoice-col">
-                        From
-                        <address>
-                          <strong>Maxwell Library</strong>
-                          <br />
-                          795 Folsom Ave, Suite 600
-                          <br />
-                          San Francisco, CA 94107
-                          <br />
-                          Phone: (804) 123-5432
-                          <br />
-                          Email: maxwell@library.com
-                        </address>
-                      </div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-sm-4 invoice-col">
-                        To
-                        <address>
-                          <strong>Niki Zefanya</strong>
-                          <br />
-                          795 Folsom Ave, Suite 600
-                          <br />
-                          San Francisco, CA 94107
-                          <br />
-                          Phone: (555) 539-1037
-                          <br />
-                          Email: john.doe@example.com
-                        </address>
-                      </div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-sm-4 invoice-col">
-                        <b>Invoice #007783</b>
-                        <br />
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
+      } else {
+         cardBody = "";
+         action = "";
 
-                    {/* <!-- Table row --> */}
-                    <div className="row">
-                      <div className="col-12 table-responsive">
-                        <table className="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>No.</th>
-                              <th>Book Title</th>
-                              <th>Borrowed On</th>
-                              <th>Due On</th>
-                              <th>Late By</th>
-                              <th>Fine Amount</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1.</td>
-                              <td>Fantastic Beasts</td>
-                              <td>15/11/2020</td>
-                              <td>17/11/2020</td>
-                              <td>3 Days</td>
-                              <td>Rp. 15.000</td>
-                            </tr>
+      }
 
-                            <tr>
-                              <td>2.</td>
-                              <td>Brief Answer to The Big Question</td>
-                              <td>15/11/2020</td>
-                              <td>17/11/2020</td>
-                              <td>3 Days</td>
-                              <td>Rp. 15.000</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
+      return (
+         <div className="content-wrapper">
+            {/* <!-- Content Header (Page header) --> */}
+            <section className="content-header">
+               <div className="container-fluid">
+                  <div className="row mb-2">
+                     <div className="col-sm-6">
+                        <h1>Fine Payment</h1>
+                     </div>
+                     <div className="col-sm-6">
+                        <ol className="breadcrumb float-sm-right">
+                           <li className="breadcrumb-item">
+                              <Link to="/">Home</Link>
+                           </li>
+                           <li className="breadcrumb-item">
+                              <Link to="/FineManagement">Fine Management</Link>
+                           </li>
+                           <li className="breadcrumb-item active">Fine Payment</li>
+                        </ol>
+                     </div>
+                  </div>
+               </div>
+               {/* <!-- /.container-fluid --> */}
+            </section>
 
-                    <div className="row">
-                      {/* <!-- accepted payments column --> */}
-                      <div className="col-6"></div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-6">
-                        <p className="lead float-right">
-                          Amount Due 19/11/2020
-                        </p>
+            <section className="content">
+               <div className="container-fluid">
+                  <div className="card">
+                     <div className="card-header">
+                        <div className="row">
+                           <div className="col-sm-6">
+                              <div className="form-group">
+                                 <label>Select Invoice: </label>
+                                 <select
+                                    className="form-control inv-selector"
+                                    id="invoice"
+                                    onChange={this.handleChange}
+                                    value={invoiceId}
+                                 >
+                                    <option value="" >Select Invoice</option>
+                                    {
+                                       invoiceNeedPaid.map((val, index) => {
+                                          return (
+                                             <option key={index} value={val.invoiceId} >{val.noInvoice}</option>
+                                          )
+                                       })
+                                    }
+                                 </select>
+                              </div>
+                           </div>
 
-                        <div className="table-responsive">
-                          <table className="table">
-                            <tr>
-                              <th style={{ width: "59%" }}>Total:</th>
-                              <td>Rp. 30.000</td>
-                            </tr>
-                          </table>
+                           <div className="col-sm-6">
+                              <div className="form-group balance-display">
+                                 <label>Current Balance: </label>
+                                 <p className="balance-value">Rp. 50.000</p>
+                              </div>
+                           </div>
                         </div>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
-
-                    {/* <!-- this row will not appear when printing --> */}
-                    <div className="row no-print">
-                      <div className="col-12">
-                        <Link
-                          to="PaymentPrint"
-                          target="_blank"
-                          className="btn btn-default"
-                        >
-                          <i className="fas fa-print"></i> Print
-                        </Link>
-                        <button
-                          type="submit"
-                          data-toggle="modal"
-                          data-target="#modal-confirm"
-                          className="btn btn-success float-right "
-                        >
-                          <i className="far fa-credit-card"></i> Pay
-                        </button>
-                        <button
-                          type="submit"
-                          data-toggle="modal"
-                          data-target="#modal-decline"
-                          className="btn btn-danger float-right custom-dcl"
-                        >
-                          <i className="far fa-credit-card"></i> Pay (Declined)
-                        </button>
-                      </div>
-                    </div>
+                     </div>
+                     {cardBody}
                   </div>
-                </div>
+               </div>
+            </section>
 
-                <div className="hd-payment invoice-3 detail">
-                  <h3>Invoice</h3>
-                  <div className="invoice p-3 mb-3">
-                    {/* <!-- title row --> */}
-                    <div className="row">
-                      <div className="col-12">
-                        <h4>
-                          <img src={MaxIcon} style={{ height: "2rem" }} />{" "}
-                          Maxwell Library
-                          <small className="float-right">
-                            Date: 20/11/2020
-                          </small>
-                        </h4>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- info row --> */}
-                    <div className="row invoice-info">
-                      <div className="col-sm-4 invoice-col">
-                        From
-                        <address>
-                          <strong>Maxwell Library</strong>
-                          <br />
-                          795 Folsom Ave, Suite 600
-                          <br />
-                          San Francisco, CA 94107
-                          <br />
-                          Phone: (804) 123-5432
-                          <br />
-                          Email: maxwell@library.com
-                        </address>
-                      </div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-sm-4 invoice-col">
-                        To
-                        <address>
-                          <strong>Niki Zefanya</strong>
-                          <br />
-                          795 Folsom Ave, Suite 600
-                          <br />
-                          San Francisco, CA 94107
-                          <br />
-                          Phone: (555) 539-1037
-                          <br />
-                          Email: john.doe@example.com
-                        </address>
-                      </div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-sm-4 invoice-col">
-                        <b>Invoice #007790</b>
-                        <br />
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
-
-                    {/* <!-- Table row --> */}
-                    <div className="row">
-                      <div className="col-12 table-responsive">
-                        <table className="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>No.</th>
-                              <th>Book Title</th>
-                              <th>Borrowed On</th>
-                              <th>Due On</th>
-                              <th>Late By</th>
-                              <th>Fine Amount</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1.</td>
-                              <td>Ubur-ubur Lembur</td>
-                              <td>17/11/2020</td>
-                              <td>19/11/2020</td>
-                              <td>1 Days</td>
-                              <td>Rp. 5.000</td>
-                            </tr>
-
-                            <tr>
-                              <td>2.</td>
-                              <td>Harry Potter</td>
-                              <td>17/11/2020</td>
-                              <td>19/11/2020</td>
-                              <td>1 Days</td>
-                              <td>Rp. 5.000</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
-
-                    <div className="row">
-                      {/* <!-- accepted payments column --> */}
-                      <div className="col-6"></div>
-                      {/* <!-- /.col --> */}
-                      <div className="col-6">
-                        <p className="lead float-right">
-                          Amount Due 24/11/2020
-                        </p>
-
-                        <div className="table-responsive">
-                          <table className="table">
-                            <tr>
-                              <th style={{ width: "59%" }}>Total:</th>
-                              <td>Rp. 10.000</td>
-                            </tr>
-                          </table>
+            {/* <!--Modal Add--> */}
+            <div className="modal fade" id="modal-confirm">
+               <div className="modal-dialog">
+                  <div className="modal-content">
+                     <div className="modal-header">
+                        <h4 className="modal-title">Confirm Payment</h4>
+                        <button
+                           type="button"
+                           className="close"
+                           data-dismiss="modal"
+                           aria-label="Close"
+                        >
+                           <span aria-hidden="true">&times;</span>
+                        </button>
+                     </div>
+                     <div className="modal-body">
+                        <div className="card-body">
+                           <table className="table table-bordered table-striped">
+                              <tbody>
+                                 <tr>
+                                    <td>Your Current Balance</td>
+                                    <td>Rp. 50.000</td>
+                                 </tr>
+                                 <tr>
+                                    <td>
+                                       <b>Invoice Total</b>
+                                    </td>
+                                    <td>Rp. 20.000</td>
+                                 </tr>
+                              </tbody>
+                           </table>
                         </div>
-                      </div>
-                      {/* <!-- /.col --> */}
-                    </div>
-                    {/* <!-- /.row --> */}
-
-                    {/* <!-- this row will not appear when printing --> */}
-                    <div className="row no-print">
-                      <div className="col-12">
-                        <Link
-                          to="PaymentPrint"
-                          target="_blank"
-                          className="btn btn-default"
-                        >
-                          <i className="fas fa-print"></i> Print
-                        </Link>
+                     </div>
+                     <div className="modal-footer justify-content-between">
                         <button
-                          type="submit"
-                          data-toggle="modal"
-                          data-target="#modal-confirm"
-                          className="btn btn-success float-right"
+                           type="button"
+                           className="btn btn-default"
+                           data-dismiss="modal"
                         >
-                          <i className="far fa-credit-card"></i> Pay
-                        </button>
-
+                           Cancel
+                </button>
                         <button
-                          type="submit"
-                          data-toggle="modal"
-                          data-target="#modal-decline"
-                          className="btn btn-danger float-right custom-dcl"
+                           type="submit"
+                           className="btn btn-warning"
+                           id="btn-pay"
+                           data-dismiss="modal"
+                           onClick={() => this.paymentSuccessful()}
                         >
-                          <i className="far fa-credit-card"></i> Pay (Declined)
-                        </button>
-                      </div>
-                    </div>
+                           Confirm
+                </button>
+                     </div>
                   </div>
-                </div>
-              </div>
+                  {/* <!-- /.modal-content --> */}
+               </div>
+               {/* <!-- /.modal-dialog --> */}
             </div>
-          </div>
-        </section>
+            {/* <!-- /.modal --> */}
 
-        {/* <!--Modal Add--> */}
-        <div className="modal fade" id="modal-confirm">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">Confirm Payment</h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
+            {/* <!--Modal Declined--> */}
+            <div className="modal fade" id="modal-decline">
+               <div className="modal-dialog">
+                  <div className="modal-content">
+                     <div className="modal-header">
+                        <h4 className="modal-title">Confirm Payment</h4>
+                        <button
+                           type="button"
+                           className="close"
+                           data-dismiss="modal"
+                           aria-label="Close"
+                        >
+                           <span aria-hidden="true">&times;</span>
+                        </button>
+                     </div>
+                     <div className="modal-body">
+                        <div className="card-body">
+                           <table className="table table-bordered table-striped">
+                              <tbody>
+                                 <tr>
+                                    <td>Your Current Balance</td>
+                                    <td>Rp. 10.000</td>
+                                 </tr>
+                                 <tr>
+                                    <td>
+                                       <b>Invoice Total</b>
+                                    </td>
+                                    <td>Rp. 20.000</td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                     <div className="modal-footer justify-content-between">
+                        <button
+                           type="button"
+                           className="btn btn-default"
+                           data-dismiss="modal"
+                        >
+                           Cancel
                 </button>
-              </div>
-              <div className="modal-body">
-                <div className="card-body">
-                  <table className="table table-bordered table-striped">
-                    <tbody>
-                      <tr>
-                        <td>Your Current Balance</td>
-                        <td>Rp. 50.000</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <b>Invoice Total</b>
-                        </td>
-                        <td>Rp. 20.000</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="modal-footer justify-content-between">
-                <button
-                  type="button"
-                  className="btn btn-default"
-                  data-dismiss="modal"
-                >
-                  Cancel
+                        <button
+                           type="submit"
+                           className="btn btn-warning"
+                           id="btn-declined"
+                           data-dismiss="modal"
+                           onClick={() => this.paymentDeclined()}
+                        >
+                           Confirm
                 </button>
-                <button
-                  type="submit"
-                  className="btn btn-warning"
-                  id="btn-pay"
-                  data-dismiss="modal"
-                  onClick={() => this.paymentSuccessful()}
-                >
-                  Confirm
-                </button>
-              </div>
+                     </div>
+                  </div>
+                  {/* <!-- /.modal-content --> */}
+               </div>
+               {/* <!-- /.modal-dialog --> */}
             </div>
-            {/* <!-- /.modal-content --> */}
-          </div>
-          {/* <!-- /.modal-dialog --> */}
-        </div>
-        {/* <!-- /.modal --> */}
-
-        {/* <!--Modal Declined--> */}
-        <div className="modal fade" id="modal-decline">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">Confirm Payment</h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="card-body">
-                  <table className="table table-bordered table-striped">
-                    <tbody>
-                      <tr>
-                        <td>Your Current Balance</td>
-                        <td>Rp. 10.000</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <b>Invoice Total</b>
-                        </td>
-                        <td>Rp. 20.000</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="modal-footer justify-content-between">
-                <button
-                  type="button"
-                  className="btn btn-default"
-                  data-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-warning"
-                  id="btn-declined"
-                  data-dismiss="modal"
-                  onClick={() => this.paymentDeclined()}
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-            {/* <!-- /.modal-content --> */}
-          </div>
-          {/* <!-- /.modal-dialog --> */}
-        </div>
-        {/* <!-- /.modal --> */}
-      </div>
-    );
-  }
+            {/* <!-- /.modal --> */}
+         </div>
+      );
+   }
 }
 
 export default withRouter(Payment);
