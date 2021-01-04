@@ -12,42 +12,86 @@ import Axios from 'axios';
 import NumberFormat from 'react-number-format';
 
 class TopUpManagement extends Component {
+  
   constructor(props) {
-    super(props);
-    this.state = {
+  let user = JSON.parse( localStorage.getItem('user'))  
+    super(props);    
+    this.state = {      
       fields: {},
       errors: {},
       data: [],
       rows: [],
       results: [],
       result: [],
-      data: []
+      data: [],        
+      headings: [],
+      role:"",
+      show:true,
+      userToken: user.token
     };
   }
-  componentDidMount() {
+  componentDidMount() {     
+        
+    
     this.getAll();
+    this.show();
+    this.getRole();
+  }
+
+  async getRole(){
+    const token=this.state.userToken;
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+}
+    const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
+    var role=getRole;
+    if (role.data=="[ROLE_ADMIN]") {      
+      this.setState({role: "[ROLE_ADMIN]" })
+    } else{
+      this.setState({role: "[ROLE_USER]" })
+    } 
+    if (this.state.role=="[ROLE_ADMIN]") {      
+      this.setState({headings: ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+    } else{
+      this.setState({headings: ["No", "ID", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+    } 
   }
 
   async getAll(){
-  const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
-  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
+  const token=this.state.userToken;
   const config = {
     headers: { Authorization: `Bearer ${token}` }
 }
     const getData = await Axios.get('http://localhost:8080/top_up_management/getAll',config);
-
+    const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
+  
+    console.log(getRole)
     const result_topup = getData.data;
+    var role=getRole;
     console.log(result_topup);
+    console.log(role.data)
+    if (role.data=="[ROLE_ADMIN]") {      
+      this.setState({role: "[ROLE_ADMIN]" })
+    } else{
+      this.setState({role: "[ROLE_USER]" })
+    } 
 
     this.setState({ data: result_topup });
-    this.fetchData();
+            
+    $("#example1").DataTable().destroy();
+    this.fetchData(getRole);
+    $("#example1").DataTable({
+      responsive: true,
+      autoWidth: false,
+    });
+    
+    // this.fetchData();
   }
 
   getId = (id) => {
-  const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
-  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
+  const token=this.state.userToken;  
   const config = {
-    headers: { Authorization: `Bearer ${token2}` }
+    headers: { Authorization: `Bearer ${token}` }
 }
     Axios.get('http://localhost:8080/top_up_management/getId/' + id)
       .then((res) => {
@@ -84,8 +128,7 @@ class TopUpManagement extends Component {
   }
 
   getId2 = (id) => {
-    const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
-  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
+  const token=this.state.userToken;    
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   }
@@ -123,7 +166,9 @@ class TopUpManagement extends Component {
       })
   }
 
-  fetchData() {
+  fetchData(getRole) {
+    var role=getRole;
+    console.log(role.data)
     let results = [];
     let result = this.state.data;
     var no=1;
@@ -157,7 +202,10 @@ class TopUpManagement extends Component {
       }
       row.push(<td className="text-center" >{no++}</td>);
       row.push(<td className="text-center" >{topup.historyBalanceId}</td>);
-      row.push(<td className="text-center" >{actVal}</td>);
+      if (role.data==="[ROLE_ADMIN]"){
+        row.push(<td className="text-center" >{actVal}</td>);
+      }      
+      // row.push(<td className="text-center" >{actVal}</td>);
       row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
       row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'Rp. '}/>}</td>);
       row.push(<td>{topup.paymentMethod}</td>);
@@ -165,6 +213,25 @@ class TopUpManagement extends Component {
       results.push(row);
     });
     this.setState({ rows: results });
+  }
+
+  async show(){
+  const token=this.state.userToken;
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+}
+    const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
+    var role=getRole;
+    if (role.data=="[ROLE_ADMIN]") {      
+      this.setState({role: "[ROLE_ADMIN]" })
+    } else{
+      this.setState({role: "[ROLE_USER]" })
+    } 
+    if (this.state.role=="[ROLE_ADMIN]") {      
+      this.setState({show:true })
+    } else{
+      this.setState({show:false})
+    }
   }
 
   handleValidation2() {
@@ -194,14 +261,13 @@ class TopUpManagement extends Component {
   }
 
   contactSubmit2(e) {
-    const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
-  const token2="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjA5MzEzMjM2LCJleHAiOjE2MDk5MTgwMzZ9.PQdCRqbHi2aRh-bYINkQxefOAoh_o1r5qmGPLw_hychQ0l-qQ-kmNo7jM4F9-O0E_bosPmtVvDiUh7h4j33b_A"
+    const token=this.state.userToken;      
     const config = {
-      headers: { Authorization: `Bearer ${token2}` }
+      headers: { Authorization: `Bearer ${token}` }
   }
     let fields = this.state.fields;
     e.preventDefault();
-    if (this.handleValidation2()) {
+    if (this.handleValidation2()) {      
       $('#passwordModal').modal('hide');
       const topup = {
         nominal: fields["Nominal"],
@@ -274,14 +340,13 @@ class TopUpManagement extends Component {
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
-    this.setState({ fields });
-  }
-
+    this.setState({ fields });    
+  } 
 
   render() {
-    const { rows } = this.state;
-    const headings = ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"];
-
+    
+    const { rows,headings,show } = this.state;    
+    
     return (
       <div className="wrapper">
         {/* Navbar */}
@@ -544,22 +609,22 @@ class TopUpManagement extends Component {
                 <div className="card-header">
                   <div className="row">
                     <div className="col-md-12 ctm-responsive">
-                      <button
+                      { show ?  <button
                         type="button"
                         className="btn btn-primary add-btn"
                         data-toggle="modal"
-                        data-target="#topupModal"
+                        data-target="#topupModal"                                                
                         style={{ float: "right" }}
                       >
                         <i className="nav-icon fas fa-plus"></i>
-                      Add Top Up
-                    </button>
+                      Add Top Up                 
+                    </button> : null}                     
                     </div>
                   </div>
                 </div>
 
-                <div className="card-body">
-                  <DataTable headings={headings} rows={rows} />
+                <div className="card-body">                  
+                  <DataTable headings={headings} rows={rows} />                    
                 </div>
               </div>
             </div>
