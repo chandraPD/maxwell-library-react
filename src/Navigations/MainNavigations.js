@@ -83,13 +83,13 @@ class MainNavigation extends Component {
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
                                 </Route>
-                                <Route path='/TopUpManagement'>
+                                <Route path='/TopUpManagement'>                                    
                                     <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>
                                     <SlideShowManagement />
                                 </Route>
-                                <Route path='/Payment'>
+                                <Route path='/Payment/:invoiceId?'>
                                     <Payment />
                                 </Route>
                                 <Route path='/PaymentDetail/:userId'>
