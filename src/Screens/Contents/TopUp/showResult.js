@@ -4,7 +4,10 @@ import axios from 'axios';
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export default (async function showResults(values) {    
-  const token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA5MzE1NDgzLCJleHAiOjE2MDk5MjAyODN9.TwMbN2YlB1TQAYxgHxkpar6Ht3UqR9nDqaEZtwQqnISlcb6NkOqH5utTGaf6hJpKSYtwotRndvntPoaEZ0PgOA"
+  let user = JSON.parse( localStorage.getItem('user'))
+  const userToken = user.token;
+  console.log(userToken);
+  const token=userToken
   const config = {
     headers: { Authorization: `Bearer ${token}` }
 }
