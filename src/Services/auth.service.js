@@ -9,7 +9,7 @@ class AuthService {
         email,
         password
       })
-      .then(response => {
+      .then(response => {        
         if (response.data.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data.data));
         }
@@ -28,6 +28,10 @@ class AuthService {
       password,
       confirmPassword
     });
+  }
+
+  getPassword(config){
+    return axios.get(API_URL+"password",config);
   }
 
   getCurrentUser() {
