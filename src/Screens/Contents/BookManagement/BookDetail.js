@@ -275,7 +275,7 @@ class BookDetail extends Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Add Category</h4>
+                <h4 className="modal-title">Add Detail</h4>
                 <button
                   type="button"
                   className="close"
@@ -291,17 +291,20 @@ class BookDetail extends Component {
               >
                 <div className="modal-body">
                   <div className="card-body">
+
                     <div className="form-group">
                       <label htmlFor="inputTypeofDamage">Type of Damage</label>
-                      <input
-                        type="text"
+                      <select
+                        name="typeOfDamage"
                         className="form-control"
                         id="inputTypeofDamage"
-                        name="typeOfDamage"
-                        placeholder="Enter Type of Damage"
-                        onChange={this.handleChange.bind(this, "typeOfDamage")}
                         value={this.state.fields["typeOfDamage"]}
-                      />
+                        onChange={this.handleChange.bind(this, "typeOfDamage")}
+                      >
+                        <option value="null">Choose Type of Damage</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Major">Major</option>
+                      </select>
                       <span style={{ color: "red" }}>
                         {this.state.errors["typeOfDamage"]}
                       </span>

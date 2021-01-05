@@ -14,7 +14,7 @@ class CategoryManagement extends Component {
     super(props);
 
     this.state = {
-      fields: {},
+      fields: [],
       errors: {},
       data: [],
       rows: [],
@@ -99,6 +99,7 @@ class CategoryManagement extends Component {
   };
 
   updateCategory = (id) => {
+
     const category = {
       category: this.state.category,
     };
@@ -107,6 +108,17 @@ class CategoryManagement extends Component {
       .put("http://localhost:8080/category/update-category/" + id, category)
       .then((response) => {
         console.log(response);
+        $("#modal-edit").modal("toggle");
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your Data has been Updated",
+          confirmButtonText: `OK`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
       });
   };
 
@@ -124,6 +136,13 @@ class CategoryManagement extends Component {
       [event.target.name]: event.target.value,
     });
   };
+
+  resetModal() {
+    let fields = this.state.fields;
+    fields["CategoryName"] = "";
+
+    this.setState({fields: fields});
+  }
 
   handleValidation() {
     let fields = this.state.fields;
@@ -172,7 +191,7 @@ class CategoryManagement extends Component {
             text: "Category already exist!",
           }).then((result) => {
             if (result.isConfirmed) {
-              window.location.reload();
+              $("#modal-add").modal("toggle");
             }
           })
         );
@@ -277,7 +296,7 @@ class CategoryManagement extends Component {
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
-                    // onClick={resetModal()}
+                    onClick={() => this.resetModal()}
                   >
                     Close
                   </button>
@@ -333,6 +352,7 @@ class CategoryManagement extends Component {
                     Cancel
                   </button>
                   <button
+                    type="button"
                     onClick={() => this.updateCategory(this.state.categoryId)}
                     className="btn btn-warning"
                   >

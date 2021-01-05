@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import './Detail.style.css'
 import Swal from 'sweetalert2';
-import foto from '../../../Assets/Media/books/covernya2.png'
-import foto2 from '../../../Assets/Media/books/novel-dilan.jpg'
-import foto3 from '../../../Assets/Media/books/buku-seni-minimalis.jpg'
-import foto4 from '../../../Assets/Media/books/novel-milea.jpg'
 import Date from '../../../Components/Datepicker/Dates'
 import axios from 'axios'
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Detail extends Component {
 
@@ -16,7 +12,8 @@ class Detail extends Component {
   
     this.state = {
        data: [],
-       category: []
+       category: [],
+       recommendedData: []
     }
   }
   
@@ -27,16 +24,33 @@ class Detail extends Component {
     this.fetchData(bookId);
   }
 
+  componentDidUpdate(prevProps) {
+    console.log(prevProps);
+    console.log(this.props.match.params.bookId)
+    if(prevProps.match.params.bookId !== this.props.match.params.bookId) {
+      this.fetchData(this.props.match.params.bookId)
+      window.scrollTo(0, 0)
+    }
+  }
+
+
   async fetchData(bookId) {
     let fetchData = await axios.get('http://localhost:8080/book/get-by-id/' + bookId)
     console.log(fetchData)
     this.setState({data: fetchData.data})
     this.setState({category: fetchData.data.categoryEntity})
+    this.fetchRecommended(fetchData.data.categoryEntity.categoryId, bookId)
+  }
+
+  async fetchRecommended(categoryId, bookId) {
+    let fetchRecommend = await axios.get('http://localhost:8080/book/get-rec-detail/' + categoryId + '/' + bookId)
+    console.log(fetchRecommend)
+    this.setState({recommendedData: fetchRecommend.data})
   }
 
   render() {
 
-    const {data, category} = this.state
+    const {data, category, recommendedData} = this.state
     return (
 
       <div>
@@ -54,13 +68,15 @@ class Detail extends Component {
                 </div>
                 <div className="row">
                   <div className="col-sm-12">
-                    <img className="big-preview" width="1600px" height="1200px" />
+                  
+                    <img className="big-preview" src={data.imgBanner} width="1600px" height="1200px" />
+                   
                     <div className="menu-right">
-                      <ul className="menuhead">
+                      {/* <ul className="menuhead">
                         <li><a href="#" data-toggle="modal" data-target="#ModalBook">Edit</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a></li>
-                      </ul>
-                      <img className="small-preview" src={foto} />
+                      </ul> */}
+                      <img className="small-preview" src={data.imgDetail} />
                     </div>
                   </div>
                 </div>
@@ -99,176 +115,26 @@ class Detail extends Component {
                 <h4>Recommended</h4><br />
               </div>
               <div className="row" id="recomended">
-                <div className="col-xs-4 col-sm-4 col-lg-4">
-                  <div className="card" id="recomendedcard">
-                    <img src={foto2} className="card-img-top" alt="Dilan 1991" />
-                    <div className="card-body">
-                      <h5 className="recommend-title">Dilan 1991</h5>
-                      <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati aspernatur enim
-                      ullam officia ... </p>
-                      <a className="recomendedcard-read btn" href="#">Read More</a>
+                {recommendedData.map((data) => {
+                  return(
+                    <div className="col-xs-4 col-sm-4 col-lg-4">
+                      <div className="card" id="recomendedcard">
+                        <img src={data.imgDetail} className="card-img-top" alt="Dilan 1991" />
+                        <div className="card-body">
+                          <h5 className="recommend-title">{data.title}</h5>
+                          <p className="card-text max-desc">{data.description} </p>
+                          <Link to={`${data.bookId}`}>Read More</Link>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="col-xs-4 col-sm-4 col-lg-4">
-                  <div className="card" id="recomendedcard">
-                    <img src={foto3} className="card-img-top" alt="Dilan 1991" />
-                    <div className="card-body">
-                      <h5 className="recommend-title">Seni Hidup Minimalis</h5>
-                      <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati aspernatur enim
-                      ullam officia ... </p>
-                      <a className="recomendedcard-read btn" href="#">Read More</a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xs-4 col-sm-4 col-lg-4">
-                  <div className="card" id="recomendedcard">
-                    <img src={foto4} className="card-img-top" alt="Milea" />
-                    <div className="card-body">
-                      <h5 className="recommend-title">Milea</h5>
-                      <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati aspernatur enim
-                      ullam officia ... </p>
-                      <a className="recomendedcard-read btn" href="#">Read More</a>
-                    </div>
-                  </div>
-                </div>
+                  )
+                })}   
               </div>
             </section>
             {/* /.content */}
           </div>
         </div>
-        {/* /.modal */}
-        <div className="modal fade" id="deleteModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Do you want to delete?</h5>
-                <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">If you delete this, you can't be returned</div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" onClick={() => Swal.fire('Success!', 'Success Delete Book!', 'success')}>Delete</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="modal fade" id="cancelModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Do you want to cancel?</h5>
-                <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">Are you serious want to cancel?</div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                <a className="btn btn-danger" id="btn-delete" href="#" data-dismiss="modal" data-toggle="modal" data-target="#CancelModal" onclick="clickstatus()">Cancel</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="modal fade" id="CancelModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Cancel Complete!</h5>
-                <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <img className="check" src="./assets/media/check.png" />
-                <p>Book already Canceled to borrow</p>
-              </div>
-              <div className="modal-footer">
-                <button id="btn" className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="modal fade" id="ModalBook" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
-          <div className="modal-dialog modal-xl" role="document">
-            <div className="modal-content" id="edit-module">
-              <div className="modal-header">
-                <h5 className="modal-title" id="modal-title">Edit Data</h5>
-                <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-lg-2">
-                    <label className="title-module">Url Image</label>
-                  </div>
-                  <div className="col-lg-10">
-                    <input type="text" name="url" className="form-control" placeholder="/assets/background.png" />
-                  </div>
-                </div>
-                <hr className="divider" />
-                <div className="row">
-                  <div className="col-lg-2">
-                    <label className="title-module">Book Tittle</label>
-                  </div>
-                  <div className="col-lg-4">
-                    <input type="text" name="title" className="form-control" placeholder="Dilan 1991" />
-                  </div>
-                </div>
-                <hr className="divider" />
-                <div className="row">
-                  <div className="col-lg-2">
-                    <label className="title-module">Date:</label>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="input-group date" id="datetimepicker4" data-target-input="nearest">
-                      <input type="text" name="date" className="form-control datetimepicker-input" data-target="#datetimepicker4" />
-                      <div className="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
-                        <div className="input-group-text"><i className="fa fa-calendar" /></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr className="divider" />
-                <div className="row">
-                  <div className="col-lg-2">
-                    <label className="title-module">Category</label>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="form-group">
-                      <select className="form-control" name="category">
-                        <option value>Choose Category</option>
-                        <option value="Novel">Novel</option>
-                        <option value="Comic Book">Comic Book</option>
-                        <option value="Detective and Mystery">Detective and Mystery</option>
-                        <option value="Historical Fiction">Historical Fiction</option>
-                        <option value="Horror">Horror</option>
-                        <option value="literary Fiction">literary Fiction</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <hr className="divider" />
-                <div className="row">
-                  <div className="col-lg-2">
-                    <label className="title-module">Description</label>
-                  </div>
-                  <hr className="divider" />
-                  <div className="col-lg-10">
-                    <textarea name="description" className="ckeditor" cols={50} rows={5} placeholder="Type Here" defaultValue={""} />
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                <button id="confirmBook" className="btn btn-warning" data-dismiss="modal" onClick={() => Swal.fire('Success!', 'Success Edit Book Data!', 'success')}>Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
+
         <div className="modal fade" id="BorrowModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabesl" aria-hidden="true">
           <div className="modal-dialog modal-md" role="document">
             <div className="modal-content" id="edit-module">
@@ -303,7 +169,7 @@ class Detail extends Component {
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
                   <button type="submit" className="btn btn-warning" id="btn-delete" href="#" data-dismiss="modal" onClick={() => Swal.fire({
                     title: "Success Borrow Book!",
-                    text: "You Already Success to borrow this book!",
+                    text: "Borrowed Book Success!",
                     icon: "success",
                     buttons: true,
                   })}>Confirm</button>
@@ -312,6 +178,7 @@ class Detail extends Component {
             </div>
           </div>
         </div>
+        
       </div>
     )
   }

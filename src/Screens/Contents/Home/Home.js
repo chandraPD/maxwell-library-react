@@ -121,7 +121,7 @@ class Home extends Component {
                         <div className="filtr-item list-book" />
                         <Link to={`Detail/${data.bookId}`}>
                           <img
-                            src="https://aimint.org/za/wp-content/uploads/sites/16/2016/04/image-placeholder-vertical.jpg"
+                            src={data.imgDetail}
                             className="img-fluid img-book"
                             alt="white sample"
                           />
@@ -255,7 +255,7 @@ class Home extends Component {
                       <div className="carousel-cell">
                         <Link to={`Detail/${data.bookId}`}>
                           <img
-                            src="https://img.wattpad.com/cover/217637593-176-k15446.jpg"
+                            src={data.imgDetail}
                             className="list-book-bottom carousel-cell-image"
                             alt="white sample"
                           />

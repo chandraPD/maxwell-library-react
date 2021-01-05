@@ -17,10 +17,10 @@ class BookManagement extends Component {
       rows: [],
       results: [],
       isLoading: true,
-      category: []
+      category: [],
     };
 
-    this.bookChange = this.bookChange.bind(this)
+    this.bookChange = this.bookChange.bind(this);
   }
 
   componentDidMount() {
@@ -45,10 +45,12 @@ class BookManagement extends Component {
   }
 
   async getCategory() {
-    let fetchCategory = await axios.get('http://localhost:8080/category/get-all-active')
-    console.log(fetchCategory)
-    const resultCategory = fetchCategory.data    
-    this.setState({category: resultCategory})    
+    let fetchCategory = await axios.get(
+      "http://localhost:8080/category/get-all-active"
+    );
+    console.log(fetchCategory);
+    const resultCategory = fetchCategory.data;
+    this.setState({ category: resultCategory });
   }
 
   fetchData() {
@@ -77,9 +79,14 @@ class BookManagement extends Component {
               icon="trash"
               dataToggle="modal"
               dataTarget="#modal-delete"
-              onClick = {() => this.getBook(book.bookId)}
+              onClick={() => this.getBook(book.bookId)}
             />
-            <Action type="info" title="Detail" icon="eye" link={`BookDetail/${book.bookId}`}/>
+            <Action
+              type="info"
+              title="Detail"
+              icon="eye"
+              link={`BookDetail/${book.bookId}`}
+            />
           </div>
         </td>
       );
@@ -88,7 +95,7 @@ class BookManagement extends Component {
       row.push(<td className="text-center">{book.author}</td>);
       row.push(<td className="text-justify">{book.description}</td>);
       row.push(<td className="text-center">{book.imgBanner}</td>);
-      row.push(<td className="text-center">{book.imgDetail}</td>);
+      row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
       row.push(<td className="text-center">{book.publishDate}</td>);
       row.push(<td className="text-center">{book.qty}</td>);
       row.push(<td className="text-center">{book.categoryEntity.category}</td>);
@@ -105,25 +112,22 @@ class BookManagement extends Component {
   };
 
   getBook = (id) => {
-    axios.get('http://localhost:8080/book/get-by-id/' + id)
-          .then((response) => {
-            console.log(response);
-            this.setState({
-              author: response.data.author,
-              description: response.data.description,
-              imgBanner: response.data.imgBanner,
-              imgDetail: response.data.imgDetail,
-              publishDate : response.data.publishDate,
-              qty: response.data.qty,
-              statusBook: response.data.statusBook,
-              title: response.data.title,
-              categoryId: response.data.categoryEntity.categoryId,
-              bookId: id
-            })
-          })
-  }
-
- 
+    axios.get("http://localhost:8080/book/get-by-id/" + id).then((response) => {
+      console.log(response);
+      this.setState({
+        author: response.data.author,
+        description: response.data.description,
+        imgBanner: response.data.imgBanner,
+        imgDetail: response.data.imgDetail,
+        publishDate: response.data.publishDate,
+        qty: response.data.qty,
+        statusBook: response.data.statusBook,
+        title: response.data.title,
+        categoryId: response.data.categoryEntity.categoryId,
+        bookId: id,
+      });
+    });
+  };
 
   updateBook = (id) => {
     const token =
@@ -141,23 +145,24 @@ class BookManagement extends Component {
       qty: this.state.qty,
       statusBook: this.state.statusBook,
       title: this.state.title,
-      categoryId: this.state.categoryId
-    }
+      categoryId: this.state.categoryId,
+    };
 
-    axios.put('http://localhost:8080/book/update-book/' + id, book, config)
-          .then((response) => {
-            console.log(response)
-          })
-
-  }
+    axios
+      .put("http://localhost:8080/book/update-book/" + id, book, config)
+      .then((response) => {
+        console.log(response);
+      });
+  };
 
   deleteBook = (id) => {
-    axios.put('http://localhost:8080/book/delete-book/' + id)
-          .then((response) => {
-            console.log(response)
-            window.location.reload()
-          })
-  }
+    axios
+      .put("http://localhost:8080/book/delete-book/" + id)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      });
+  };
 
   handleChange(field, e) {
     let fields = this.state.fields;
@@ -206,9 +211,9 @@ class BookManagement extends Component {
 
   contactSubmit(e) {
     let fields = this.state.fields;
-    let user = JSON.parse(localStorage.getItem('user'));
+    let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(token)
+    console.log(token);
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -226,7 +231,7 @@ class BookManagement extends Component {
         statusBook: fields["statusBook"],
         title: fields["title"],
         categoryId: fields["categoryId"],
-        publishDate: fields["publishDate"]
+        publishDate: fields["publishDate"],
       };
 
       console.log(book);
@@ -235,19 +240,27 @@ class BookManagement extends Component {
         .post("http://localhost:8080/book/add-book", book, config)
         .then((response) => {
           console.log(response);
-        });
-
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Your Data has been Added",
-        confirmButtonText: `OK`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
-      });
-    } else {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Your Data has been Added",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        }).catch((error) =>
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Book already exist!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $("#modal-add").modal("toggle");
+          }
+        })
+      );
     }
   }
 
@@ -398,12 +411,20 @@ class BookManagement extends Component {
 
                     <div className="form-group">
                       <label htmlFor="inputCategoryId">Category</label>
-                      <select name="categoryId" className="form-control" id="inputCategoryId" value={this.state.fields["categoryId"]} onChange={this.handleChange.bind(this, "categoryId")}>
+                      <select
+                        name="categoryId"
+                        className="form-control"
+                        id="inputCategoryId"
+                        value={this.state.fields["categoryId"]}
+                        onChange={this.handleChange.bind(this, "categoryId")}
+                      >
                         <option value="null">Choose Category</option>
                         {category.map((category) => {
                           return (
-                            <option value={category.categoryId}>{category.category}</option>
-                          )
+                            <option value={category.categoryId}>
+                              {category.category}
+                            </option>
+                          );
                         })}
                       </select>
                       <span style={{ color: "red" }}>
@@ -493,8 +514,14 @@ class BookManagement extends Component {
                     </div> */}
 
                     <div className="form-group">
-                    <label htmlFor="inputStatusBook">Status Book</label>
-                      <select name="statusBook" className="form-control" id="inputStatusBook" value={this.state.fields["statusBook"]} onChange={this.handleChange.bind(this, "statusBook")}>
+                      <label htmlFor="inputStatusBook">Status Book</label>
+                      <select
+                        name="statusBook"
+                        className="form-control"
+                        id="inputStatusBook"
+                        value={this.state.fields["statusBook"]}
+                        onChange={this.handleChange.bind(this, "statusBook")}
+                      >
                         <option value="null">Choose Status</option>
                         <option value="Available">Available</option>
                         <option value="Unavailable">Unavailable</option>
@@ -503,8 +530,6 @@ class BookManagement extends Component {
                         {this.state.errors["categoryId"]}
                       </span>
                     </div>
-
-                    
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">
@@ -746,7 +771,6 @@ class BookManagement extends Component {
           {/* <!-- /.modal-dialog --> */}
         </div>
         {/* <!-- /.modal --> */}
-
       </div>
     );
   }
