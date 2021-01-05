@@ -12,6 +12,7 @@ class Payment extends Component {
       let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
       this.state = {
+         balance: '',
          invoiceId: '',
          invoiceNeedPaid: [],
          dataInvoice: [],
@@ -21,11 +22,9 @@ class Payment extends Component {
    }
 
    componentDidMount() {
-      let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
       const invoiceId = this.props.match.params.invoiceId;
       this.fetchDataInvoiceNeedPaid();
-
+      this.getBalance();
       if (invoiceId) {
          this.setState({ invoiceId: invoiceId });
          this.getDetailInvoiceByInvoiceId(invoiceId);
@@ -40,11 +39,21 @@ class Payment extends Component {
 
    handleChange = (event) => {
       var invoiceId = event.target.value;
+      this.setState({ invoiceId: invoiceId });
       if (invoiceId === "") {
          return this.setState({ dataInvoice: "", dataDetailInvoice: "" });
       } else {
          this.getDetailInvoiceByInvoiceId(invoiceId);
       }
+   }
+
+   async getBalance() {
+      const token = this.state.userToken;
+      const config = {
+         headers: { Authorization: `Bearer ${token}` }
+      }
+      const balance = await Axios.get('http://localhost:8080/top_up_management/getBalance', config);
+      this.setState({ balance: balance.data });
    }
 
    async fetchDataInvoiceNeedPaid() {
@@ -54,6 +63,7 @@ class Payment extends Component {
       }
       const getData = await Axios.get('http://localhost:8080/invoice/user/get-all-need-paid', config);
       this.setState({ invoiceNeedPaid: getData.data.data });
+
    }
 
    async getDetailInvoiceByInvoiceId(invoiceId) {
@@ -70,7 +80,10 @@ class Payment extends Component {
       }
    }
 
-   paymentSuccessful() {
+   confirmPaid() {
+
+
+
       Swal.fire("Success", "Your Payment has been Accepted", "success")
    }
 
@@ -94,8 +107,9 @@ class Payment extends Component {
    }
 
    render() {
-      const { invoiceId, invoiceNeedPaid, dataInvoice, dataDetailInvoice } = this.state;
+      const { invoiceId, invoiceNeedPaid, dataInvoice, dataDetailInvoice, balance } = this.state;
       let cardBody, action;
+
       if (dataInvoice != "") {
 
          if (dataInvoice.statusInvoice === "Waiting For Payment") {
@@ -289,7 +303,7 @@ class Payment extends Component {
                            <div className="col-sm-6">
                               <div className="form-group balance-display">
                                  <label>Current Balance: </label>
-                                 <p className="balance-value">Rp. 50.000</p>
+                                 <p className="balance-value"> {this.formatRupiah(balance)} </p>
                               </div>
                            </div>
                         </div>
@@ -320,13 +334,13 @@ class Payment extends Component {
                               <tbody>
                                  <tr>
                                     <td>Your Current Balance</td>
-                                    <td>Rp. 50.000</td>
+                                    <td>{this.formatRupiah(balance)}</td>
                                  </tr>
                                  <tr>
                                     <td>
                                        <b>Invoice Total</b>
                                     </td>
-                                    <td>Rp. 20.000</td>
+                                    <td>{this.formatRupiah(`${dataInvoice.grandTotal}`)}</td>
                                  </tr>
                               </tbody>
                            </table>
@@ -346,64 +360,6 @@ class Payment extends Component {
                            id="btn-pay"
                            data-dismiss="modal"
                            onClick={() => this.paymentSuccessful()}
-                        >
-                           Confirm
-                </button>
-                     </div>
-                  </div>
-                  {/* <!-- /.modal-content --> */}
-               </div>
-               {/* <!-- /.modal-dialog --> */}
-            </div>
-            {/* <!-- /.modal --> */}
-
-            {/* <!--Modal Declined--> */}
-            <div className="modal fade" id="modal-decline">
-               <div className="modal-dialog">
-                  <div className="modal-content">
-                     <div className="modal-header">
-                        <h4 className="modal-title">Confirm Payment</h4>
-                        <button
-                           type="button"
-                           className="close"
-                           data-dismiss="modal"
-                           aria-label="Close"
-                        >
-                           <span aria-hidden="true">&times;</span>
-                        </button>
-                     </div>
-                     <div className="modal-body">
-                        <div className="card-body">
-                           <table className="table table-bordered table-striped">
-                              <tbody>
-                                 <tr>
-                                    <td>Your Current Balance</td>
-                                    <td>Rp. 10.000</td>
-                                 </tr>
-                                 <tr>
-                                    <td>
-                                       <b>Invoice Total</b>
-                                    </td>
-                                    <td>Rp. 20.000</td>
-                                 </tr>
-                              </tbody>
-                           </table>
-                        </div>
-                     </div>
-                     <div className="modal-footer justify-content-between">
-                        <button
-                           type="button"
-                           className="btn btn-default"
-                           data-dismiss="modal"
-                        >
-                           Cancel
-                </button>
-                        <button
-                           type="submit"
-                           className="btn btn-warning"
-                           id="btn-declined"
-                           data-dismiss="modal"
-                           onClick={() => this.paymentDeclined()}
                         >
                            Confirm
                 </button>
