@@ -18,7 +18,7 @@ class FineManagement extends Component {
             data: [],
             rows: [],
             results: [],
-            userToken : userToken
+            userToken: userToken
         };
     }
     componentDidMount() {
@@ -40,22 +40,23 @@ class FineManagement extends Component {
             'success'
         );
     }
+    
     async fetchDataInvoice() {
 
         const token = this.state.userToken;
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         }
-        const getData = await Axios.get('http://localhost:8080/invoice/user/get-all', config);
-        const resultInvoice = getData.data.data;
-
-        this.setState({ data: resultInvoice });
-        $('#example1').DataTable().destroy();
-        this.fetchData();
-        $("#example1").DataTable({
-            responsive: true,
-            autoWidth: false,
-        });
+        await Axios.get('http://localhost:8080/invoice/user/get-all', config)
+            .then((getData) => {
+                const resultInvoice = getData.data.data;
+                this.setState({ data: resultInvoice });
+                this.fetchData();
+                $("#example1").DataTable({
+                    responsive: true,
+                    autoWidth: false,
+                });
+            });
     }
 
     fetchData = () => {
