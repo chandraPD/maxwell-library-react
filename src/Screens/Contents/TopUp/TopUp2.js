@@ -10,6 +10,11 @@ import {
 import { ProgressBar } from 'react-bootstrap';
 import validate from './Validate'
 
+import { MDBIcon } from "mdbreact";
+
+const renderError = ({ meta: { touched, error } }) =>
+  touched && error ? <span><MDBIcon icon="exclamation-circle"/> {error}</span> : false;
+
 
 const TopUp2 = (props) => {
     console.log(props)
@@ -83,10 +88,11 @@ const TopUp2 = (props) => {
         <img src="https://www.clipartmax.com/png/middle/223-2235279_cash-in-hand-icon.png" alt="" style={{ height: '2rem' }} />
             Cash
           </label>
-              </div>
-              </div>
-              </div>
+              </div>              
+              </div>              
+              </div>              
             </div>
+            <Field name="payment" component={renderError}/>
           </div>
                 </div>
                 <Button color="dark" className="btn-pill pull-right action-button" type="submit" style={{}}>
