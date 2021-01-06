@@ -13,6 +13,12 @@ img.check{
     margin-left: 120px;
 }
 
+.max-desc{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 p{
     text-align: center;
     margin-left: 0.2rem;
@@ -21,14 +27,14 @@ p{
 img.big-preview{
     width: 100%;
     background-size: cover;
-    background-image: url(../../../Assets/Media/books/covernya.png);
+    background-image: url(https://marshalledc.org/sites/default/files/banner/mountains.jpg);
     max-height: 350px;
     max-width: 100%;
 
 }
 
 .category {
-	width:60px;
+	width:100px;
 	height:20px;
 	bottom:40px;
     right:40px;
@@ -147,8 +153,8 @@ ul.menuhead li a:hover {
 }
 
 #recomendedcard img{
-    height: 18rem;
-    width: 100%;
+    height: 26rem;
+    width: 70%;
     margin: auto;
 }
 
