@@ -68,7 +68,7 @@ class MainNavigation extends Component {
                                 <Route path='/AdminProfile'>
                                     <AdminProfile/>
                                 </Route>
-                                <Route path='/Detail'>
+                                <Route path='/Detail/:bookId'>
                                     <Detail />
                                 </Route>
                                 <Route path='/RentManagement'>
@@ -83,7 +83,7 @@ class MainNavigation extends Component {
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
                                 </Route>
-                                <Route path='/TopUpManagement'>
+                                <Route path='/TopUpManagement'>                                    
                                     <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>
