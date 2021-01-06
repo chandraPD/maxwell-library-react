@@ -87,7 +87,7 @@ class BookManagement extends Component {
           </div>
         </td>
       );
-      row.push(<td className="text-center">{book.bookId}</td>);
+      row.push(<td className="text-center">{book.bookCode}</td>);
       row.push(<td className="text-center">{book.title}</td>);
       row.push(<td className="text-center">{book.author}</td>);
       row.push(<td className="text-justify" style={{width: "100%"}}>{book.description}</td>);
