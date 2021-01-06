@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import { ProgressBar } from 'react-bootstrap';
 import validate from './Validate'
+import FormInput from './FormInput'
 
 const TopUp4 = (props) => {
   const { handleSubmit, pristine, previousPage, submitting } = props;
@@ -36,7 +37,7 @@ const TopUp4 = (props) => {
               </label>
               </div>
               <div className="col-sm-8 float-right">
-              <Field name="passwordconfirm" component="input" type="password"  />
+              <Field name="passwordconfirm" component={FormInput} type="password"  />
               </div>
               </div>
             </div>
@@ -51,7 +52,7 @@ const TopUp4 = (props) => {
               </div>
 
               <div className="col-md-8 float-right">
-              <Field name="passwordconfirm2" component="input" type="password" />
+              <Field name="passwordconfirm2" component={FormInput} type="password" />
               </div>
               </div>
             </div>
