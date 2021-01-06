@@ -14,6 +14,7 @@ class Home extends Component {
   
     this.state = {
        dataTop: [],
+       dataOld: [],
        allBook: []
     }
   }
@@ -22,6 +23,7 @@ class Home extends Component {
   componentDidMount() {
     this.getTopFive();
     this.getAllBook();
+    this.getOldestFive();
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
@@ -31,6 +33,12 @@ class Home extends Component {
     let fetchTop = await Axios.get('http://localhost:8080/book/get-recent-five')
     const resultTop = fetchTop.data      
     this.setState({dataTop: resultTop})      
+  }
+
+  async getOldestFive() {
+    let fetchOld = await Axios.get('http://localhost:8080/book/get-oldest-five')
+    const resultOld = fetchOld.data
+    this.setState({dataOld: resultOld})
   }
 
   async getAllBook() {
@@ -46,7 +54,7 @@ class Home extends Component {
       initialIndex: 2,
     };
 
-    const { dataTop, allBook } = this.state
+    const { dataTop, allBook, dataOld } = this.state
 
     return (
       <div className="content-wrapper">
@@ -108,7 +116,7 @@ class Home extends Component {
             <div className="list-book-content">
               <div className="col-12">
                 <div className="custom-flex2">
-                  <h2 className="title-container">Top Picks For You</h2>
+                  <h2 className="title-container">Recently Added</h2>
                   <h4 className="title-container">
                     Stories sparking conversation
                   </h4>
@@ -148,7 +156,7 @@ class Home extends Component {
               </div>
               <div className="hero-book">
                 <div className="hero-book-cover">
-                  <Link to="Detail">
+                  <Link to="Detail/25">
                     <img
                       src="https://img.wattpad.com/cover/235119477-416-k713259.jpg"
                       alt="Conquer Dream, With Bos! cover"
@@ -156,13 +164,13 @@ class Home extends Component {
                   </Link>
                 </div>
                 <div>
-                  <a
+                  <Link
                     className="title"
-                    href="detail.html"
+                    to='Detail/25'
                     aria-label="Read Conquer Dream, With Bos!"
                   >
                     Conquer Dream, With Bos!
-                  </a>
+                  </Link>
                   <br />
                   <p className="description">
                     Penangkapan mendadak kedua orang tua yang terseret di sebuah
@@ -174,63 +182,32 @@ class Home extends Component {
                     bangkit untuk adik-adiknya. Chayla berusaha mengembalikan
                     takdir...
                   </p>
-                  <span className="badge category-book">fiction</span>
+                  <span className="badge category-book">Romance</span>
                 </div>
               </div>
             </div>
             <div className="filter-container p-0 row custom-flex">
-              <div className="top-seller">
-                <div className="filtr-item list-book" />
-                <Link to="Detail">
-                  <img
-                    src="https://img.wattpad.com/cover/138766480-200-k262515.jpg"
-                    className="img-fluid img-book"
-                    alt="white sample"
-                  />
-                  <span className="badge  category-book">fiction</span>
-                </Link>
-              </div>
-              <div className="filtr-item list-book">
-                <Link to="Detail">
-                  <img
-                    src="https://img.wattpad.com/cover/225027823-200-k139088.jpg"
-                    className="img-fluid img-book"
-                    alt="white sample"
-                  />
-                </Link>
-                <span className="badge  category-book">romance</span>
-              </div>
-              <div className="filtr-item list-book">
-                <Link to="Detail">
-                  <img
-                    src="https://img.wattpad.com/cover/142217672-200-k469744.jpg"
-                    className="img-fluid img-book"
-                    alt="white sample"
-                  />
-                </Link>
-                <span className="badge  category-book">fantasy</span>
-              </div>
-              <div className="filtr-item list-book">
-                <Link to="Detail">
-                  <img
-                    src="https://img.wattpad.com/cover/164853306-200-k69310.jpg"
-                    className="img-fluid img-book"
-                    alt="white sample"
-                  />
-                </Link>
-                <span className="badge  category-book">novel</span>
-              </div>
-              <div className="filtr-item list-book">
-                <Link to="Detail">
-                  <img
-                    src="https://img.wattpad.com/cover/143926052-200-k378110.jpg"
-                    className="img-fluid img-book"
-                    alt="white sample"
-                  />
-                </Link>
-                <span className="badge  category-book">novel</span>
-              </div>
-            </div>
+             
+
+                {dataOld.map((data) => {
+                      return (
+                        <div className="top-seller">
+                        <div className="filtr-item list-book" >
+                          <Link to={`Detail/${data.bookId}`}>
+                            <img
+                              src={data.imgDetail}
+                              className="img-fluid img-book"
+                              alt="white sample"
+                            />
+                            <span className="badge category-book">{data.categoryEntity.category}</span>
+                          </Link>
+                        </div>
+                        </div>
+                      )
+                    })}
+                    
+    
+            
             <div className="books-nf" style={{ display: 'none' }}>
               <h3 className="book-not-found">Oops, Book Not Found</h3>
             </div>
@@ -266,8 +243,10 @@ class Home extends Component {
               </Flickity>
             </div>
           </div>
+          </div>
         </section>
       </div>
+
     );
   }
 }

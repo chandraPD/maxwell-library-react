@@ -16,7 +16,6 @@ class BookManagement extends Component {
       data: [],
       rows: [],
       results: [],
-      isLoading: true,
       category: [],
     };
 
@@ -33,7 +32,6 @@ class BookManagement extends Component {
       "http://localhost:8080/book/get-all-active"
     );
     console.log(fetchedData);
-    this.setState.isLoading = false;
     const resultUser = fetchedData.data;
     this.setState({ data: resultUser });
     $("#example1").DataTable().destroy();
@@ -58,7 +56,6 @@ class BookManagement extends Component {
     let result = this.state.data;
     var no = 1;
     result.forEach((book) => {
-      this.setState({ isLoading: true });
       let row = [];
 
       row.push(<td className="text-center">{no++}</td>);
@@ -93,8 +90,8 @@ class BookManagement extends Component {
       row.push(<td className="text-center">{book.bookId}</td>);
       row.push(<td className="text-center">{book.title}</td>);
       row.push(<td className="text-center">{book.author}</td>);
-      row.push(<td className="text-justify">{book.description}</td>);
-      row.push(<td className="text-center">{book.imgBanner}</td>);
+      row.push(<td className="text-justify" style={{width: "100%"}}>{book.description}</td>);
+      row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
       row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
       row.push(<td className="text-center">{book.publishDate}</td>);
       row.push(<td className="text-center">{book.qty}</td>);
@@ -102,7 +99,6 @@ class BookManagement extends Component {
       results.push(row);
     });
     this.setState({ rows: results });
-    this.setState({ isLoading: false });
   }
 
   bookChange = (event) => {
@@ -110,6 +106,22 @@ class BookManagement extends Component {
       [event.target.name]: event.target.value,
     });
   };
+
+  resetModal() {
+    let fields = this.state.fields
+    fields["title"] = ""
+    fields["author"] = ""
+    fields["categoryId"] = ""
+    fields["statusBook"] = ""
+    fields["description"] = ""
+    fields["publishDate"] = ""
+    fields["statusBook"] = ""
+    fields["imgBanner"] = ""
+    fields["imgDetail"] = ""
+    fields["title"] = ""
+
+    this.setState({fields: fields})
+  }
 
   getBook = (id) => {
     axios.get("http://localhost:8080/book/get-by-id/" + id).then((response) => {
@@ -130,8 +142,8 @@ class BookManagement extends Component {
   };
 
   updateBook = (id) => {
-    const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MjQwMTkxLCJleHAiOjE2MDk4NDQ5OTF9.bWFIxMvfoxByjHi6u7SHJH8xBwed44RmK2SAt69HsaZ5JwaO9eECOCxUW74vQoLthrthuLAiIIgyoY41qB1EpQ";
+    let user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -152,6 +164,17 @@ class BookManagement extends Component {
       .put("http://localhost:8080/book/update-book/" + id, book, config)
       .then((response) => {
         console.log(response);
+        $("#modal-edit").modal("toggle");
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your Data has been Updated",
+          confirmButtonText: `OK`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
       });
   };
 
@@ -160,7 +183,16 @@ class BookManagement extends Component {
       .put("http://localhost:8080/book/delete-book/" + id)
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your Data has been Deleted",
+          confirmButtonText: `OK`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
       });
   };
 
@@ -393,22 +425,6 @@ class BookManagement extends Component {
                       </div>
                     </div>
 
-                    {/* <div className="form-group">
-                      <label htmlFor="inputCategoryId">Category ID</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputCategoryId"
-                        name="categoryId"
-                        placeholder="Enter Category ID"
-                        onChange={this.handleChange.bind(this, "categoryId")}
-                        value={this.state.fields["categoryId"]}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["categoryId"]}
-                      </span>
-                    </div> */}
-
                     <div className="form-group">
                       <label htmlFor="inputCategoryId">Category</label>
                       <select
@@ -497,22 +513,6 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    {/* <div className="form-group">
-                      <label htmlFor="inputStatusBook">Status Book</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputStatusBook"
-                        name="statusBook"
-                        placeholder="Enter Status Book"
-                        onChange={this.handleChange.bind(this, "statusBook")}
-                        value={this.state.fields["statusBook"]}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["statusBook"]}
-                      </span>
-                    </div> */}
-
                     <div className="form-group">
                       <label htmlFor="inputStatusBook">Status Book</label>
                       <select
@@ -537,7 +537,7 @@ class BookManagement extends Component {
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
-                    // onClick={resetModal()}
+                    onClick={() => this.resetModal()}
                   >
                     Close
                   </button>
@@ -609,6 +609,28 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
+                      <label htmlFor="editCategoryId">Category</label>
+                      <select
+                        name="categoryId"
+                        className="form-control"
+                        id="editCategoryId"
+                        value={this.state.categoryId}
+                        onChange={this.bookChange}
+                      >
+                        {category.map((category) => {
+                          return (
+                            <option value={category.categoryId}>
+                              {category.category}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["categoryId"]}
+                      </span>
+                    </div>
+
+                    <div className="form-group">
                       <label htmlFor="editDescription">Description</label>
                       <textarea
                         className="form-control"
@@ -675,17 +697,18 @@ class BookManagement extends Component {
 
                     <div className="form-group">
                       <label htmlFor="editStatusBook">Status Book</label>
-                      <input
-                        type="text"
+                      <select
+                        name="statusBook"
                         className="form-control"
                         id="editStatusBook"
-                        name="statusBook"
-                        placeholder="Enter Status Book"
-                        onChange={this.bookChange}
                         value={this.state.statusBook}
-                      />
+                        onChange={this.bookChange}
+                      >
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                      </select>
                       <span style={{ color: "red" }}>
-                        {this.state.errors["statusBook"]}
+                        {this.state.errors["categoryId"]}
                       </span>
                     </div>
 
@@ -715,6 +738,7 @@ class BookManagement extends Component {
                     Cancel
                   </button>
                   <button
+                    type="button"
                     onClick={() => this.updateBook(this.state.bookId)}
                     className="btn btn-warning"
                   >
@@ -757,8 +781,7 @@ class BookManagement extends Component {
                 </button>
                 <button
                   className="btn btn-warning"
-                  data-toggle="modal"
-                  data-target="#deleteSuccess"
+                  type="button"
                   data-dismiss="modal"
                   onClick={() => this.deleteBook(this.state.bookId)}
                 >

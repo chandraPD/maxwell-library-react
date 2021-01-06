@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./customtable.css";
-import SuccessImg from "../../../Assets/Media/check.png";
 import "bootstrap";
 import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
@@ -19,7 +18,6 @@ class CategoryManagement extends Component {
       data: [],
       rows: [],
       results: [],
-      isLoading: true,
       category: ''
     };
 
@@ -31,20 +29,19 @@ class CategoryManagement extends Component {
   }
 
   async fetchDataCategory() {
-    let fetchedData = await axios.get(
+    await axios.get(
       "http://localhost:8080/category/get-all-active"
-    );
-    console.log(fetchedData);
-    this.setState.isLoading = false;
-    const resultCategory = fetchedData.data;
-    this.setState({ data: resultCategory });
-
-    $("#example1").DataTable().destroy();
-    this.fetchData();
-    $("#example1").DataTable({
-      responsive: true,
-      autoWidth: false,
-    });
+    ).then((response) => {
+      console.log(response)
+      this.setState({data: response.data})
+      this.fetchData()
+      console.log(this.state.data)
+      $("#example1").DataTable({
+        responsive: true,
+        autoWidth: false,
+      });
+    })
+    
   }
 
   fetchData() {
@@ -53,7 +50,6 @@ class CategoryManagement extends Component {
     var no = 1;
 
     result.forEach((category) => {
-      this.setState({ isLoading: true });
       var row = [];
 
       row.push(<td className="text-center">{no++}</td>);
@@ -84,6 +80,7 @@ class CategoryManagement extends Component {
       results.push(row);
     });
     this.setState({ rows: results });
+
   }
 
   getCategory = (id) => {
@@ -127,7 +124,16 @@ class CategoryManagement extends Component {
       .put("http://localhost:8080/category/delete-category/" + id)
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your Data has been Deleted",
+          confirmButtonText: `OK`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
       });
   };
 
@@ -394,9 +400,8 @@ class CategoryManagement extends Component {
                   Cancel
                 </button>
                 <button
+                  type="button"
                   className="btn btn-warning"
-                  data-toggle="modal"
-                  data-target="#deleteSuccess"
                   data-dismiss="modal"
                   onClick={() => this.deleteCategory(this.state.categoryId)}
                 >
@@ -409,47 +414,7 @@ class CategoryManagement extends Component {
           {/* <!-- /.modal-dialog --> */}
         </div>
         {/* <!-- /.modal --> */}
-
-        {/* <!--Delete Completed--> */}
-        <div
-          className="modal fade"
-          id="deleteSuccess"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabesl"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Delete Complete!
-                </h5>
-                <button
-                  className="close"
-                  type="button"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <img className="check" src={SuccessImg} alt="description" />
-                <p>Data has been deleted</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  type="button"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     );
   }

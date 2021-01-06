@@ -20,7 +20,6 @@ class BookDetail extends Component {
       data: [],
       rows: [],
       results: [],
-      isLoading: true,
       title: "",
     };
 
@@ -34,31 +33,29 @@ class BookDetail extends Component {
   }
 
   async fetchDataBookDetail(bookId) {
-    let fetchedData = await axios.get(
+    await axios.get(
       `http://localhost:8080/book-detail/get-by-book-id/${bookId}`
-    );
-    console.log(fetchedData);
-    
-    var jumlah = fetchedData.data.length
+    ).then((response) => {
+      this.setState({ data: response.data });
+      this.fetchData();
+      $("#example1").DataTable({
+        responsive: true,
+        autoWidth: false,
+      });
 
-    const count = {
-      qty: jumlah
-    }
+      var jumlah = response.data.length
 
-    axios.put("http://localhost:8080/book/update-qty-book/" + bookId, count)
-      .then((response) => {
-        console.log(response)
-      })  
+      const count = {
+        qty: jumlah
+      }
 
-    this.setState.isLoading = false;
-    const resultDetailBook = fetchedData.data;
-    this.setState({ data: resultDetailBook });
-    $("#example1").DataTable().destroy();
-    this.fetchData();
-    $("#example1").DataTable({
-      responsive: true,
-      autoWidth: false,
-    });
+      axios.put("http://localhost:8080/book/update-qty-book/" + bookId, count)
+        .then((response) => {
+          console.log(response)
+        })  
+
+    })
+
   }
 
   fetchData() {
@@ -67,7 +64,6 @@ class BookDetail extends Component {
     var no = 1;
 
     result.forEach((detailBook) => {
-      this.setState({ isLoading: true });
       let row = [];
 
       row.push(<td className="text-center">{no++}</td>);
@@ -100,8 +96,15 @@ class BookDetail extends Component {
       results.push(row);
     });
     this.setState({ rows: results });
-    this.setState({ isLoading: false });
     
+  }
+
+  resetModal() {
+    let fields = this.state.fields
+    fields["typeOfDamage"] = ""
+    fields["descOfDamage"] = ""
+
+    this.setState({fields: fields})
   }
 
   handleChange(field, e) {
@@ -126,6 +129,17 @@ class BookDetail extends Component {
       axios.put('http://localhost:8080/book-detail/update-detail/' + id, detailBook)
         .then((response) => {
             console.log(response)
+            $("#modal-edit").modal("toggle");
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Your Data has been Updated",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
         })
   }
 
@@ -133,7 +147,16 @@ class BookDetail extends Component {
     axios.put('http://localhost:8080/book-detail/delete-detail/' + id)
     .then((response) => {
       console.log(response)
-      window.location.reload()
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Your Data has been Deleted",
+        confirmButtonText: `OK`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     })
   }
 
@@ -332,7 +355,7 @@ class BookDetail extends Component {
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
-                    // onClick={resetModal()}
+                    onClick={() => this.resetModal()}
                   >
                     Close
                   </button>
@@ -366,17 +389,24 @@ class BookDetail extends Component {
               <form id="editDetailBook">
                 <div className="modal-body">
                   <div className="card-body">
+
                     <div className="form-group">
-                      <label htmlFor="editTypeOfDamage">Type Of Damage</label>
-                      <input
-                        type="text"
-                        className="form-control"
+                      <label htmlFor="editTypeOfDamage">Type of Damage</label>
+                      <select
                         name="typeOfDamage"
+                        className="form-control"
                         id="editTypeOfDamage"
                         value={this.state.typeOfDamage}
                         onChange={this.detailBookChange}
-                      />
+                      >
+                        <option value="Minor">Minor</option>
+                        <option value="Major">Major</option>
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["typeOfDamage"]}
+                      </span>
                     </div>
+
                     <div className="form-group">
                       <label htmlFor="editDescOfDamage">Description Of Damage</label>
                       <input
@@ -398,7 +428,7 @@ class BookDetail extends Component {
                   >
                     Cancel
                   </button>
-                  <button onClick={() => this.updateDetailBook(this.state.bookDetailId)} className="btn btn-warning">
+                  <button type="button" onClick={() => this.updateDetailBook(this.state.bookDetailId)} className="btn btn-warning">
                     Save changes
                   </button>
                 </div>
@@ -438,8 +468,7 @@ class BookDetail extends Component {
                 </button>
                 <button
                   className="btn btn-warning"
-                  data-toggle="modal"
-                  data-target="#deleteSuccess"
+                  type="button"
                   data-dismiss="modal"
                   onClick={() => this.deleteDetailBook(this.state.bookDetailId)}
                 >
@@ -452,47 +481,7 @@ class BookDetail extends Component {
           {/* <!-- /.modal-dialog --> */}
         </div>
         {/* <!-- /.modal --> */}
-
-         {/* <!--Delete Completed--> */}
-         <div
-          className="modal fade"
-          id="deleteSuccess"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabesl"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Delete Complete!
-                </h5>
-                <button
-                  className="close"
-                  type="button"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <img className="check" src={SuccessImg} alt="description"/>
-                <p>Data has been deleted</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  type="button"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+         
 
       </div>
     );
