@@ -3,22 +3,23 @@ import "./payment.css";
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
 import { Link, withRouter } from "react-router-dom";
 import Swal from 'sweetalert2'
-import Axios from 'axios';
+import Axios from '../../../Instances/axios-instances';
 import NumberFormat from 'react-number-format';
 
 class Payment extends Component {
+   
+   interval = null;
    constructor() {
       super();
-      let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
       this.state = {
          balance: '',
+         grandTotal: '',
          invoiceId: '',
          invoiceNeedPaid: [],
          dataInvoice: [],
          dataDetailInvoice: [],
-         userToken: userToken
       };
+      this.reNewBalance();
    }
 
    componentDidMount() {
@@ -31,6 +32,7 @@ class Payment extends Component {
       } else {
          this.setState({ invoiceId: "" });
       }
+      this.interval = setInterval(this.reNewBalance, 5000);
    }
 
    formatRupiah = (nilai) => {
@@ -48,43 +50,64 @@ class Payment extends Component {
    }
 
    async getBalance() {
-      const token = this.state.userToken;
-      const config = {
-         headers: { Authorization: `Bearer ${token}` }
-      }
-      const balance = await Axios.get('http://localhost:8080/top_up_management/getBalance', config);
+      const balance = await Axios.get('top_up_management/getBalance');
       this.setState({ balance: balance.data });
    }
 
+
+   componentWillUnmount() {
+      clearInterval(this.interval);
+   }
+
+
+   reNewBalance = () => {
+      this.setState({
+         balance: JSON.parse(localStorage.getItem('balance')),
+      })
+   }
+
    async fetchDataInvoiceNeedPaid() {
-      const token = this.state.userToken;
-      const config = {
-         headers: { Authorization: `Bearer ${token}` }
-      }
-      const getData = await Axios.get('http://localhost:8080/invoice/user/get-all-need-paid', config);
+      const getData = await Axios.get('invoice/user/get-all-need-paid');
       this.setState({ invoiceNeedPaid: getData.data.data });
 
    }
 
    async getDetailInvoiceByInvoiceId(invoiceId) {
       try {
-         const token = this.state.userToken;
-         const config = {
-            headers: { Authorization: `Bearer ${token}` }
-         }
-         const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`, config)
-         const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
-         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
+         const getInvoice = await Axios.get(`invoice/get-by-id/${invoiceId}`)
+         const getInvoiceDetail = await Axios.get(`invoice-detail/get-by-invoice-id/${invoiceId}`)
+         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data, grandTotal: getInvoice.data.data.grandTotal })
       } catch (err) {
          console.log(err);
       }
    }
 
-   confirmPaid() {
+   confirmPaid = () => {
 
+      console.log(this.state.grandTotal);
+      console.log(this.state.balance);
+      if (this.state.grandTotal <= this.state.balance) {
+         Axios.put()
+         Swal.fire("Success", "Your Payment has been Accepted", "success")
+      } else {
+         Swal.fire({
+            icon: 'error',
+            title: 'Declined',
+            text: 'Sorry, Your Current Balance is Insufficient.',
+            showDenyButton: true,
+            showConfirmButton: true,
+            confirmButtonText: `Top Up`,
+            denyButtonText: `OK`
+         }).then((result) => {
+            if (result.isConfirmed) {
+               // this.props.history.push('/TopUp')
+            }
+            else {
 
+            }
+         })
+      }
 
-      Swal.fire("Success", "Your Payment has been Accepted", "success")
    }
 
    paymentDeclined() {
@@ -361,7 +384,7 @@ class Payment extends Component {
                            className="btn btn-warning"
                            id="btn-pay"
                            data-dismiss="modal"
-                           onClick={() => this.paymentSuccessful()}
+                           onClick={this.confirmPaid}
                         >
                            Confirm
                 </button>

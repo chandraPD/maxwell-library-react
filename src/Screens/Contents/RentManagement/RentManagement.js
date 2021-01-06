@@ -4,7 +4,7 @@ import Action from '../../../Components/Datatable/Action'
 import Status from '../../../Components/Datatable/Status'
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
-import Axios from 'axios';
+import Axios from '../../../Instances/axios-instances';
 import $ from 'jquery'
 import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
@@ -12,13 +12,10 @@ class RentManagement extends Component {
 
     constructor() {
         super();
-        let user = JSON.parse(localStorage.getItem('user'))
-        const userToken = user.token;
         this.state = {
             data: [], // Raw data
             rows: [],
             results: [],
-            userToken: userToken
         };
     }
     componentDidMount() {
@@ -26,16 +23,10 @@ class RentManagement extends Component {
     }
 
     acceptRent(id) {
-        const token = this.state.userToken;
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        console.log(token);
-        Axios.put('http://localhost:8080/borrow/acc-act/' + id,null, config)
+        Axios.put('borrow/acc-act/' + id)
             .then((data) => {
                 Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
-                // $("#example1").Datatable().ajax.reload();
-                // window.location.reload();
+                this.fetchData();
             });
     }
 
@@ -47,30 +38,20 @@ class RentManagement extends Component {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                const token = this.state.userToken;
-                const config = {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-                Axios.put('http://localhost:8080/borrow/dec-act/' + id,null, config)
+                Axios.put('borrow/dec-act/' + id)
                     .then((data) => {
                         Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
-                        // $('#example1').Datatable().ajax.reload();
                         window.location.reload()
                     });
             }
         });
     }
 
-
     async fetchData() {
+        $('#example1').DataTable().destroy();
         const results = [];
-
-        const token = this.state.userToken;
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
         var no = 1;
-        await Axios.get('http://localhost:8080/borrow/get-all', config)
+        await Axios.get('borrow/get-all')
             .then((getData) => {
                 const result = getData.data.data;
                 this.setState({ data: result });

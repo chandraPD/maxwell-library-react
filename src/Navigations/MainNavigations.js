@@ -29,6 +29,7 @@ import DonationManagement from '../Screens/Contents/DonationManagement/DonationM
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import PrivateRoute from './PrivateRoute'
+import Axios from '../Instances/axios-instances';
 
 class MainNavigation extends Component {
 
@@ -37,6 +38,27 @@ class MainNavigation extends Component {
         this.state = {
             isAuthenticated :  localStorage.getItem('user')
         };
+      }
+      interval = null;
+
+      componentDidMount() {
+        this.interval = setInterval(this.getBalance, 5000);
+        this.getBalance();
+      }
+  
+      componentWillUnmount() {
+         clearInterval(this.interval);
+      }
+      getBalance = () => {
+        if(JSON.parse(localStorage.getItem('user')) != null){
+            let user = JSON.parse(localStorage.getItem('user'))
+            Axios.get('top_up_management/getBalance')
+            .then((balance) => {
+                localStorage.setItem('balance', JSON.stringify(balance.data));
+            })
+        }else{
+            localStorage.setItem('balance', 0);
+        }
       }
 
     render() {
