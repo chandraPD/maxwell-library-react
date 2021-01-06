@@ -9,7 +9,9 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import Status from '../../../Components/Datatable/Status'
 import Axios from 'axios';
+import { MDBIcon } from "mdbreact";
 import NumberFormat from 'react-number-format';
+import AuthService from '../../../Services/auth.service';
 
 class TopUpManagement extends Component {
   
@@ -27,15 +29,14 @@ class TopUpManagement extends Component {
       headings: [],
       role:"",
       show:true,
+      password:"",
       userToken: user.token
     };
   }
-  componentDidMount() {     
-        
-    
+  componentDidMount() {                 
     this.getAll();
     this.show();
-    this.getRole();
+    this.getRole();    
   }
 
   async getRole(){
@@ -57,18 +58,24 @@ class TopUpManagement extends Component {
     } 
   }
 
-  async getAll(){
+  async getAll(){  
   const token=this.state.userToken;
   const config = {
     headers: { Authorization: `Bearer ${token}` }
-}
-    const getData = await Axios.get('http://localhost:8080/top_up_management/getAll',config);
+}    
     const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
-  
+    await Axios.get('http://localhost:8080/top_up_management/getAll',config).then((getData)=>{
+      const result_topup = getData.data;
+      this.setState({ data: result_topup });
+      this.fetchData(getRole);
+      $("#example1").DataTable({
+        responsive: true,
+        autoWidth: false,
+      });  
+    });    
     console.log(getRole)
-    const result_topup = getData.data;
-    var role=getRole;
-    console.log(result_topup);
+   
+    var role=getRole;    
     console.log(role.data)
     if (role.data=="[ROLE_ADMIN]") {      
       this.setState({role: "[ROLE_ADMIN]" })
@@ -76,15 +83,10 @@ class TopUpManagement extends Component {
       this.setState({role: "[ROLE_USER]" })
     } 
 
-    this.setState({ data: result_topup });
+   
             
-    $("#example1").DataTable().destroy();
-    this.fetchData(getRole);
-    $("#example1").DataTable({
-      responsive: true,
-      autoWidth: false,
-    });
-    
+    // $("#example1").DataTable().destroy();
+      
     // this.fetchData();
   }
 
@@ -235,6 +237,11 @@ class TopUpManagement extends Component {
   }
 
   handleValidation2() {
+    const token=this.state.userToken;
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  }
+    var pass=AuthService.getPassword(config);
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
@@ -251,13 +258,27 @@ class TopUpManagement extends Component {
       errors["PasswordConfirm2"] = "Password Confirm cannot be empty";
     }
 
-    if (fields["PasswordConfirm"]!=fields["PasswordConfirm2"]){
+    if (fields["PasswordConfirm"]!==fields["PasswordConfirm2"]){
       formIsValid = false;
       errors["PasswordConfirm2"] = "Password don't Match";
     }
 
     this.setState({ errors: errors });
     return formIsValid;
+  }
+
+  async validatepass(){
+    let fields = this.state.fields;
+    const token=this.state.userToken;      
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  }
+  const topup = {    
+    user_balance_id: fields["Name"],
+    password: fields["PasswordConfirm"]
+  }
+    var  match=await Axios.post('http://localhost:8080/top_up_management/getPass',topup,config);    
+    return match.data
   }
 
   contactSubmit2(e) {
@@ -272,28 +293,45 @@ class TopUpManagement extends Component {
       const topup = {
         nominal: fields["Nominal"],
         paymentMethod: fields["Payment"],
-        user_balance_id: fields["Name"]
+        user_balance_id: fields["Name"],
+        password: fields["PasswordConfirm"]
       }
-      console.log(topup)
-      Axios.post('http://localhost:8080/top_up/post2', topup,config)
-            .then((response) => {
-              console.log(response);
-            })
-      Swal.fire({
-        title: "Success Save Top Up Data!",
-        text: "You Already Success to save this data!",
-        icon: "success",
-        buttons: true,
-      })
-      .then((isConfirmed) => {
-        if (isConfirmed) {
-          window.location.reload();
-      }
-      })
+      console.log(topup)            
+      this.validatepass().then(x => {       
+        if (x==true) {
+          Axios.post('http://localhost:8080/top_up/post2', topup,config)
+              .then((response) => {
+                console.log(response);
+              })
+        Swal.fire({
+          title: "Success Save Top Up Data!",
+          text: "You Already Success to save this data!",
+          icon: "success",
+          buttons: true,
+        })
+        .then((isConfirmed) => {
+          if (isConfirmed) {
+            window.location.reload();
+        }
+        })
+        } else {
+          Swal.fire({
+            title: "Wrong Password",
+            text: "Failed Wrong Password",
+            icon: "warning",
+            buttons: true,
+          })
+          .then((isConfirmed) => {
+            if (isConfirmed) {
+              window.location.reload();
+          }
+          })
+        }
+    })      
+      
+      
 
-    } else {
-
-    }
+    } 
   }
 
   handleChange2(field, e) {
@@ -343,14 +381,16 @@ class TopUpManagement extends Component {
     this.setState({ fields });    
   } 
 
+  refresh(){
+    window.location.reload();
+  }
+
   render() {
     
-    const { rows,headings,show } = this.state;    
-    
-    return (
+    const { rows,headings,show } = this.state;        
+    return (            
       <div className="wrapper">
-        {/* Navbar */}
-
+        {/* Navbar */}      
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
           {/* Content Header (Page header) */}
@@ -395,10 +435,13 @@ class TopUpManagement extends Component {
                 <div className="modal-body">
                   <div className="row">
                     <div className="col-md-5">
-                      <label className="title-module">Username:</label>
+                      <label className="title-module">ID User:</label>
                     </div>
                     <div className="col-md-7">
-                      <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter Username" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
+                      <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter ID User" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
+                      <span style={{ color: "red" }}>
+                            {this.state.errors["Name"]}
+                          </span>
                     </div>
                   </div>
                   <hr className="divider" />
@@ -434,6 +477,9 @@ class TopUpManagement extends Component {
                               <input type="radio" name="option" id="option6" value="200000" onChange={this.handleChange.bind(this, "Nominal")} />
                               <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Rp. 200000</label>
                             </div>
+                            <span style={{ color: "red" }}>
+                            {this.state.errors["Nominal"]}
+                          </span>
                           </div>
                         </div>
                       </div>
@@ -472,6 +518,9 @@ class TopUpManagement extends Component {
                               <input type="radio" name="option2" id="option-method6" Value="Cash" onChange={this.handleChange.bind(this, "Payment")}  />
                               <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Cash</label>
                             </div>
+                            <span style={{ color: "red" }}>
+                            {this.state.errors["Payment"]}
+                          </span>
                           </div>
                         </div>
                       </div>
@@ -559,7 +608,10 @@ class TopUpManagement extends Component {
                       <label className="title-module">Password:</label>
                     </div>
                     <div className="col-md-7">
-                      <input type="password" id="passwordconfirm" name="name" className="form-control" placeholder="Password" onChange={this.handleChange2.bind(this, "PasswordConfirm")} value={this.state.fields["PasswordConfirm"]} />
+                      <input type="password" id="PasswordConfirm" name="PasswordConfirm" className="form-control" placeholder="Password" onChange={this.handleChange2.bind(this, "PasswordConfirm")} value={this.state.fields["PasswordConfirm"]} />
+                      <span style={{ color: "red" }}>
+                            {this.state.errors["PasswordConfirm"]}
+                          </span>
                     </div>
                   </div>
                   <hr className="divider" />
@@ -568,7 +620,10 @@ class TopUpManagement extends Component {
                       <label className="title-module">Confirm Password:</label>
                     </div>
                     <div className="col-md-7">
-                      <input type="password" id="passwordconfirm2" name="name" className="form-control" placeholder="Confirm Password" onChange={this.handleChange2.bind(this, "PasswordConfirm2")} value={this.state.fields["PasswordConfirm2"]} />
+                      <input type="password" id="PasswordConfirm2" name="PasswordConfirm2" className="form-control" placeholder="Confirm Password" onChange={this.handleChange2.bind(this, "PasswordConfirm2")} value={this.state.fields["PasswordConfirm2"]} />
+                      <span style={{ color: "red" }}>
+                            {this.state.errors["PasswordConfirm2"]}
+                          </span>
                     </div>
                   </div>
                 </div>

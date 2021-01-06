@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import Axios from 'axios';
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -14,8 +15,14 @@ export default (async function showResults(values) {
   const topup = {
     nominal: values.nominal,
     paymentMethod: values.payment,
+  }  
+  const topup2 = {        
+    password: values.passwordconfirm
   }
-  axios.post('http://localhost:8080/top_up/post', topup,config)
+  var  match=Axios.post('http://localhost:8080/top_up_management/getPass',topup2,config);        
+  console.log((await match).data)
+  if ((await match).data==true) {
+    axios.post('http://localhost:8080/top_up/post', topup,config)
         .then((response) => {
           console.log(response);
         })
@@ -31,4 +38,18 @@ export default (async function showResults(values) {
       window.location.href = "/";
   } 
   })
+  } else{
+    Swal.fire({
+      title: "Wrong Password",
+      text: "Password Wrong",
+      icon: "warning",
+      buttons: true,    
+    })
+    .then((isConfirmed) => {
+      if (isConfirmed) {
+        window.location.href = "/";
+    } 
+    })
+  }
+  
 });

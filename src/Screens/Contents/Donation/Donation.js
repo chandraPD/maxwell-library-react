@@ -9,7 +9,7 @@ import axios from 'axios'
 class Donation extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       fields: {},     
     };
@@ -23,7 +23,7 @@ class Donation extends Component {
     var PhoneNumber = document.getElementById('inputPhone').value;
     var DonationNumber = document.getElementById('inputBookbybook').value;
 
-    if (Email == ''|| Name == ''|| PhoneNumber == ''|| DonationNumber == ''){
+    if (Email === ''|| Name === ''|| PhoneNumber === ''|| DonationNumber === ''){
         Swal.fire(
             'Submit Failed !',
             'You should fill in the blank',
