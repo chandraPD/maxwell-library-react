@@ -4,9 +4,38 @@ import './SideBar.style.css'
 import avatarUser from '../../Assets/Media/user/profile.png'
 import logo from '../../Assets/Media/icon/bookshelf.png'
 import { Link } from 'react-router-dom';
+import NumberFormat from 'react-number-format';
 
 export default class SideBar extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      balance : JSON.parse(localStorage.getItem('balance')),
+    }
+  }
+  interval = null;
+
+  componentDidMount() {
+    this.interval = setInterval(this.reNewBalance, 5000);
+  }
+
+  componentWillUnmount() {
+     clearInterval(this.interval);
+  }
+
+  reNewBalance = () => {
+    this.setState({
+      balance : JSON.parse(localStorage.getItem('balance')),
+    })
+  }
+
+  formatRupiah = (nilai) => {
+    return <NumberFormat value={nilai} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />
+ }
+
     render() {
+      const balance = this.state.balance;
         return (
             <aside className="main-sidebar elevation-4 sidebar-light-primary">
   {/* Brand Logo */}
@@ -35,7 +64,7 @@ export default class SideBar extends Component {
             </div>
             <div className="info">
               <Link to="Profile" className="d-block user-name">Niki Zefanya</Link>
-              <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>Rp. 50.000,-</p>
+              <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>{this.formatRupiah(this.state.balance)}</p>
               <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
                 <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
               </Link>
