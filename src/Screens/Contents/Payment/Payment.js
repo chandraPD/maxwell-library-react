@@ -182,6 +182,7 @@ class Payment extends Component {
                                  <th>Book Title</th>
                                  <th>Borrowed On</th>
                                  <th>Due On</th>
+                                 <th>Type</th>
                                  <th>Late By</th>
                                  <th>Fine Amount</th>
                               </tr>
@@ -195,6 +196,7 @@ class Payment extends Component {
                                           <td>{val.title}</td>
                                           <td>{val.borrowedDate}</td>
                                           <td>{val.treshold}</td>
+                                          <td>{val.type}</td>
                                           <td>{val.late} Days</td>
                                           <td>{val.grandTotal}</td>
                                        </tr>

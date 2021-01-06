@@ -25,11 +25,21 @@ class RentManagement extends Component {
         this.fetchData();
     }
 
-    acceptRent() {
-        Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
+    acceptRent(id) {
+        const token = this.state.userToken;
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        console.log(token);
+        Axios.put('http://localhost:8080/borrow/acc-act/' + id,null, config)
+            .then((data) => {
+                Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
+                // $("#example1").Datatable().ajax.reload();
+                // window.location.reload();
+            });
     }
 
-    cancelRent() {
+    cancelRent(id) {
         Swal.fire({
             title: 'Do you want to Cancel this Rent?',
             showCancelButton: true,
@@ -37,7 +47,16 @@ class RentManagement extends Component {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
+                const token = this.state.userToken;
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+                Axios.put('http://localhost:8080/borrow/dec-act/' + id,null, config)
+                    .then((data) => {
+                        Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
+                        // $('#example1').Datatable().ajax.reload();
+                        window.location.reload()
+                    });
             }
         });
     }
@@ -61,8 +80,8 @@ class RentManagement extends Component {
                     var actVal, statusVal = "";
                     if (rent.statusBook === "Waiting Given By Librarian") {
                         actVal = <div className="btn-group btn-group-sm">
-                            <Action type="primary" onClick={this.acceptRent} title="Accept" icon="check-square" />
-                            <Action type="danger" onClick={this.cancelRent} title="Cancel" icon="window-close" /></div>
+                            <Action type="primary" onClick={() => this.acceptRent(rent.borrowedBookId)} title="Accept" icon="check-square" />
+                            <Action type="danger" onClick={() => this.cancelRent(rent.borrowedBookId)} title="Cancel" icon="window-close" /></div>
                         statusVal = <Status type="primary" val="Waiting Given By Librarian" />
                     } else if (rent.statusBook === "Waiting For Return") {
                         actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
@@ -71,7 +90,7 @@ class RentManagement extends Component {
                         actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
                         statusVal = <Status type="orange" val="Need Immediate Returns" />
                     } else if (rent.statusBook === "Waiting Taken By Librarian") {
-                        actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={this.acceptRent} title="Accept" icon="check-square" /><Action type="danger" onClick={this.cancelRent} title="Cancel" icon="window-close" /></div>
+                        actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={() => this.acceptRent(rent.borrowedBookId)} title="Accept" icon="check-square" /></div>
                         statusVal = <Status type="primary" val="Waiting Taken By Librarian" />
                     } else if (rent.statusBook === "Waiting for Payment of Fines") {
                         actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link={`/PaymentDetail/${rent.rent_id}`} title="Payment" icon="file-invoice" /></div>
@@ -103,7 +122,7 @@ class RentManagement extends Component {
                     results.push(row);
                 });
                 this.setState({ rows: results });
-                
+
                 $("#example1").DataTable({
                     responsive: true,
                     autoWidth: false,
