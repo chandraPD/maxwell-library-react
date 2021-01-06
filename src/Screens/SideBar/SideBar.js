@@ -5,19 +5,43 @@ import avatarUser from '../../Assets/Media/user/profile.png'
 import logo from '../../Assets/Media/icon/bookshelf.png'
 import { Link } from 'react-router-dom';
 import NumberFormat from 'react-number-format';
+import Axios from 'axios';
 
 export default class SideBar extends Component {
 
   constructor(props){
+    let user = JSON.parse( localStorage.getItem('user'))  
     super(props);
     this.state = {
       balance : JSON.parse(localStorage.getItem('balance')),
+      show:true,        
+      userToken: user.token
     }
   }
   interval = null;
 
+  async show(){
+    const token=this.state.userToken;
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  }
+      const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
+      var role=getRole;
+      if (role.data=="[ROLE_ADMIN]") {      
+        this.setState({role: "[ROLE_ADMIN]" })
+      } else{
+        this.setState({role: "[ROLE_USER]" })
+      } 
+      if (this.state.role=="[ROLE_USER]") {      
+        this.setState({show:true })
+      } else{
+        this.setState({show:false})
+      }
+    }
+
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
+    this.show();     
   }
 
   componentWillUnmount() {
@@ -36,6 +60,7 @@ export default class SideBar extends Component {
 
     render() {
       const balance = this.state.balance;
+      const { show } = this.state;
         return (
             <aside className="main-sidebar elevation-4 sidebar-light-primary">
   {/* Brand Logo */}
@@ -65,9 +90,10 @@ export default class SideBar extends Component {
             <div className="info">
               <Link to="Profile" className="d-block user-name">Niki Zefanya</Link>
               <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>{this.formatRupiah(this.state.balance)}</p>
-              <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
+              { show ?  <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
                 <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
-              </Link>
+              </Link>: null}
+              
             </div>
           </div>
           {/* Sidebar Menu */}
