@@ -1,28 +1,27 @@
 import React, { Component } from "react";
 import "./customtable.css";
-import SuccessImg from "../../../Assets/Media/check.png";
 import "bootstrap";
 import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
-import $ from 'jquery'
-import 'bootstrap'
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import $ from "jquery";
+import "bootstrap";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 class CategoryManagement extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      fields: {},
+      fields: [],
       errors: {},
       data: [],
       rows: [],
       results: [],
-      isLoading: true,
+      category: ''
     };
 
-    this.categoryChange = this.categoryChange.bind(this)
+    this.categoryChange = this.categoryChange.bind(this);
   }
 
   componentDidMount() {
@@ -30,37 +29,49 @@ class CategoryManagement extends Component {
   }
 
   async fetchDataCategory() {
-    let fetchedData = await axios.get(
-      'http://localhost:8080/category/get-all-active'
-    );
-    console.log(fetchedData)
-    this.setState.isLoading = false;
-    const resultCategory = fetchedData.data;
-    this.setState({ data: resultCategory });
+    await axios.get(
+      "http://localhost:8080/category/get-all-active"
+    ).then((response) => {
+      console.log(response)
+      this.setState({data: response.data})
+      this.fetchData()
+      console.log(this.state.data)
+      $("#example1").DataTable({
+        responsive: true,
+        autoWidth: false,
+      });
+    })
     
-    $('#example1').DataTable().destroy();
-    this.fetchData();
-    $("#example1").DataTable({
-      responsive: true,
-      autoWidth: false,
-    });
   }
 
   fetchData() {
     const results = [];
-    const result = this.state.data
+    const result = this.state.data;
     var no = 1;
 
     result.forEach((category) => {
-      this.setState({ isLoading: true });
       var row = [];
 
       row.push(<td className="text-center">{no++}</td>);
       row.push(
         <td className="text-center py-0 align-middle">
           <div className="btn-group btn-group-sm">
-            <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" onClick={() => this.getCategory(category.categoryId)}/>
-            <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" onClick={() => this.getCategory(category.categoryId)}/>
+            <Action
+              type="success"
+              title="Edit"
+              icon="pen"
+              dataToggle="modal"
+              dataTarget="#modal-edit"
+              onClick={() => this.getCategory(category.categoryId)}
+            />
+            <Action
+              type="danger"
+              title="Delete"
+              icon="trash"
+              dataToggle="modal"
+              dataTarget="#modal-delete"
+              onClick={() => this.getCategory(category.categoryId)}
+            />
           </div>
         </td>
       );
@@ -69,45 +80,74 @@ class CategoryManagement extends Component {
       results.push(row);
     });
     this.setState({ rows: results });
+
   }
 
   getCategory = (id) => {
-    axios.get('http://localhost:8080/category/get-by-id/' + id)
-          .then((response) => {
-            console.log(response);
-            this.setState({
-              category: response.data.category,
-              categoryId: id
-            })
-          })
-  }
+    axios
+      .get("http://localhost:8080/category/get-by-id/" + id)
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          category: response.data.category,
+          categoryId: id,
+        });
+      });
+  };
 
   updateCategory = (id) => {
+
     const category = {
-      category: this.state.category
-    }
+      category: this.state.category,
+    };
 
-    axios.put('http://localhost:8080/category/update-category/' + id, category)
+    axios
+      .put("http://localhost:8080/category/update-category/" + id, category)
       .then((response) => {
-        console.log(response)
-      })
-
-  }
+        console.log(response);
+        $("#modal-edit").modal("toggle");
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your Data has been Updated",
+          confirmButtonText: `OK`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      });
+  };
 
   deleteCategory = (id) => {
-
-    axios.put('http://localhost:8080/category/delete-category/' + id)
-         .then((response) => {
-           console.log(response)
-           window.location.reload()
-         })
-
-  }
+    axios
+      .put("http://localhost:8080/category/delete-category/" + id)
+      .then((response) => {
+        console.log(response);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your Data has been Deleted",
+          confirmButtonText: `OK`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      });
+  };
 
   categoryChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
-    })
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  resetModal() {
+    let fields = this.state.fields;
+    fields["CategoryName"] = "";
+
+    this.setState({fields: fields});
   }
 
   handleValidation() {
@@ -129,40 +169,46 @@ class CategoryManagement extends Component {
     let fields = this.state.fields;
     e.preventDefault();
     if (this.handleValidation()) {
-      $('#modal-add').modal('toggle');
+      $("#modal-add").modal("toggle");
 
       const category = {
-        category: fields["CategoryName"]
-      }
-      console.log(category)
-      axios.post('http://localhost:8080/category/add-category', category)
-           .then((response) => {
-             console.log(response)
-           })
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your Data has been Added',
-        confirmButtonText: `OK`
-      }).then((result) => {
-          if(result.isConfirmed) {
-            window.location.reload()
-          }
-      })
-        
-    } else {
-
+        category: fields["CategoryName"],
+      };
+      console.log(category);
+      axios
+        .post("http://localhost:8080/category/add-category", category)
+        .then((response) => {
+          console.log(response);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Your Data has been Added",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        })
+        .catch((error) =>
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Category already exist!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $("#modal-add").modal("toggle");
+            }
+          })
+        );
     }
   }
-  
 
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
   }
-  
 
   render() {
     const { rows } = this.state;
@@ -179,7 +225,7 @@ class CategoryManagement extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href='/'>Home</a>
+                    <a href="/">Home</a>
                   </li>
                   <li className="breadcrumb-item active">Category</li>
                 </ol>
@@ -231,10 +277,7 @@ class CategoryManagement extends Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form
-                id="addCategory"
-                onSubmit={this.contactSubmit.bind(this)}
-              >
+              <form id="addCategory" onSubmit={this.contactSubmit.bind(this)}>
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
@@ -259,7 +302,7 @@ class CategoryManagement extends Component {
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
-                    // onClick={resetModal()}
+                    onClick={() => this.resetModal()}
                   >
                     Close
                   </button>
@@ -314,7 +357,11 @@ class CategoryManagement extends Component {
                   >
                     Cancel
                   </button>
-                  <button onClick={() => this.updateCategory(this.state.categoryId)} className="btn btn-warning">
+                  <button
+                    type="button"
+                    onClick={() => this.updateCategory(this.state.categoryId)}
+                    className="btn btn-warning"
+                  >
                     Save changes
                   </button>
                 </div>
@@ -353,9 +400,8 @@ class CategoryManagement extends Component {
                   Cancel
                 </button>
                 <button
+                  type="button"
                   className="btn btn-warning"
-                  data-toggle="modal"
-                  data-target="#deleteSuccess"
                   data-dismiss="modal"
                   onClick={() => this.deleteCategory(this.state.categoryId)}
                 >
@@ -368,47 +414,7 @@ class CategoryManagement extends Component {
           {/* <!-- /.modal-dialog --> */}
         </div>
         {/* <!-- /.modal --> */}
-
-        {/* <!--Delete Completed--> */}
-        <div
-          className="modal fade"
-          id="deleteSuccess"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabesl"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Delete Complete!
-                </h5>
-                <button
-                  className="close"
-                  type="button"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <img className="check" src={SuccessImg} alt="description"/>
-                <p>Data has been deleted</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  type="button"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     );
   }
