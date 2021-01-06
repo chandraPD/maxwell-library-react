@@ -8,15 +8,14 @@ import DataTable from "../../../Components/Datatable/Table";
 import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import Status from '../../../Components/Datatable/Status'
-import Axios from 'axios';
 import { MDBIcon } from "mdbreact";
 import NumberFormat from 'react-number-format';
 import AuthService from '../../../Services/auth.service';
+import Axios2 from '../../../Instances/axios-instances';
 
 class TopUpManagement extends Component {
   
-  constructor(props) {
-  let user = JSON.parse( localStorage.getItem('user'))  
+  constructor(props) {  
     super(props);    
     this.state = {      
       fields: {},
@@ -30,9 +29,7 @@ class TopUpManagement extends Component {
       user:[],
       role:"",
       show:true,
-      password:"",
-      name:"",
-      userToken: user.token
+      password:""      
     };
   }
   componentDidMount() {                 
@@ -42,12 +39,8 @@ class TopUpManagement extends Component {
     this.getUser();
   }
 
-  async getRole(){
-    const token=this.state.userToken;
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}
-    const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
+  async getRole(){    
+    const getRole = await Axios2.get('top_up_management/getRole');
     var role=getRole;
     if (role.data=="[ROLE_ADMIN]") {      
       this.setState({role: "[ROLE_ADMIN]" })
@@ -62,12 +55,8 @@ class TopUpManagement extends Component {
   }
 
   async getAll(){  
-  const token=this.state.userToken;
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}    
-    const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
-    await Axios.get('http://localhost:8080/top_up_management/getAll',config).then((getData)=>{
+    const getRole = await Axios2.get('top_up_management/getRole');
+    await Axios2.get('top_up_management/getAll').then((getData)=>{
       const result_topup = getData.data;
       this.setState({ data: result_topup });
       this.fetchData(getRole);
@@ -93,12 +82,8 @@ class TopUpManagement extends Component {
     // this.fetchData();
   }
 
-  getUser(){  
-  const token=this.state.userToken;
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}        
-    Axios.get('http://localhost:8080/user',config).then((getData)=>{
+  getUser(){         
+    Axios2.get('user').then((getData)=>{
       const result_topup = getData.data;
       console.log(getData)
       this.setState({ user: result_topup });
@@ -107,11 +92,7 @@ class TopUpManagement extends Component {
   }
 
   getId = (id) => {
-  const token=this.state.userToken;  
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}
-    Axios.get('http://localhost:8080/top_up_management/getId/' + id)
+    Axios2.get('top_up_management/getId/' + id)
       .then((res) => {
         console.log(res);
         this.setState({
@@ -126,7 +107,7 @@ class TopUpManagement extends Component {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Axios.put('http://localhost:8080/top_up/accept/' + id, res,config)
+        Axios2.put('top_up/accept/' + id, res)
         .then((response) => {
           console.log(response);
         })
@@ -145,12 +126,8 @@ class TopUpManagement extends Component {
       })
   }
 
-  getId2 = (id) => {
-  const token=this.state.userToken;    
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  }
-    Axios.get('http://localhost:8080/top_up_management/getId/' + id)
+  getId2 = (id) => {  
+    Axios2.get('top_up_management/getId/' + id)
       .then((res) => {
         console.log(res);
         this.setState({
@@ -165,7 +142,7 @@ class TopUpManagement extends Component {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Axios.put('http://localhost:8080/top_up/cancel/' + id, res,config)
+        Axios2.put('top_up/cancel/' + id, res)
         .then((response) => {
           console.log(response);
         })
@@ -234,11 +211,7 @@ class TopUpManagement extends Component {
   }
 
   async show(){
-  const token=this.state.userToken;
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}
-    const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
+    const getRole = await Axios2.get('top_up_management/getRole');
     var role=getRole;
     if (role.data=="[ROLE_ADMIN]") {      
       this.setState({role: "[ROLE_ADMIN]" })
@@ -252,12 +225,7 @@ class TopUpManagement extends Component {
     }
   }
 
-  handleValidation2() {
-    const token=this.state.userToken;
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  }
-    var pass=AuthService.getPassword(config);
+  handleValidation2() {    
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
@@ -284,24 +252,16 @@ class TopUpManagement extends Component {
   }
 
   async validatepass(){
-    let fields = this.state.fields;
-    const token=this.state.userToken;      
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  }
+    let fields = this.state.fields;    
   const topup = {    
     user_balance_id: fields["Name"],
     password: fields["PasswordConfirm"]
   }
-    var  match=await Axios.post('http://localhost:8080/top_up_management/getPass',topup,config);    
+    var  match=await Axios2.post('top_up_management/getPass',topup);    
     return match.data
   }
 
-  contactSubmit2(e) {
-    const token=this.state.userToken;      
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  }
+  contactSubmit2(e) {    
     let fields = this.state.fields;
     e.preventDefault();
     if (this.handleValidation2()) {      
@@ -315,7 +275,7 @@ class TopUpManagement extends Component {
       console.log(topup)            
       this.validatepass().then(x => {       
         if (x==true) {
-          Axios.post('http://localhost:8080/top_up/post2', topup,config)
+          Axios2.post('top_up/post2', topup)
               .then((response) => {
                 console.log(response);
               })
@@ -391,16 +351,9 @@ class TopUpManagement extends Component {
     }
   }
 
-  handleDropdownChange(e) {    
-    this.setState({name : e.target.value});
-    console.log(e);
-    console.log(this.state.name)
-  }
-
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
-    console.log(fields)
     this.setState({ fields });    
   } 
 
@@ -410,7 +363,8 @@ class TopUpManagement extends Component {
 
   render() {
     
-    const { rows,headings,show,user } = this.state;            
+    const { rows,headings,show,user } = this.state;    
+    console.log(this.state.user)      
     return (            
       <div className="wrapper">
         {/* Navbar */}      
@@ -460,11 +414,8 @@ class TopUpManagement extends Component {
                     <div className="col-md-5">
                       <label className="title-module">ID User:</label>
                     </div>
-                    <div className="col-md-7">                      
-                    <select id="dropdown" className="custom-select"
-            OnChange={this.handleDropdownChange}>
-              {this.state.user.map(person => <option value={person.userId}>{person.email}</option> )}                           
-            </select>
+                    <div className="col-md-7">
+                      <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter ID User" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
                       <span style={{ color: "red" }}>
                             {this.state.errors["Name"]}
                           </span>

@@ -5,6 +5,7 @@ import avatarUser from '../../Assets/Media/user/profile.png'
 import logo from '../../Assets/Media/icon/bookshelf.png'
 import { Link } from 'react-router-dom';
 import NumberFormat from 'react-number-format';
+import Axios from 'axios';
 
 export default class SideBar extends Component {
 
