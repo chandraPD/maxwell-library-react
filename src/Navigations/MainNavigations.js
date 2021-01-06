@@ -29,6 +29,7 @@ import DonationManagement from '../Screens/Contents/DonationManagement/DonationM
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import PrivateRoute from './PrivateRoute'
+import AuthRoute from './AuthRoute'
 
 class MainNavigation extends Component {
 
@@ -42,9 +43,10 @@ class MainNavigation extends Component {
     render() {
         return ( <Router >
                 <Switch>
-                    <Route path='/auth'>
-                        <Auth />
-                    </Route>
+                    <AuthRoute path='/auth'
+                    authenticated={this.state.isAuthenticated}
+                    component={Auth}>
+                    </AuthRoute>
                     <Route path='/PaymentPrint'>
                         <PaymentInvoicePrint />
                     </Route>
@@ -83,7 +85,7 @@ class MainNavigation extends Component {
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
                                 </Route>
-                                <Route path='/TopUpManagement'>                                    
+                                <Route path='/TopUpManagement'>
                                     <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>

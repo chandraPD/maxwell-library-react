@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/auth/";
+const API_URL = "https://maxwell-backend.herokuapp.com/auth/";
 
 class AuthService {
   login(email, password) {
@@ -9,7 +9,7 @@ class AuthService {
         email,
         password
       })
-      .then(response => {        
+      .then(response => {
         if (response.data.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data.data));
         }
@@ -20,10 +20,11 @@ class AuthService {
 
   logout() {
     localStorage.removeItem("user");
+    window.location.reload();
   }
 
   register(email, password, confirmPassword) {
-    return axios.post(API_URL + "signup", {
+    return axios.post(API_URL + "register", {
       email,
       password,
       confirmPassword
