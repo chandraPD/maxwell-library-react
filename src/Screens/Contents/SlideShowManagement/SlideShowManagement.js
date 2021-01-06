@@ -18,14 +18,22 @@ class SlideShowManagement extends Component {
       rows: [],
       results: [],
       isLoading : true,
+      selectStatus : ""
     };
 
     this.slideShowChange = this.slideShowChange.bind(this);
+    this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
 
    //METHOD TAMBAHAN GET POST UPDATE DELETE  
   componentDidMount() {
     this.fetchDataSlideShow();
+  }
+
+  //SAVE STATUS ACTIVE OR INACTIVE
+  handleDropdownChange(e) {
+    console.log(e);
+    this.setState({selectStatus : e.target.value});
   }
 
   async fetchDataSlideShow() {
@@ -62,9 +70,10 @@ class SlideShowManagement extends Component {
             </td>
           );
           row.push(<td className="text-center py-0 align-middle">
-          <select className="custom-select">
-              <option>Active</option>
-              <option>Inactive</option>
+          <select id="dropdown" className="custom-select"
+            OnChange={this.handleDropdownChange}>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
             </select>
           </td>)
           row.push(<td>{slideshow.title}</td>)
@@ -128,10 +137,18 @@ class SlideShowManagement extends Component {
       }
       console.log(slideshow)
 
-      const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
+      // const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
+      // const config = {
+      //     headers: { Authorization: `Bearer ${token}` }
+      // };
+
+      let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
       const config = {
-          headers: { Authorization: `Bearer ${token}` }
-      };
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
       axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow, config)
           .then((response) => {
             console.log(response)
@@ -155,7 +172,15 @@ class SlideShowManagement extends Component {
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
-    axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id)
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+
+    axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id, config)
       .then((response) => {
         console.log(response.data.data);
         this.setState({
@@ -171,17 +196,25 @@ class SlideShowManagement extends Component {
 
   //METHOD UNTUK UPDATE
   editSlideShow = (id) => {
-    
+   
     const slideshow = {
       title : this.state.title,
       subTitle : this.state.subTitle,
       img : this.state.img
     }
     console.log(slideshow);
-    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow)
+
+    let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
+      const config = {
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
+    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
-    })
+    }).then($("#modal-edit").modal("toggle"));
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -193,11 +226,18 @@ class SlideShowManagement extends Component {
             window.location.reload();
           }
       })
-  }
+}
 
   //METHOD DELETE MENGGUNAKAN SOFTDELETE
   deleteSlideShow = (id) => {
-    axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id)
+    let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
+      const config = {
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
+    axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id,config)
       .then((response) => {
         console.log(response);
         window.location.reload();
@@ -206,7 +246,14 @@ class SlideShowManagement extends Component {
 
   //METHOD DELETE DATA
   deleteDataSlideShow = (id) => {
-    axios.delete('http://localhost:8080/slideshow/delete-data-slideshow/'+ id)
+    let user = JSON.parse( localStorage.getItem('user'))
+      const userToken = user.token;
+      console.log(userToken);
+
+      const config = {
+        headers : { Authorization : `Bearer ${userToken}`}
+      }
+    axios.delete('http://localhost:8080/slideshow/delete-data-slideshow/'+ id, config)
       .then((response) => {
         console.log(response);
         window.location.reload();
@@ -368,7 +415,7 @@ class SlideShowManagement extends Component {
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button id="submitEdit" type="submit" onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
+              <button id="submitEdit" type="button" onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
             </div>
           </form>
         </div>
