@@ -144,6 +144,7 @@ class BookManagement extends Component {
   updateBook = (id) => {
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
+    console.log(token)
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };

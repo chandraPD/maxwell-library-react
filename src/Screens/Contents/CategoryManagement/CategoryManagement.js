@@ -206,8 +206,11 @@ class CategoryManagement extends Component {
 
   handleChange(field, e) {
     let fields = this.state.fields;
+    let errors = {}
+    errors["CategoryName"] = "";
     fields[field] = e.target.value;
     this.setState({ fields });
+    this.setState({ errors: errors})
   }
 
   render() {
