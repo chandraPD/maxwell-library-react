@@ -27,9 +27,11 @@ class TopUpManagement extends Component {
       result: [],
       data: [],        
       headings: [],
+      user:[],
       role:"",
       show:true,
       password:"",
+      name:"",
       userToken: user.token
     };
   }
@@ -37,6 +39,7 @@ class TopUpManagement extends Component {
     this.getAll();
     this.show();
     this.getRole();    
+    this.getUser();
   }
 
   async getRole(){
@@ -88,6 +91,19 @@ class TopUpManagement extends Component {
     // $("#example1").DataTable().destroy();
       
     // this.fetchData();
+  }
+
+  getUser(){  
+  const token=this.state.userToken;
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+}        
+    Axios.get('http://localhost:8080/user',config).then((getData)=>{
+      const result_topup = getData.data;
+      console.log(getData)
+      this.setState({ user: result_topup });
+      
+    })    
   }
 
   getId = (id) => {
@@ -375,9 +391,16 @@ class TopUpManagement extends Component {
     }
   }
 
+  handleDropdownChange(e) {    
+    this.setState({name : e.target.value});
+    console.log(e);
+    console.log(this.state.name)
+  }
+
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
+    console.log(fields)
     this.setState({ fields });    
   } 
 
@@ -387,7 +410,7 @@ class TopUpManagement extends Component {
 
   render() {
     
-    const { rows,headings,show } = this.state;        
+    const { rows,headings,show,user } = this.state;            
     return (            
       <div className="wrapper">
         {/* Navbar */}      
@@ -437,8 +460,11 @@ class TopUpManagement extends Component {
                     <div className="col-md-5">
                       <label className="title-module">ID User:</label>
                     </div>
-                    <div className="col-md-7">
-                      <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter ID User" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
+                    <div className="col-md-7">                      
+                    <select id="dropdown" className="custom-select"
+            OnChange={this.handleDropdownChange}>
+              {this.state.user.map(person => <option value={person.userId}>{person.email}</option> )}                           
+            </select>
                       <span style={{ color: "red" }}>
                             {this.state.errors["Name"]}
                           </span>
