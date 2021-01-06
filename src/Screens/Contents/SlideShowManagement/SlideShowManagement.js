@@ -18,22 +18,38 @@ class SlideShowManagement extends Component {
       rows: [],
       results: [],
       isLoading : true,
-      selectStatus : ""
+      selectStatus : "Active"
     };
 
+    //FUNGSI YANG DIGUNAKAN UNTUK MENGEDIT DATA DI MODAL-EDIT
     this.slideShowChange = this.slideShowChange.bind(this);
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
 
-   //METHOD TAMBAHAN GET POST UPDATE DELETE  
+  //METHOD TAMBAHAN GET POST UPDATE DELETE  
   componentDidMount() {
     this.fetchDataSlideShow();
   }
 
-  //SAVE STATUS ACTIVE OR INACTIVE
-  handleDropdownChange(e) {
-    console.log(e);
-    this.setState({selectStatus : e.target.value});
+  // SAVE STATUS ACTIVE OR INACTIVE
+  handleDropdownChange(id) {
+    const status = this.state.selectStatus;  
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+      
+
+    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, config)
+    .then((response) => {
+      console.log(response);
+      window.location.reload();
+    })
+    
+    // this.setState({selectStatus : e.target.value});
   }
 
   async fetchDataSlideShow() {
@@ -52,6 +68,7 @@ class SlideShowManagement extends Component {
     });
   }
 
+  //SETIAP BARIS PADA TABEL
   fetchData() {
     const results = [];
     const result = this.state.data;
@@ -61,6 +78,7 @@ class SlideShowManagement extends Component {
           var row = [];
     
           row.push(<td className="text-center">{number++}</td>);
+          //UNTUK TOMBOL EDIT DAN DELETE
           row.push(
             <td className="text-center py-0 align-middle">
               <div className="btn-group btn-group-sm">
@@ -69,21 +87,26 @@ class SlideShowManagement extends Component {
               </div>
             </td>
           );
+          //UNTUK OPTION ACTIVE DAN INACTIVE
           row.push(<td className="text-center py-0 align-middle">
           <select id="dropdown" className="custom-select"
             OnChange={this.handleDropdownChange}>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="Active">{this.state.selectStatus}</option>
+              <option value="Inactive">Inactive</option>
             </select>
           </td>)
+          //UNTUK MENAMPILKAN JUDUL
           row.push(<td>{slideshow.title}</td>)
+          //UNTUK MENAMPILKAN SUBJUDUL
           row.push(<td>{slideshow.subTitle}</td>)
+          //UNTUK MENAMPILKAN GAMBAR
           row.push(<td><img src={slideshow.img} alt ="gambar buku" style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
           results.push(row)
         })
         this.setState({ rows: results });
   }
 
+  //FUNGSI TOMBOL SUBMIT PADA MODAL ADD SLIDESHOW
   submitSlideShow = () => {
   const slideshow = {
       title : this.state.title,
@@ -97,6 +120,7 @@ class SlideShowManagement extends Component {
       })
   }
 
+  //VALIDASI UNTUK ADD SLIDESHOW
   handleValidation() {
     let fields = this.state.fields;
     let errors = {};
@@ -124,6 +148,7 @@ class SlideShowManagement extends Component {
     return formIsValid;
   }
 
+  //FUNGSI UNTUK TOMBOL SUMBIT SAAT ADD-SLIDESHOW DITEKAN
   contactSubmit(e) {
     e.preventDefault();
     const fields = this.state.fields;
@@ -137,6 +162,7 @@ class SlideShowManagement extends Component {
       }
       console.log(slideshow)
 
+      // TOKEN YANG BELUM DISIMPAN DI LOCALSTORAGE
       // const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
       // const config = {
       //     headers: { Authorization: `Bearer ${token}` }
