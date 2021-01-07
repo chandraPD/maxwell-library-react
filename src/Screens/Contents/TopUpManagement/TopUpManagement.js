@@ -419,6 +419,10 @@ class TopUpManagement extends Component {
                       <span style={{ color: "red" }}>
                             {this.state.errors["Name"]}
                           </span>
+                          {/* <select id="dropdown" className="custom-select"
+            OnChange={this.handleDropdownChange}>
+              {this.state.user.map(person => <option value={person.userId}>{person.email}</option>)}                            
+            </select> */}
                     </div>
                   </div>
                   <hr className="divider" />
