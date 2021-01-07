@@ -1,17 +1,10 @@
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import Axios from 'axios';
+import Axios2 from '../../../Instances/axios-instances';
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export default (async function showResults(values) {    
-  let user = JSON.parse( localStorage.getItem('user'))
-  const userToken = user.token;
-  console.log(userToken);
-  const token=userToken
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}
   const topup = {
     nominal: values.nominal,
     paymentMethod: values.payment,
@@ -19,10 +12,10 @@ export default (async function showResults(values) {
   const topup2 = {        
     password: values.passwordconfirm
   }
-  var  match=Axios.post('http://localhost:8080/top_up_management/getPass',topup2,config);        
+  var  match=Axios2.post('top_up_management/getPass',topup2);        
   console.log((await match).data)
   if ((await match).data==true) {
-    axios.post('http://localhost:8080/top_up/post', topup,config)
+    Axios2.post('top_up/post', topup)
         .then((response) => {
           console.log(response);
         })

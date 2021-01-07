@@ -44,25 +44,25 @@ class SlideShowManagement extends Component {
   // }
 
   // SAVE STATUS ACTIVE OR INACTIVE
-  handleDropdownChange(id, e) {
+  handleDropdownChange(id, event) {
     
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
 
-
-    console.log(e);
+    console.log(id);
+    
+    const status = event.target.value;
+    console.log(status);
     const config = {
       headers : { Authorization : `Bearer ${userToken}`}
     }
 
-    // const statusSlideShow = {status : this.state.statusShow};
-    // console.log(statusSlideShow);
-    // axios.put(`http://localhost:8080/slideshow/update-status/${id}/${status}`,null, config)
-    // .then((response) => {
-    //   console.log(response);
+    axios.put(`http://localhost:8080/slideshow/update-status/${id}/${status}`,null, config)
+    .then((response) => {
+      console.log(response);
       // window.location.reload();
-    // })
+    })
 
   }
 
@@ -82,13 +82,16 @@ class SlideShowManagement extends Component {
     });
   }
 
+ 
   //SETIAP BARIS PADA TABEL
   fetchData() {
     const results = [];
     const result = this.state.data;
     var number = 1;
 
+    
     result.map((slideshow) => {
+      console.log(slideshow.statusShow);
           var row = [];
     
           row.push(<td className="text-center">{number++}</td>);
@@ -104,7 +107,8 @@ class SlideShowManagement extends Component {
           //UNTUK OPTION ACTIVE DAN INACTIVE
           row.push(<td className="text-center py-0 align-middle">
           <select name="statusShow" id="dropdown" className="custom-select"
-            value={this.state.statusShow} onChange={this.handleDropdownChange(slideshow.slideShowId, this)}>
+            // onChange={this.handleDropdownChange("slideshow.slideShowId")} 
+            onChange={(e) => this.handleDropdownChange(slideshow.slideShowId, e)}>
               <option value="1">Active</option>
               <option value="0">Inactive</option>
             </select>
@@ -230,7 +234,7 @@ class SlideShowManagement extends Component {
           subTitle : response.data.data.subTitle,
           img : response.data.data.img
         })
-        // console.log(this.state.slideshow.title);
+        console.log(this.state.slideshow.title);
       })
   }
 
