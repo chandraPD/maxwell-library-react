@@ -15,32 +15,35 @@ export default class SideBar extends Component {
     super(props);
     let balance
     let userToken
+    let role
 
     if(user) {
       balance = JSON.parse(localStorage.getItem('balance'))
       userToken = user.token
+      role = JSON.parse(localStorage.getItem('user')).userInfo.activeRole
     } else {
       balance = 0;
       userToken = false
+      role = false
     }
 
     this.state = {
       balance : balance,
-      show:true,        
-      userToken: user.token,
-      role:JSON.parse(localStorage.getItem('user')).userInfo.activeRole
+      show:true,
+      userToken: userToken,
+      role: role
     }
   }
   interval = null;
 
-  async show(){        
+  async show(){
     console.log(this.state.role)
-      if (this.state.role=="ROLE_USER") { 
-        console.log(this.state.role)     
+      if (this.state.role=="ROLE_USER") {
+        console.log(this.state.role)
         this.setState({show:true })
       } else{
         this.setState({show:false})
-      }      
+      }
     }
 
   componentDidMount() {
