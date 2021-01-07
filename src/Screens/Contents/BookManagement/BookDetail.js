@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import DataTable from "../../../Components/Datatable/Table";
-import axios from "axios";
 import Action from "../../../Components/Datatable/Action";
 import $ from "jquery";
 import "datatables.net-responsive/js/dataTables.responsive";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import Swal from "sweetalert2";
 import { Link, withRouter } from "react-router-dom";
-import SuccessImg from "../../../Assets/Media/check.png";
+import Axios from '../../../Instances/axios-instances';
 
 class BookDetail extends Component {
   constructor(props) {
@@ -29,74 +28,70 @@ class BookDetail extends Component {
   componentDidMount() {
     const bookId = this.props.match.params.bookId;
     console.log(bookId);
-    this.fetchDataBookDetail(bookId);
+    this.fetchData(bookId);
   }
 
-  async fetchDataBookDetail(bookId) {
-    await axios.get(
-      `http://localhost:8080/book-detail/get-by-book-id/${bookId}`
-    ).then((response) => {
-      this.setState({ data: response.data });
-      this.fetchData();
-      $("#example1").DataTable({
-        responsive: true,
-        autoWidth: false,
-      });
-
-      var jumlah = response.data.length
-
-      const count = {
-        qty: jumlah
-      }
-
-      axios.put("http://localhost:8080/book/update-qty-book/" + bookId, count)
-        .then((response) => {
-          console.log(response)
-        })  
-
-    })
-
-  }
-
-  fetchData() {
+  async fetchData(bookId) {
+    $('#example1').DataTable().destroy();
     let results = [];
-    let result = this.state.data;
+
     var no = 1;
 
-    result.forEach((detailBook) => {
-      let row = [];
+    await Axios.get(`/book-detail/get-by-book-id/${bookId}`)
+        .then((response) => {
+          const result = response.data;
+          this.setState({data: result})
 
-      row.push(<td className="text-center">{no++}</td>);
-      row.push(
-        <td className="text-center py-0 align-middle">
-          <div className="btn-group btn-group-sm">
-            <Action
-              type="success"
-              title="Edit"
-              icon="pen"
-              dataToggle="modal"
-              dataTarget="#modal-edit"
-              onClick = {() => this.getDetailBook(detailBook.bookDetailId)}
-            />
-            <Action
-              type="danger"
-              title="Delete"
-              icon="trash"
-              dataToggle="modal"
-              dataTarget="#modal-delete"
-              onClick = {() => this.getDetailBook(detailBook.bookDetailId)}
-            />
-          </div>
-        </td>
-      );
-      row.push(<td className="text-center">{detailBook.bookDetailCode}</td>);
-      row.push(<td className="text-center">{detailBook.typeOfDamage}</td>);
-      row.push(<td className="text-center">{detailBook.descOfDamage}</td>);
-      this.setState({ title: detailBook.bookEntity.title})
-      results.push(row);
-    });
-    this.setState({ rows: results });
-    
+          result.map((detailBook) => {
+            let row = [];
+
+            row.push(<td className="text-center">{no++}</td>);
+            row.push(
+              <td className="text-center py-0 align-middle">
+                <div className="btn-group btn-group-sm">
+                  <Action
+                    type="success"
+                    title="Edit"
+                    icon="pen"
+                    dataToggle="modal"
+                    dataTarget="#modal-edit"
+                    onClick = {() => this.getDetailBook(detailBook.bookDetailId)}
+                  />
+                  <Action
+                    type="danger"
+                    title="Delete"
+                    icon="trash"
+                    dataToggle="modal"
+                    dataTarget="#modal-delete"
+                    onClick = {() => this.getDetailBook(detailBook.bookDetailId)}
+                  />
+                </div>
+              </td>
+            );
+            row.push(<td className="text-center">{detailBook.bookDetailCode}</td>);
+            row.push(<td className="text-center">{detailBook.typeOfDamage}</td>);
+            row.push(<td className="text-center">{detailBook.descOfDamage}</td>);
+            this.setState({ title: detailBook.bookEntity.title})
+            results.push(row);                        
+          })
+           this.setState({ rows: results });
+
+           $("#example1").DataTable({
+            responsive: true,
+            autoWidth: false,
+            });
+
+            var jumlah = response.data.length
+
+            const count = {
+              qty: jumlah
+            }
+
+            Axios.put("/book/update-qty-book/" + bookId, count)
+              .then((response) => {
+                console.log(response)
+              })  
+        })
   }
 
   resetModal() {
@@ -126,10 +121,11 @@ class BookDetail extends Component {
           bookId: this.props.match.params.bookId
       }
 
-      axios.put('http://localhost:8080/book-detail/update-detail/' + id, detailBook)
+      Axios.put('/book-detail/update-detail/' + id, detailBook)
         .then((response) => {
             console.log(response)
             $("#modal-edit").modal("toggle");
+            $('.modal-backdrop').remove();
             Swal.fire({
               icon: "success",
               title: "Success",
@@ -137,14 +133,14 @@ class BookDetail extends Component {
               confirmButtonText: `OK`,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                this.fetchData(this.props.match.params.bookId)
               }
             });
         })
   }
 
   deleteDetailBook = (id) => {
-    axios.put('http://localhost:8080/book-detail/delete-detail/' + id)
+    Axios.put('/book-detail/delete-detail/' + id)
     .then((response) => {
       console.log(response)
       Swal.fire({
@@ -154,14 +150,14 @@ class BookDetail extends Component {
         confirmButtonText: `OK`,
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location.reload();
+          this.fetchData(this.props.match.params.bookId)
         }
       });
     })
   }
 
   getDetailBook = (id) => {
-      axios.get("http://localhost:8080/book-detail/get-detail-book/" + id)
+      Axios.get("/book-detail/get-detail-book/" + id)
         .then((response) => {
             console.log(response)
             this.setState({
@@ -192,7 +188,7 @@ class BookDetail extends Component {
       e.preventDefault()
       if(this.handleValidation()) {
         $("#modal-add").modal("toggle")
-
+        $('.modal-backdrop').remove();
         const detailBook = {
             typeOfDamage: fields["typeOfDamage"],
             descOfDamage: fields["descOfDamage"],
@@ -201,7 +197,7 @@ class BookDetail extends Component {
 
         console.log(detailBook)
 
-        axios.post("http://localhost:8080/book-detail/add-detail", detailBook)
+        Axios.post("/book-detail/add-detail", detailBook)
             .then((response)=> {
                 console.log(response)
                 Swal.fire({
@@ -211,7 +207,7 @@ class BookDetail extends Component {
                   confirmButtonText: `OK`,
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    window.location.reload();
+                    this.fetchData(this.props.match.params.bookId)
                   }
                 });
             })
