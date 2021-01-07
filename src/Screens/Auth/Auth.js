@@ -22,19 +22,7 @@ class Auth extends Component {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
-
-    //username
-    if(!fields["userNameSignUp"]) {
-      formIsValid = false;
-      errors["userNameSignUp"] = "Username cannot be empty"
-    }
-
-    //name
-    if(!fields["fullNameSignUp"]) {
-      formIsValid = false;
-      errors["fullNameSignUp"] = "Name cannot be empty"
-    }
-
+    
     //email
     if(!fields["emailSignUp"]) {
       formIsValid = false
@@ -210,12 +198,12 @@ class Auth extends Component {
   handleRegister(e) {
     e.preventDefault()
 
-    if(this.handleValidationSignUp()){
-      let email = this.state.fields["emailSignUp"]
-      let password = this.state.fields["PasswordSignUp"]
-      let confirmPassword = this.state.fields["ConfirmPasswordSignUp"]
+     let email = this.state.fields["emailSignUp"]
+     let password = this.state.fields["PasswordSignUp"]
+     let confirmPassword = this.state.fields["ConfirmPasswordSignUp"]
 
-      AuthService.register(email, password, confirmPassword).then(
+    if (this.handleValidationSignUp()) {
+    	AuthService.register(email, password, confirmPassword).then(
         () => {
           Swal.fire({
 
@@ -236,9 +224,8 @@ class Auth extends Component {
         'Either email is taken or password is incorrect',
         'error'
     ))
-    } else {
-
-    }
+  }
+      this.handleValidationSignUp()
   }
 
   handleLogin(e) {
@@ -368,13 +355,13 @@ class Auth extends Component {
               </div>
 
               {/* <!--Register Form--> */}
-              <div className="register-wrapper my-auto" id="register" >
+              <div className="register-wrapper my-auto" id="register" onSubmit={this.handleRegister} >
                 <h1 className="form-title">Register</h1>
                 <p className="form-subtitle">
                   Welcome! Please Register to your Account
                 </p>
 
-                <form role="form" id="formRegister" onSubmit={this.handleRegister}>
+                <form role="form" id="formRegister">
                   <div className="container-form">
                     <div className="login form-group bottom-label">
                       <label for="inputEmail" className="label-login">
