@@ -11,12 +11,23 @@ import Axios from 'axios';
 export default class SideBar extends Component {
 
   constructor(props){
-    let user = JSON.parse( localStorage.getItem('user'))  
+    let user = JSON.parse( localStorage.getItem('user'))
     super(props);
+    let balance
+    let userToken
+
+    if(user) {
+      balance = JSON.parse(localStorage.getItem('balance'))
+      userToken = user.token
+    } else {
+      balance = 0;
+      userToken = false
+    }
+
     this.state = {
-      balance : JSON.parse(localStorage.getItem('balance')),
-      show:true,        
-      userToken: user.token
+      show:true,
+      balance: balance,
+      userToken : userToken
     }
   }
   interval = null;
@@ -28,12 +39,12 @@ export default class SideBar extends Component {
   }
       const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
       var role=getRole;
-      if (role.data=="[ROLE_ADMIN]") {      
+      if (role.data=="[ROLE_ADMIN]") {
         this.setState({role: "[ROLE_ADMIN]" })
       } else{
         this.setState({role: "[ROLE_USER]" })
-      } 
-      if (this.state.role=="[ROLE_USER]") {      
+      }
+      if (this.state.role=="[ROLE_USER]") {
         this.setState({show:true })
       } else{
         this.setState({show:false})
@@ -42,7 +53,7 @@ export default class SideBar extends Component {
 
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
-    this.show();     
+    this.show();
   }
 
   componentWillUnmount() {
@@ -94,7 +105,7 @@ export default class SideBar extends Component {
               { show ?  <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
                 <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
               </Link>: null}
-              
+
             </div>
           </div>
           {/* Sidebar Menu */}
