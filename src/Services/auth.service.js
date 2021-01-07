@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://maxwell-backend.herokuapp.com/auth/";
+const API_URL = "http://localhost:8080/auth/";
 
 class AuthService {
   login(email, password) {
