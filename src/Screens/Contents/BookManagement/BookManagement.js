@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import DataTable from "../../../Components/Datatable/Table";
-import axios from "axios";
 import Action from "../../../Components/Datatable/Action";
 import $ from "jquery";
 import "datatables.net-responsive/js/dataTables.responsive";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import Swal from "sweetalert2";
+import Axios from '../../../Instances/axios-instances';
 
 class BookManagement extends Component {
   constructor() {
@@ -24,81 +24,77 @@ class BookManagement extends Component {
 
   componentDidMount() {
     this.getCategory();
-    this.fetchDataBook();
-  }
-
-  async fetchDataBook() {
-    let fetchedData = await axios.get(
-      "http://localhost:8080/book/get-all-active"
-    );
-    console.log(fetchedData);
-    const resultUser = fetchedData.data;
-    this.setState({ data: resultUser });
-    $("#example1").DataTable().destroy();
     this.fetchData();
-    $("#example1").DataTable({
-      responsive: true,
-      autoWidth: false,
-    });
   }
 
   async getCategory() {
-    let fetchCategory = await axios.get(
-      "http://localhost:8080/category/get-all-active"
+    let fetchCategory = await Axios.get(
+      "/category/get-all-active"
     );
     console.log(fetchCategory);
     const resultCategory = fetchCategory.data;
     this.setState({ category: resultCategory });
   }
 
-  fetchData() {
+  async fetchData() {
+    $("#example1").DataTable().destroy();
     let results = [];
-    let result = this.state.data;
-    var no = 1;
-    result.forEach((book) => {
-      let row = [];
 
-      row.push(<td className="text-center">{no++}</td>);
-      row.push(
-        <td className="text-center py-0 align-middle">
-          <div className="btn-group btn-group-sm">
-            <Action
-              type="success"
-              title="Edit"
-              icon="pen"
-              dataToggle="modal"
-              dataTarget="#modal-edit"
-              onClick={() => this.getBook(book.bookId)}
-            />
-            <Action
-              type="danger"
-              title="Delete"
-              icon="trash"
-              dataToggle="modal"
-              dataTarget="#modal-delete"
-              onClick={() => this.getBook(book.bookId)}
-            />
-            <Action
-              type="info"
-              title="Detail"
-              icon="eye"
-              link={`BookDetail/${book.bookId}`}
-            />
-          </div>
-        </td>
-      );
-      row.push(<td className="text-center">{book.bookId}</td>);
-      row.push(<td className="text-center">{book.title}</td>);
-      row.push(<td className="text-center">{book.author}</td>);
-      row.push(<td className="text-justify" style={{width: "100%"}}>{book.description}</td>);
-      row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
-      row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
-      row.push(<td className="text-center">{book.publishDate}</td>);
-      row.push(<td className="text-center">{book.qty}</td>);
-      row.push(<td className="text-center">{book.categoryEntity.category}</td>);
-      results.push(row);
-    });
-    this.setState({ rows: results });
+    var no = 1;
+
+    await Axios.get('/book/get-all-active')
+        .then((response) => {
+          const result = response.data
+          this.setState({data: result})
+          result.map((book) => {
+            let row = [];
+
+            row.push(<td className="text-center">{no++}</td>);
+            row.push(
+              <td className="text-center py-0 align-middle">
+                <div className="btn-group btn-group-sm">
+                  <Action
+                    type="success"
+                    title="Edit"
+                    icon="pen"
+                    dataToggle="modal"
+                    dataTarget="#modal-edit"
+                    onClick={() => this.getBook(book.bookId)}
+                  />
+                  <Action
+                    type="danger"
+                    title="Delete"
+                    icon="trash"
+                    dataToggle="modal"
+                    dataTarget="#modal-delete"
+                    onClick={() => this.getBook(book.bookId)}
+                  />
+                  <Action
+                    type="info"
+                    title="Detail"
+                    icon="eye"
+                    link={`BookDetail/${book.bookId}`}
+                  />
+                </div>
+              </td>
+            );
+            row.push(<td className="text-center">{book.bookCode}</td>);
+            row.push(<td className="text-center">{book.title}</td>);
+            row.push(<td className="text-center">{book.author}</td>);
+            row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
+            row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
+            row.push(<td className="text-center">{book.publishDate}</td>);
+            row.push(<td className="text-center">{book.qty}</td>);
+            row.push(<td className="text-center">{book.categoryEntity.category}</td>);
+            results.push(row);
+                })
+            this.setState({ rows: results });
+
+            $("#example1").DataTable({
+              responsive: true,
+              autoWidth: false,
+            });
+        })
   }
 
   bookChange = (event) => {
@@ -120,11 +116,24 @@ class BookManagement extends Component {
     fields["imgDetail"] = ""
     fields["title"] = ""
 
+    let errors = {}
+    errors["title"] = ""
+    errors["author"] = ""
+    errors["categoryId"] = ""
+    errors["statusBook"] = ""
+    errors["description"] = ""
+    errors["publishDate"] = ""
+    errors["statusBook"] = ""
+    errors["imgBanner"] = ""
+    errors["imgDetail"] = ""
+    errors["title"] = ""
+
     this.setState({fields: fields})
+    this.setState({errors: errors})
   }
 
   getBook = (id) => {
-    axios.get("http://localhost:8080/book/get-by-id/" + id).then((response) => {
+    Axios.get("/book/get-by-id/" + id).then((response) => {
       console.log(response);
       this.setState({
         author: response.data.author,
@@ -144,6 +153,7 @@ class BookManagement extends Component {
   updateBook = (id) => {
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
+    console.log(token)
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -160,11 +170,12 @@ class BookManagement extends Component {
       categoryId: this.state.categoryId,
     };
 
-    axios
-      .put("http://localhost:8080/book/update-book/" + id, book, config)
+    Axios
+      .put("/book/update-book/" + id, book, config)
       .then((response) => {
         console.log(response);
         $("#modal-edit").modal("toggle");
+        $('.modal-backdrop').remove();
         Swal.fire({
           icon: "success",
           title: "Success",
@@ -172,15 +183,15 @@ class BookManagement extends Component {
           confirmButtonText: `OK`,
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            this.fetchData()
           }
         });
       });
   };
 
   deleteBook = (id) => {
-    axios
-      .put("http://localhost:8080/book/delete-book/" + id)
+    Axios
+      .put("/book/delete-book/" + id)
       .then((response) => {
         console.log(response);
         Swal.fire({
@@ -190,7 +201,7 @@ class BookManagement extends Component {
           confirmButtonText: `OK`,
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            this.fetchData()
           }
         });
       });
@@ -253,7 +264,7 @@ class BookManagement extends Component {
     e.preventDefault();
     if (this.handleValidation()) {
       $("#modal-add").modal("toggle");
-
+      $('.modal-backdrop').remove();
       const book = {
         author: fields["author"],
         description: fields["description"],
@@ -268,8 +279,8 @@ class BookManagement extends Component {
 
       console.log(book);
 
-      axios
-        .post("http://localhost:8080/book/add-book", book, config)
+      Axios
+        .post("/book/add-book", book, config)
         .then((response) => {
           console.log(response);
           Swal.fire({
@@ -279,7 +290,7 @@ class BookManagement extends Component {
             confirmButtonText: `OK`,
           }).then((result) => {
             if (result.isConfirmed) {
-              window.location.reload();
+              this.fetchData()
             }
           });
         }).catch((error) =>
@@ -304,7 +315,6 @@ class BookManagement extends Component {
       "Book ID",
       "Title",
       "Author",
-      "Description",
       "Image Banner",
       "Image Detail",
       "Publish Date",
@@ -712,21 +722,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
-                      <label htmlFor="editCategoryId">Category ID</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="editCategoryId"
-                        name="categoryId"
-                        placeholder="Enter Category ID"
-                        onChange={this.bookChange}
-                        value={this.state.categoryId}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["categoryId"]}
-                      </span>
-                    </div>
+                   
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">
