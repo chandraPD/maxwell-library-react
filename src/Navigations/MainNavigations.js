@@ -30,6 +30,8 @@ import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import PrivateRoute from './PrivateRoute'
 import Search from '../Screens/Contents/Search/Search'
+import AuthRoute from './AuthRoute'
+import Axios from '../Instances/axios-instances';
 
 class MainNavigation extends Component {
 
@@ -39,13 +41,35 @@ class MainNavigation extends Component {
             isAuthenticated :  localStorage.getItem('user')
         };
       }
+      interval = null;
+
+      componentDidMount() {
+        this.interval = setInterval(this.getBalance, 5000);
+        this.getBalance();
+      }
+  
+      componentWillUnmount() {
+         clearInterval(this.interval);
+      }
+      getBalance = () => {
+        if(JSON.parse(localStorage.getItem('user')) != null){
+            let user = JSON.parse(localStorage.getItem('user'))
+            Axios.get('top_up_management/getBalance')
+            .then((balance) => {
+                localStorage.setItem('balance', JSON.stringify(balance.data));
+            })
+        }else{
+            localStorage.setItem('balance', 0);
+        }
+      }
 
     render() {
         return ( <Router >
                 <Switch>
-                    <Route path='/auth'>
-                        <Auth />
-                    </Route>
+                    <AuthRoute path='/auth'
+                    authenticated={this.state.isAuthenticated}
+                    component={Auth}>
+                    </AuthRoute>
                     <Route path='/PaymentPrint'>
                         <PaymentInvoicePrint />
                     </Route>
@@ -87,7 +111,7 @@ class MainNavigation extends Component {
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
                                 </Route>
-                                <Route path='/TopUpManagement'>                                    
+                                <Route path='/TopUpManagement'>
                                     <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>

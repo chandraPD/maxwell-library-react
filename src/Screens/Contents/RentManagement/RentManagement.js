@@ -4,7 +4,7 @@ import Action from '../../../Components/Datatable/Action'
 import Status from '../../../Components/Datatable/Status'
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
-import Axios from 'axios';
+import Axios from '../../../Instances/axios-instances';
 import $ from 'jquery'
 import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
@@ -12,24 +12,25 @@ class RentManagement extends Component {
 
     constructor() {
         super();
-        let user = JSON.parse(localStorage.getItem('user'))
-        const userToken = user.token;
         this.state = {
             data: [], // Raw data
             rows: [],
             results: [],
-            userToken: userToken
         };
     }
     componentDidMount() {
         this.fetchData();
     }
 
-    acceptRent() {
-        Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
+    acceptRent(id) {
+        Axios.put('borrow/acc-act/' + id)
+            .then((data) => {
+                Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
+                this.fetchData();
+            });
     }
 
-    cancelRent() {
+    cancelRent(id) {
         Swal.fire({
             title: 'Do you want to Cancel this Rent?',
             showCancelButton: true,
@@ -37,21 +38,20 @@ class RentManagement extends Component {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
+                Axios.put('borrow/dec-act/' + id)
+                    .then((data) => {
+                        Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
+                        window.location.reload()
+                    });
             }
         });
     }
 
-
     async fetchData() {
+        $('#example1').DataTable().destroy();
         const results = [];
-
-        const token = this.state.userToken;
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
         var no = 1;
-        await Axios.get('http://localhost:8080/borrow/get-all', config)
+        await Axios.get('borrow/get-all')
             .then((getData) => {
                 const result = getData.data.data;
                 this.setState({ data: result });
@@ -61,8 +61,8 @@ class RentManagement extends Component {
                     var actVal, statusVal = "";
                     if (rent.statusBook === "Waiting Given By Librarian") {
                         actVal = <div className="btn-group btn-group-sm">
-                            <Action type="primary" onClick={this.acceptRent} title="Accept" icon="check-square" />
-                            <Action type="danger" onClick={this.cancelRent} title="Cancel" icon="window-close" /></div>
+                            <Action type="primary" onClick={() => this.acceptRent(rent.borrowedBookId)} title="Accept" icon="check-square" />
+                            <Action type="danger" onClick={() => this.cancelRent(rent.borrowedBookId)} title="Cancel" icon="window-close" /></div>
                         statusVal = <Status type="primary" val="Waiting Given By Librarian" />
                     } else if (rent.statusBook === "Waiting For Return") {
                         actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
@@ -71,7 +71,7 @@ class RentManagement extends Component {
                         actVal = <div className="btn-group btn-group-sm"><Action type="info" link="ReturnBook" title="Return" icon="exchange-alt" /></div>
                         statusVal = <Status type="orange" val="Need Immediate Returns" />
                     } else if (rent.statusBook === "Waiting Taken By Librarian") {
-                        actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={this.acceptRent} title="Accept" icon="check-square" /><Action type="danger" onClick={this.cancelRent} title="Cancel" icon="window-close" /></div>
+                        actVal = <div className="btn-group btn-group-sm"><Action type="primary" onClick={() => this.acceptRent(rent.borrowedBookId)} title="Accept" icon="check-square" /></div>
                         statusVal = <Status type="primary" val="Waiting Taken By Librarian" />
                     } else if (rent.statusBook === "Waiting for Payment of Fines") {
                         actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link={`/PaymentDetail/${rent.rent_id}`} title="Payment" icon="file-invoice" /></div>
@@ -103,7 +103,7 @@ class RentManagement extends Component {
                     results.push(row);
                 });
                 this.setState({ rows: results });
-                
+
                 $("#example1").DataTable({
                     responsive: true,
                     autoWidth: false,
