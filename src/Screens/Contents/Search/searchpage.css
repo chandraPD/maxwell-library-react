@@ -1,0 +1,124 @@
+.search-content input {
+    border: none;
+    background-color: transparent;
+    margin-top: 4rem;
+    color: #6f6f6f;
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 48px;
+    margin: 16px 0 30px;
+    width: 100%;
+}
+
+.content {
+    background-color: white;
+    margin-top: 2rem;
+}
+
+.content-wrapper {
+    background-color: #fff !important;
+}
+
+#input-search {
+    border-radius: 22px;
+}
+
+form#search-books {
+    margin-left: 20%;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.recommended-books-search {
+    margin-left: 1rem;
+    color: #6f6f6f;
+}
+
+.category-book {
+    padding: 0.3rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.hero-book {
+    min-width: 400px;
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 20px;
+    padding: 1.2rem;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .26);
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .26);
+    background-color: #fff;
+    z-index: 1;
+}
+
+.hero-book h4 {
+    color: #6f6f6f;
+    font-size: 1.3rem;
+    position: absolute;
+}
+
+.hero-book .input-group-prepend {
+    color: #6f6f6f;
+    font-size: 1.3rem;
+    margin-right: 3rem;
+    position: absolute;
+    right: 0px;
+}
+
+.book-list-search {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 3rem;
+}
+
+.book-content {
+    margin-bottom: 2rem;
+}
+
+.content-cover img {
+    border-radius: 4px;
+    -webkit-box-shadow: 0 3px 14px 2px rgba(34, 34, 34, .08), 0 8px 10px 1px rgba(34, 34, 34, .1);
+    box-shadow: 0 3px 14px 2px rgba(34, 34, 34, .08), 0 8px 10px 1px rgba(34, 34, 34, .1);
+    float: left;
+    margin-right: .7rem;
+    width:80px;
+    height: 125px
+}
+
+.book-content .title-search {
+    font-weight: bold;
+    line-height: 1.38;
+    color: #000000;
+    text-align: left !important;
+    display: block;
+}
+
+.book-content .description {
+    font-size: 1rem;
+    line-height: 1.38;
+    color: #6f6f6f;
+    text-align: left !important;
+    display: block;
+    margin-top: -.4rem;
+}

@@ -145,9 +145,12 @@ class CategoryManagement extends Component {
 
   resetModal() {
     let fields = this.state.fields;
+    let errors = {}
     fields["CategoryName"] = "";
+    errors["CategoryName"] = "";
 
     this.setState({fields: fields});
+    this.setState({errors: errors});
   }
 
   handleValidation() {

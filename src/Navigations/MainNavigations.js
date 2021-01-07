@@ -29,6 +29,7 @@ import DonationManagement from '../Screens/Contents/DonationManagement/DonationM
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import PrivateRoute from './PrivateRoute'
+import Search from '../Screens/Contents/Search/Search'
 
 class MainNavigation extends Component {
 
@@ -70,6 +71,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/Detail/:bookId'>
                                     <Detail />
+                                </Route>
+                                <Route path='/Search/:title'>
+                                    <Search />
                                 </Route>
                                 <Route path='/RentManagement'>
                                     <RentManagement />
