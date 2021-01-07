@@ -27,7 +27,7 @@ class TopUpManagement extends Component {
       data: [],
       headings: [],
       user: [],
-      role: "",
+      role: JSON.parse(localStorage.getItem('user')).userInfo.activeRole,
       show: true,
       userId: "",
       password: ""
@@ -40,43 +40,24 @@ class TopUpManagement extends Component {
     this.getUser();
   }
 
-  async getRole() {
-    const getRole = await Axios2.get('top_up_management/getRole');
-    var role = getRole;
-    if (role.data == "[ROLE_ADMIN]") {
-      this.setState({ role: "[ROLE_ADMIN]" })
-    } else {
-      this.setState({ role: "[ROLE_USER]" })
-    }
-    if (this.state.role == "[ROLE_ADMIN]") {
+  async getRole() {    
+    if (this.state.role == "ROLE_ADMIN") {
       this.setState({ headings: ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
     } else {
       this.setState({ headings: ["No", "ID", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
     }
   }
 
-  async getAll() {
-    const getRole = await Axios2.get('top_up_management/getRole');
+  async getAll() {    
     await Axios2.get('top_up_management/getAll').then((getData) => {
       const result_topup = getData.data;
       this.setState({ data: result_topup });
-      this.fetchData(getRole);
+      this.fetchData(this.state.role);
       $("#example1").DataTable({
         responsive: true,
         autoWidth: false,
       });
-    });
-    console.log(getRole)
-
-    var role = getRole;
-    console.log(role.data)
-    if (role.data == "[ROLE_ADMIN]") {
-      this.setState({ role: "[ROLE_ADMIN]" })
-    } else {
-      this.setState({ role: "[ROLE_USER]" })
-    }
-
-
+    });    
 
     // $("#example1").DataTable().destroy();
 
@@ -84,12 +65,13 @@ class TopUpManagement extends Component {
   }
 
   getUser() {
-    Axios2.get('user').then((getData) => {
+    var a =Axios2.get('user').then((getData) => {
       const result_topup = getData.data;
       console.log(getData)
       this.setState({ user: result_topup });
 
     })
+    console.log(a)
   }
 
   getId = (id) => {
@@ -198,7 +180,7 @@ class TopUpManagement extends Component {
       }
       row.push(<td className="text-center" >{no++}</td>);
       row.push(<td className="text-center" >{topup.historyBalanceId}</td>);
-      if (role.data === "[ROLE_ADMIN]") {
+      if (role === "ROLE_ADMIN") {
         row.push(<td className="text-center" >{actVal}</td>);
       }
       // row.push(<td className="text-center" >{actVal}</td>);
@@ -211,15 +193,8 @@ class TopUpManagement extends Component {
     this.setState({ rows: results });
   }
 
-  async show() {
-    const getRole = await Axios2.get('top_up_management/getRole');
-    var role = getRole;
-    if (role.data == "[ROLE_ADMIN]") {
-      this.setState({ role: "[ROLE_ADMIN]" })
-    } else {
-      this.setState({ role: "[ROLE_USER]" })
-    }
-    if (this.state.role == "[ROLE_ADMIN]") {
+  async show() {   
+    if (this.state.role == "ROLE_ADMIN") {
       this.setState({ show: true })
     } else {
       this.setState({ show: false })
@@ -376,7 +351,8 @@ class TopUpManagement extends Component {
   }
 
   render() {
-
+    var lol=JSON.parse(localStorage.getItem('user')).userInfo.activeRole;
+    console.log(lol)
     const { rows, headings, show, user,userId } = this.state;
     console.log(this.state.user)
     return (
@@ -426,7 +402,7 @@ class TopUpManagement extends Component {
                   <div className="modal-body">
                     <div className="row">
                       <div className="col-md-5">
-                        <label className="title-module">ID User:</label>
+                        <label className="title-module">Email User:</label>
                       </div>
                       <div className="col-md-7">
                         {/* <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter ID User" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
@@ -548,7 +524,7 @@ class TopUpManagement extends Component {
                 <div className="modal-body">
                   <div className="row">
                     <div className="col-md-5">
-                      <label className="title-module">Username:</label>
+                      <label className="title-module">ID User:</label>
                     </div>
                     <div className="col-md-7">
                       <input type="text" id="checkuser" name="name" className="form-control" value={this.state.userId} readOnly placeholder />

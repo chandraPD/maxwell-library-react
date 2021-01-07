@@ -16,28 +16,20 @@ export default class SideBar extends Component {
     this.state = {
       balance : JSON.parse(localStorage.getItem('balance')),
       show:true,        
-      userToken: user.token
+      userToken: user.token,
+      role:JSON.parse(localStorage.getItem('user')).userInfo.activeRole
     }
   }
   interval = null;
 
-  async show(){
-    const token=this.state.userToken;
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  }
-      const getRole = await Axios.get('http://localhost:8080/top_up_management/getRole',config);
-      var role=getRole;
-      if (role.data=="[ROLE_ADMIN]") {      
-        this.setState({role: "[ROLE_ADMIN]" })
-      } else{
-        this.setState({role: "[ROLE_USER]" })
-      } 
-      if (this.state.role=="[ROLE_USER]") {      
+  async show(){        
+    console.log(this.state.role)
+      if (this.state.role=="ROLE_USER") { 
+        console.log(this.state.role)     
         this.setState({show:true })
       } else{
         this.setState({show:false})
-      }
+      }      
     }
 
   componentDidMount() {
