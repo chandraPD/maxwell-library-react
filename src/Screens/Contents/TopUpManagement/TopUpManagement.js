@@ -14,81 +14,82 @@ import AuthService from '../../../Services/auth.service';
 import Axios2 from '../../../Instances/axios-instances';
 
 class TopUpManagement extends Component {
-  
-  constructor(props) {  
-    super(props);    
-    this.state = {      
+
+  constructor(props) {
+    super(props);
+    this.state = {
       fields: {},
       errors: {},
       data: [],
       rows: [],
       results: [],
       result: [],
-      data: [],        
+      data: [],
       headings: [],
-      user:[],
-      role:"",
-      show:true,
-      password:""      
+      user: [],
+      role: "",
+      show: true,
+      userId: "",
+      password: ""
     };
   }
-  componentDidMount() {                 
+  componentDidMount() {
     this.getAll();
     this.show();
-    this.getRole();    
+    this.getRole();
     this.getUser();
   }
 
-  async getRole(){    
+  async getRole() {
     const getRole = await Axios2.get('top_up_management/getRole');
-    var role=getRole;
-    if (role.data=="[ROLE_ADMIN]") {      
-      this.setState({role: "[ROLE_ADMIN]" })
-    } else{
-      this.setState({role: "[ROLE_USER]" })
-    } 
-    if (this.state.role=="[ROLE_ADMIN]") {      
-      this.setState({headings: ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
-    } else{
-      this.setState({headings: ["No", "ID", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
-    } 
+    var role = getRole;
+    if (role.data == "[ROLE_ADMIN]") {
+      this.setState({ role: "[ROLE_ADMIN]" })
+    } else {
+      this.setState({ role: "[ROLE_USER]" })
+    }
+    if (this.state.role == "[ROLE_ADMIN]") {
+      this.setState({ headings: ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+    } else {
+      this.setState({ headings: ["No", "ID", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+    }
   }
 
-  async getAll(){  
+  async getAll() {
     const getRole = await Axios2.get('top_up_management/getRole');
-    await Axios2.get('top_up_management/getAll').then((getData)=>{
+    await Axios2.get('top_up_management/getAll').then((getData) => {
       const result_topup = getData.data;
       this.setState({ data: result_topup });
       this.fetchData(getRole);
       $("#example1").DataTable({
         responsive: true,
         autoWidth: false,
-      });  
-    });    
+      });
+    });
     console.log(getRole)
-   
-    var role=getRole;    
-    console.log(role.data)
-    if (role.data=="[ROLE_ADMIN]") {      
-      this.setState({role: "[ROLE_ADMIN]" })
-    } else{
-      this.setState({role: "[ROLE_USER]" })
-    } 
 
-   
-            
+    var role = getRole;
+    console.log(role.data)
+    if (role.data == "[ROLE_ADMIN]") {
+      this.setState({ role: "[ROLE_ADMIN]" })
+    } else {
+      this.setState({ role: "[ROLE_USER]" })
+    }
+
+
+
     // $("#example1").DataTable().destroy();
-      
+
     // this.fetchData();
   }
 
-  getUser(){         
-    Axios2.get('user').then((getData)=>{
+  getUser() {
+    Axios2.get('user').then((getData) => {
       const result_topup = getData.data;
       console.log(getData)
       this.setState({ user: result_topup });
-      
-    })    
+
+    })
   }
 
   getId = (id) => {
@@ -96,80 +97,80 @@ class TopUpManagement extends Component {
       .then((res) => {
         console.log(res);
         this.setState({
-          nominal:res.data.nominal,
-          paymentMethod:res.data.paymentMethod
-        })
-    Swal.fire({
-      icon: 'warning',
-      title: 'Warning!',
-      showCancelButton: true,
-      text: 'Are you sure want to confirm this?',
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        Axios2.put('top_up/accept/' + id, res)
-        .then((response) => {
-          console.log(response);
+          nominal: res.data.nominal,
+          paymentMethod: res.data.paymentMethod
         })
         Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        showCancelButton: false,
-        text:  'Confirm Top Up Already Success!',
-        }).then((result)=>{
-          if(result.isConfirmed){
-            window.location.reload();
+          icon: 'warning',
+          title: 'Warning!',
+          showCancelButton: true,
+          text: 'Are you sure want to confirm this?',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            Axios2.put('top_up/accept/' + id, res)
+              .then((response) => {
+                console.log(response);
+              })
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              showCancelButton: false,
+              text: 'Confirm Top Up Already Success!',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            })
           }
         })
-      }
-    })
       })
   }
 
-  getId2 = (id) => {  
+  getId2 = (id) => {
     Axios2.get('top_up_management/getId/' + id)
       .then((res) => {
         console.log(res);
         this.setState({
-          nominal:res.data.nominal,
-          paymentMethod:res.data.paymentMethod
-        })
-    Swal.fire({
-      icon: 'warning',
-      title: 'Warning!',
-      showCancelButton: true,
-      text: 'Are you sure want to Cancel this?',
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        Axios2.put('top_up/cancel/' + id, res)
-        .then((response) => {
-          console.log(response);
+          nominal: res.data.nominal,
+          paymentMethod: res.data.paymentMethod
         })
         Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          showCancelButton: false,
-          text:  'Cancel Top Up Already Success!',
-          }).then((result)=>{
-            if(result.isConfirmed){
-              window.location.reload();
-            }
-          })
-      }
-    })
+          icon: 'warning',
+          title: 'Warning!',
+          showCancelButton: true,
+          text: 'Are you sure want to Cancel this?',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            Axios2.put('top_up/cancel/' + id, res)
+              .then((response) => {
+                console.log(response);
+              })
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              showCancelButton: false,
+              text: 'Cancel Top Up Already Success!',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            })
+          }
+        })
       })
   }
 
   fetchData(getRole) {
-    var role=getRole;
+    var role = getRole;
     console.log(role.data)
     let results = [];
     let result = this.state.data;
-    var no=1;
+    var no = 1;
 
 
-    result.forEach( topup => {
+    result.forEach(topup => {
       var row = [];
       var actVal, statusVal = '';
       if (topup.statusPayment == 'Success') {
@@ -197,12 +198,12 @@ class TopUpManagement extends Component {
       }
       row.push(<td className="text-center" >{no++}</td>);
       row.push(<td className="text-center" >{topup.historyBalanceId}</td>);
-      if (role.data==="[ROLE_ADMIN]"){
+      if (role.data === "[ROLE_ADMIN]") {
         row.push(<td className="text-center" >{actVal}</td>);
-      }      
+      }
       // row.push(<td className="text-center" >{actVal}</td>);
       row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
-      row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'Rp. '}/>}</td>);
+      row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />}</td>);
       row.push(<td>{topup.paymentMethod}</td>);
       row.push(<td className="text-center" >{statusVal}</td>);
       results.push(row);
@@ -210,25 +211,30 @@ class TopUpManagement extends Component {
     this.setState({ rows: results });
   }
 
-  async show(){
+  async show() {
     const getRole = await Axios2.get('top_up_management/getRole');
-    var role=getRole;
-    if (role.data=="[ROLE_ADMIN]") {      
-      this.setState({role: "[ROLE_ADMIN]" })
-    } else{
-      this.setState({role: "[ROLE_USER]" })
-    } 
-    if (this.state.role=="[ROLE_ADMIN]") {      
-      this.setState({show:true })
-    } else{
-      this.setState({show:false})
+    var role = getRole;
+    if (role.data == "[ROLE_ADMIN]") {
+      this.setState({ role: "[ROLE_ADMIN]" })
+    } else {
+      this.setState({ role: "[ROLE_USER]" })
+    }
+    if (this.state.role == "[ROLE_ADMIN]") {
+      this.setState({ show: true })
+    } else {
+      this.setState({ show: false })
     }
   }
 
-  handleValidation2() {    
+  handleValidation2() {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
+
+    if (this.state.userId==""){
+      formIsValid = false;
+      errors["Name"] = "User ID cannot be empty";
+    }
 
     //Password
     if (!fields["PasswordConfirm"]) {
@@ -242,7 +248,7 @@ class TopUpManagement extends Component {
       errors["PasswordConfirm2"] = "Password Confirm cannot be empty";
     }
 
-    if (fields["PasswordConfirm"]!==fields["PasswordConfirm2"]){
+    if (fields["PasswordConfirm"] !== fields["PasswordConfirm2"]) {
       formIsValid = false;
       errors["PasswordConfirm2"] = "Password don't Match";
     }
@@ -251,45 +257,45 @@ class TopUpManagement extends Component {
     return formIsValid;
   }
 
-  async validatepass(){
-    let fields = this.state.fields;    
-  const topup = {    
-    user_balance_id: fields["Name"],
-    password: fields["PasswordConfirm"]
-  }
-    var  match=await Axios2.post('top_up_management/getPass',topup);    
+  async validatepass() {
+    let fields = this.state.fields;
+    const topup = {
+      user_balance_id: fields["Name"],
+      password: fields["PasswordConfirm"]
+    }
+    var match = await Axios2.post('top_up_management/getPass', topup);
     return match.data
   }
 
-  contactSubmit2(e) {    
+  contactSubmit2(e) {
     let fields = this.state.fields;
     e.preventDefault();
-    if (this.handleValidation2()) {      
+    if (this.handleValidation2()) {
       $('#passwordModal').modal('hide');
       const topup = {
         nominal: fields["Nominal"],
         paymentMethod: fields["Payment"],
-        user_balance_id: fields["Name"],
+        user_balance_id: this.state.userId,
         password: fields["PasswordConfirm"]
       }
-      console.log(topup)            
-      this.validatepass().then(x => {       
-        if (x==true) {
+      console.log(topup)
+      this.validatepass().then(x => {
+        if (x == true) {
           Axios2.post('top_up/post2', topup)
-              .then((response) => {
-                console.log(response);
-              })
-        Swal.fire({
-          title: "Success Save Top Up Data!",
-          text: "You Already Success to save this data!",
-          icon: "success",
-          buttons: true,
-        })
-        .then((isConfirmed) => {
-          if (isConfirmed) {
-            window.location.reload();
-        }
-        })
+            .then((response) => {
+              console.log(response);
+            })
+          Swal.fire({
+            title: "Success Save Top Up Data!",
+            text: "You Already Success to save this data!",
+            icon: "success",
+            buttons: true,
+          })
+            .then((isConfirmed) => {
+              if (isConfirmed) {
+                window.location.reload();
+              }
+            })
         } else {
           Swal.fire({
             title: "Wrong Password",
@@ -297,17 +303,17 @@ class TopUpManagement extends Component {
             icon: "warning",
             buttons: true,
           })
-          .then((isConfirmed) => {
-            if (isConfirmed) {
-              window.location.reload();
-          }
-          })
+            .then((isConfirmed) => {
+              if (isConfirmed) {
+                window.location.reload();
+              }
+            })
         }
-    })      
-      
-      
+      })
 
-    } 
+
+
+    }
   }
 
   handleChange2(field, e) {
@@ -320,11 +326,10 @@ class TopUpManagement extends Component {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
-
-    //Name
-    if (!fields["Name"]) {
+    
+    if (this.state.userId=="") {
       formIsValid = false;
-      errors["Name"] = "Name cannot be empty";
+      errors["Name"] = "User ID cannot be empty";
     }
 
     //Nominal
@@ -351,23 +356,32 @@ class TopUpManagement extends Component {
     }
   }
 
+  handleChange3 = (event) => {    
+
+      var userId = event.target.value;
+    console.log(userId)
+    this.setState({ userId: userId}); 
+    
+       
+ }
+
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
-    this.setState({ fields });    
-  } 
+    this.setState({ fields });
+  }
 
-  refresh(){
+  refresh() {
     window.location.reload();
   }
 
   render() {
-    
-    const { rows,headings,show,user } = this.state;    
-    console.log(this.state.user)      
-    return (            
+
+    const { rows, headings, show, user,userId } = this.state;
+    console.log(this.state.user)
+    return (
       <div className="wrapper">
-        {/* Navbar */}      
+        {/* Navbar */}
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
           {/* Content Header (Page header) */}
@@ -405,116 +419,120 @@ class TopUpManagement extends Component {
                   </button>
                 </div>
                 <form
-                role="form"
-                id="addtopup"
-                onSubmit={this.contactSubmit.bind(this)}
-              >
-                <div className="modal-body">
-                  <div className="row">
-                    <div className="col-md-5">
-                      <label className="title-module">ID User:</label>
-                    </div>
-                    <div className="col-md-7">
-                      <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter ID User" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
+                  role="form"
+                  id="addtopup"
+                  onSubmit={this.contactSubmit.bind(this)}
+                >
+                  <div className="modal-body">
+                    <div className="row">
+                      <div className="col-md-5">
+                        <label className="title-module">ID User:</label>
+                      </div>
+                      <div className="col-md-7">
+                        {/* <input type="text" id="topup-user" name="name" className="form-control" placeholder="Enter ID User" onChange={this.handleChange.bind(this, "Name")} value={this.state.fields["Name"]} />
                       <span style={{ color: "red" }}>
                             {this.state.errors["Name"]}
-                          </span>
-                          {/* <select id="dropdown" className="custom-select"
-            OnChange={this.handleDropdownChange}>
-              {this.state.user.map(person => <option value={person.userId}>{person.email}</option>)}                            
-            </select> */}
+                          </span> */}
+                        <select id="dropdown" className="custom-select"
+                          onChange={this.handleChange3} value={userId}>
+                            <option value="">Select---</option>
+                          {this.state.user.map((person,index) => {return(<option key={index} value={person.userId}>{person.email}</option>) })}                          
+                        </select>
+                        <span style={{ color: "red" }}>
+                            {this.state.errors["Name"]}
+                          </span> 
+                      </div>
                     </div>
-                  </div>
-                  <hr className="divider" />
-                  <div className="row">
-                    <div className="col-lg-5">
-                      <label className="title-module">Total Nominal:</label>
+                    <hr className="divider" />
+                    <div className="row">
+                      <div className="col-lg-5">
+                        <label className="title-module">Total Nominal:</label>
+                      </div>
+                      <div className="col-lg-7">
+                        <div className="form-group">
+                          <div className="radio-group">
+                            <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option" id="option1" value="10000" onChange={this.handleChange.bind(this, "Nominal")} />
+                                <label htmlFor="option1" style={{ fontWeight: 'normal' }}>Rp. 10000</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option" id="option2" value="20000" onChange={this.handleChange.bind(this, "Nominal")} />
+                                <label htmlFor="option2" style={{ fontWeight: 'normal' }}>Rp. 20000</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option" id="option3" value="30000" onChange={this.handleChange.bind(this, "Nominal")} />
+                                <label htmlFor="option3" style={{ fontWeight: 'normal' }}>Rp. 30000</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option" id="option4" value="50000" onChange={this.handleChange.bind(this, "Nominal")} />
+                                <label htmlFor="option4" style={{ fontWeight: 'normal' }}>Rp. 50000</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option" id="option5" value="100000" onChange={this.handleChange.bind(this, "Nominal")} />
+                                <label htmlFor="option5" style={{ fontWeight: 'normal' }}>Rp. 100000</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option" id="option6" value="200000" onChange={this.handleChange.bind(this, "Nominal")} />
+                                <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Rp. 200000</label>
+                              </div>
+                              <span style={{ color: "red" }}>
+                                {this.state.errors["Nominal"]}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="col-lg-7">
-                      <div className="form-group">
-                        <div className="radio-group">
-                          <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option" id="option1" value="10000"  onChange={this.handleChange.bind(this, "Nominal")} />
-                              <label htmlFor="option1" style={{ fontWeight: 'normal' }}>Rp. 10000</label>
+                    <hr className="divider" />
+                    <div className="row">
+                      <div className="col-lg-5">
+                        <label className="title-module">Payment Method:</label>
+                      </div>
+                      <div className="col-lg-7">
+                        <div className="form-group">
+                          <div className="radio-group method">
+                            <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option2" id="option-method1" Value="Credit Card" onChange={this.handleChange.bind(this, "Payment")} />
+                                <label htmlFor="option1" style={{ fontWeight: 'normal' }}>Credit Card</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option2" id="option-method2" Value="Paypall" onChange={this.handleChange.bind(this, "Payment")} />
+                                <label htmlFor="option2" style={{ fontWeight: 'normal' }}>Paypall</label>
+                              </div>
+                              <div className="icheck-primary">
+                                <input type="radio" name="option2" id="option-method3" Value="OVO" onChange={this.handleChange.bind(this, "Payment")} />
+                                <label htmlFor="option3" style={{ fontWeight: 'normal' }}>OVO</label>
+                              </div>
+                              <div className="icheck-primary gopay">
+                                <input type="radio" name="option2" id="option-method4" Value="Gopay" onChange={this.handleChange.bind(this, "Payment")} />
+                                <label htmlFor="option4" style={{ fontWeight: 'normal' }}>Gopay</label>
+                              </div>
+                              <div className="icheck-primary dana">
+                                <input type="radio" name="option2" id="option-method5" Value="Dana" onChange={this.handleChange.bind(this, "Payment")} />
+                                <label htmlFor="option5" style={{ fontWeight: 'normal' }}>Dana</label>
+                              </div>
+                              <div className="icheck-primary cash">
+                                <input type="radio" name="option2" id="option-method6" Value="Cash" onChange={this.handleChange.bind(this, "Payment")} />
+                                <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Cash</label>
+                              </div>
+                              <span style={{ color: "red" }}>
+                                {this.state.errors["Payment"]}
+                              </span>
                             </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option" id="option2" value="20000"  onChange={this.handleChange.bind(this, "Nominal")} />
-                              <label htmlFor="option2" style={{ fontWeight: 'normal' }}>Rp. 20000</label>
-                            </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option" id="option3" value="30000"  onChange={this.handleChange.bind(this, "Nominal")} />
-                              <label htmlFor="option3" style={{ fontWeight: 'normal' }}>Rp. 30000</label>
-                            </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option" id="option4" value="50000"  onChange={this.handleChange.bind(this, "Nominal")} />
-                              <label htmlFor="option4" style={{ fontWeight: 'normal' }}>Rp. 50000</label>
-                            </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option" id="option5" value="100000"  onChange={this.handleChange.bind(this, "Nominal")} />
-                              <label htmlFor="option5" style={{ fontWeight: 'normal' }}>Rp. 100000</label>
-                            </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option" id="option6" value="200000" onChange={this.handleChange.bind(this, "Nominal")} />
-                              <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Rp. 200000</label>
-                            </div>
-                            <span style={{ color: "red" }}>
-                            {this.state.errors["Nominal"]}
-                          </span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <hr className="divider" />
-                  <div className="row">
-                    <div className="col-lg-5">
-                      <label className="title-module">Payment Method:</label>
-                    </div>
-                    <div className="col-lg-7">
-                      <div className="form-group">
-                        <div className="radio-group method">
-                          <div className="row row-cols-md-3" style={{ textAlign: 'center' }}>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option2" id="option-method1" Value="Credit Card" onChange={this.handleChange.bind(this, "Payment")} />
-                              <label htmlFor="option1" style={{ fontWeight: 'normal' }}>Credit Card</label>
-                            </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option2" id="option-method2" Value="Paypall" onChange={this.handleChange.bind(this, "Payment")} />
-                              <label htmlFor="option2" style={{ fontWeight: 'normal' }}>Paypall</label>
-                            </div>
-                            <div className="icheck-primary">
-                              <input type="radio" name="option2" id="option-method3" Value="OVO" onChange={this.handleChange.bind(this, "Payment")} />
-                              <label htmlFor="option3" style={{ fontWeight: 'normal' }}>OVO</label>
-                            </div>
-                            <div className="icheck-primary gopay">
-                              <input type="radio" name="option2" id="option-method4" Value="Gopay" onChange={this.handleChange.bind(this, "Payment")}  />
-                              <label htmlFor="option4" style={{ fontWeight: 'normal' }}>Gopay</label>
-                            </div>
-                            <div className="icheck-primary dana">
-                              <input type="radio" name="option2" id="option-method5" Value="Dana" onChange={this.handleChange.bind(this, "Payment")} />
-                              <label htmlFor="option5" style={{ fontWeight: 'normal' }}>Dana</label>
-                            </div>
-                            <div className="icheck-primary cash">
-                              <input type="radio" name="option2" id="option-method6" Value="Cash" onChange={this.handleChange.bind(this, "Payment")}  />
-                              <label htmlFor="option6" style={{ fontWeight: 'normal' }}>Cash</label>
-                            </div>
-                            <span style={{ color: "red" }}>
-                            {this.state.errors["Payment"]}
-                          </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal">
-                    Close
+                  <div className="modal-footer">
+                    <button className="btn btn-secondary" type="button" data-dismiss="modal">
+                      Close
                   </button>
-                  <button className="btn btn-primary" id="btn-delete" type="submit" >Next</button>
-                </div>
+                    <button className="btn btn-primary" id="btn-delete" type="submit" >Next</button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -525,10 +543,7 @@ class TopUpManagement extends Component {
                 <div className="modal-header">
                   <h5 className="modal-title" id="exampleModalLabel">
                     Check Data Top Up
-                  </h5>
-                  <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                  </button>
+                  </h5>                  
                 </div>
                 <div className="modal-body">
                   <div className="row">
@@ -536,7 +551,7 @@ class TopUpManagement extends Component {
                       <label className="title-module">Username:</label>
                     </div>
                     <div className="col-md-7">
-                      <input type="text" id="checkuser" name="name" className="form-control" value={this.state.fields["Name"]} readOnly placeholder />
+                      <input type="text" id="checkuser" name="name" className="form-control" value={this.state.userId} readOnly placeholder />
                     </div>
                   </div>
                   <hr className="divider" />
@@ -573,47 +588,44 @@ class TopUpManagement extends Component {
                 <div className="modal-header">
                   <h5 className="modal-title" id="exampleModalLabel">
                     Password
-                  </h5>
-                  <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                  </button>
+                  </h5>                  
                 </div>
                 <form
-                role="form"
-                id="addtopup"
-                onSubmit={this.contactSubmit2.bind(this)}
-              >
-                <div className="modal-body">
-                  <div className="row">
-                    <div className="col-md-5">
-                      <label className="title-module">Password:</label>
+                  role="form"
+                  id="addtopup"
+                  onSubmit={this.contactSubmit2.bind(this)}
+                >
+                  <div className="modal-body">
+                    <div className="row">
+                      <div className="col-md-5">
+                        <label className="title-module">Password:</label>
+                      </div>
+                      <div className="col-md-7">
+                        <input type="password" id="PasswordConfirm" name="PasswordConfirm" className="form-control" placeholder="Password" onChange={this.handleChange2.bind(this, "PasswordConfirm")} value={this.state.fields["PasswordConfirm"]} />
+                        <span style={{ color: "red" }}>
+                          {this.state.errors["PasswordConfirm"]}
+                        </span>
+                      </div>
                     </div>
-                    <div className="col-md-7">
-                      <input type="password" id="PasswordConfirm" name="PasswordConfirm" className="form-control" placeholder="Password" onChange={this.handleChange2.bind(this, "PasswordConfirm")} value={this.state.fields["PasswordConfirm"]} />
-                      <span style={{ color: "red" }}>
-                            {this.state.errors["PasswordConfirm"]}
-                          </span>
+                    <hr className="divider" />
+                    <div className="row">
+                      <div className="col-md-5">
+                        <label className="title-module">Confirm Password:</label>
+                      </div>
+                      <div className="col-md-7">
+                        <input type="password" id="PasswordConfirm2" name="PasswordConfirm2" className="form-control" placeholder="Confirm Password" onChange={this.handleChange2.bind(this, "PasswordConfirm2")} value={this.state.fields["PasswordConfirm2"]} />
+                        <span style={{ color: "red" }}>
+                          {this.state.errors["PasswordConfirm2"]}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <hr className="divider" />
-                  <div className="row">
-                    <div className="col-md-5">
-                      <label className="title-module">Confirm Password:</label>
-                    </div>
-                    <div className="col-md-7">
-                      <input type="password" id="PasswordConfirm2" name="PasswordConfirm2" className="form-control" placeholder="Confirm Password" onChange={this.handleChange2.bind(this, "PasswordConfirm2")} value={this.state.fields["PasswordConfirm2"]} />
-                      <span style={{ color: "red" }}>
-                            {this.state.errors["PasswordConfirm2"]}
-                          </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#checkModal">
-                    Back
+                  <div className="modal-footer">
+                    <button className="btn btn-secondary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#checkModal">
+                      Back
                   </button>
-                  <button className="btn btn-success" id="btn-delete" type="submit">Confirm</button>
-                </div>
+                    <button className="btn btn-success" id="btn-delete" type="submit">Confirm</button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -645,22 +657,22 @@ class TopUpManagement extends Component {
                 <div className="card-header">
                   <div className="row">
                     <div className="col-md-12 ctm-responsive">
-                      { show ?  <button
+                      {show ? <button
                         type="button"
                         className="btn btn-primary add-btn"
                         data-toggle="modal"
-                        data-target="#topupModal"                                                
+                        data-target="#topupModal"
                         style={{ float: "right" }}
                       >
                         <i className="nav-icon fas fa-plus"></i>
-                      Add Top Up                 
-                    </button> : null}                     
+                      Add Top Up
+                    </button> : null}
                     </div>
                   </div>
                 </div>
 
-                <div className="card-body">                  
-                  <DataTable headings={headings} rows={rows} />                    
+                <div className="card-body">
+                  <DataTable headings={headings} rows={rows} />
                 </div>
               </div>
             </div>
