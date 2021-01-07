@@ -10,6 +10,7 @@ class Auth extends Component {
   constructor(props) {
     super(props)
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
 
     this.state = {
        fields: {},
@@ -206,11 +207,46 @@ class Auth extends Component {
     forgotPassword.style.display = "block";
   }
 
+  handleRegister(e) {
+    e.preventDefault()
+
+    if(this.handleValidationSignUp()){
+      let email = this.state.fields["emailSignUp"]
+      let password = this.state.fields["PasswordSignUp"]
+      let confirmPassword = this.state.fields["ConfirmPasswordSignUp"]
+
+      AuthService.register(email, password, confirmPassword).then(
+        () => {
+          Swal.fire({
+
+            icon: 'success',
+            title: 'Register Success!',
+            showCancelButton: false,
+            text: 'Please continue to login',
+            }).then((result) => {
+
+            if (result.isConfirmed) {
+            window.location.reload()
+            }
+            })
+        }
+      )
+      .catch(error => Swal.fire(
+        'Register Failed !',
+        'Either email is taken or password is incorrect',
+        'error'
+    ))
+    } else {
+
+    }
+  }
+
   handleLogin(e) {
     e.preventDefault()
 
-    let email = this.state.fields["emailSignIn"]
-    let password = this.state.fields["PasswordSignIn"]
+    if(this.handleValidationSignIn()){
+      let email = this.state.fields["emailSignIn"]
+      let password = this.state.fields["PasswordSignIn"]
 
 
     AuthService.login(email, password).then(
@@ -223,6 +259,9 @@ class Auth extends Component {
       'Either email or password is incorrect',
       'error'
   ))
+    } else {
+
+    }
   }
 
   render() {
@@ -265,7 +304,7 @@ class Auth extends Component {
                         className="form-control custom-form"
                         id="exampleInputEmail1"
                         placeholder="Enter email"
-                        onChange={this.handleChangeSignUp.bind(this, "emailSignIn")}
+                        onChange={this.handleChangeSignIn.bind(this, "emailSignIn")}
                         value={this.state.fields["emailSignIn"]}
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignIn"]}</span>
@@ -283,7 +322,7 @@ class Auth extends Component {
                         className="form-control custom-form"
                         id="exampleInputPassword1"
                         placeholder="Password"
-                        onChange={this.handleChangeSignUp.bind(this, "PasswordSignIn")}
+                        onChange={this.handleChangeSignIn.bind(this, "PasswordSignIn")}
                         value={this.state.fields["PasswordSignIn"]}
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignIn"]}</span>
@@ -329,46 +368,14 @@ class Auth extends Component {
               </div>
 
               {/* <!--Register Form--> */}
-              <div className="register-wrapper my-auto" id="register" onSubmit={this.contactSubmitSignUp.bind(this)}>
+              <div className="register-wrapper my-auto" id="register" >
                 <h1 className="form-title">Register</h1>
                 <p className="form-subtitle">
                   Welcome! Please Register to your Account
                 </p>
 
-                <form role="form" id="formRegister">
+                <form role="form" id="formRegister" onSubmit={this.handleRegister}>
                   <div className="container-form">
-                    <div className="login form-group bottom-label">
-                      <label for="inputUsername" className="label-login">
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        name="userNameSignUp"
-                        className="form-control custom-form"
-                        id="inputUsername"
-                        placeholder="Enter username"
-                        autocomplete="off"
-                        onChange={this.handleChangeSignUp.bind(this, "userNameSignUp")}
-                        value={this.state.fields["userNameSignUp"]}
-                      />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["userNameSignUp"]}</span>
-                    </div>
-                    <div className="login form-group bottom-label">
-                      <label for="inputFullName" className="label-login">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        name="fullNameSignUp"
-                        className="form-control custom-form"
-                        id="inputFullName"
-                        placeholder="Enter full name"
-                        autocomplete="off"
-                        onChange={this.handleChangeSignUp.bind(this, "fullNameSignUp")}
-                        value={this.state.fields["fullNameSignUp"]}
-                      />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["fullNameSignUp"]}</span>
-                    </div>
                     <div className="login form-group bottom-label">
                       <label for="inputEmail" className="label-login">
                         Email address
@@ -397,6 +404,21 @@ class Auth extends Component {
                         placeholder="Password"
                         onChange={this.handleChangeSignUp.bind(this, "PasswordSignUp")}
                         value={this.state.fields["PasswordSignUp"]}
+                      />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignUp"]}</span>
+                    </div>
+                    <div className="login form-group bottom-label">
+                      <label for="inputPassword" className="label-login">
+                        Confirm Password
+                      </label>
+                      <input
+                        type="password"
+                        name="confirmPasswordSignUp"
+                        className="form-control custom-form"
+                        id="exampleInputPassword"
+                        placeholder="Confirm Password"
+                        onChange={this.handleChangeSignUp.bind(this, "ConfirmPasswordSignUp")}
+                        value={this.state.fields["ConfirmPasswordSignUp"]}
                       />
                       <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignUp"]}</span>
                     </div>

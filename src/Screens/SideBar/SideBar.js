@@ -4,6 +4,7 @@ import './SideBar.style.css'
 import avatarUser from '../../Assets/Media/user/profile.png'
 import logo from '../../Assets/Media/icon/bookshelf.png'
 import { Link } from 'react-router-dom';
+import AuthService from '../../Services/auth.service'
 import NumberFormat from 'react-number-format';
 import Axios from 'axios';
 
@@ -192,7 +193,7 @@ export default class SideBar extends Component {
                   </p>
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item" onClick={AuthService.logout}>
                 <Link to="/Auth" className="nav-link" data-target="#modal-xl">
                   <i className="nav-icon fas fa-sign-out-alt" />
                   <p>
