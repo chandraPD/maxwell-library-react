@@ -4,6 +4,7 @@ import $ from 'jquery'
 import {Link, withRouter} from 'react-router-dom'
 import Axios from 'axios'
 
+
 class Search extends Component {
 
     constructor(props) {
@@ -12,11 +13,17 @@ class Search extends Component {
         this.state = {
              title: "",
              dataSearch: [],
-             countBook: ""
+             countBook: "",
+             search: "",
+             visible: 3
         }
+
+        this.handleChangeSearch = this.handleChangeSearch.bind(this)
+        this.loadMore = this.loadMore.bind(this)
     }
     
     componentDidMount() {
+
         const titleSearch = this.props.match.params.title;
         console.log(titleSearch)
         this.setState({title: titleSearch})
@@ -33,6 +40,12 @@ class Search extends Component {
         console.log(this.state.countBook)
     }
 
+    loadMore() {
+        this.setState((prev) => {
+            return {visible: prev.visible + 4}
+        })
+    }
+
     showCountBook() {
         if(this.state.countBook === 1) {
             return <h4>{this.state.countBook} Book</h4>
@@ -41,19 +54,31 @@ class Search extends Component {
         }
     }
 
+    handleChangeSearch = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+        this.setState({search: e.target.value}, () => setTimeout(function() {
+            this.fetchData(this.state.search)
+        }.bind(this), 500))
+        
+    }
+
+
     render() {
 
-        const {dataSearch, title} = this.state
+        const {dataSearch, title, visible} = this.state
 
         return (
             <div className="content-wrapper">
                 <section className="content">
                 <div className="container-fluid search-content">
-                    <input className="form-control form-control" type="text" value={title}/>
 
-                    <p className="recommended-books-search">Suggested Categories : &nbsp;
+                    <input autoComplete="off" className="form-control form-control" type="text" value={title} name="title" onChange={this.handleChangeSearch}/>
+
+                    {/* <p className="recommended-books-search">Suggested Categories : &nbsp;
                         <span className="badge badge-success category-book">novel</span>
-                    </p>
+                    </p> */}
 
                     <div className="hero-book-search">
                         {this.showCountBook()}
@@ -69,7 +94,7 @@ class Search extends Component {
                         </div>
                         <div className="book-list-search">
 
-                            {dataSearch.map((data) => {
+                            {dataSearch.slice(0, visible).map((data) => {
                                 return(
                                     <div className="book-content">
                                         <div className="content-cover">
@@ -86,7 +111,9 @@ class Search extends Component {
                                 )
                             })}
 
-                            
+                            {visible < dataSearch.length &&
+                                <button onClick={this.loadMore} type="button" className="btn btn-dark">Load More</button>
+                            }
 
                             
                         </div>

@@ -6,7 +6,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from "jquery";
 import "bootstrap";
 import Swal from "sweetalert2";
-import axios from "axios";
+import Axios from '../../../Instances/axios-instances';
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -25,67 +25,60 @@ class CategoryManagement extends Component {
   }
 
   componentDidMount() {
-    this.fetchDataCategory();
+    this.fetchData();
   }
 
-  async fetchDataCategory() {
-    await axios.get(
-      "http://localhost:8080/category/get-all-active"
-    ).then((response) => {
-      console.log(response)
-      this.setState({data: response.data})
-      this.fetchData()
-      console.log(this.state.data)
-      $("#example1").DataTable({
-        responsive: true,
-        autoWidth: false,
-      });
-    })
-    
-  }
-
-  fetchData() {
+  async fetchData() {
+    $('#example1').DataTable().destroy();
     const results = [];
-    const result = this.state.data;
+    
     var no = 1;
 
-    result.forEach((category) => {
-      var row = [];
+    await Axios.get('/category/get-all-active')
+          .then((response) => {
+            const result = response.data;
+            this.setState({data: result})
+            result.map((category) => {
+              var row = [];
+              row.push(<td className="text-center">{no++}</td>);
+              row.push(
+                <td className="text-center py-0 align-middle">
+                  <div className="btn-group btn-group-sm">
+                    <Action
+                      type="success"
+                      title="Edit"
+                      icon="pen"
+                      dataToggle="modal"
+                      dataTarget="#modal-edit"
+                      onClick={() => this.getCategory(category.categoryId)}
+                    />
+                    <Action
+                      type="danger"
+                      title="Delete"
+                      icon="trash"
+                      dataToggle="modal"
+                      dataTarget="#modal-delete"
+                      onClick={() => this.getCategory(category.categoryId)}
+                    />
+                  </div>
+                </td>
+              );
+              row.push(<td>{category.categoryId}</td>);
+              row.push(<td>{category.category}</td>);
+              results.push(row);
+            })
+            this.setState({ rows: results });
 
-      row.push(<td className="text-center">{no++}</td>);
-      row.push(
-        <td className="text-center py-0 align-middle">
-          <div className="btn-group btn-group-sm">
-            <Action
-              type="success"
-              title="Edit"
-              icon="pen"
-              dataToggle="modal"
-              dataTarget="#modal-edit"
-              onClick={() => this.getCategory(category.categoryId)}
-            />
-            <Action
-              type="danger"
-              title="Delete"
-              icon="trash"
-              dataToggle="modal"
-              dataTarget="#modal-delete"
-              onClick={() => this.getCategory(category.categoryId)}
-            />
-          </div>
-        </td>
-      );
-      row.push(<td>{category.categoryId}</td>);
-      row.push(<td>{category.category}</td>);
-      results.push(row);
-    });
-    this.setState({ rows: results });
-
+            $("#example1").DataTable({
+              responsive: true,
+              autoWidth: false,
+              });
+          })
   }
 
   getCategory = (id) => {
-    axios
-      .get("http://localhost:8080/category/get-by-id/" + id)
+    Axios
+      .get("/category/get-by-id/" + id)
       .then((response) => {
         console.log(response);
         this.setState({
@@ -101,11 +94,12 @@ class CategoryManagement extends Component {
       category: this.state.category,
     };
 
-    axios
-      .put("http://localhost:8080/category/update-category/" + id, category)
+    Axios
+      .put("/category/update-category/" + id, category)
       .then((response) => {
         console.log(response);
         $("#modal-edit").modal("toggle");
+        $('.modal-backdrop').remove();
         Swal.fire({
           icon: "success",
           title: "Success",
@@ -113,15 +107,15 @@ class CategoryManagement extends Component {
           confirmButtonText: `OK`,
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            this.fetchData()
           }
         });
       });
   };
 
   deleteCategory = (id) => {
-    axios
-      .put("http://localhost:8080/category/delete-category/" + id)
+    Axios
+      .put("/category/delete-category/" + id)
       .then((response) => {
         console.log(response);
         Swal.fire({
@@ -131,7 +125,7 @@ class CategoryManagement extends Component {
           confirmButtonText: `OK`,
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            this.fetchData()
           }
         });
       });
@@ -172,14 +166,14 @@ class CategoryManagement extends Component {
     let fields = this.state.fields;
     e.preventDefault();
     if (this.handleValidation()) {
-      $("#modal-add").modal("toggle");
-
+      $("#modal-add").modal("hide");
+      $('.modal-backdrop').remove();
       const category = {
         category: fields["CategoryName"],
       };
       console.log(category);
-      axios
-        .post("http://localhost:8080/category/add-category", category)
+      Axios
+        .post("/category/add-category", category)
         .then((response) => {
           console.log(response);
           Swal.fire({
@@ -189,7 +183,7 @@ class CategoryManagement extends Component {
             confirmButtonText: `OK`,
           }).then((result) => {
             if (result.isConfirmed) {
-              window.location.reload();
+              this.fetchData()
             }
           });
         })
