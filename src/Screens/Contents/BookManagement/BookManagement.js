@@ -87,7 +87,7 @@ class BookManagement extends Component {
           </div>
         </td>
       );
-      row.push(<td className="text-center">{book.bookId}</td>);
+      row.push(<td className="text-center">{book.bookCode}</td>);
       row.push(<td className="text-center">{book.title}</td>);
       row.push(<td className="text-center">{book.author}</td>);
       row.push(<td className="text-justify" style={{width: "100%"}}>{book.description}</td>);
@@ -120,7 +120,20 @@ class BookManagement extends Component {
     fields["imgDetail"] = ""
     fields["title"] = ""
 
+    let errors = {}
+    errors["title"] = ""
+    errors["author"] = ""
+    errors["categoryId"] = ""
+    errors["statusBook"] = ""
+    errors["description"] = ""
+    errors["publishDate"] = ""
+    errors["statusBook"] = ""
+    errors["imgBanner"] = ""
+    errors["imgDetail"] = ""
+    errors["title"] = ""
+
     this.setState({fields: fields})
+    this.setState({errors: errors})
   }
 
   getBook = (id) => {
@@ -144,6 +157,7 @@ class BookManagement extends Component {
   updateBook = (id) => {
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
+    console.log(token)
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -712,21 +726,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
-                      <label htmlFor="editCategoryId">Category ID</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="editCategoryId"
-                        name="categoryId"
-                        placeholder="Enter Category ID"
-                        onChange={this.bookChange}
-                        value={this.state.categoryId}
-                      />
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["categoryId"]}
-                      </span>
-                    </div>
+                   
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">

@@ -89,7 +89,7 @@ class BookDetail extends Component {
           </div>
         </td>
       );
-      row.push(<td className="text-center">{detailBook.bookDetailId}</td>);
+      row.push(<td className="text-center">{detailBook.bookDetailCode}</td>);
       row.push(<td className="text-center">{detailBook.typeOfDamage}</td>);
       row.push(<td className="text-center">{detailBook.descOfDamage}</td>);
       this.setState({ title: detailBook.bookEntity.title})
