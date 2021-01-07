@@ -7,6 +7,10 @@ import {
 } from 'reactstrap';
 import { ProgressBar } from 'react-bootstrap';
 import validate from './Validate'
+import { MDBIcon } from "mdbreact";
+
+const renderError = ({ meta: { touched, error } }) =>
+  touched && error ? <span><MDBIcon icon="exclamation-circle"/> {error}</span> : false;
 
 const TopUp1 = (props) => {
   console.log(props)
@@ -69,8 +73,9 @@ const TopUp1 = (props) => {
                   <Field name="nominal" component="input" type="radio" value="200000" />
                   {' '}
             Rp 200.000
-          </label>
+          </label>                
               </div>
+              <Field name="nominal" component={renderError}/>
             </div>            
           </div>
           

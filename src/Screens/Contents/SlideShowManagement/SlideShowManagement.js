@@ -18,7 +18,7 @@ class SlideShowManagement extends Component {
       rows: [],
       results: [],
       isLoading : true,
-      selectStatus : "Active"
+      statusShow : ""
     };
 
     //FUNGSI YANG DIGUNAKAN UNTUK MENGEDIT DATA DI MODAL-EDIT
@@ -29,27 +29,41 @@ class SlideShowManagement extends Component {
   //METHOD TAMBAHAN GET POST UPDATE DELETE  
   componentDidMount() {
     this.fetchDataSlideShow();
+    // this.getSlideShow();
   }
 
+
+  // async getSlideShow() {
+  //   let fetchSlideShow = await axios.get(
+  //     'http://localhost:8080/slideshow/get-all');
+  //   console.log(fetchSlideShow);
+  //   const resultSlideShow = fetchSlideShow.data;
+  //   this.setState({
+  //     slideshow : resultSlideShow
+  //   });
+  // }
+
   // SAVE STATUS ACTIVE OR INACTIVE
-  handleDropdownChange(id) {
-    const status = this.state.selectStatus;  
+  handleDropdownChange(id, e) {
+    
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
 
+
+    console.log(e);
     const config = {
       headers : { Authorization : `Bearer ${userToken}`}
     }
-      
 
-    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, config)
-    .then((response) => {
-      console.log(response);
-      window.location.reload();
-    })
-    
-    // this.setState({selectStatus : e.target.value});
+    // const statusSlideShow = {status : this.state.statusShow};
+    // console.log(statusSlideShow);
+    // axios.put(`http://localhost:8080/slideshow/update-status/${id}/${status}`,null, config)
+    // .then((response) => {
+    //   console.log(response);
+      // window.location.reload();
+    // })
+
   }
 
   async fetchDataSlideShow() {
@@ -89,10 +103,10 @@ class SlideShowManagement extends Component {
           );
           //UNTUK OPTION ACTIVE DAN INACTIVE
           row.push(<td className="text-center py-0 align-middle">
-          <select id="dropdown" className="custom-select"
-            OnChange={this.handleDropdownChange}>
-              <option value="Active">{this.state.selectStatus}</option>
-              <option value="Inactive">Inactive</option>
+          <select name="statusShow" id="dropdown" className="custom-select"
+            value={this.state.statusShow} onChange={this.handleDropdownChange(slideshow.slideShowId, this)}>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
             </select>
           </td>)
           //UNTUK MENAMPILKAN JUDUL
