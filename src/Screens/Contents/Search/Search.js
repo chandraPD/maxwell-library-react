@@ -55,7 +55,7 @@ class Search extends Component {
                         <span className="badge badge-success category-book">novel</span>
                     </p>
 
-                    <div className="hero-book">
+                    <div className="hero-book-search">
                         {this.showCountBook()}
                         <div className="input-group-prepend">
                             <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown"

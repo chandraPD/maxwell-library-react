@@ -48,13 +48,17 @@ form#search-books {
     color: #6f6f6f;
 }
 
+.search-content p {
+    text-align: left;
+}
+
 .category-book {
     padding: 0.3rem;
     background-color: rgba(0, 0, 0, 0.3);
     color: white;
 }
 
-.hero-book {
+.hero-book-search {
     min-width: 400px;
     width: 100%;
     margin-top: 1rem;
@@ -71,13 +75,13 @@ form#search-books {
     z-index: 1;
 }
 
-.hero-book h4 {
+.hero-book-search h4 {
     color: #6f6f6f;
     font-size: 1.3rem;
     position: absolute;
 }
 
-.hero-book .input-group-prepend {
+.hero-book-search .input-group-prepend {
     color: #6f6f6f;
     font-size: 1.3rem;
     margin-right: 3rem;
