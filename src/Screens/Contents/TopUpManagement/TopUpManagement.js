@@ -30,6 +30,7 @@ class TopUpManagement extends Component {
       role: JSON.parse(localStorage.getItem('user')).userInfo.activeRole,
       show: true,
       userId: "",
+      checkedRadio: null,
       password: ""
     };
   }
@@ -42,15 +43,17 @@ class TopUpManagement extends Component {
 
   async getRole() {    
     if (this.state.role == "ROLE_ADMIN") {
-      this.setState({ headings: ["No", "ID", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+      this.setState({ headings: ["No", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
     } else {
-      this.setState({ headings: ["No", "ID", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+      this.setState({ headings: ["No", "Total Nominal (Rp)", "Payment Method", "Status"] })
     }
   }
 
   async getAll() {    
-    await Axios2.get('top_up_management/getAll').then((getData) => {
+    await Axios2.get('top_up_management/getAll').then((getData) => {      
       const result_topup = getData.data;
+      console.log(result_topup)
+      $("#example1").DataTable().destroy();
       this.setState({ data: result_topup });
       this.fetchData(this.state.role);
       $("#example1").DataTable({
@@ -101,7 +104,7 @@ class TopUpManagement extends Component {
               text: 'Confirm Top Up Already Success!',
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                this.getAll();
               }
             })
           }
@@ -136,7 +139,7 @@ class TopUpManagement extends Component {
               text: 'Cancel Top Up Already Success!',
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                this.getAll();
               }
             })
           }
@@ -178,13 +181,13 @@ class TopUpManagement extends Component {
         </td>
         statusVal = <Status type="warning" val="Pending" />
       }
-      row.push(<td className="text-center" >{no++}</td>);
-      row.push(<td className="text-center" >{topup.historyBalanceId}</td>);
+      row.push(<td className="text-center" >{no++}</td>);      
       if (role === "ROLE_ADMIN") {
         row.push(<td className="text-center" >{actVal}</td>);
+        row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
       }
       // row.push(<td className="text-center" >{actVal}</td>);
-      row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
+      
       row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />}</td>);
       row.push(<td>{topup.paymentMethod}</td>);
       row.push(<td className="text-center" >{statusVal}</td>);
@@ -245,8 +248,7 @@ class TopUpManagement extends Component {
   contactSubmit2(e) {
     let fields = this.state.fields;
     e.preventDefault();
-    if (this.handleValidation2()) {
-      $('#passwordModal').modal('hide');
+    if (this.handleValidation2()) {          
       const topup = {
         nominal: fields["Nominal"],
         paymentMethod: fields["Payment"],
@@ -267,20 +269,23 @@ class TopUpManagement extends Component {
             buttons: true,
           })
             .then((isConfirmed) => {
-              if (isConfirmed) {
-                window.location.reload();
+              if (isConfirmed) {                
+                this.getAll();                
+                $('#passwordModal').modal('hide');  
+                $('.modal-backdrop').remove(); 
               }
             })
+            
         } else {
           Swal.fire({
             title: "Wrong Password",
             text: "Failed Wrong Password",
             icon: "warning",
-            buttons: true,
+            
           })
             .then((isConfirmed) => {
               if (isConfirmed) {
-                window.location.reload();
+                this.getAll();
               }
             })
         }
@@ -340,15 +345,17 @@ class TopUpManagement extends Component {
        
  }
 
+ refresh(){
+  this.setState({fields:[],userId:"",errors:[]})
+  $('input[type="radio"]').prop('checked', false);
+  $('#topupModal').modal('show');
+ }
+
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
-  }
-
-  refresh() {
-    window.location.reload();
-  }
+  }  
 
   render() {
     var lol=JSON.parse(localStorage.getItem('user')).userInfo.activeRole;
@@ -636,8 +643,7 @@ class TopUpManagement extends Component {
                       {show ? <button
                         type="button"
                         className="btn btn-primary add-btn"
-                        data-toggle="modal"
-                        data-target="#topupModal"
+                        onClick={()=>{this.refresh()}}
                         style={{ float: "right" }}
                       >
                         <i className="nav-icon fas fa-plus"></i>

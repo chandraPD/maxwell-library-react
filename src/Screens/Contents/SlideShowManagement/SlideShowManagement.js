@@ -18,78 +18,130 @@ class SlideShowManagement extends Component {
       rows: [],
       results: [],
       isLoading : true,
-      selectStatus : ""
+      statusShow : ""
     };
-
-    this.slideShowChange = this.slideShowChange.bind(this);
-    this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
 
-   //METHOD TAMBAHAN GET POST UPDATE DELETE  
+  //METHOD TAMBAHAN GET POST UPDATE DELETE  
   componentDidMount() {
-    this.fetchDataSlideShow();
-  }
-
-  //SAVE STATUS ACTIVE OR INACTIVE
-  handleDropdownChange(e) {
-    console.log(e);
-    this.setState({selectStatus : e.target.value});
-  }
-
-  async fetchDataSlideShow() {
-    let fetchedData = await axios.get('http://localhost:8080/slideshow/get-all-slideshow');
-
-    console.log(fetchedData)
-    // this.setState.isLoading = false;
-    const resultSlideShow = fetchedData.data;
-    this.setState({ data : resultSlideShow });
-
-    $('#example1').DataTable().destroy();
     this.fetchData();
+  }
+
+
+  // SAVE STATUS ACTIVE OR INACTIVE
+  handleDropdownChange = (id, event) => {
+    
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    console.log(id);
+    
+    const status = event.target.value;
+    console.log(status);
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+
+    axios.put(`http://localhost:8080/slideshow/update-status/${id}/${status}`,null, config)
+    .then((response) => {
+      console.log(response);
+      this.fetchData();
+    })
+
+  }
+
+  async fetchData() {
+    $('#example1').DataTable().destroy();
+    await axios.get('http://localhost:8080/slideshow/get-all-slideshow')
+      .then((fetchedData)=> { 
+        console.log(fetchedData);
+        const resultSlideShow = fetchedData.data;
+        this.setState({ data : resultSlideShow });
+        const results = [];
+        const result = this.state.data;
+        var number = 1;
+        
+        result.map((slideshow) => {
+              var row = [];
+        
+              row.push(<td className="text-center">{number++}</td>);
+
+              //UNTUK TOMBOL EDIT DAN DELETE
+              row.push(
+                <td className="text-center py-0 align-middle">
+                  <div className="btn-group btn-group-sm">
+                    <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" onClick={() => this.getSlideShowById(slideshow.slideShowId)}/>
+                    <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" onClick={() => this.getSlideShowById(slideshow.slideShowId)}/>
+                  </div>
+                </td>
+              );
+
+              //UNTUK OPTION ACTIVE DAN INACTIVE
+              row.push(
+                <td className="text-center py-0 align-middle">
+                <select name="statusShow" id="dropdown" className="custom-select"
+                  value = {slideshow.statusShow === true ? "1" : "0"}
+                  onChange={(e) => this.handleDropdownChange(slideshow.slideShowId, e)}>
+                    <option value='1'>Active</option>
+                    <option value='0'>Inactive</option>
+                  </select>
+                </td>
+              );
+
+              //UNTUK MENAMPILKAN JUDUL
+              row.push(
+                <td>{slideshow.title}</td>
+              );
+
+              //UNTUK MENAMPILKAN SUBJUDUL
+              row.push(
+                <td>{slideshow.subTitle}</td>
+              );
+
+              //UNTUK MENAMPILKAN GAMBAR
+              row.push(
+                <td><img src={slideshow.img} alt ="gambar buku" 
+                style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/>
+                </td>
+              );
+              results.push(row)
+            })
+
+            this.setState({ rows: results });
+            $("#example1").DataTable({
+              responsive: true,
+              autoWidth: false,
+          });
+        });
+  }
+
+  //FUNGSI TOMBOL SUBMIT PADA MODAL ADD SLIDESHOW
+  submitSlideShow = () => {
+    const slideshow = {
+        title : this.state.title,
+        subTitle : this.state.subTitle,
+        img : this.state.img
+      };
+
+    axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
+      .then((response) => {
+        console.log(response)
+      })
+   
     $('#example1').DataTable({
       responsive: true,
       autoWidth: false,
     });
   }
 
-  fetchData() {
-    const results = [];
-    const result = this.state.data;
-    var number = 1;
-
-    result.map((slideshow) => {
-          var row = [];
-    
-          row.push(<td className="text-center">{number++}</td>);
-          row.push(
-            <td className="text-center py-0 align-middle">
-              <div className="btn-group btn-group-sm">
-                <Action type="success" title="Edit" icon="pen" dataToggle="modal" dataTarget="#modal-edit" onClick={() => this.getSlideShowById(slideshow.slideShowId)}/>
-                <Action type="danger" title="Delete" icon="trash" dataToggle="modal" dataTarget="#modal-delete" onClick={() => this.getSlideShowById(slideshow.slideShowId)}/>
-              </div>
-            </td>
-          );
-          row.push(<td className="text-center py-0 align-middle">
-          <select id="dropdown" className="custom-select"
-            OnChange={this.handleDropdownChange}>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </td>)
-          row.push(<td>{slideshow.title}</td>)
-          row.push(<td>{slideshow.subTitle}</td>)
-          row.push(<td><img src={slideshow.img} alt ="gambar buku" style={{width: "10rem", display: "block", marginLeft: "auto", marginRight: "auto"}}/></td>)
-          results.push(row)
-        })
-        this.setState({ rows: results });
-  }
-
+  //FUNGSI TOMBOL SUBMIT PADA MODAL ADD SLIDESHOW
   submitSlideShow = () => {
-  const slideshow = {
-      title : this.state.title,
-      subTitle : this.state.subTitle,
-      img : this.state.img
-    };
+    const slideshow = {
+        title : this.state.title,
+        subTitle : this.state.subTitle,
+        img : this.state.img
+      };
 
     axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
       .then((response) => {
@@ -97,6 +149,7 @@ class SlideShowManagement extends Component {
       })
   }
 
+  //VALIDASI UNTUK ADD SLIDESHOW
   handleValidation() {
     let fields = this.state.fields;
     let errors = {};
@@ -124,6 +177,7 @@ class SlideShowManagement extends Component {
     return formIsValid;
   }
 
+  //FUNGSI UNTUK TOMBOL SUMBIT SAAT ADD-SLIDESHOW DITEKAN
   contactSubmit(e) {
     e.preventDefault();
     const fields = this.state.fields;
@@ -137,12 +191,7 @@ class SlideShowManagement extends Component {
       }
       console.log(slideshow)
 
-      // const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjA5MzA5NzAxLCJleHAiOjE2MDk5MTQ1MDF9.sqO6Egr0Iy4QkNtNY683SC5ylUudM3Cog16boGW-GWr4KA4E5T-w-xF6sf31JnzXIxLA9RSVnstGz3Dt1i7TPg'
-      // const config = {
-      //     headers: { Authorization: `Bearer ${token}` }
-      // };
-
-      let user = JSON.parse( localStorage.getItem('user'))
+      let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
       console.log(userToken);
 
@@ -164,9 +213,7 @@ class SlideShowManagement extends Component {
             window.location.reload();
           }
       })
-        
-    } else {
-
+      //TADINYA ADA ELSE
     }
   }
 
@@ -184,19 +231,16 @@ class SlideShowManagement extends Component {
       .then((response) => {
         console.log(response.data.data);
         this.setState({
-          slideshow : response.data.data.slideshow,
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
           subTitle : response.data.data.subTitle,
           img : response.data.data.img
         })
-        // console.log(this.state.slideshow.title);
       })
   }
 
   //METHOD UNTUK UPDATE
   editSlideShow = (id) => {
-   
     const slideshow = {
       title : this.state.title,
       subTitle : this.state.subTitle,
@@ -204,13 +248,14 @@ class SlideShowManagement extends Component {
     }
     console.log(slideshow);
 
-    let user = JSON.parse( localStorage.getItem('user'))
+    let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
       console.log(userToken);
 
       const config = {
         headers : { Authorization : `Bearer ${userToken}`}
       }
+
     axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
@@ -229,24 +274,24 @@ class SlideShowManagement extends Component {
 }
 
   //METHOD DELETE MENGGUNAKAN SOFTDELETE
-  deleteSlideShow = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-      const userToken = user.token;
-      console.log(userToken);
+  // deleteSlideShow = (id) => {
+  //     let user = JSON.parse(localStorage.getItem('user'))
+  //     const userToken = user.token;
+  //     console.log(userToken);
 
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
-    axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id,config)
-      .then((response) => {
-        console.log(response);
-        window.location.reload();
-        })
-  }
+  //     const config = {
+  //       headers : { Authorization : `Bearer ${userToken}`}
+  //     }
+  //   axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id,config)
+  //     .then((response) => {
+  //       console.log(response);
+  //       window.location.reload();
+  //       })
+  // }
 
   //METHOD DELETE DATA
   deleteDataSlideShow = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
+      let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
       console.log(userToken);
 
@@ -307,7 +352,7 @@ class SlideShowManagement extends Component {
                   <button type="button" className="btn btn-primary add-btn" data-toggle="modal" data-target="#modal-add"
                     style={{float:"right"}}>
                     <i className="nav-icon fas fa-plus"></i>
-                     Add Slideshow Photo
+                      Add Slideshow Photo
                   </button>
                 </div>
               </div>
@@ -325,7 +370,7 @@ class SlideShowManagement extends Component {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Add new Slideshow Image</h4>
+            <h4 class="modal-title">Add New Slideshow Image</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
