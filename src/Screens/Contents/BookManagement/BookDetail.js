@@ -20,6 +20,7 @@ class BookDetail extends Component {
       rows: [],
       results: [],
       title: "",
+      statusBookDetail: "Available"
     };
 
     this.detailBookChange = this.detailBookChange.bind(this)
@@ -203,16 +204,10 @@ class BookDetail extends Component {
           descOfDamage = fields["descOfDamage"]
         }
 
-        if(document.getElementById("inputStatusBookDetail").value.length == 0) {
-          statusBookDetail = "Available"
-        } else {
-          statusBookDetail = fields["statusBookDetail"]
-        }
-
         const detailBook = {
             typeOfDamage: fields["typeOfDamage"],
             descOfDamage: descOfDamage,
-            statusBookDetail: statusBookDetail,
+            statusBookDetail: this.state.statusBookDetail,
             bookId: this.props.match.params.bookId
         }
 
@@ -375,10 +370,10 @@ class BookDetail extends Component {
                         name="statusBookDetail"
                         className="form-control"
                         id="inputStatusBookDetail"
-                        value={this.state.fields["statusBookDetail"]}
-                        onChange={this.handleChange.bind(this, "statusBookDetail")}
+                        value={this.state.statusBookDetail}
+                        onChange={this.detailBookChange}
                       >
-                        <option value="Available" selected="selected">Available</option>
+                        <option value="Available" selected>Available</option>
                         <option value="Unavailable">Unavailable</option>
                       </select>
                       <span style={{ color: "red" }}>
