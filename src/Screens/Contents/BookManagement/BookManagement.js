@@ -202,6 +202,7 @@ class BookManagement extends Component {
         }).then((result) => {
           if (result.isConfirmed) {
             this.fetchData()
+            
           }
         });
       });
@@ -291,6 +292,7 @@ class BookManagement extends Component {
           }).then((result) => {
             if (result.isConfirmed) {
               this.fetchData()
+              this.resetModal()
             }
           });
         }).catch((error) =>
