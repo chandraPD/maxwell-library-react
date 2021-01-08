@@ -71,6 +71,7 @@ class BookDetail extends Component {
             row.push(<td className="text-center">{detailBook.bookDetailCode}</td>);
             row.push(<td className="text-center">{detailBook.typeOfDamage}</td>);
             row.push(<td className="text-center">{detailBook.descOfDamage}</td>);
+            row.push(<td className="text-center">{detailBook.statusBookDetail}</td>);
             this.setState({ title: detailBook.bookEntity.title})
             results.push(row);                        
           })
@@ -106,6 +107,7 @@ class BookDetail extends Component {
       let fields = this.state.fields
       fields[field] = e.target.value
       this.setState({fields})
+      console.log(this.state.fields)
   }
 
   detailBookChange = (event) => {
@@ -118,6 +120,7 @@ class BookDetail extends Component {
       const detailBook = {
           typeOfDamage: this.state.typeOfDamage,
           descOfDamage: this.state.descOfDamage,
+          statusBookDetail: this.state.statusBookDetail,
           bookId: this.props.match.params.bookId
       }
 
@@ -163,7 +166,8 @@ class BookDetail extends Component {
             this.setState({
                 typeOfDamage: response.data.typeOfDamage,
                 descOfDamage: response.data.descOfDamage,
-                bookDetailId: id
+                bookDetailId: id,
+                statusBookDetail: response.data.statusBookDetail
             })
         })
   }
@@ -189,9 +193,26 @@ class BookDetail extends Component {
       if(this.handleValidation()) {
         $("#modal-add").modal("toggle")
         $('.modal-backdrop').remove();
+
+        let descOfDamage;
+        let statusBookDetail;
+
+        if(document.getElementById("inputDescofDamage").value.length == 0) {
+          descOfDamage = "-"
+        } else {
+          descOfDamage = fields["descOfDamage"]
+        }
+
+        if(document.getElementById("inputStatusBookDetail").value.length == 0) {
+          statusBookDetail = "Available"
+        } else {
+          statusBookDetail = fields["statusBookDetail"]
+        }
+
         const detailBook = {
             typeOfDamage: fields["typeOfDamage"],
-            descOfDamage: fields["descOfDamage"],
+            descOfDamage: descOfDamage,
+            statusBookDetail: statusBookDetail,
             bookId: this.props.match.params.bookId
         }
 
@@ -225,6 +246,7 @@ class BookDetail extends Component {
       "Book Detail ID",
       "Type of Damage",
       "Desc of Damage",
+      "Status"
     ];
 
     return (
@@ -322,6 +344,7 @@ class BookDetail extends Component {
                         onChange={this.handleChange.bind(this, "typeOfDamage")}
                       >
                         <option value="null">Choose Type of Damage</option>
+                        <option value="No Damage">No Damage</option>
                         <option value="Minor">Minor</option>
                         <option value="Major">Major</option>
                       </select>
@@ -345,6 +368,24 @@ class BookDetail extends Component {
                         {this.state.errors["descOfDamage"]}
                       </span>
                     </div>
+
+                    <div className="form-group">
+                      <label htmlFor="inputStatusBookDetail">Status</label>
+                      <select
+                        name="statusBookDetail"
+                        className="form-control"
+                        id="inputStatusBookDetail"
+                        value={this.state.fields["statusBookDetail"]}
+                        onChange={this.handleChange.bind(this, "statusBookDetail")}
+                      >
+                        <option value="Available" selected="selected">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["statusBookDetail"]}
+                      </span>
+                    </div>
+
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">
@@ -396,6 +437,7 @@ class BookDetail extends Component {
                         value={this.state.typeOfDamage}
                         onChange={this.detailBookChange}
                       >
+                        <option value="No Damage">No Damage</option>
                         <option value="Minor">Minor</option>
                         <option value="Major">Major</option>
                       </select>
@@ -415,6 +457,24 @@ class BookDetail extends Component {
                         onChange={this.detailBookChange}
                       />
                     </div>
+
+                    <div className="form-group">
+                      <label htmlFor="editStatusBookDetail">Status</label>
+                      <select
+                        name="statusBookDetail"
+                        className="form-control"
+                        id="editStatusBookDetail"
+                        value={this.state.statusBookDetail}
+                        onChange={this.detailBookChange}
+                      >
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["statusBookDetail"]}
+                      </span>
+                    </div>
+
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">
