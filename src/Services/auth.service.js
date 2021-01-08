@@ -31,6 +31,17 @@ class AuthService {
     });
   }
 
+  updateProfile(firstName, lastName, address, phoneNumber, dateOfBirth, img) {
+    return axios.post(API_URL + "profile", {
+      firstName,
+      lastName,
+      address,
+      phoneNumber,
+      dateOfBirth,
+      img
+    });
+  }
+
   getPassword(config){
     return axios.get(API_URL+"password",config);
   }
