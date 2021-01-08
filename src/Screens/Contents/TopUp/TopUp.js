@@ -15,31 +15,7 @@ class TopUp extends Component {
       };
     }
     
-   render () {
-
-//   const token=this.state.userToken;
-//   const config = {
-//     headers: { Authorization: `Bearer ${token}` }
-// }
-    // var b=Axios.get('http://localhost:8080/top_up_management/getRole',config)
-    // console.log(b)
-    // Axios.get('http://localhost:8080/top_up_management/getRole',config).then((getData)=>{
-    // var role=getData.data;
-    // if (role.data=="[ROLE_ADMIN]") {      
-    //   this.setState({role: "[ROLE_ADMIN]" })
-    // } else{
-    //   this.setState({role: "[ROLE_USER]" })
-    // }     
-    // });
-    // if (this.state.role=="[ROLE_ADMIN]") {      
-    //   return(window.location.href = "/")
-    // } else{
-    //   return (        
-    //     <Card onSubmit={showResults} >               
-    //     </Card>
-    //   )
-    // } 
-    // return (     
+   render () { 
       return(<Card onSubmit={showResults} >               
         </Card>     )         
     }

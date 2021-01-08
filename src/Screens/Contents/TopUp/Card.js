@@ -5,8 +5,11 @@ import TopUp1 from '../TopUp/TopUp1'
 import TopUp2 from '../TopUp/TopUp2'
 import TopUp3 from '../TopUp/TopUp3'
 import TopUp4 from '../TopUp/TopUp4'
+import {reset} from 'redux-form';
 
 class Card extends Component {
+    
+
     constructor(props) {
         super(props);
         this.nextPage = this.nextPage.bind(this);
@@ -32,8 +35,11 @@ class Card extends Component {
     render () {
         const { onSubmit } = this.props;
     const { page, steps } = this.state;
+    
       return (
-        <div className="content-wrapper ctm-wrap-tpup">
+        
+        <div className="content-wrapper ctm-wrap-tpup">          
+        {/* {dispatch(reset('TopUpForm'))} */}
         <section className="signup-step-container">
           <div className="container-fluid">
             <div className="row justify-content-center">
@@ -41,9 +47,8 @@ class Card extends Component {
                 <div className="card px-4 pt-4 pb-4 mt-6 mb-6">
                   <h2 id="heading">Top Up Your User Account</h2>
                   <p>Fill all form field to go to next step</p>
-        <Stepper steps={ steps } activeStep={ page } />                       
-
-        {page === 0 && <TopUp1 onSubmit={this.nextPage}  /> }
+        <Stepper steps={ steps } activeStep={ page } />                               
+        {page === 0 && <TopUp1 onSubmit={this.nextPage}   /> }
         {page === 1 && (
           <TopUp2
             previousPage={this.previousPage}
