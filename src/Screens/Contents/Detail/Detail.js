@@ -9,9 +9,11 @@ class Detail extends Component {
 
   constructor(props) {
     super(props)
-
+    console.log(props);
     this.state = {
       data: [],
+      startDate: null,
+      endDate: null,
       category: [],
       recommendedData: []
     }
@@ -29,18 +31,33 @@ class Detail extends Component {
     }
   }
 
+  getStartDate = (start) => {
+    this.setState({ startDate: start })
+  }
+
+  getEndDate = (end) => {
+    this.setState({ endDate: end })
+  }
+
   borrow = (id) => {
-
-    const data = {
-
+    console.log(this.state.startDate);
+    console.log(this.state.endDate);
+    // console.log(Date.getStart());
+    const dataBorrow = {
+      bookId : id,
+      borrowDate : this.state.startDate,
+      returnedDate : this.state.endDate,
     }
-    Axios.post("borrow/save", data)
-    Swal.fire({
-      title: "Success Borrow Book!",
-      text: "Borrowed Book Success!",
-      icon: "success",
-      buttons: true,
+    Axios.post("borrow/save", dataBorrow)
+    .then((data) => {
+      Swal.fire({
+        title: "Success Borrow Book!",
+        text: "Borrowed Book Success!",
+        icon: "success",
+        buttons: true,
+      })
     })
+    
   }
 
 
@@ -75,10 +92,6 @@ class Detail extends Component {
       // nothing
     }
 
-  }
-
-  setDate = (event) => {
-    console.log(event);
   }
 
   render() {
@@ -146,9 +159,9 @@ class Detail extends Component {
                 <h4>Recommended</h4><br />
               </div>
               <div className="row" id="recomended">
-                {recommendedData.map((data) => {
+                {recommendedData.map((data, index) => {
                   return (
-                    <div className="col-xs-4 col-sm-4 col-lg-4">
+                    <div key={index} className="col-xs-4 col-sm-4 col-lg-4">
                       <div className="card" id="recomendedcard">
                         <img src={data.imgDetail} className="card-img-top" alt="Dilan 1991" />
                         <div className="card-body">
@@ -182,7 +195,7 @@ class Detail extends Component {
                   </div>
                   <div className="col-md-6">
                     <div className="input-group date" id="datetimepicker5" data-target-input="nearest">
-                      <Date onChange={() => this.setDate()} />
+                      <Date  startDateCallback = {this.getStartDate} endDateCallBack = {this.getEndDate} />
                     </div>
                   </div>
                 </div>
