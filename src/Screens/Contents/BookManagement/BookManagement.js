@@ -17,6 +17,10 @@ class BookManagement extends Component {
       rows: [],
       results: [],
       category: [],
+      imgBanner: "",
+      imgDetail: "",
+      chooseFileBanner: "Choose Image Banner",
+      chooseFileDetail: "Choose Image Detail"
     };
 
     this.bookChange = this.bookChange.bind(this);
@@ -212,7 +216,43 @@ class BookManagement extends Component {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
+    
   }
+
+  handleImageDetail = (e) => {
+    const fileImg = e.target.files[0]
+    this.setState({chooseFileDetail: fileImg.name})
+    console.log(this.state.chooseFileDetail)
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(fileImg)
+
+    fileReader.onload = e => {
+      let base64Image = e.target.result
+      let base64ImageStrip = base64Image.split("base64,")[1];
+      
+      this.setState({imgDetail: base64ImageStrip})
+      console.log(this.state.imgDetail)
+    }
+  }
+
+  handleImageBanner = (e) => {
+    const fileImg = e.target.files[0]
+    this.setState({chooseFileBanner: fileImg.name})
+    console.log(this.state.chooseFileBanner)
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(fileImg)
+
+    fileReader.onload = e => {
+      let base64Image = e.target.result
+      let base64ImageStrip = base64Image.split("base64,")[1];
+      
+      this.setState({imgBanner: base64ImageStrip})
+      console.log(this.state.imgBanner)
+    }
+  }
+
 
   handleValidation() {
     let fields = this.state.fields;
@@ -243,11 +283,7 @@ class BookManagement extends Component {
       errors["publishDate"] = "Publish Date cannot be empty";
     }
 
-    //Status Book
-    if (!fields["statusBook"]) {
-      formIsValid = false;
-      errors["statusBook"] = "Status Book cannot be empty";
-    }
+
 
     this.setState({ errors: errors });
     return formIsValid;
@@ -269,8 +305,8 @@ class BookManagement extends Component {
       const book = {
         author: fields["author"],
         description: fields["description"],
-        imgBanner: fields["imgBanner"],
-        imgDetail: fields["imgDetail"],
+        imgBanner: this.state.imgBanner,
+        imgDetail: this.state.imgDetail,
         qty: fields["qty"],
         statusBook: fields["statusBook"],
         title: fields["title"],
@@ -477,7 +513,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label htmlFor="inputImgBanner">Image Banner</label>
                       <input
                         type="text"
@@ -491,22 +527,34 @@ class BookManagement extends Component {
                       <span style={{ color: "red" }}>
                         {this.state.errors["imgBanner"]}
                       </span>
+                    </div> */}
+
+                    <div className="form-group">
+                    <label htmlFor="inputImgBanner">Image Banner</label>
+                      <div className="input-group">
+                        <div className="custom-file">
+                          <input type="file" accept="image/*" className="custom-file-input" id="inputImgBanner" name="imgBanner" onChange={this.handleImageBanner}
+                        value={this.state.fields["imgBanner"]}/>
+                          <label className="custom-file-label" for="exampleInputFile" style={{overflow:"hidden"}}>{this.state.chooseFileBanner}</label>                   
+                        </div>
+                      </div> <br/>
+                      <span style={{ color: "red" }}>
+                            {this.state.errors["imgBanner"]}
+                          </span>
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="inputImgDetail">Image Detail</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputImgDetail"
-                        name="imgDetail"
-                        placeholder="Enter Image Detail"
-                        onChange={this.handleChange.bind(this, "imgDetail")}
-                        value={this.state.fields["imgDetail"]}
-                      />
+                      <div className="input-group">
+                        <div className="custom-file">
+                          <input type="file" accept="image/*" className="custom-file-input" id="inputImgDetail" name="imgDetail" onChange={this.handleImageDetail}
+                        value={this.state.fields["imgDetail"]}/>
+                          <label className="custom-file-label" for="exampleInputFile" style={{overflow:"hidden"}}>{this.state.chooseFileDetail}</label>                   
+                        </div>
+                      </div> <br/>
                       <span style={{ color: "red" }}>
-                        {this.state.errors["imgDetail"]}
-                      </span>
+                            {this.state.errors["imgDetail"]}
+                          </span>
                     </div>
 
                     <div className="form-group">
@@ -525,7 +573,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label htmlFor="inputStatusBook">Status Book</label>
                       <select
                         name="statusBook"
@@ -541,7 +589,7 @@ class BookManagement extends Component {
                       <span style={{ color: "red" }}>
                         {this.state.errors["categoryId"]}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">
