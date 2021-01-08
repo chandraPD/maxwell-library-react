@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import AuthService from '../../Services/auth.service'
 import NumberFormat from 'react-number-format';
 import Axios from 'axios';
+import $ from 'jquery'
+import Axios2 from '../../Instances/axios-instances';
 
 export default class SideBar extends Component {
 
@@ -26,7 +28,9 @@ export default class SideBar extends Component {
 
     this.state = {
       balance : balance,
-      show:true,        
+      show:true,     
+      role2:"",
+      name:"",
       userToken: user.token,
       role:JSON.parse(localStorage.getItem('user')).userInfo.activeRole
     }
@@ -37,15 +41,23 @@ export default class SideBar extends Component {
     console.log(this.state.role)
       if (this.state.role=="ROLE_USER") { 
         console.log(this.state.role)     
-        this.setState({show:true })
+        this.setState({show:true,role2:"User" })        
       } else{
-        this.setState({show:false})
+        this.setState({show:false,role2:"Admin"})
       }      
     }
+
+  async getNama(){
+    await Axios2.get('/name').then((getName) =>{
+      console.log(getName)
+      this.setState({name:getName.data})
+    })    
+  }
 
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
     this.show();
+    this.getNama();
   }
 
   componentWillUnmount() {
@@ -56,6 +68,10 @@ export default class SideBar extends Component {
     this.setState({
       balance : JSON.parse(localStorage.getItem('balance')),
     })
+  }
+
+  refresh(){
+    $('input[type="radio"]').prop('checked', false);
   }
 
   formatRupiah = (nilai) => {
@@ -92,12 +108,12 @@ export default class SideBar extends Component {
                 </Link>
             </div>
             <div className="info">
-              <Link to="Profile" className="d-block user-name">Niki Zefanya</Link>
+              <Link to="Profile" className="d-block user-name">{this.state.name}</Link>
               <p style={{fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000'}}>{this.formatRupiah(this.state.balance)}</p>
-              { show ?  <Link to='/TopUp' className="btn btn-sm btn-primary" style={{color: 'white'}}>
+              <p className="p-role">{this.state.role2}</p>
+              { show ?  <Link onClick={()=>window.location.href = "/TopUp"}  className="btn btn-sm btn-primary" style={{color: 'white'}}>
                 <i style={{color: 'white'}} className="fas fa-plus-square" /> &nbsp; Top Up
-              </Link>: null}
-
+              </Link>: null}              
             </div>
           </div>
           {/* Sidebar Menu */}
@@ -105,7 +121,7 @@ export default class SideBar extends Component {
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               {/* Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library */}
-              <li className="nav-item">
+              <li className="nav-item">                 
                 <Link to="/Profile" className="nav-link">
                   <i className="nav-icon fas fa-user" />
                   <p>
