@@ -184,6 +184,7 @@ class CategoryManagement extends Component {
           }).then((result) => {
             if (result.isConfirmed) {
               this.fetchData()
+              this.resetModal()
             }
           });
         })

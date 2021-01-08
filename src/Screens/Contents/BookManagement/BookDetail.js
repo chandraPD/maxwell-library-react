@@ -208,6 +208,7 @@ class BookDetail extends Component {
                 }).then((result) => {
                   if (result.isConfirmed) {
                     this.fetchData(this.props.match.params.bookId)
+                    this.resetModal()
                   }
                 });
             })
