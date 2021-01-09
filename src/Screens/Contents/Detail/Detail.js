@@ -4,14 +4,16 @@ import Swal from 'sweetalert2';
 import Date from '../../../Components/Datepicker/Dates'
 import Axios from '../../../Instances/axios-instances';
 import { Link, withRouter } from "react-router-dom";
-
+import moment from 'moment';
 class Detail extends Component {
 
   constructor(props) {
     super(props)
-
+    console.log(props);
     this.state = {
       data: [],
+      startDate: null,
+      endDate: null,
       category: [],
       recommendedData: []
     }
@@ -20,6 +22,10 @@ class Detail extends Component {
   componentDidMount() {
     const bookId = this.props.match.params.bookId;
     this.fetchData(bookId);
+    this.setState({
+      startDate: moment(),
+      endDate: moment()
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -29,20 +35,45 @@ class Detail extends Component {
     }
   }
 
-  borrow = (id) => {
-
-    const data = {
-
-    }
-    Axios.post("borrow/save", data)
-    Swal.fire({
-      title: "Success Borrow Book!",
-      text: "Borrowed Book Success!",
-      icon: "success",
-      buttons: true,
-    })
+  getStartDate = (start) => {
+    this.setState({ startDate: start })
   }
 
+  getEndDate = (end) => {
+    this.setState({ endDate: end })
+  }
+
+  borrow = (id) => {
+    console.log(this.state.startDate);
+    console.log(this.state.endDate);
+    // console.log(Date.getStart());
+    const dataBorrow = {
+      bookId: id,
+      borrowedDate: this.state.startDate,
+      returnedDate: this.state.endDate,
+    }
+    console.log(dataBorrow);
+    Axios.post("borrow/save", dataBorrow)
+      .then((data) => {
+        const result = data.data;
+        if (result.status === 400) {
+          Swal.fire(
+            'Ups, Sorry',
+            result.message,
+            'warning'
+          )
+        } else {
+
+          Swal.fire({
+            title: "Success Borrow Book!",
+            text: "Borrowed Book Success!",
+            icon: "success",
+            buttons: true,
+          })
+        }
+      })
+
+  }
 
   async fetchData(bookId) {
     let fetchData = await Axios.get('/book/get-by-id/' + bookId)
@@ -75,10 +106,6 @@ class Detail extends Component {
       // nothing
     }
 
-  }
-
-  setDate = (event) => {
-    console.log(event);
   }
 
   render() {
@@ -146,9 +173,9 @@ class Detail extends Component {
                 <h4>Recommended</h4><br />
               </div>
               <div className="row" id="recomended">
-                {recommendedData.map((data) => {
+                {recommendedData.map((data, index) => {
                   return (
-                    <div className="col-xs-4 col-sm-4 col-lg-4">
+                    <div key={index} className="col-xs-4 col-sm-4 col-lg-4">
                       <div className="card" id="recomendedcard">
                         <img src={data.imgDetail} className="card-img-top" alt="Dilan 1991" />
                         <div className="card-body">
@@ -182,7 +209,7 @@ class Detail extends Component {
                   </div>
                   <div className="col-md-6">
                     <div className="input-group date" id="datetimepicker5" data-target-input="nearest">
-                      <Date onChange={() => this.setDate()} />
+                      <Date startDateCallback={this.getStartDate} endDateCallBack={this.getEndDate} />
                     </div>
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import Axios from '../../../Instances/axios-instances';
 import $ from 'jquery'
 import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
+import moment from 'moment'
 class RentManagement extends Component {
 
     constructor() {
@@ -45,6 +46,14 @@ class RentManagement extends Component {
                     });
             }
         });
+    }
+
+    convertToDate = (date) => {
+        if (date === null) {
+            return "-"
+        } else {
+            return moment.utc(date).format('DD-MM-YYYY hh:mm')
+        }
     }
 
     async fetchData() {
@@ -87,16 +96,16 @@ class RentManagement extends Component {
                         actVal = "-";
                     }
 
-                    row.push(<td className="text-center" >{no++}</td>);
-                    row.push(<td className="text-center" >{actVal}</td>);
-                    row.push(<td className="text-center" >{rent.borrowedBookCode}</td>);
-                    row.push(<td className="text-center" >{rent.borrower}</td>);
-                    row.push(<td>{rent.id_book}</td>);
+                    row.push(<td className="text-center text-nowrap" >{no++}</td>);
+                    row.push(<td className="text-center text-nowrap" >{actVal}</td>);
+                    row.push(<td className="text-center text-nowrap" >{rent.borrowedBookCode}</td>);
+                    row.push(<td className="text-center text-nowrap" >{rent.borrower}</td>);
+                    row.push(<td>{rent.bookDetailCode}</td>);
                     row.push(<td>{rent.title}</td>);
                     row.push(<td>{rent.givenBy}</td>);
-                    row.push(<td>{rent.borrowedDate}</td>);
-                    row.push(<td className="text-center" >{rent.threshold}</td>);
-                    row.push(<td>{rent.returnedDate}</td>);
+                    row.push(<td>{this.convertToDate(rent.borrowedDate)}</td>);
+                    row.push(<td className="text-center text-nowrap" >{this.convertToDate(rent.threshold)}</td>);
+                    row.push(<td className="text-center text-nowrap">{this.convertToDate(rent.returnedDate)}</td>);
                     row.push(<td className="text-center" >{rent.takenBy}</td>);
                     row.push(<td>{rent.grandTotal}</td>);
                     row.push(<td className="text-center" >{statusVal}</td>);
