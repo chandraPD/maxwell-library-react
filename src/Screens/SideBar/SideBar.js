@@ -17,13 +17,16 @@ export default class SideBar extends Component {
     super(props);
     let balance
     let userToken
+    let activeRole
 
     if(user) {
       balance = JSON.parse(localStorage.getItem('balance'))
       userToken = user.token
+      activeRole = JSON.parse(localStorage.getItem('user')).userInfo.activeRole
     } else {
       balance = 0;
-      userToken = false
+      userToken = false;
+      activeRole = false;
     }
 
     this.state = {
@@ -31,8 +34,8 @@ export default class SideBar extends Component {
       show:true,     
       role2:"",
       name:"",
-      userToken: user.token,
-      role:JSON.parse(localStorage.getItem('user')).userInfo.activeRole
+      userToken: userToken,
+      role:activeRole
     }
   }
   interval = null;

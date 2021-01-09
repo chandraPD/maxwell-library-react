@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import Date from '../../../Components/Datepicker/Dates'
 import Axios from '../../../Instances/axios-instances';
 import { Link, withRouter } from "react-router-dom";
-
+import moment from 'moment';
 class Detail extends Component {
 
   constructor(props) {
@@ -22,6 +22,10 @@ class Detail extends Component {
   componentDidMount() {
     const bookId = this.props.match.params.bookId;
     this.fetchData(bookId);
+    this.setState({
+      startDate: moment(),
+      endDate: moment()
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -44,22 +48,32 @@ class Detail extends Component {
     console.log(this.state.endDate);
     // console.log(Date.getStart());
     const dataBorrow = {
-      bookId : id,
-      borrowDate : this.state.startDate,
-      returnedDate : this.state.endDate,
+      bookId: id,
+      borrowedDate: this.state.startDate,
+      returnedDate: this.state.endDate,
     }
+    console.log(dataBorrow);
     Axios.post("borrow/save", dataBorrow)
-    .then((data) => {
-      Swal.fire({
-        title: "Success Borrow Book!",
-        text: "Borrowed Book Success!",
-        icon: "success",
-        buttons: true,
-      })
-    })
-    
-  }
+      .then((data) => {
+        const result = data.data;
+        if (result.status === 400) {
+          Swal.fire(
+            'Ups, Sorry',
+            result.message,
+            'warning'
+          )
+        } else {
 
+          Swal.fire({
+            title: "Success Borrow Book!",
+            text: "Borrowed Book Success!",
+            icon: "success",
+            buttons: true,
+          })
+        }
+      })
+
+  }
 
   async fetchData(bookId) {
     let fetchData = await Axios.get('/book/get-by-id/' + bookId)
@@ -195,7 +209,7 @@ class Detail extends Component {
                   </div>
                   <div className="col-md-6">
                     <div className="input-group date" id="datetimepicker5" data-target-input="nearest">
-                      <Date  startDateCallback = {this.getStartDate} endDateCallBack = {this.getEndDate} />
+                      <Date startDateCallback={this.getStartDate} endDateCallBack={this.getEndDate} />
                     </div>
                   </div>
                 </div>
