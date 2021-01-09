@@ -202,6 +202,7 @@ class BookManagement extends Component {
         }).then((result) => {
           if (result.isConfirmed) {
             this.fetchData()
+            
           }
         });
       });
@@ -291,6 +292,7 @@ class BookManagement extends Component {
           }).then((result) => {
             if (result.isConfirmed) {
               this.fetchData()
+              this.resetModal()
             }
           });
         }).catch((error) =>
@@ -705,7 +707,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label htmlFor="editStatusBook">Status Book</label>
                       <select
                         name="statusBook"
@@ -720,7 +722,7 @@ class BookManagement extends Component {
                       <span style={{ color: "red" }}>
                         {this.state.errors["categoryId"]}
                       </span>
-                    </div>
+                    </div> */}
 
                    
                   </div>
