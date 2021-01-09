@@ -8,11 +8,18 @@ import {
 import { ProgressBar } from 'react-bootstrap';
 import validate from './Validate'
 import { MDBIcon } from "mdbreact";
+import $ from 'jquery'
+
+
+const refresh = ()  =>{
+  console.log("test")
+  $('input[type="radio"]').prop('checked', false);
+}
 
 const renderError = ({ meta: { touched, error } }) =>
   touched && error ? <span><MDBIcon icon="exclamation-circle"/> {error}</span> : false;
 
-const TopUp1 = (props) => {
+const TopUp1 = (props) => {  
   console.log(props)
   const { handlekeyup, handleSubmit, pristine, previousPage, submitting } = props;
   return (
@@ -98,5 +105,5 @@ export default reduxForm({
   form: 'TopUpForm',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
-  validate
+  validate  
 })(TopUp1);
