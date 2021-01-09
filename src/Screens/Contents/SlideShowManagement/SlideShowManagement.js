@@ -177,7 +177,7 @@ class SlideShowManagement extends Component {
             console.log(result);
             window.location.reload();
           }
-      })
+      });
       } else {
         Swal.fire({
           icon: 'warning',
