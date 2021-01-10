@@ -106,8 +106,11 @@ class BookDetail extends Component {
 
   handleChange(field, e) {
       let fields = this.state.fields
+      let errors = {}
+      errors["typeOfDamage"] = ""
       fields[field] = e.target.value
       this.setState({fields})
+      this.setState({errors: errors})
       console.log(this.state.fields)
   }
 
@@ -240,7 +243,7 @@ class BookDetail extends Component {
       "Action",
       "Book Detail ID",
       "Type of Damage",
-      "Desc of Damage",
+      "Description",
       "Status"
     ];
 
