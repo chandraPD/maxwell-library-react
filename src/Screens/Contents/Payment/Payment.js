@@ -8,7 +8,7 @@ import NumberFormat from 'react-number-format';
 import moment from 'moment';
 
 class Payment extends Component {
-   
+
    interval = null;
    constructor() {
       super();
@@ -87,29 +87,34 @@ class Payment extends Component {
 
       if (this.state.grandTotal <= this.state.balance) {
          Axios.put('invoice/pay/' + this.state.invoiceId)
-         .then((data) => {
-            console.log(data);
-            // if(result.status)
-            Swal.fire("Success", "Your Payment has been Accepted", "success")
-         });
-         
-      } else {
-         Swal.fire({
-            icon: 'error',
-            title: 'Declined',
-            text: 'Sorry, Your Current Balance is Insufficient.',
-            showDenyButton: true,
-            showConfirmButton: true,
-            confirmButtonText: `Top Up`,
-            denyButtonText: `OK`
-         }).then((result) => {
-            if (result.isConfirmed) {
-               // this.props.history.push('/TopUp')
-            }
-            else {
+            .then((data) => {
+               const result = data.data;
+               if (result.status === 200) {
+                  Swal.fire("Success", "Your Payment has been Accepted", "success")
+               } else if (result.message === "Sorry, Your Current Balance is Insufficient.") {
+                  Swal.fire({
+                     icon: 'warning',
+                     title: 'Declined',
+                     text: 'Sorry, Your Current Balance is Insufficient.',
+                     showDenyButton: true,
+                     showConfirmButton: true,
+                     confirmButtonText: `Top Up`,
+                     denyButtonText: `OK`
+                  }).then((val) => {
+                     if (val.isConfirmed) {
+                        this.props.history.push('/TopUp')
+                     }
+                     else {
+                        // nothing
+                     }
+                  })
+               } else {
+                  Swal.fire("Ups.", result.message, "warning")
+               }
+            });
 
-            }
-         })
+      } else {
+
       }
 
    }
@@ -132,14 +137,20 @@ class Payment extends Component {
          }
       })
    }
-   
+
    convertToDate = (date) => {
       if (date === null) {
-          return "-"
+         return "-"
       } else {
-          return moment.utc(date).format('DD-MM-YYYY hh:mm')
+         return moment.utc(date).format('DD-MM-YYYY hh:mm')
       }
-  }
+   }
+
+   printStatusPaid = () => {
+      if (this.state.dataInvoice.statusInvoice === "Paid") {
+         return <h2><font color="green">PAID</font></h2>
+      }
+   }
 
    render() {
       const { invoiceId, invoiceNeedPaid, dataInvoice, dataDetailInvoice, balance } = this.state;
@@ -202,8 +213,10 @@ class Payment extends Component {
                      <div className="col-sm-4 invoice-col">
                         <b>Invoice {dataInvoice.noInvoice}</b><br />
                         <br />
+                        {this.printStatusPaid()}
                      </div>
                      {/* <!-- /.col --> */}
+
                   </div>
                   {/* <!-- /.row --> */}
 
