@@ -28,10 +28,12 @@ import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
+import LogManagement from "../Screens/Contents/LogManagement/LogManagement";
 import PrivateRoute from './PrivateRoute'
 import Search from '../Screens/Contents/Search/Search'
 import AuthRoute from './AuthRoute'
 import Axios from '../Instances/axios-instances';
+
 
 class MainNavigation extends Component {
 
@@ -146,6 +148,9 @@ class MainNavigation extends Component {
                                 </Route>
                                  <Route path='/Donation'>
                                     <Donation />
+                                </Route>
+                                <Route path='/LogManagement'>
+                                    <LogManagement />
                                 </Route>
                             </Switch>
                             <Footer />

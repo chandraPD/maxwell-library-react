@@ -216,6 +216,14 @@ export default class SideBar extends Component {
                   </p>
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to="/LogManagement" className="nav-link">
+                  <i className="nav-icon fas fa-clipboard-list" />
+                  <p>
+                    Log Management
+                  </p>
+                </Link>
+              </li>
               <li className="nav-item" onClick={AuthService.logout}>
                 <Link to="/Auth" className="nav-link" data-target="#modal-xl">
                   <i className="nav-icon fas fa-sign-out-alt" />
