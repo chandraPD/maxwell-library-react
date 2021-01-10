@@ -93,7 +93,6 @@ class Home extends Component {
                         </div>
                     )
                   })}
-
               {/* <div
                 className="carousel-cell"
                 style={{
