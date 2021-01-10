@@ -187,8 +187,12 @@ class TopUpManagement extends Component {
         row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
       }
       // row.push(<td className="text-center" >{actVal}</td>);
+      if (topup.paymentMethod=="Debit"){
+        row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'- Rp. '} />}</td>);
+      } else{
+        row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'+ Rp. '} />}</td>);
+      }
       
-      row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />}</td>);
       row.push(<td>{topup.paymentMethod}</td>);
       row.push(<td className="text-center" >{statusVal}</td>);
       results.push(row);
@@ -619,14 +623,14 @@ class TopUpManagement extends Component {
             <div className="container-fluid">
               <div className="row mb-2">
                 <div className="col-sm-6">
-                  <h3>Top Up Management</h3>
+                  <h3>History Transaction</h3>
                 </div>
                 <div className="col-sm-6">
                   <ol className="breadcrumb float-sm-right">
                     <li className="breadcrumb-item">
                       <a href='/'>Home</a>
                     </li>
-                    <li className="breadcrumb-item active">Top Up Management</li>
+                    <li className="breadcrumb-item active">History Transaction</li>
                   </ol>
                 </div>
               </div>

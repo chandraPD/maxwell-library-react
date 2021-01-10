@@ -32,6 +32,7 @@ export default class SideBar extends Component {
     this.state = {
       balance : balance,
       show:true,
+      show2:true,
       userToken: userToken,
       role2:"",
       name:"",
@@ -51,6 +52,16 @@ export default class SideBar extends Component {
       }
     }
 
+    async show2(){
+      console.log(this.state.role)
+        if (this.state.role=="ROLE_USER") {
+          console.log(this.state.role)
+          this.setState({show2:false,role2:"User" })
+        } else{
+          this.setState({show2:true,role2:"Admin"})
+        }
+      }
+
   async getNama(){
     await Axios2.get('/name').then((getName) =>{
       console.log(getName)
@@ -61,6 +72,7 @@ export default class SideBar extends Component {
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
     this.show();
+    this.show2();
     this.getNama();
   }
 
@@ -84,7 +96,7 @@ export default class SideBar extends Component {
 
     render() {
       const balance = this.state.balance;
-      const { show } = this.state;
+      const { show,show2 } = this.state;
         return (
             <aside className="main-sidebar elevation-4 sidebar-light-primary">
   {/* Brand Logo */}
@@ -203,7 +215,7 @@ export default class SideBar extends Component {
                   <li className="nav-item">
                     <Link to="/TopUpManagement" className="nav-link">
                       <i className="fa fa-credit-card nav-icon" />
-                      <p>Top Up Management</p>
+                      <p>History Transaction</p>
                     </Link>
                   </li>
                 </ul>
@@ -217,12 +229,13 @@ export default class SideBar extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/LogManagement" className="nav-link">
+              { show2 ?  <Link to="/LogManagement" className="nav-link">
                   <i className="nav-icon fas fa-clipboard-list" />
                   <p>
                     Log Management
                   </p>
-                </Link>
+                </Link>: null}
+                
               </li>
               <li className="nav-item" onClick={AuthService.logout}>
                 <Link to="/Auth" className="nav-link" data-target="#modal-xl">
