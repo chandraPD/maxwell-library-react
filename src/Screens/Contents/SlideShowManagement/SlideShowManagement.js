@@ -262,7 +262,7 @@ class SlideShowManagement extends Component {
     Axios.delete('slideshow/delete-data-slideshow/'+ id, config)
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        this.fetchData();
       })
   }
   //METHOD Perubahan Inputan di SlideShow

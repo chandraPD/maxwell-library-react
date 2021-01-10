@@ -15,7 +15,8 @@ class Home extends Component {
     this.state = {
        dataTop: [],
        dataOld: [],
-       allBook: []
+       allBook: [],
+       slideShowActive : []
     }
   }
   
@@ -24,6 +25,7 @@ class Home extends Component {
     this.getTopFive();
     this.getAllBook();
     this.getOldestFive();
+    this.getSlideShowActive();
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
@@ -46,6 +48,11 @@ class Home extends Component {
     this.setState({allBook: fetchBook.data})
   }
 
+  async getSlideShowActive() {
+    let fetchSlideShowActive = await Axios.get('http://localhost:8080/slideshow/get-all-active');
+    this.setState({ slideShowActive : fetchSlideShowActive.data});
+  }
+
   render() {
     const flickityOptions = {
       wrapAround: true,
@@ -54,7 +61,7 @@ class Home extends Component {
       initialIndex: 2,
     };
 
-    const { dataTop, allBook, dataOld } = this.state
+    const { dataTop, allBook, dataOld, slideShowActive } = this.state
 
     return (
       <div className="content-wrapper">
@@ -68,7 +75,26 @@ class Home extends Component {
               static={true}
               reloadOnUpdate={true}
             >
-              <div
+              {slideShowActive.map((data) => {
+                    return (
+                          <div
+                          className="carousel-cell"
+                          style={{
+                            backgroundImage: `url(${data.img})`,
+                            borderRadius: '30px'
+                          }}
+                        >
+                          <div className="carousel-info">
+                            <div className="carousel-text">
+                              <h2>{data.title}</h2>
+                              <h3>{data.subTitle}</h3>
+                            </div>
+                          </div>
+                        </div>
+                    )
+                  })}
+
+              {/* <div
                 className="carousel-cell"
                 style={{
                   backgroundImage: `url(${firstHero})`,
@@ -80,8 +106,9 @@ class Home extends Component {
                     <h3>Raditya Dika</h3>
                   </div>
                 </div>
-              </div>
-              <div
+              </div> */}
+
+              {/* <div
                 className="carousel-cell"
                 style={{
                   backgroundImage: `url(${secondtHero})`,
@@ -93,8 +120,9 @@ class Home extends Component {
                     <h3>Raditya Dika</h3>
                   </div>
                 </div>
-              </div>
-              <div
+              </div> */}
+
+              {/* <div
                 className="carousel-cell"
                 style={{
                   backgroundImage: `url(${thirdHero})`,
@@ -106,7 +134,8 @@ class Home extends Component {
                     <h3>Raditya Dika</h3>
                   </div>
                 </div>
-              </div>
+              </div> */}
+
             </Flickity>
           </div>
           {/* Flickity ends */}
