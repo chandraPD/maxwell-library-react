@@ -2,6 +2,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import Axios2 from '../../../Instances/axios-instances';
 
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export default (async function showResults(values) {    
@@ -28,7 +29,7 @@ export default (async function showResults(values) {
   })
   .then((isConfirmed) => {
     if (isConfirmed) {
-      window.location.href = "/";
+      window.location.href = "/";      
   } 
   })
   } else{
@@ -37,11 +38,6 @@ export default (async function showResults(values) {
       text: "Password Wrong",
       icon: "warning",
       buttons: true,    
-    })
-    .then((isConfirmed) => {
-      if (isConfirmed) {
-        window.location.href = "/";
-    } 
     })
   }
   
