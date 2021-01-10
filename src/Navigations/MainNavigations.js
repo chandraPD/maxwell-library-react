@@ -44,7 +44,7 @@ class MainNavigation extends Component {
       interval = null;
 
       componentDidMount() {
-        this.interval = setInterval(this.getBalance, 5000);
+        this.interval = setInterval(this.getBalance, 30000);
         this.getBalance();
       }
   

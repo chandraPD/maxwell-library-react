@@ -6,7 +6,7 @@ export default function Cell({
   }) {
   
     const cellMarkup = header ? (
-      <th className="text-center">
+      <th className="text-center text-nowwrap">
         {content}
       </th>
     ) : (
