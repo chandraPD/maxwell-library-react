@@ -18,7 +18,8 @@ class History extends Component {
   constructor() {
     super();
     this.state = {
-      borroweddata: []
+      borroweddata: [],
+      currentreaddata: [] 
     };
 
 
@@ -26,6 +27,8 @@ class History extends Component {
 
   componentDidMount() {
     this.fetchDataBorrowedBooks()
+    this.fetchDataCurrentBooks()
+
   }
 
   async fetchDataBorrowedBooks() {
@@ -39,6 +42,20 @@ class History extends Component {
     })
 
   }
+
+
+  async fetchDataCurrentBooks() {
+    await axios.get('history/currentread').then((response) => {
+
+      this.setState({
+        currentreaddata: response.data.data
+      })
+      console.log(this.state.currentreaddata)
+
+    })
+
+  }
+  
 
   displayCurrentRead() {
     var titleCurrent = document.getElementById('title-current');
@@ -66,11 +83,9 @@ class History extends Component {
     currentBooks.style.display = 'none';
   }
 
-  // onClick={() => this.displayBorrowedBooks()}
-  // onClick={() => this.displayCurrentRead()}
   render() {
     let borroweddata = this.state.borroweddata
-
+    let currentreaddata = this.state.currentreaddata
 
     return (
 
@@ -102,9 +117,8 @@ class History extends Component {
                       </div>
                     </div>
                   </div>
+
                   <div className="panel-body borrowed" id="borrowed-books">
-
-
                     {borroweddata.map(item => <div className="row">
                       <div className="col-md-1"><img src={photo} alt="media-object" /></div>
                       <div className="col-md-11">
@@ -126,127 +140,33 @@ class History extends Component {
                     </div>)}
 
                   </div>
+
+
                   {/* Current Read */}
                   <div className="panel-body current" id="current-books">
-                    <div className="row">
-                      <div className="col-md-1"><img src={photo6} alt="media-object" />
-                      </div>
+                   {currentreaddata.map(item => <div className="row">
+                      <div className="col-md-1"><img src={photo} alt="media-object" /></div>
                       <div className="col-md-11">
                         <div className="row">
                           <div className="col-md-12">
-                            <span><strong>Book Title (Current)</strong></span>
-                            <span className="label label-info-custom">Category</span>
+                            <span><strong>{item.bookDetailEntity.bookEntity.title}</strong></span>
+                            <span className="label label-info-custom">{item.bookDetailEntity.bookEntity.categoryEntity.category}</span>
                             <br />
                             <div className="book-description">
-                              <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate exercitationem
-                              reiciendis ipsa? Nihil laborum recusandae, vero voluptate incidunt quas? Dolor ab enim
-                          exercitationem sit quam reiciendis officiis sed sapiente aspernatur.</span>
-                            </div>
-                            <br />
-                          </div>
-                          <div className="col-md-12">
-                            Borrowed On: 05/30/2014
-                    </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-1"><img src={photo7} alt="media-object" />
-                      </div>
-                      <div className="col-md-11">
-                        <div className="row">
-                          <div className="col-md-12">
-                            <span><strong>Book Title (Current)</strong></span>
-                            <span className="label label-info-custom">Category</span>
-                            <br />
-                            <div className="book-description">
-                              <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate exercitationem
-                              reiciendis ipsa? Nihil laborum recusandae, vero voluptate incidunt quas? Dolor ab enim
-                          exercitationem sit quam reiciendis officiis sed sapiente aspernatur.</span>
-                            </div>
-                            <br />
-                          </div>
-                          <div className="col-md-12">
-                            Borrowed On: 03/10/2013
-                    </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-1"><img src={photo8} alt="media-object" />
-                      </div>
-                      <div className="col-md-11">
-                        <div className="row">
-                          <div className="col-md-12">
-                            <span><strong>Book Title (Current)</strong></span>
-                            <span className="label label-info-custom">Category</span>
-                            <br />
-                            <div className="book-description">
-                              <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate exercitationem
-                              reiciendis ipsa? Nihil laborum recusandae, vero voluptate incidunt quas? Dolor ab enim
-                          exercitationem sit quam reiciendis officiis sed sapiente aspernatur.</span>
-                            </div>
-                            <br />
-                          </div>
-                          <div className="col-md-12">
-                            Borrowed On: 03/10/2013
-                    </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-1"><img src={photo9} alt="media-object" />
-                      </div>
-                      <div className="col-md-11">
-                        <div className="row">
-                          <div className="col-md-12">
-                            <span><strong>Book Title (Current)</strong></span>
-                            <span className="label label-info-custom">Category</span>
-                            <br />
-                            <div className="book-description">
-                              <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi accusamus laboriosam
-                              aliquid reiciendis dolore doloremque rerum minus, quo numquam nulla, et eveniet consectetur
-                          vitae tempora! Facere dolore dicta ab in.</span>
+                              <span>{item.bookDetailEntity.bookEntity.description}</span>
                             </div>
                           </div>
+                          <br />
                           <div className="col-md-12">
-                            Borrowed On: 05/30/2014
-                    </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-1"><img src={photo10} alt="media-object" />
-                      </div>
-                      <div className="col-md-11">
-                        <div className="row">
-                          <div className="col-md-12">
-                            <span><strong>Book Title (Current)</strong></span>
-                            <span className="label label-info-custom">Category</span>
-                            <br />
-                            <div className="book-description">
-                              <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate exercitationem
-                              reiciendis ipsa? Nihil laborum recusandae, vero voluptate incidunt quas? Dolor ab enim
-                          exercitationem sit quam reiciendis officiis sed sapiente aspernatur.</span>
-                            </div>
-                            <br />
+                            Borrowed On: {item.borrowedDate}
                           </div>
-                          <div className="col-md-12">
-                            Borrowed On: 03/10/2013
-                    </div>
                         </div>
                       </div>
-                    </div>
-                    <br />
-                    <div className="card-tools">
-                      <ul className="pagination pagination-sm custom-pagination-pos">
-                        <li className="page-item"><a href="#" className="page-link">«</a></li>
-                        <li className="page-item"><a href="#" className="page-link">1</a></li>
-                        <li className="page-item"><a href="#" className="page-link">2</a></li>
-                        <li className="page-item"><a href="#" className="page-link">3</a></li>
-                        <li className="page-item"><a href="#" className="page-link">»</a></li>
-                      </ul>
-                    </div>
+                    </div>)}
+                   
+                 
+                  
+                 
                   </div>
                 </div>
               </div>
