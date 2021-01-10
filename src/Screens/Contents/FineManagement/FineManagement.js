@@ -82,7 +82,10 @@ class FineManagement extends Component {
                     } else if (rent.statusInvoice === 'Paid') {
                         actVal = <div className="btn-group btn-group-sm"><Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" /></div>
                         statusVal = <Status type="info" val="Paid" />
-                    } else {
+                    } else if(rent.statusInvoice === "Canceled"){
+                        actVal = '-';
+                        statusVal = <Status type="Danger" val="Canceled" />
+                    }else{
                         actVal = '-';
                         statusVal = '';
                     }
