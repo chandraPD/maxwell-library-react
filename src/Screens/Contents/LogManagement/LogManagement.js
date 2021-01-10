@@ -22,7 +22,7 @@ class LogManagement extends Component {
   async fetchData(){
     // $("#example1").DataTable.destroy();
 
-    await Axios.get('log/get-all-log')
+    await Axios.get('log/get-log-lastActivity')
     .then((fetchedData) => {
       console.log(fetchedData);
       const resultLog = fetchedData.data;
@@ -85,7 +85,7 @@ class LogManagement extends Component {
             <section className="content-header">
               <div className="container-fluid">
                 <div className="row mb-2">
-                  <div className="col-sm-6"><h3>Log Management</h3></div>
+                  <div className="col-sm-6"><h3>Last Activity</h3></div>
                   <div className="col-sm-6">
                     <ol className="breadcrumb float-sm-right">
                       <li className="breadcrumb-item">
