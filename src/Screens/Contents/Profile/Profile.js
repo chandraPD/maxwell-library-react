@@ -136,8 +136,9 @@ class Profile extends Component {
   }
 
   async getLogUser() {
-      let fetchLogUser = await axios.get('log/get-log-lastActivity')
+      let fetchLogUser = await axios.get('log/get-log-user')
       this.setState({ dataLogUser : fetchLogUser.data});
+      console.log(this.state.dataLogUser);
   }
 
 
@@ -432,7 +433,8 @@ class Profile extends Component {
                   <i className="fas fa-user bg-green"></i>
                   <div className="timeline-item">
                     <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
-                    <h3 className="timeline-header no-border"><a href="#">{data.name}</a> {data.description}</h3>
+                    <small style={{ margin : "10px"}}>Your Activity : {data.action}</small>
+                    <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
                   </div>
                 </div>
 
