@@ -23,11 +23,14 @@ class Profile extends Component {
       updateBirthDate: '',
       updateAddress: '',
       updatePhoneNumber: '',
+
+      dataLogUser : [],
     };
   }
 
   componentDidMount() {
     this.fetchDataUser();
+    this.getLogUser();
   }
 
   handleChangeProfile(e) {
@@ -128,6 +131,12 @@ class Profile extends Component {
       });
   }
 
+  async getLogUser() {
+      let fetchLogUser = await axios.get('log/get-log-lastActivity')
+      this.setState({ dataLogUser : fetchLogUser.data});
+  }
+
+
   displayEditForm() {
     const editForm = document.querySelector('#container-editform');
     editForm.style.display = 'block';
@@ -172,6 +181,8 @@ class Profile extends Component {
     }
   }
   render() {
+
+    const { dataLogUser } = this.state;
     return (
       <Fragment>
         <div className="content-wrapper">
@@ -248,8 +259,8 @@ class Profile extends Component {
                 </div>
               </div>
             </div>
-          </section>
-
+          </section>             
+        
           {/* Edit Form  */}
           <section className="padding-editform">
             <div id="container-editform">
@@ -380,6 +391,72 @@ class Profile extends Component {
               </form>
             </div>
           </section>
+
+        {dataLogUser.map((data) => {
+          return(
+            <div className="row" style={{margin : "20px"}}>
+              <div className="col-md-12">
+                <div className="timeline">
+                  {/* timeline-label */}
+                  <div className="time-label">
+                    <span className="bg-read">10 February 2021</span>
+                  </div>
+                
+                <div>
+                  <i className="fas fa-user bg-green"></i>
+                  <div className="timeline-item">
+                    <span className="time"><i class="fas fa-clock"></i>{data.dateTime}</span>
+                    <h3 className="timeline-header no-border"><a href="#">(NAMA USER)</a> {data.description}</h3>
+                  </div>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          )
+        })}
+
+        {/* Log Activity User */}
+        <section>
+          {/* timeline */}
+        <div className="row" style={{margin : "20px"}}>
+          <div className="col-md-12">
+            <div className="timeline">
+              {/* timeline-label */}
+              <div className="time-label">
+                <span className="bg-read">10 Feb 2021</span>
+              </div>
+            
+            <div>
+              <i className="fas fa-user bg-green"></i>
+              <div className="timeline-item">
+                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+              </div>
+            </div>
+
+            <div>
+              <i className="fas fa-user bg-green"></i>
+              <div className="timeline-item">
+                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+              </div>
+            </div>
+
+            <div>
+              <i className="fas fa-user bg-green"></i>
+              <div className="timeline-item">
+                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+              </div>
+            </div>
+
+            </div>
+
+          </div>
+
+        </div>       
+        </section>
         </div>
       </Fragment>
     );

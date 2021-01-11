@@ -22,7 +22,15 @@ class LogManagement extends Component {
   async fetchData(){
     // $("#example1").DataTable.destroy();
 
-    await Axios.get('log/get-log-lastActivity')
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+
+    await Axios.get('log/get-log-lastActivity', config)
     .then((fetchedData) => {
       console.log(fetchedData);
       const resultLog = fetchedData.data;
