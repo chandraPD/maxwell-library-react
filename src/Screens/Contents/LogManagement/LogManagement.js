@@ -4,6 +4,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Axios from '../../../Instances/axios-instances';
+import moment from 'moment';
 
 class LogManagement extends Component {
 
@@ -50,7 +51,7 @@ class LogManagement extends Component {
 
         row.push(
           <td>
-            {log.dateTime}
+            {this.convertToDate(log.dateTime)}
           </td>
         );
 
@@ -78,6 +79,14 @@ class LogManagement extends Component {
       });
     });
   }
+
+  convertToDate = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('DD-MM-YYYY hh:mm')
+    }
+}
 
     render() {
         const { rows } = this.state

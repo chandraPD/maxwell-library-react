@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from '../../../Instances/axios-instances';
+import moment from 'moment';
 
 class Profile extends Component {
   constructor(props) {
@@ -178,6 +179,22 @@ class Profile extends Component {
       document.getElementById('email').innerHTML = emailUser;
       document.getElementById('address').innerHTML = addressUser;
       document.getElementById('phonenumber').innerHTML = phoneNumber;
+    }
+  }
+
+  convertToTime = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('hh:mm')
+    }
+  }
+
+  convertToDate = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('MMM Do, YYYY')
     }
   }
   render() {
@@ -399,13 +416,13 @@ class Profile extends Component {
                 <div className="timeline">
                   {/* timeline-label */}
                   <div className="time-label">
-                    <span className="bg-read">10 February 2021</span>
+                    <span className="bg-read">{this.convertToDate(data.dateTime)}</span>
                   </div>
                 
                 <div>
                   <i className="fas fa-user bg-green"></i>
                   <div className="timeline-item">
-                    <span className="time"><i class="fas fa-clock"></i>{data.dateTime}</span>
+                    <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
                     <h3 className="timeline-header no-border"><a href="#">(NAMA USER)</a> {data.description}</h3>
                   </div>
                 </div>

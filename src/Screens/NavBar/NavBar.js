@@ -27,7 +27,7 @@ class NavBar extends Component {
             {/* Left navbar links */}
             <ul className="navbar-nav">
                 <li className="nav-item dropdown">
-                <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link dropdown-toggle">All Categories</a>
+                <a id="dropdownSubMenu1" role="button" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link dropdown-toggle">All Categories</a>
                 <ul aria-labelledby="dropdownSubMenu1" className="dropdown-menu border-0 shadow" style={{left: 0, right: 'inherit'}}>
                     <li><a href="./category.html" className="dropdown-item">Novel</a></li>
                     <li><a href="./category.html" className="dropdown-item">Comic Book</a></li>
@@ -41,7 +41,7 @@ class NavBar extends Component {
                 </ul>
                 </li>
                 <li className="nav-item dropdown">
-                <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link dropdown-toggle">All Time</a>
+                <a id="dropdownSubMenu1" role="button" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link dropdown-toggle">All Time</a>
                 <ul aria-labelledby="dropdownSubMenu1" className="dropdown-menu border-0 shadow" style={{left: 0, right: 'inherit'}}>
                     <li><a href="./year.html" className="dropdown-item">2020</a></li>
                     <li><a href="./year.html" className="dropdown-item">2019</a></li>
