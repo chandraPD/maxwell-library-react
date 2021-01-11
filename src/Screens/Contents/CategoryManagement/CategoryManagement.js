@@ -18,7 +18,6 @@ class CategoryManagement extends Component {
       data: [],
       rows: [],
       results: [],
-      category: ''
     };
 
     this.categoryChange = this.categoryChange.bind(this);
@@ -94,7 +93,10 @@ class CategoryManagement extends Component {
       category: this.state.category,
     };
 
-    Axios
+    console.log(category)
+
+    if(this.handleValidationUpdate()) {
+      Axios
       .put("/category/update-category/" + id, category)
       .then((response) => {
         console.log(response);
@@ -111,7 +113,21 @@ class CategoryManagement extends Component {
           }
         });
       });
+    }
   };
+
+  handleValidationUpdate() {
+    let errors = {};
+    let formIsValid = true;
+
+    if(this.state.category === "") {
+      formIsValid = false;
+      errors["categoryName"] = "Category cannot be empty";
+    }
+
+    this.setState({errors: errors})
+    return formIsValid
+  }
 
   deleteCategory = (id) => {
     Axios
@@ -347,6 +363,9 @@ class CategoryManagement extends Component {
                         value={this.state.category}
                         onChange={this.categoryChange}
                       />
+                      <span style={{ color: "red" }}>
+                            {this.state.errors["categoryName"]}
+                          </span>
                     </div>
                   </div>
                 </div>
