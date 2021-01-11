@@ -37,7 +37,8 @@ export default class SideBar extends Component {
       role2:"",
       name:"",
       userToken: userToken,
-      role:activeRole
+      role:activeRole,
+      profileImage : ""
     }
   }
   interval = null;
@@ -69,11 +70,23 @@ export default class SideBar extends Component {
     })
   }
 
+  async getProfile() {
+    await Axios2
+      .get('/profile')
+      .then((response) => {
+        const dataProfile = response.data;
+        this.setState({
+          profileImage: dataProfile.img,
+        });
+      })
+  }
+
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
     this.show();
     this.show2();
     this.getNama();
+    this.getProfile();
   }
 
   componentWillUnmount() {
@@ -120,7 +133,7 @@ export default class SideBar extends Component {
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image my-center">
               <Link to='/Profile'>
-                <img src={avatarUser} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
+                <img src={this.state.profileImage} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
                 </Link>
             </div>
             <div className="info">
@@ -235,7 +248,7 @@ export default class SideBar extends Component {
                     Log Management
                   </p>
                 </Link>: null}
-                
+
               </li>
               <li className="nav-item" onClick={AuthService.logout}>
                 <Link to="/Auth" className="nav-link" data-target="#modal-xl">
