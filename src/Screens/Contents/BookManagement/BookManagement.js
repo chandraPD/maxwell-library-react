@@ -322,12 +322,12 @@ class BookManagement extends Component {
       errors["categoryId"] = "Please Choose a Category!";
     }
 
-    if(document.getElementById("inputImgBanner").files.length === 0) {
+    if(this.state.imgBanner === "") {
       formIsValid = false;
       errors["imgBanner"] = "Image Banner cannot be empty!";
     }
 
-    if(document.getElementById("inputImgDetail").files.length === 0) {
+    if(this.state.imgDetail === "") {
       formIsValid = false;
       errors["imgDetail"] = "Image Detail cannot be empty!";
     }
@@ -368,7 +368,6 @@ class BookManagement extends Component {
     let fields = this.state.fields;
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(token);
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
