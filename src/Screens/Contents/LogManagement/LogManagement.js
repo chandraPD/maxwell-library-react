@@ -57,6 +57,17 @@ class LogManagement extends Component {
 
         row.push(
           <td>
+            {/* FullName */}
+          </td>
+        );
+
+        row.push(
+          <td>
+            {/* Email */}
+          </td>
+        );
+        row.push(
+          <td>
             {log.action}
           </td>
         );
@@ -93,6 +104,8 @@ class LogManagement extends Component {
         const headings = [
                 "No.",
                 "Time",
+                "FullName",
+                "Email",
                 "Action",
                 "Description"
             ]
