@@ -1,0 +1,31 @@
+section.pdg-btm {
+    padding: 1px!important;
+}
+
+.head-number {
+    width: 8px;
+}
+
+.action-col {
+    width: 80px;
+}
+
+.add-btn {
+    margin-left: 1.2rem;
+}
+
+
+
+@media (max-width: 426px){
+    .ctm-responsive {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 764px) {
+    .paging_simple_numbers {
+        display: flex;
+        justify-content: center;
+    }
+}

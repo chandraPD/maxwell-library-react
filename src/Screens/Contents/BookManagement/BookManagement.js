@@ -17,6 +17,7 @@ class BookManagement extends Component {
       rows: [],
       results: [],
       category: [],
+      author: [],
       imgBanner: "",
       imgDetail: "",
       chooseFileBanner: "Choose Image Banner",
@@ -28,6 +29,7 @@ class BookManagement extends Component {
 
   componentDidMount() {
     this.getCategory();
+    this.getAuthor();
     this.fetchData();
   }
 
@@ -40,6 +42,13 @@ class BookManagement extends Component {
     this.setState({ category: resultCategory });
   }
 
+  async getAuthor() {
+    let fetchAuthor = await Axios.get('/author/getAll')
+    console.log(fetchAuthor)
+    const resultAuthor = fetchAuthor.data
+    this.setState({author: resultAuthor})
+  }
+
   async fetchData() {
     $("#example1").DataTable().destroy();
     let results = [];
@@ -49,6 +58,7 @@ class BookManagement extends Component {
     await Axios.get('/book/get-all-active')
         .then((response) => {
           const result = response.data
+          console.log(response)
           this.setState({data: result})
           result.map((book) => {
             let row = [];
@@ -84,7 +94,7 @@ class BookManagement extends Component {
             );
             row.push(<td className="text-center">{book.bookCode}</td>);
             row.push(<td className="text-center">{book.title}</td>);
-            row.push(<td className="text-center">{book.author}</td>);
+            row.push(<td className="text-center">{book.authorEntity.authorName}</td>);
             row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
             row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
             row.push(<td className="text-center">{book.publishDate}</td>);
@@ -147,7 +157,7 @@ class BookManagement extends Component {
       console.log(imgDetailConvert)
 
       this.setState({
-        author: response.data.author,
+        authorId: response.data.authorEntity.authorId,
         description: response.data.description,
         imgBanner: response.data.imgBanner,
         imgDetail: response.data.imgDetail,
@@ -170,7 +180,7 @@ class BookManagement extends Component {
     };
 
     const book = {
-      author: this.state.author,
+      authorId: this.state.authorId,
       description: this.state.description,
       imgBanner: this.state.imgBanner,
       imgDetail: this.state.imgDetail,
@@ -339,7 +349,7 @@ class BookManagement extends Component {
       errors["title"] = "Title cannot be empty";
     }
 
-    if(this.state.author === "") {
+    if(this.state.authorId === "") {
       formIsValid = false;
       errors["author"] = "Author cannot be empty";
     }
@@ -381,7 +391,7 @@ class BookManagement extends Component {
       $("#modal-add").modal("toggle");
       $('.modal-backdrop').remove();
       const book = {
-        author: fields["author"],
+        authorId: fields["author"],
         description: fields["description"],
         imgBanner: this.state.imgBanner,
         imgDetail: this.state.imgDetail,
@@ -424,7 +434,7 @@ class BookManagement extends Component {
   }
 
   render() {
-    const { rows, category } = this.state;
+    const { rows, category, author } = this.state;
     const headings = [
       "No.",
       "Action",
@@ -533,23 +543,32 @@ class BookManagement extends Component {
                       </div>
 
                       <div className="col-sm-6">
-                        <div className="form-group">
-                          <label htmlFor="inputAuthor">Author</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="inputAuthor"
-                            name="author"
-                            placeholder="Enter Author"
-                            onChange={this.handleChange.bind(this, "author")}
-                            value={this.state.fields["author"]}
-                          />
-                          <span style={{ color: "red" }}>
-                            {this.state.errors["author"]}
-                          </span>
-                        </div>
+                      <div className="form-group">
+                      <label htmlFor="inputAuthor">Author</label>
+                      <select
+                        name="authorId"
+                        className="form-control"
+                        id="inputAuthor"
+                        value={this.state.fields["author"]}
+                        onChange={this.handleChange.bind(this, "author")}
+                      >
+                        <option value="null">Choose Author</option>
+                        {author.map((author) => {
+                          return (
+                            <option value={author.authorId}>
+                              {author.authorName}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["author"]}
+                      </span>
+                    </div>
                       </div>
                     </div>
+
+                    
 
                     <div className="form-group">
                       <label htmlFor="inputCategoryId">Category</label>
@@ -676,8 +695,6 @@ class BookManagement extends Component {
               <form id="editBook">
                 <div className="modal-body">
                   <div className="card-body">
-                    <div className="row">
-                      <div className="col-sm-6">
                         <div className="form-group">
                           <label htmlFor="editTitle">Title</label>
                           <input
@@ -692,25 +709,27 @@ class BookManagement extends Component {
                             {this.state.errors["title"]}
                           </span>
                         </div>
-                      </div>
 
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label htmlFor="editAuthor">Author</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="editAuthor"
-                            name="author"
-                            placeholder="Enter Author"
-                            onChange={this.bookChange}
-                            value={this.state.author}
-                          />
-                          <span style={{ color: "red" }}>
-                            {this.state.errors["author"]}
-                          </span>
-                        </div>
-                      </div>
+                    <div className="form-group">
+                      <label htmlFor="editAuthor">Author</label>
+                      <select
+                        name="authorId"
+                        className="form-control"
+                        id="editAuthor"
+                        value={this.state.authorId}
+                        onChange={this.bookChange}
+                      >
+                        {author.map((author) => {
+                          return (
+                            <option value={author.authorId}>
+                              {author.authorName}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["author"]}
+                      </span>
                     </div>
 
                     <div className="form-group">
