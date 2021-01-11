@@ -154,6 +154,14 @@ export default class SideBar extends Component {
                   </p>
                 </Link>
               </li>
+              { show ?  <li className="nav-item">
+               <Link to="/Wishlist" className="nav-link" id="index">
+                  <i className="nav-icon fas fa-heart" />
+                  <p>
+                    Wishlist
+                  </p>
+                </Link>
+              </li>: null}
               <li className="nav-item">
                 <Link to="/History" className="nav-link" id="history">
                   <i className="nav-icon fas fa-history" />
