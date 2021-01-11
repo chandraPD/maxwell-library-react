@@ -29,11 +29,8 @@ import DonationManagement from '../Screens/Contents/DonationManagement/DonationM
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import LogManagement from "../Screens/Contents/LogManagement/LogManagement";
-<<<<<<< HEAD
 import Author from "../Screens/Contents/Author/Author"
-=======
 import Catalogue from '../Screens/Contents/Catalogue/Catalogue'
->>>>>>> ec29d6434affd61a4e20488136a7bb17429273ac
 import PrivateRoute from './PrivateRoute'
 import Search from '../Screens/Contents/Search/Search'
 import AuthRoute from './AuthRoute'

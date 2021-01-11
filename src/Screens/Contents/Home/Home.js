@@ -60,7 +60,7 @@ class Home extends Component {
     let fetchRecommended = await Axios.get('/book/get-max-qty')
     console.log(fetchRecommended)
     this.setState({recommendedBook: fetchRecommended.data})
-    this.setState({recommendedCat: this.state.recommendedBook.categoryEntity.category})
+    // this.setState({recommendedCat: this.state.recommendedBook.categoryEntity.category})
   }
 
   render() {
