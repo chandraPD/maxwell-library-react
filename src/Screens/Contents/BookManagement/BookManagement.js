@@ -17,6 +17,11 @@ class BookManagement extends Component {
       rows: [],
       results: [],
       category: [],
+      author: [],
+      imgBanner: "",
+      imgDetail: "",
+      chooseFileBanner: "Choose Image Banner",
+      chooseFileDetail: "Choose Image Detail"
     };
 
     this.bookChange = this.bookChange.bind(this);
@@ -24,6 +29,7 @@ class BookManagement extends Component {
 
   componentDidMount() {
     this.getCategory();
+    this.getAuthor();
     this.fetchData();
   }
 
@@ -36,6 +42,13 @@ class BookManagement extends Component {
     this.setState({ category: resultCategory });
   }
 
+  async getAuthor() {
+    let fetchAuthor = await Axios.get('/author/getAll')
+    console.log(fetchAuthor)
+    const resultAuthor = fetchAuthor.data
+    this.setState({author: resultAuthor})
+  }
+
   async fetchData() {
     $("#example1").DataTable().destroy();
     let results = [];
@@ -45,6 +58,7 @@ class BookManagement extends Component {
     await Axios.get('/book/get-all-active')
         .then((response) => {
           const result = response.data
+          console.log(response)
           this.setState({data: result})
           result.map((book) => {
             let row = [];
@@ -80,7 +94,7 @@ class BookManagement extends Component {
             );
             row.push(<td className="text-center">{book.bookCode}</td>);
             row.push(<td className="text-center">{book.title}</td>);
-            row.push(<td className="text-center">{book.author}</td>);
+            row.push(<td className="text-center">{book.authorEntity.authorName}</td>);
             row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
             row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
             row.push(<td className="text-center">{book.publishDate}</td>);
@@ -101,6 +115,16 @@ class BookManagement extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+    let errors = {}
+
+    errors["title"] = ""
+    errors["author"] = ""
+    errors["description"] = ""
+    errors["publishDate"] = ""
+    errors["categoryId"] = ""
+    errors["imgBanner"] = ""
+    errors["imgDetail"] = ""
+    this.setState({errors: errors})
   };
 
   resetModal() {
@@ -130,13 +154,18 @@ class BookManagement extends Component {
 
     this.setState({fields: fields})
     this.setState({errors: errors})
+    this.setState({imgDetail: ""})
+    this.setState({imgBanner: ""})
+    this.setState({chooseFileDetail: "Choose Image Detail"})
+    this.setState({chooseFileBanner: "Choose Image Banner"})
   }
 
   getBook = (id) => {
     Axios.get("/book/get-by-id/" + id).then((response) => {
       console.log(response);
+
       this.setState({
-        author: response.data.author,
+        authorId: response.data.authorEntity.authorId,
         description: response.data.description,
         imgBanner: response.data.imgBanner,
         imgDetail: response.data.imgDetail,
@@ -159,7 +188,7 @@ class BookManagement extends Component {
     };
 
     const book = {
-      author: this.state.author,
+      authorId: this.state.authorId,
       description: this.state.description,
       imgBanner: this.state.imgBanner,
       imgDetail: this.state.imgDetail,
@@ -170,7 +199,10 @@ class BookManagement extends Component {
       categoryId: this.state.categoryId,
     };
 
-    Axios
+    console.log(book)
+
+    if(this.handleValidationUpdate()) {
+      Axios
       .put("/book/update-book/" + id, book, config)
       .then((response) => {
         console.log(response);
@@ -187,6 +219,8 @@ class BookManagement extends Component {
           }
         });
       });
+    }
+
   };
 
   deleteBook = (id) => {
@@ -210,9 +244,58 @@ class BookManagement extends Component {
 
   handleChange(field, e) {
     let fields = this.state.fields;
+    let errors = {}
+
+    errors["title"] = ""
+    errors["author"] = ""
+    errors["description"] = ""
+    errors["publishDate"] = ""
+    errors["categoryId"] = ""
+    errors["imgBanner"] = ""
+    errors["imgDetail"] = ""
     fields[field] = e.target.value;
     this.setState({ fields });
+    this.setState({errors: errors})
+    
   }
+
+  handleImageDetail = (e) => {
+    const fileImg = e.target.files[0]
+    this.setState({chooseFileDetail: fileImg.name})
+    console.log(this.state.chooseFileDetail)
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(fileImg)
+
+    fileReader.onload = e => {
+      let base64Image = e.target.result
+      let base64ImageStrip = base64Image.split("base64,")[1];
+      
+      this.setState({imgDetail: base64ImageStrip})
+      console.log(this.state.imgDetail)
+    }
+  }
+
+  handleImageBanner = (e) => {
+    const fileImg = e.target.files[0]
+    let errors = {}
+    errors["imgBanner"] = ""
+    this.setState({chooseFileBanner: fileImg.name})
+    console.log(this.state.chooseFileBanner)
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(fileImg)
+
+    fileReader.onload = e => {
+      let base64Image = e.target.result
+      let base64ImageStrip = base64Image.split("base64,")[1];
+      
+      this.setState({imgBanner: base64ImageStrip})
+      console.log(this.state.imgBanner)
+    }
+    this.setState({errors: errors})
+  }
+
 
   handleValidation() {
     let fields = this.state.fields;
@@ -243,10 +326,48 @@ class BookManagement extends Component {
       errors["publishDate"] = "Publish Date cannot be empty";
     }
 
-    //Status Book
-    if (!fields["statusBook"]) {
+    //Category
+    if (!fields["categoryId"]) {
       formIsValid = false;
-      errors["statusBook"] = "Status Book cannot be empty";
+      errors["categoryId"] = "Please Choose a Category!";
+    }
+
+    if(this.state.imgBanner === "") {
+      formIsValid = false;
+      errors["imgBanner"] = "Image Banner cannot be empty!";
+    }
+
+    if(this.state.imgDetail === "") {
+      formIsValid = false;
+      errors["imgDetail"] = "Image Detail cannot be empty!";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
+  handleValidationUpdate() {
+    let errors = {};
+    let formIsValid = true;
+
+    if(this.state.title === "") {
+      formIsValid = false;
+      errors["title"] = "Title cannot be empty";
+    }
+
+    if(this.state.authorId === "") {
+      formIsValid = false;
+      errors["author"] = "Author cannot be empty";
+    }
+
+    if(this.state.categoryId === "") {
+      formIsValid = false;
+      errors["categoryId"] = "Please Choose a Category!";
+    }
+
+    if(this.state.description === "") {
+      formIsValid = false;
+      errors["description"] = "Description cannot be empty";
     }
 
     this.setState({ errors: errors });
@@ -257,7 +378,6 @@ class BookManagement extends Component {
     let fields = this.state.fields;
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(token);
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -267,10 +387,10 @@ class BookManagement extends Component {
       $("#modal-add").modal("toggle");
       $('.modal-backdrop').remove();
       const book = {
-        author: fields["author"],
+        authorId: fields["author"],
         description: fields["description"],
-        imgBanner: fields["imgBanner"],
-        imgDetail: fields["imgDetail"],
+        imgBanner: this.state.imgBanner,
+        imgDetail: this.state.imgDetail,
         qty: fields["qty"],
         statusBook: fields["statusBook"],
         title: fields["title"],
@@ -310,7 +430,7 @@ class BookManagement extends Component {
   }
 
   render() {
-    const { rows, category } = this.state;
+    const { rows, category, author } = this.state;
     const headings = [
       "No.",
       "Action",
@@ -419,23 +539,32 @@ class BookManagement extends Component {
                       </div>
 
                       <div className="col-sm-6">
-                        <div className="form-group">
-                          <label htmlFor="inputAuthor">Author</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="inputAuthor"
-                            name="author"
-                            placeholder="Enter Author"
-                            onChange={this.handleChange.bind(this, "author")}
-                            value={this.state.fields["author"]}
-                          />
-                          <span style={{ color: "red" }}>
-                            {this.state.errors["author"]}
-                          </span>
-                        </div>
+                      <div className="form-group">
+                      <label htmlFor="inputAuthor">Author</label>
+                      <select
+                        name="authorId"
+                        className="form-control"
+                        id="inputAuthor"
+                        value={this.state.fields["author"]}
+                        onChange={this.handleChange.bind(this, "author")}
+                      >
+                        <option value="null">Choose Author</option>
+                        {author.map((author) => {
+                          return (
+                            <option value={author.authorId}>
+                              {author.authorName}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["author"]}
+                      </span>
+                    </div>
                       </div>
                     </div>
+
+                    
 
                     <div className="form-group">
                       <label htmlFor="inputCategoryId">Category</label>
@@ -478,35 +607,31 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputImgBanner">Image Banner</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputImgBanner"
-                        name="imgBanner"
-                        placeholder="Enter Image Banner"
-                        onChange={this.handleChange.bind(this, "imgBanner")}
-                        value={this.state.fields["imgBanner"]}
-                      />
+                    <label htmlFor="inputImgBanner">Image Banner</label>
+                      <div className="input-group">
+                        <div className="custom-file">
+                          <input type="file" accept="image/*" className="custom-file-input" id="inputImgBanner" name="imgBanner" onChange={this.handleImageBanner}
+                        value={this.state.fields["imgBanner"]}/>
+                          <label className="custom-file-label" for="exampleInputFile" style={{overflow:"hidden"}}>{this.state.chooseFileBanner}</label>                   
+                        </div>
+                      </div> 
                       <span style={{ color: "red" }}>
-                        {this.state.errors["imgBanner"]}
-                      </span>
+                            {this.state.errors["imgBanner"]}
+                          </span>
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="inputImgDetail">Image Detail</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputImgDetail"
-                        name="imgDetail"
-                        placeholder="Enter Image Detail"
-                        onChange={this.handleChange.bind(this, "imgDetail")}
-                        value={this.state.fields["imgDetail"]}
-                      />
+                      <div className="input-group">
+                        <div className="custom-file">
+                          <input type="file" accept="image/*" className="custom-file-input" id="inputImgDetail" name="imgDetail" onChange={this.handleImageDetail}
+                        value={this.state.fields["imgDetail"]}/>
+                          <label className="custom-file-label" for="exampleInputFile" style={{overflow:"hidden"}}>{this.state.chooseFileDetail}</label>                   
+                        </div>
+                      </div>
                       <span style={{ color: "red" }}>
-                        {this.state.errors["imgDetail"]}
-                      </span>
+                            {this.state.errors["imgDetail"]}
+                          </span>
                     </div>
 
                     <div className="form-group">
@@ -525,23 +650,6 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
-                    <div className="form-group">
-                      <label htmlFor="inputStatusBook">Status Book</label>
-                      <select
-                        name="statusBook"
-                        className="form-control"
-                        id="inputStatusBook"
-                        value={this.state.fields["statusBook"]}
-                        onChange={this.handleChange.bind(this, "statusBook")}
-                      >
-                        <option value="null">Choose Status</option>
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
-                      </select>
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["categoryId"]}
-                      </span>
-                    </div>
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">
@@ -583,8 +691,6 @@ class BookManagement extends Component {
               <form id="editBook">
                 <div className="modal-body">
                   <div className="card-body">
-                    <div className="row">
-                      <div className="col-sm-6">
                         <div className="form-group">
                           <label htmlFor="editTitle">Title</label>
                           <input
@@ -599,25 +705,27 @@ class BookManagement extends Component {
                             {this.state.errors["title"]}
                           </span>
                         </div>
-                      </div>
 
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label htmlFor="editAuthor">Author</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="editAuthor"
-                            name="author"
-                            placeholder="Enter Author"
-                            onChange={this.bookChange}
-                            value={this.state.author}
-                          />
-                          <span style={{ color: "red" }}>
-                            {this.state.errors["author"]}
-                          </span>
-                        </div>
-                      </div>
+                    <div className="form-group">
+                      <label htmlFor="editAuthor">Author</label>
+                      <select
+                        name="authorId"
+                        className="form-control"
+                        id="editAuthor"
+                        value={this.state.authorId}
+                        onChange={this.bookChange}
+                      >
+                        {author.map((author) => {
+                          return (
+                            <option value={author.authorId}>
+                              {author.authorName}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span style={{ color: "red" }}>
+                        {this.state.errors["author"]}
+                      </span>
                     </div>
 
                     <div className="form-group">
@@ -660,35 +768,29 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="editImgBanner">Image Banner</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="editImgBanner"
-                        name="imgBanner"
-                        placeholder="Enter Image Banner"
-                        onChange={this.bookChange}
-                        value={this.state.imgBanner}
-                      />
+                    <label htmlFor="editImgBanner">Image Banner</label>
+                      <div className="input-group">
+                        <div className="custom-file">
+                          <input type="file" accept="image/*" className="custom-file-input" id="editImgBanner" name="imgBanner" onChange={this.handleImageBanner}  />
+                          <label className="custom-file-label" for="exampleInputFile" style={{overflow:"hidden"}}>{this.state.imgBanner}</label>                   
+                        </div>
+                      </div> 
                       <span style={{ color: "red" }}>
-                        {this.state.errors["imgBanner"]}
-                      </span>
+                            {this.state.errors["imgBanner"]}
+                          </span>
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="editImgDetail">Image Detail</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="editImgDetail"
-                        name="imgDetail"
-                        placeholder="Enter Image Detail"
-                        onChange={this.bookChange}
-                        value={this.state.imgDetail}
-                      />
+                      <div className="input-group">
+                        <div className="custom-file">
+                          <input type="file" accept="image/*" className="custom-file-input" id="editImgDetail" name="imgDetail" onChange={this.handleImageDetail}/>
+                          <label className="custom-file-label" for="exampleInputFile" style={{overflow:"hidden"}}>{this.state.imgDetail}</label>                   
+                        </div>
+                      </div>
                       <span style={{ color: "red" }}>
-                        {this.state.errors["imgDetail"]}
-                      </span>
+                            {this.state.errors["imgDetail"]}
+                          </span>
                     </div>
 
                     <div className="form-group">
@@ -706,23 +808,6 @@ class BookManagement extends Component {
                         {this.state.errors["publishDate"]}
                       </span>
                     </div>
-
-                    {/* <div className="form-group">
-                      <label htmlFor="editStatusBook">Status Book</label>
-                      <select
-                        name="statusBook"
-                        className="form-control"
-                        id="editStatusBook"
-                        value={this.state.statusBook}
-                        onChange={this.bookChange}
-                      >
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
-                      </select>
-                      <span style={{ color: "red" }}>
-                        {this.state.errors["categoryId"]}
-                      </span>
-                    </div> */}
 
                    
                   </div>

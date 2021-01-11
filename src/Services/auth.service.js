@@ -23,8 +23,10 @@ class AuthService {
     window.location.reload();
   }
 
-  register(email, password, confirmPassword) {
+  register(firstName, lastName, email, password, confirmPassword) {
     return axios.post(API_URL + "register", {
+      firstName,
+      lastName,
       email,
       password,
       confirmPassword

@@ -37,30 +37,20 @@ export default class SideBar extends Component {
       role2:"",
       name:"",
       userToken: userToken,
-      role:activeRole
+      role:activeRole,
+      profileImage : ""
     }
   }
   interval = null;
 
   async show(){
     console.log(this.state.role)
-      if (this.state.role=="ROLE_USER") {
-        console.log(this.state.role)
-        this.setState({show:true,role2:"User" })
+      if (this.state.role=="ROLE_USER") {        
+        this.setState({show:true,role2:"User",show2:false,role2:"User" })
       } else{
-        this.setState({show:false,role2:"Admin"})
+        this.setState({show:false,role2:"Admin",show2:true,role2:"Admin"})
       }
-    }
-
-    async show2(){
-      console.log(this.state.role)
-        if (this.state.role=="ROLE_USER") {
-          console.log(this.state.role)
-          this.setState({show2:false,role2:"User" })
-        } else{
-          this.setState({show2:true,role2:"Admin"})
-        }
-      }
+    }    
 
   async getNama(){
     await Axios2.get('/name').then((getName) =>{
@@ -69,11 +59,22 @@ export default class SideBar extends Component {
     })
   }
 
+  async getProfile() {
+    await Axios2
+      .get('/profile')
+      .then((response) => {
+        const dataProfile = response.data;
+        this.setState({
+          profileImage: dataProfile.img,
+        });
+      })
+  }
+
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
-    this.show();
-    this.show2();
+    this.show();    
     this.getNama();
+    this.getProfile();
   }
 
   componentWillUnmount() {
@@ -120,7 +121,7 @@ export default class SideBar extends Component {
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image my-center">
               <Link to='/Profile'>
-                <img src={avatarUser} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
+                <img src={this.state.profileImage} className="img-circle elevation-2 profile-img-custom" alt="User Image" />
                 </Link>
             </div>
             <div className="info">
@@ -169,18 +170,26 @@ export default class SideBar extends Component {
                     <i className="fas fa-angle-left right" />
                   </p>
                 </a>
+                
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <Link to="/UserManagement" className="nav-link">
+                  { show2 ?  <Link to="/UserManagement" className="nav-link">
                       <i className="fas fa-users nav-icon" />
                       <p>User Management</p>
-                    </Link>
+                    </Link>: null}
+                    
                   </li>
                   <li className="nav-item">
-                    <Link to="/BookManagement" className="nav-link">
+                  { show2 ?  <Link to="/Author" className="nav-link">
+                      <i className="fas fa-user nav-icon" />
+                      <p>Author Management</p>
+                    </Link>: null}                     
+                  </li> 
+                  <li className="nav-item">
+                  { show2 ?  <Link to="/BookManagement" className="nav-link">
                       <i className="fas fa-book nav-icon" />
                       <p>Book Management</p>
-                    </Link>
+                    </Link>: null}                    
                   </li>
                   <li className="nav-item">
                     <Link to="/RentManagement" className="nav-link">
@@ -193,24 +202,26 @@ export default class SideBar extends Component {
                       <i className="fas fa-gavel nav-icon" />
                       <p>Fine Management</p>
                     </Link>
-                  </li>
+                  </li>                  
                   <li className="nav-item">
-                    <Link to="/CategoryManagement" className="nav-link">
+                  { show2 ?  <Link to="/CategoryManagement" className="nav-link">
                       <i className="fas fa-th nav-icon" />
                       <p>Category Management</p>
-                    </Link>
+                    </Link>: null}   
+                    
                   </li>
                   <li className="nav-item">
-                    <Link to="/SlideShowManagement" className="nav-link">
+                  { show2 ?   <Link to="/SlideShowManagement" className="nav-link">
                       <i className="far fa-images nav-icon" />
                       <p>Slide Show Management</p>
-                    </Link>
+                    </Link>: null}   
+                   
                   </li>
                   <li className="nav-item">
-                    <Link to="/DonationManagement" className="nav-link">
+                  { show2 ?  <Link to="/DonationManagement" className="nav-link">
                       <i className="fa fa-hands-helping nav-icon" />
                       <p>Donation Management</p>
-                    </Link>
+                    </Link>: null}                       
                   </li>
                   <li className="nav-item">
                     <Link to="/TopUpManagement" className="nav-link">
@@ -235,7 +246,7 @@ export default class SideBar extends Component {
                     Log Management
                   </p>
                 </Link>: null}
-                
+
               </li>
               <li className="nav-item" onClick={AuthService.logout}>
                 <Link to="/Auth" className="nav-link" data-target="#modal-xl">
