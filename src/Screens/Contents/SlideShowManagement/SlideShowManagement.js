@@ -243,7 +243,7 @@ class SlideShowManagement extends Component {
     const slideshow = {
       title : this.state.title,
       subTitle : this.state.subTitle,
-      img : this.state.img
+      img : this.state.uploadImage
     }
     console.log(slideshow.img);
 

@@ -423,7 +423,7 @@ class Profile extends Component {
                   <i className="fas fa-user bg-green"></i>
                   <div className="timeline-item">
                     <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
-                    <h3 className="timeline-header no-border"><a href="#">(NAMA USER)</a> {data.description}</h3>
+                    <h3 className="timeline-header no-border"><a href="#">{data.name}</a> {data.description}</h3>
                   </div>
                 </div>
 

@@ -57,13 +57,13 @@ class LogManagement extends Component {
 
         row.push(
           <td>
-            {/* FullName */}
+            {log.name}
           </td>
         );
 
         row.push(
           <td>
-            {/* Email */}
+            {log.email}
           </td>
         );
         row.push(
@@ -95,7 +95,7 @@ class LogManagement extends Component {
     if (date === null) {
         return "-"
     } else {
-        return moment.utc(date).format('DD-MM-YYYY hh:mm')
+        return moment.utc(date).format('DD-MM-YYYY HH:mm')
     }
 }
 
