@@ -157,18 +157,26 @@ export default class SideBar extends Component {
                     <i className="fas fa-angle-left right" />
                   </p>
                 </a>
+                
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <Link to="/UserManagement" className="nav-link">
+                  { show2 ?  <Link to="/UserManagement" className="nav-link">
                       <i className="fas fa-users nav-icon" />
                       <p>User Management</p>
-                    </Link>
+                    </Link>: null}
+                    
                   </li>
                   <li className="nav-item">
-                    <Link to="/BookManagement" className="nav-link">
+                  { show2 ?  <Link to="/Author" className="nav-link">
+                      <i className="fas fa-user nav-icon" />
+                      <p>Author Management</p>
+                    </Link>: null}                     
+                  </li> 
+                  <li className="nav-item">
+                  { show2 ?  <Link to="/BookManagement" className="nav-link">
                       <i className="fas fa-book nav-icon" />
                       <p>Book Management</p>
-                    </Link>
+                    </Link>: null}                    
                   </li>
                   <li className="nav-item">
                     <Link to="/RentManagement" className="nav-link">
@@ -181,24 +189,26 @@ export default class SideBar extends Component {
                       <i className="fas fa-gavel nav-icon" />
                       <p>Fine Management</p>
                     </Link>
-                  </li>
+                  </li>                  
                   <li className="nav-item">
-                    <Link to="/CategoryManagement" className="nav-link">
+                  { show2 ?  <Link to="/CategoryManagement" className="nav-link">
                       <i className="fas fa-th nav-icon" />
                       <p>Category Management</p>
-                    </Link>
+                    </Link>: null}   
+                    
                   </li>
                   <li className="nav-item">
-                    <Link to="/SlideShowManagement" className="nav-link">
+                  { show2 ?   <Link to="/SlideShowManagement" className="nav-link">
                       <i className="far fa-images nav-icon" />
                       <p>Slide Show Management</p>
-                    </Link>
+                    </Link>: null}   
+                   
                   </li>
                   <li className="nav-item">
-                    <Link to="/DonationManagement" className="nav-link">
+                  { show2 ?  <Link to="/DonationManagement" className="nav-link">
                       <i className="fa fa-hands-helping nav-icon" />
                       <p>Donation Management</p>
-                    </Link>
+                    </Link>: null}                       
                   </li>
                   <li className="nav-item">
                     <Link to="/TopUpManagement" className="nav-link">
