@@ -60,7 +60,6 @@ class Home extends Component {
     let fetchRecommended = await Axios.get('/book/get-max-qty')
     console.log(fetchRecommended)
     this.setState({recommendedBook: fetchRecommended.data})
-    // this.setState({recommendedCat: this.state.recommendedBook.categoryEntity.category})
   }
 
   render() {
@@ -173,7 +172,7 @@ class Home extends Component {
                   <p className="description">
                     {recommendedBook.description}
                   </p>
-                  <span className="badge category-book">{recommendedCat}</span>
+                  
                 </div>
               </div>
             </div>
