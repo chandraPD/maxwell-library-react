@@ -105,6 +105,16 @@ class BookManagement extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+    let errors = {}
+
+    errors["title"] = ""
+    errors["author"] = ""
+    errors["description"] = ""
+    errors["publishDate"] = ""
+    errors["categoryId"] = ""
+    errors["imgBanner"] = ""
+    errors["imgDetail"] = ""
+    this.setState({errors: errors})
   };
 
   resetModal() {
@@ -134,17 +144,15 @@ class BookManagement extends Component {
 
     this.setState({fields: fields})
     this.setState({errors: errors})
+    this.setState({imgDetail: ""})
+    this.setState({imgBanner: ""})
+    this.setState({chooseFileDetail: "Choose Image Detail"})
+    this.setState({chooseFileBanner: "Choose Image Banner"})
   }
 
   getBook = (id) => {
     Axios.get("/book/get-by-id/" + id).then((response) => {
       console.log(response);
-
-      let imgBannerConvert = this.base64Converter(response.data.imgBanner)
-      console.log("Convert Base64 Banner: " + imgBannerConvert)
-
-      let imgDetailConvert = this.base64Converter(response.data.imgDetail)
-      console.log(imgDetailConvert)
 
       this.setState({
         author: response.data.author,
@@ -227,6 +235,7 @@ class BookManagement extends Component {
   handleChange(field, e) {
     let fields = this.state.fields;
     let errors = {}
+
     errors["title"] = ""
     errors["author"] = ""
     errors["description"] = ""
@@ -257,14 +266,10 @@ class BookManagement extends Component {
     }
   }
 
-  base64Converter = (fileImg) =>{
-    const data = fileImg
-    var base64Convert = btoa(data)
-    return base64Convert
-  }
-
   handleImageBanner = (e) => {
     const fileImg = e.target.files[0]
+    let errors = {}
+    errors["imgBanner"] = ""
     this.setState({chooseFileBanner: fileImg.name})
     console.log(this.state.chooseFileBanner)
     const fileReader = new FileReader();
@@ -278,6 +283,7 @@ class BookManagement extends Component {
       this.setState({imgBanner: base64ImageStrip})
       console.log(this.state.imgBanner)
     }
+    this.setState({errors: errors})
   }
 
 
@@ -316,14 +322,12 @@ class BookManagement extends Component {
       errors["categoryId"] = "Please Choose a Category!";
     }
 
-    //Image Banner
-    if (fields["imgBanner"] === "") {
+    if(this.state.imgBanner === "") {
       formIsValid = false;
       errors["imgBanner"] = "Image Banner cannot be empty!";
     }
 
-    //Image Detail
-    if (fields["imgDetail"] === "") {
+    if(this.state.imgDetail === "") {
       formIsValid = false;
       errors["imgDetail"] = "Image Detail cannot be empty!";
     }
@@ -356,16 +360,6 @@ class BookManagement extends Component {
       errors["description"] = "Description cannot be empty";
     }
 
-    if(this.state.imgBanner === "") {
-      formIsValid = false;
-      errors["imgBanner"] = "Image Banner cannot be empty!";
-    }
-
-    if(this.state.imgDetail === "") {
-      formIsValid = false;
-      errors["imgDetail"] = "Image Detail cannot be empty!";
-    }
-
     this.setState({ errors: errors });
     return formIsValid;
   }
@@ -374,7 +368,6 @@ class BookManagement extends Component {
     let fields = this.state.fields;
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(token);
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
