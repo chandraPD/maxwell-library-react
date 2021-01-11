@@ -207,8 +207,9 @@ class Home extends Component {
           <div className="list-book-content">
             <div className="col-12">
               <div className="custom-flex2">
-                <h2 className="title-container">Book List</h2>
+                <Link to='/Catalogue' ><h2 className="title-container">View Book List </h2></Link>
                 <h4 className="title-container">Find your best reads</h4>
+
               </div>
               <Flickity
                 className={'carousel carousel-main book-list-bottom'}

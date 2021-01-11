@@ -29,6 +29,7 @@ import DonationManagement from '../Screens/Contents/DonationManagement/DonationM
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import LogManagement from "../Screens/Contents/LogManagement/LogManagement";
+import Catalogue from '../Screens/Contents/Catalogue/Catalogue'
 import PrivateRoute from './PrivateRoute'
 import Search from '../Screens/Contents/Search/Search'
 import AuthRoute from './AuthRoute'
@@ -112,6 +113,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
+                                </Route>
+                                <Route path='/Catalogue'>
+                                    <Catalogue />
                                 </Route>
                                 <Route path='/TopUpManagement'>
                                     <TopUpManagement />
