@@ -157,7 +157,7 @@ class SlideShowManagement extends Component {
       errors["slideshowSubTitle"] = "Sub Title cannot be empty"
     }
 
-    if(this.state.uploadImage === ""){
+    if(this.state.img === ""){
       formIsValid = false;
       errors["slideshowImage"] = "Image cannot be empty"
     }
@@ -232,7 +232,7 @@ class SlideShowManagement extends Component {
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
           subTitle : response.data.data.subTitle,
-          img : response.data.data.uploadImage
+          img : response.data.data.img
         })
       })
   }
@@ -243,9 +243,9 @@ class SlideShowManagement extends Component {
     const slideshow = {
       title : this.state.title,
       subTitle : this.state.subTitle,
-      img : this.state.uploadImage
+      img : this.state.img
     }
-    console.log(slideshow);
+    console.log(slideshow.img);
 
     let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
@@ -270,7 +270,18 @@ class SlideShowManagement extends Component {
             this.fetchData();
           }
       })
-    } 
+    } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sorry !',
+          text: 'You Must Fill The Requirement !',
+          confirmButtonText: `OK`
+        }).then((result) => {
+            if(result.isConfirmed) {
+              console.log(result);
+        }
+      });
+    }
 }
 
 
@@ -331,6 +342,9 @@ class SlideShowManagement extends Component {
     this.setState({
       chooseFile : file.name
     });
+    this.setState({
+      uploadImage : file.name
+    })
     console.log(this.state.chooseFile);
 
     const reader = new FileReader();
@@ -451,7 +465,7 @@ class SlideShowManagement extends Component {
                     <div class="custom-file">
                       <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="img" onChange={this.handleUploadImage}
                       value={this.state.fields["slideshowImage"]}/>
-                      <label class="custom-file-label" for="exampleInputFile">{this.state.chooseFile}</label>                   
+                      <label class="custom-file-label" for="exampleInputFile" style={{overflow : "hidden"}}>{this.state.chooseFile}</label>                   
                     </div>
                   </div>
                   <span class="text-danger">Minimum size is 300x100 px</span> <br/>
@@ -509,7 +523,7 @@ class SlideShowManagement extends Component {
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" id="exampleInputFile" name="img" 
                       onChange={this.handleUploadImage}/>
-                      <label class="custom-file-label" for="exampleInputFile">{this.state.uploadImage}</label>
+                      <label class="custom-file-label" for="exampleInputFile" style={{ overflow : "hidden"}}>{this.state.img}</label>
                     </div>
                   </div>
                   <span class="text-danger">Minimum size is 300x100 px</span> <br/>

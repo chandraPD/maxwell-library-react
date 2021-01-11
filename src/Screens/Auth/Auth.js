@@ -22,7 +22,19 @@ class Auth extends Component {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
-    
+
+    //firstname
+    if(!fields["firstNameSignUp"]) {
+      formIsValid = false
+      errors["firstNameSignUp"] = "Cannot be empty"
+    }
+
+     //lastname
+     if(!fields["lastNameSignUp"]) {
+      formIsValid = false
+      errors["lastNameSignUp"] = "Cannot be empty"
+    }
+
     //email
     if(!fields["emailSignUp"]) {
       formIsValid = false
@@ -198,12 +210,14 @@ class Auth extends Component {
   handleRegister(e) {
     e.preventDefault()
 
+     let firstName = this.state.fields["firstNameSignUp"]
+     let lastName = this.state.fields["lastNameSignUp"]
      let email = this.state.fields["emailSignUp"]
      let password = this.state.fields["PasswordSignUp"]
      let confirmPassword = this.state.fields["ConfirmPasswordSignUp"]
 
     if (this.handleValidationSignUp()) {
-    	AuthService.register(email, password, confirmPassword).then(
+    	AuthService.register(firstName, lastName, email, password, confirmPassword).then(
         () => {
           Swal.fire({
 
@@ -363,6 +377,41 @@ class Auth extends Component {
 
                 <form role="form" id="formRegister">
                   <div className="container-form">
+
+                    <div className="login form-group bottom-label">
+                      <label for="firstName" className="label-login">
+                       First Name
+                      </label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        className="form-control custom-form"
+                        id="firstName"
+                        placeholder="Enter first name"
+                        autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "firstNameSignUp")}
+                        value={this.state.fields["firstNameSignUp"]}
+                      />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["firstNameSignUp"]}</span>
+                    </div>
+
+                    <div className="login form-group bottom-label">
+                      <label for="lastname" className="label-login">
+                       Last Name
+                      </label>
+                      <input
+                        type="text"
+                        name="lastname"
+                        className="form-control custom-form"
+                        id="lastname"
+                        placeholder="Enter last name"
+                        autocomplete="off"
+                        onChange={this.handleChangeSignUp.bind(this, "lastNameSignUp")}
+                        value={this.state.fields["lastNameSignUp"]}
+                      />
+                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["lastNameSignUp"]}</span>
+                    </div>
+
                     <div className="login form-group bottom-label">
                       <label for="inputEmail" className="label-login">
                         Email address
