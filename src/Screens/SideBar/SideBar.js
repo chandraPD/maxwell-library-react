@@ -44,23 +44,12 @@ export default class SideBar extends Component {
 
   async show(){
     console.log(this.state.role)
-      if (this.state.role=="ROLE_USER") {
-        console.log(this.state.role)
-        this.setState({show:true,role2:"User" })
+      if (this.state.role=="ROLE_USER") {        
+        this.setState({show:true,role2:"User",show2:false,role2:"User" })
       } else{
-        this.setState({show:false,role2:"Admin"})
+        this.setState({show:false,role2:"Admin",show2:true,role2:"Admin"})
       }
-    }
-
-    async show2(){
-      console.log(this.state.role)
-        if (this.state.role=="ROLE_USER") {
-          console.log(this.state.role)
-          this.setState({show2:false,role2:"User" })
-        } else{
-          this.setState({show2:true,role2:"Admin"})
-        }
-      }
+    }    
 
   async getNama(){
     await Axios2.get('/name').then((getName) =>{
@@ -71,8 +60,7 @@ export default class SideBar extends Component {
 
   componentDidMount() {
     this.interval = setInterval(this.reNewBalance, 5000);
-    this.show();
-    this.show2();
+    this.show();    
     this.getNama();
   }
 
