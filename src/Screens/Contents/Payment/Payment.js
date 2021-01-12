@@ -91,6 +91,7 @@ class Payment extends Component {
                const result = data.data;
                if (result.status === 200) {
                   Swal.fire("Success", "Your Payment has been Accepted", "success")
+                  this.props.history.push('/FineManagement')
                } else if (result.message === "Sorry, Your Current Balance is Insufficient.") {
                   Swal.fire({
                      icon: 'warning',
@@ -109,7 +110,7 @@ class Payment extends Component {
                      }
                   })
                } else {
-                  Swal.fire("Ups.", result.message, "warning")
+                  Swal.fire("Ups..", result.message, "warning")
                }
             });
 
@@ -117,25 +118,6 @@ class Payment extends Component {
 
       }
 
-   }
-
-   paymentDeclined() {
-      Swal.fire({
-         icon: 'error',
-         title: 'Declined',
-         text: 'Sorry, Your Current Balance is Insufficient.',
-         showDenyButton: true,
-         showConfirmButton: true,
-         confirmButtonText: `Top Up`,
-         denyButtonText: `OK`
-      }).then((result) => {
-         if (result.isConfirmed) {
-            this.props.history.push('/TopUp')
-         }
-         else {
-
-         }
-      })
    }
 
    convertToDate = (date) => {

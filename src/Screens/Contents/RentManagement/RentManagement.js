@@ -39,8 +39,9 @@ class RentManagement extends Component {
             .then((data) => {
                 const result = data.data;
                 if (result.status === 200) {
-                    Swal.fire('Saved!', 'Rent has been Accepted!', 'success')
+                    Swal.fire('Saved!', result.message, 'success')
                     this.fetchData();
+
                 } else {
                     Swal.fire('Ups..', result.message, 'warning')
                     this.fetchData();
@@ -61,7 +62,7 @@ class RentManagement extends Component {
                     .then((data) => {
                         const results = data.data;
                         if (results.status === 200) {
-                            Swal.fire('Saved!', 'Rent has been Canceled!', 'success')
+                            Swal.fire('Saved!', results.message, 'success')
                             this.fetchData();
                         } else {
                             Swal.fire('Ups..', results.message, 'warning')
@@ -112,7 +113,7 @@ class RentManagement extends Component {
                         if (this.state.role === "ROLE_ADMIN") {
                             actVal = <div className="btn-group btn-group-sm">
                                 <Action type="primary" onClick={() => this.acceptRent(rent.borrowedBookId)} title="Accept" icon="check-square" />
-                                <Action type="danger" onClick={() => this.cancelRent(rent.borrowedBookId)} title="Cancel" icon="window-close" /></div>
+                            </div>
                         } else {
                             actVal = "-";
                         }

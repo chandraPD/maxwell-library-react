@@ -85,6 +85,9 @@ class FineManagement extends Component {
                     } else if(rent.statusInvoice === "Canceled"){
                         actVal = '-';
                         statusVal = <Status type="Danger" val="Canceled" />
+                    }else if(rent.statusInvoice === "Waiting Check By Librarian"){
+                        actVal = '-';
+                        statusVal = <Status type="warning" val="Waiting Check By Librarian" />
                     }else{
                         actVal = '-';
                         statusVal = '';
