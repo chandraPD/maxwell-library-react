@@ -3,7 +3,7 @@ import DataTable from '../../../Components/Datatable/Table';
 import Status from '../../../Components/Datatable/Status';
 import axios from 'axios';
 import './UserManagement.style.css'
-
+import { Link } from 'react-router-dom'
 import $ from 'jquery';
 import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
