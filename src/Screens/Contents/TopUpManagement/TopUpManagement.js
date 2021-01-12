@@ -12,6 +12,7 @@ import { MDBIcon } from "mdbreact";
 import NumberFormat from 'react-number-format';
 import AuthService from '../../../Services/auth.service';
 import Axios2 from '../../../Instances/axios-instances';
+import moment from 'moment';
 
 class TopUpManagement extends Component {
 
@@ -43,9 +44,9 @@ class TopUpManagement extends Component {
 
   async getRole() {    
     if (this.state.role == "ROLE_ADMIN") {
-      this.setState({ headings: ["No", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+      this.setState({ headings: ["No", "Action", "Email", "Date Input", "Date Accept","Total Nominal (Rp)", "Payment Method", "Status"] })
     } else {
-      this.setState({ headings: ["No", "Total Nominal (Rp)", "Payment Method", "Status"] })
+      this.setState({ headings: ["No","Date Input", "Date Accept", "Total Nominal (Rp)", "Payment Method", "Status"] })
     }
   }
 
@@ -147,6 +148,14 @@ class TopUpManagement extends Component {
       })
   }
 
+  convertToDate = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('DD-MM-YYYY HH:mm')
+    }
+}
+
   fetchData(getRole) {
     var role = getRole;
     console.log(role.data)
@@ -156,6 +165,7 @@ class TopUpManagement extends Component {
 
 
     result.forEach(topup => {
+      var date=topup.dateAcc;
       var row = [];
       var actVal, statusVal = '';
       if (topup.statusPayment == 'Success') {
@@ -185,6 +195,12 @@ class TopUpManagement extends Component {
       if (role === "ROLE_ADMIN") {
         row.push(<td className="text-center" >{actVal}</td>);
         row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
+      }
+      row.push(<td className="text-center" >{this.convertToDate(topup.dateTopup)}</td>);
+      if (date==""){
+        row.push(<td className="text-center" > - </td>);
+      } else{
+        row.push(<td className="text-center" >{this.convertToDate(topup.dateAcc)}</td>);
       }
       // row.push(<td className="text-center" >{actVal}</td>);
       if (topup.paymentMethod=="Debit"){
