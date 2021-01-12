@@ -133,9 +133,9 @@ class SlideShowManagement extends Component {
     }
 
     //Image
-    if (!fields["slideshowImage"]) {
+    if(this.state.img === ""){
       formIsValid = false;
-      errors["slideshowImage"] = "Image cannot be empty";
+      errors["slideshowImage"] = "Image cannot be empty"
     }
 
     this.setState({ errors: errors });
@@ -189,31 +189,33 @@ class SlideShowManagement extends Component {
       }
       Axios.post('slideshow/add-slideshow', slideshow, config)
           .then((response) => {
-            console.log(response)
-          })
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your Data has been Added',
-        confirmButtonText: `OK`
-      }).then((result) => {
-          if(result.isConfirmed) {
-            this.fetchData();
-          }
-      });
-      } else {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Sorry !',
-          text: 'You Must Fill The Requirement !',
-          confirmButtonText: `OK`
-        }).then((result) => {
-            if(result.isConfirmed) {
-              console.log(result);
+            console.log(response);
+            $('.modal-backdrop').remove();
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Your Data has been Added',
+              confirmButtonText: `OK`,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                  this.fetchData();
+                }
+              });
+            }).catch((error) => 
+              Swal.fire({
+                icon: 'warning',
+                title: 'Sorry !',
+                text: 'You Must Fill The Requirement !',
+                confirmButtonText: `OK`
+              }).then((result) => {
+                  if(result.isConfirmed) {
+                    console.log(result);
+                  }
+              })
+            )
         }
-      })
-    }
-  }
+      }
+    
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
@@ -342,9 +344,6 @@ class SlideShowManagement extends Component {
     this.setState({
       chooseFile : file.name
     });
-    this.setState({
-      uploadImage : file.name
-    })
     console.log(this.state.chooseFile);
 
     const reader = new FileReader();
@@ -357,7 +356,7 @@ class SlideShowManagement extends Component {
       this.setState({
         uploadImage : base64ImageStrip
       });
-      console.log(this.state.uploadImage);
+      // console.log(this.state.uploadImage);
       
     }
   }
