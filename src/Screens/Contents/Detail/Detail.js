@@ -8,6 +8,7 @@ import moment from 'moment';
 import Axios2 from '../../../Instances/axios-instances';
 import $ from 'jquery'
 import ReactStars from "react-rating-stars-component";
+import Rating from 'react-rating'
 import { MDBIcon } from "mdbreact";
 
 class Detail extends Component {
@@ -15,6 +16,8 @@ class Detail extends Component {
   constructor(props) {
     let activeRole    
     let user = JSON.parse(localStorage.getItem('user'))
+    console.log(user)
+    let userEmail = JSON.parse(localStorage.getItem('user')).userInfo.email
     if (user) {
       activeRole = JSON.parse(localStorage.getItem('user')).userInfo.activeRole
     } else {
@@ -33,13 +36,48 @@ class Detail extends Component {
       show: true,
       endDate: null,
       role: activeRole,
+      emailToken: userEmail,
       category: [],
       description:"",      
       recommendedData: [],
       data3:[],
       star: "",
+      rate: 1,
       bookId:this.props.match.params.bookId
     }
+  }
+
+  componentDidMount() {
+    const bookId = this.props.match.params.bookId;
+    this.getRate(bookId);
+    this.getData();
+    this.getData2(bookId);
+    this.fetchData(bookId);
+    this.getStatus(bookId);
+    console.log(this.state.emailToken)
+    this.getStatus2(bookId);
+    this.show();
+    this.setState({
+      startDate: moment(),
+      endDate: moment()
+    })
+    
+  }
+
+  async getRate(id) {
+    await Axios2.get('review/rate/' + id).then((getStatus) => {
+      if (getStatus.data==null || getStatus.data==""){
+        console.log(getStatus)
+      var status = getStatus.data;
+      return status
+      } else{
+        console.log(getStatus)
+      var status = getStatus.data;
+      this.setState({ rate: getStatus.data })
+      console.log(this.state.rate)
+      return status
+      }      
+    })
   }
 
   handleChange(field, e) {
@@ -61,21 +99,7 @@ class Detail extends Component {
     }
   }
 
-  componentDidMount() {
-    const bookId = this.props.match.params.bookId;
-    this.getData();
-    this.getData2(bookId);
-    this.fetchData(bookId);
-    this.getStatus(bookId);
-    
-    this.getStatus2(bookId);
-    this.show();
-    this.setState({
-      startDate: moment(),
-      endDate: moment()
-    })
-    this.getRate(bookId);
-  }
+ 
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.bookId !== this.props.match.params.bookId) {
@@ -148,7 +172,7 @@ class Detail extends Component {
     await Axios2.get('review/getAll/' + id).then((getData) => {
       console.log(getData.data);
       const result = getData.data;      
-      this.setState({ data3: result });            
+      this.setState({ data3: result });  
     });
   }
 
@@ -183,22 +207,6 @@ class Detail extends Component {
     let fetchRecommend = await Axios.get('/book/get-rec-detail/' + categoryId + '/' + bookId)
     console.log(fetchRecommend)
     this.setState({ recommendedData: fetchRecommend.data })
-  }
-
-  async getRate(id) {
-    await Axios2.get('review/rate/' + id).then((getStatus) => {
-      if (getStatus.data==null || getStatus.data==""){
-        console.log(getStatus)
-      var status = getStatus.data;
-      this.setState({ rate: 0 })
-      return status
-      } else{
-        console.log(getStatus)
-      var status = getStatus.data;
-      this.setState({ rate: getStatus.data })
-      return status
-      }      
-    })
   }
 
   async getStatus(id) {
@@ -383,16 +391,15 @@ class Detail extends Component {
       color: "black",
       edit:false,      
       activeColor: "yellow",
+      value: this.state.rate,
       a11y: true,
       isHalf: true,
       emptyIcon: <i className="far fa-star" />,
       halfIcon: <i className="fa fa-star-half-alt" />,
       filledIcon: <i className="fa fa-star" />,
-      onChange: (newValue) => {
-        this.setState({ star: newValue })
-      }
+      
     };  
-    console.log(this.state.rate)
+    console.log(rateStar2)
     const { data, category, recommendedData, show, star,description,rate,data3 } = this.state
     return (
       <div>
@@ -428,13 +435,22 @@ class Detail extends Component {
             <section className="content">
               <div className="category">
                 <p>{category.category}</p>
-              </div>                            
-              <div>
-              {/* <ReactStars {...rateStar2}  value={}/> */}
-              {rate}<MDBIcon icon="star"/>
-              </div>
-              
+              </div>      
+
               <div className="container-fluid">
+              
+              <div className="star-review">
+                  <Rating 
+                  initialRating={rate} 
+                  readonly
+                  emptySymbol={<i className="far fa-star" />}
+                  fullSymbol={<i className="fa fa-star" />}
+                  />
+                  {/* {rate}<MDBIcon icon="star"/> */}
+                  <br/>
+                </div>
+                
+           
                 <div className="row">
                   <div className="col-sm-6">
                     <h1 className="titletext">{data.title}</h1>
@@ -444,24 +460,7 @@ class Detail extends Component {
                   </div>
 
                 </div>
-                <div>
-                  {show ? <button
-                    type="button"
-                    className="btn btn-primary add-btn"
-                    onClick={() => { this.getId(data.bookId) }}
-                    style={{ float: "right" }}
-                  >
-                    <i className="nav-icon fas fa-heart"></i>
-                  </button> : null}
-                  {show ? <button
-                    type="button"
-                    className="btn btn-primary add-btn"
-                    onClick={() => { this.getId2(data.bookId) }}
-                    style={{ float: "right" }}
-                  >
-                    <i className="nav-icon fas fa-star"></i>
-                  </button> : null}
-                </div>
+                
               </div>
               <p className="date">{data.publishDate}</p>
               <p className="date">Available Stock: {data.qty}</p>
@@ -471,29 +470,93 @@ class Detail extends Component {
                     {data.description}
                   </p>
                 </div>
+                
                 {this.printBorrowButton(data.statusBook)}
-
+                <div>
+                  {show ? <button
+                    type="button"
+                    className="btn btn-warning add-btn"
+                    onClick={() => { this.getId(data.bookId) }}
+                    style={{ float: "right" }}
+                  >
+                    <i className="nav-icon fas fa-heart"></i>
+                  </button> : null}
+                 
+                </div>
+                
+                <div>
+                {show ? <button
+                    type="button"
+                    className="btn btn-warning add-btn"
+                    onClick={() => { this.getId2(data.bookId) }}
+                    style={{ float: "right" }}
+                  >
+                    <i className="nav-icon fas fa-star"></i>
+                  </button> : null}
+                  </div>
               </div>
+
+              
+
+              <section>
+                  <div className="card shadow mb-4 mr-4">
+                    <a  className="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExamplee">
+                      <h6 className="m-0 font-weight-bold text-dark">User Reviews</h6>
+                    </a>
+                    <div className="collapse show" id="collapseCardExamplee">
+                      <div className="card-body">                                   
+                        
+                        
+                        <div className="p-2 hover">              
+                        {data3.map((person) => {
+                            if(person.userEntity.email === this.state.emailToken) {
+                              return(
+                                <div className="row">
+    
+                                  <div className="col-sm-6">
+                                    <div className="font-weight-bold text-dark">{person.userEntity.email}</div>
+                                    <hr className="divider" />
+                                    <div className="text-dark mb-5"><i className="nav-icon fas fa-star"></i> {person.rate} : {person.comment}</div>
+                                  </div>
+    
+                                  <div className="col-sm-6">
+                                    
+                                    <button type="button" className="btn btn-danger float-right">Delete</button>
+                                    
+                                  </div>
+    
+                                </div>
+                                ) 
+                            } else {
+                              return(
+                                <div className="row">
+    
+                                  <div className="col-sm-6">
+                                    <div className="font-weight-bold text-dark">{person.userEntity.email}</div>
+                                    <hr className="divider" />
+                                    <div className="text-dark mb-5"><i className="nav-icon fas fa-star"></i> {person.rate} : {person.comment}</div>
+                                  </div>
+    
+                                  <div className="col-sm-6">
+                                    
+                                    
+                                    
+                                  </div>
+    
+                                </div>
+                                ) 
+                            }
+                          }
+                        )}                                                                  
+                        
+                          <hr className="divider" />
+                        </div>            
+                      </div>
+                    </div>
+                  </div>
+              </section>
             </section>
-            <section>
-            <div className="card shadow mb-4 mr-4">
-        <a href="#collapseCardExamplee" className=" d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExamplee">
-          <h6 className="m-0 font-weight-bold text-dark">Review</h6>
-        </a>
-        <div className="collapse show" id="collapseCardExamplee">
-          <div className="card-body">                                   
-            <div className="text-l font-weight-bold text-dark  mb-1">Comments:</div>
-            <hr className="divider" />
             
-            <div className="p-2 hover">              
-            {data3.map((person) => {return(<div className="text-l font-weight-bold text-dark  mb-1"> {person.userEntity.email} {person.rate}  {person.comment}</div>) })}                                                                  
-            
-              <hr className="divider" />
-            </div>            
-          </div>
-        </div>
-      </div>
-            </section>
             <section>
             
               {/*Adding list books*/}
@@ -561,8 +624,8 @@ class Detail extends Component {
               </div>
               <div className="modal-body">
               <form id="addBook" onSubmit={this.contactSubmit.bind(this)}>
-                <div className="row">
-                  <div className="col-md-6">
+                <div>
+                  <div >
                     <div className="input-group date" id="datetimepicker5" data-target-input="nearest">
                       <ReactStars {...rateStar} />
                       <span style={{ color: "red" }}>
@@ -570,7 +633,7 @@ class Detail extends Component {
                       </span>
                     </div>                    
                   </div>
-                  <div>
+                  <br></br>
                   <div className="form-group">                      
                       <textarea
                         className="form-control"
@@ -586,7 +649,7 @@ class Detail extends Component {
                         {this.state.errors["description"]}
                       </span>
                     </div>
-                    </div>
+                    
                 </div>
                 
                 <div className="modal-footer">
