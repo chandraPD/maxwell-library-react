@@ -5,23 +5,49 @@ import Date from '../../../Components/Datepicker/Dates'
 import Axios from '../../../Instances/axios-instances';
 import { Link, withRouter } from "react-router-dom";
 import moment from 'moment';
+import Axios2 from '../../../Instances/axios-instances';
+import $ from 'jquery'
+
 class Detail extends Component {
 
   constructor(props) {
+    let activeRole
+    let user = JSON.parse(localStorage.getItem('user'))
+    if (user) {
+      activeRole = JSON.parse(localStorage.getItem('user')).userInfo.activeRole
+    } else {
+      activeRole = false;
+    }
+
     super(props)
     console.log(props);
     this.state = {
+      data2: [],
       data: [],
+      status: "",
       startDate: null,
+      show: true,
       endDate: null,
+      role: activeRole,
       category: [],
       recommendedData: []
+    }
+  }
+  async show() {
+    console.log(this.state.role)
+    if (this.state.role == "ROLE_USER") {
+      this.setState({ show: true, role2: "User", show2: false, role2: "User" })
+    } else {
+      this.setState({ show: false, role2: "Admin", show2: true, role2: "Admin" })
     }
   }
 
   componentDidMount() {
     const bookId = this.props.match.params.bookId;
+    this.getData();
     this.fetchData(bookId);
+    this.getStatus(bookId);
+    this.show();
     this.setState({
       startDate: moment(),
       endDate: moment()
@@ -75,6 +101,19 @@ class Detail extends Component {
 
   }
 
+  async getData() {
+    await Axios2.get('wishlist/getAll').then((getData) => {
+      const result = getData.data;
+      $("#example1").DataTable().destroy();
+      this.setState({ data2: result });
+      this.fetchData(this.state.role);
+      $("#example1").DataTable({
+        responsive: true,
+        autoWidth: false,
+      });
+    });
+  }
+
   async fetchData(bookId) {
     let fetchData = await Axios.get('/book/get-by-id/' + bookId)
     console.log(fetchData.data);
@@ -89,6 +128,54 @@ class Detail extends Component {
     this.setState({ recommendedData: fetchRecommend.data })
   }
 
+  async getStatus(id) {
+    await Axios2.get('wishlist/get/' + id).then((getStatus) => {
+      console.log(getStatus)
+      var status = getStatus.data;
+      this.setState({ status: getStatus.data })
+      return status
+    })
+  }
+
+  getId = (id) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Warning!',
+      showCancelButton: true,
+      text: 'Are you sure want to confirm this?',
+    })
+      .then((result) => {
+        if (result.isConfirmed) {          
+          console.log(this.state.status)
+          if (this.state.status==true){
+            Axios2.post('wishlist/post/' + id)
+            .then((res) => {
+              console.log(res);
+              this.getStatus(id);
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                showCancelButton: false,
+                text: 'Wishlist Cancel Already Success!',
+              })
+            })
+          } else{
+            Axios2.post('wishlist/post/' + id)
+            .then((res) => {
+              console.log(res);
+              this.getStatus(id);
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                showCancelButton: false,
+                text: 'Wishlist Already Success!',
+              })
+            })
+          }
+          
+        }
+      })
+  }
   printStatusBook = (statusBook) => {
     if (statusBook === 'Available') {
       return <h1 className="statustextgreen">{statusBook}</h1>
@@ -110,7 +197,7 @@ class Detail extends Component {
 
   render() {
 
-    const { data, category, recommendedData } = this.state
+    const { data, category, recommendedData, show } = this.state
     return (
 
       <div>
@@ -138,7 +225,9 @@ class Detail extends Component {
                       </ul> */}
                       <img className="small-preview" src={data.imgDetail} />
                     </div>
+
                   </div>
+
                 </div>
               </div>{/* /.container-fluid */}
             </section>
@@ -147,6 +236,7 @@ class Detail extends Component {
               <div className="category">
                 <p>{category.category}</p>
               </div>
+
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-sm-6">
@@ -155,16 +245,28 @@ class Detail extends Component {
                   <div className="col-sm-6">
                     {this.printStatusBook(data.statusBook)}
                   </div>
+
                 </div>
-                <p className="date">{data.publishDate}</p>
-                <div className="row">
-                  <div className="col-sm-8">
-                    <p className="content">
-                      {data.description}
-                    </p>
-                  </div>
+                <div>
+                  {show ? <button
+                    type="button"
+                    className="btn btn-primary add-btn"
+                    onClick={() => { this.getId(data.bookId) }}
+                    style={{ float: "right" }}
+                  >
+                    <i className="nav-icon fas fa-heart"></i>
+                  </button> : null}
+                </div>
+              </div>
+              <p className="date">{data.publishDate}</p>
+              <div className="row">
+                <div className="col-sm-8">
+                  <p className="content">
+                    {data.description}
+                  </p>
                 </div>
                 {this.printBorrowButton(data.statusBook)}
+
               </div>
             </section>
             <section>

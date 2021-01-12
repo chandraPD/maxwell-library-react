@@ -353,21 +353,9 @@ class TopUpManagement extends Component {
  refresh(){  
   this.setState({fields:[],userId:"",errors:[]})
   $('input[type="radio"]').prop('checked', false);
+  $('input[type="password"]').val('');  
   $('#topupModal').modal('show');
  
- }
-
- refresh2(){
-  let errors = {};
-  let fields = this.state.fields;
-  $('input[type="password"]').val('');
-  $('#checkModal').modal('hide');
-  $('#passwordModal').modal('show');  
-  fields["PasswordConfirm"]=""
-  fields["PasswordConfirm2"]=""
-  errors["PasswordConfirm"] = "";
-  errors["PasswordConfirm2"] = "";
-  this.setState({ errors: errors });
  }
 
   handleChange(field, e) {
@@ -579,7 +567,7 @@ class TopUpManagement extends Component {
                   <button className="btn btn-secondary" type="button" data-dismiss="modal" data-target="#topupModal" data-toggle="modal">
                     Back
                   </button>
-                  <a className="btn btn-primary" id="btn-delete" href="#" onClick={()=>{this.refresh2()}}>Next</a>
+                  <a className="btn btn-primary" id="btn-delete" href="#" data-dismiss="modal" data-target="#passwordModal" data-toggle="modal">Next</a>
                 </div>
               </div>
             </div>

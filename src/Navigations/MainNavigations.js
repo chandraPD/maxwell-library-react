@@ -30,6 +30,7 @@ import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import LogManagement from "../Screens/Contents/LogManagement/LogManagement";
 import Author from "../Screens/Contents/Author/Author"
+import Wishlist from "../Screens/Contents/Wishlist/Wishlist"
 import Catalogue from '../Screens/Contents/Catalogue/Catalogue'
 import PrivateRoute from './PrivateRoute'
 import Search from '../Screens/Contents/Search/Search'
@@ -129,6 +130,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/Payment/:invoiceId?'>
                                     <Payment />
+                                </Route>
+                                <Route path='/Wishlist'>
+                                    <Wishlist/>
                                 </Route>
                                 <Route path='/PaymentDetail/:userId'>
                                     <PaymentDetail />
