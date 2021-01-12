@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from '../../../Instances/axios-instances';
+import moment from 'moment';
 
 class Profile extends Component {
   constructor(props) {
@@ -23,11 +24,14 @@ class Profile extends Component {
       updateBirthDate: '',
       updateAddress: '',
       updatePhoneNumber: '',
+
+      dataLogUser : [],
     };
   }
 
   componentDidMount() {
     this.fetchDataUser();
+    this.getLogUser();
   }
 
   handleChangeProfile(e) {
@@ -131,6 +135,13 @@ class Profile extends Component {
       });
   }
 
+  async getLogUser() {
+      let fetchLogUser = await axios.get('log/get-log-user')
+      this.setState({ dataLogUser : fetchLogUser.data});
+      console.log(this.state.dataLogUser);
+  }
+
+
   displayEditForm() {
     const editForm = document.querySelector('#container-editform');
     editForm.style.display = 'block';
@@ -174,7 +185,25 @@ class Profile extends Component {
       document.getElementById('phonenumber').innerHTML = phoneNumber;
     }
   }
+
+  convertToTime = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('hh:mm')
+    }
+  }
+
+  convertToDate = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('MMM Do, YYYY')
+    }
+  }
   render() {
+
+    const { dataLogUser } = this.state;
     return (
       <Fragment>
         <div className="content-wrapper">
@@ -251,8 +280,8 @@ class Profile extends Component {
                 </div>
               </div>
             </div>
-          </section>
-
+          </section>             
+        
           {/* Edit Form  */}
           <section className="padding-editform">
             <div id="container-editform">
@@ -389,6 +418,73 @@ class Profile extends Component {
               </form>
             </div>
           </section>
+
+        {dataLogUser.map((data) => {
+          return(
+            <div className="row" style={{margin : "20px"}}>
+              <div className="col-md-12">
+                <div className="timeline">
+                  {/* timeline-label */}
+                  <div className="time-label">
+                    <span className="bg-read">{this.convertToDate(data.dateTime)}</span>
+                  </div>
+                
+                <div>
+                  <i className="fas fa-user bg-green"></i>
+                  <div className="timeline-item">
+                    <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
+                    <small style={{ margin : "10px"}}>Your Activity : {data.action}</small>
+                    <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
+                  </div>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          )
+        })}
+
+        {/* Log Activity User */}
+        <section>
+          {/* timeline */}
+        <div className="row" style={{margin : "20px"}}>
+          <div className="col-md-12">
+            <div className="timeline">
+              {/* timeline-label */}
+              <div className="time-label">
+                <span className="bg-read">10 Feb 2021</span>
+              </div>
+            
+            <div>
+              <i className="fas fa-user bg-green"></i>
+              <div className="timeline-item">
+                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+              </div>
+            </div>
+
+            <div>
+              <i className="fas fa-user bg-green"></i>
+              <div className="timeline-item">
+                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+              </div>
+            </div>
+
+            <div>
+              <i className="fas fa-user bg-green"></i>
+              <div className="timeline-item">
+                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
+              </div>
+            </div>
+
+            </div>
+
+          </div>
+
+        </div>       
+        </section>
         </div>
       </Fragment>
     );
