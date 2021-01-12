@@ -83,16 +83,20 @@ class BookDetail extends Component {
             autoWidth: false,
             });
 
-            var jumlah = response.data.length
+            Axios.get('/book-detail/get-book-detail-count/Available/' + bookId)
+                  .then((response) => {
+                    console.log(response.data)
 
-            const count = {
-              qty: jumlah
-            }
+                    const count = {
+                      qty: response.data
+                    }
 
-            Axios.put("/book/update-qty-book/" + bookId, count)
-              .then((response) => {
-                console.log(response)
-              })  
+                    Axios.put("/book/update-qty-book/" + bookId, count)
+                    .then((response) => {
+                      console.log(response)
+                    })  
+
+                  })  
         })
   }
 
