@@ -190,7 +190,7 @@ class Profile extends Component {
     if (date === null) {
         return "-"
     } else {
-        return moment.utc(date).format('hh:mm')
+        return moment.utc(date).format('HH:mm')
     }
   }
 
@@ -421,23 +421,24 @@ class Profile extends Component {
 
         {dataLogUser.map((data) => {
           return(
-            <div className="row" style={{margin : "20px"}}>
-              <div className="col-md-12">
-                <div className="timeline">
-                  {/* timeline-label */}
-                  <div className="time-label">
-                    <span className="bg-read">{this.convertToDate(data.dateTime)}</span>
-                  </div>
+            <div className="row" style={{marginLeft : "20px", paddingBottom :"0px", marginBottom : "0px"}}>
+              <div className="col-md-11" style={{paddingBottom : "0px", marginBottom : "0px"}}>
+                <div className="timeline" style={{marginBottom : "0px"}}>
+                  
+                    <div className="time-label" style={{marginTop : "0px"}}>
+                      <span className="bg-read">{this.convertToDate(data.dateTime)}</span>
+                    </div>
                 
-                <div>
-                  <i className="fas fa-user bg-green"></i>
-                  <div className="timeline-item">
-                    <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
-                    <small style={{ margin : "10px"}}>Your Activity : {data.action}</small>
-                    <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
-                  </div>
-                </div>
+                    <div>
+                      <i className="fas fa-user bg-green"></i>
+                      <div className="timeline-item">
+                        <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
+                        <small style={{ margin : "10px"}}>Your Activity : {data.action}</small>
+                        <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
+                      </div>
+                    </div>
 
+                                 
                 </div>
               </div>
             </div>

@@ -133,9 +133,9 @@ class SlideShowManagement extends Component {
     }
 
     //Image
-    if (!fields["slideshowImage"]) {
+    if(this.state.img === ""){
       formIsValid = false;
-      errors["slideshowImage"] = "Image cannot be empty";
+      errors["slideshowImage"] = "Image cannot be empty"
     }
 
     this.setState({ errors: errors });
@@ -342,9 +342,6 @@ class SlideShowManagement extends Component {
     this.setState({
       chooseFile : file.name
     });
-    this.setState({
-      uploadImage : file.name
-    })
     console.log(this.state.chooseFile);
 
     const reader = new FileReader();
@@ -357,7 +354,7 @@ class SlideShowManagement extends Component {
       this.setState({
         uploadImage : base64ImageStrip
       });
-      console.log(this.state.uploadImage);
+      // console.log(this.state.uploadImage);
       
     }
   }
