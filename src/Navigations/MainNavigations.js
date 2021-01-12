@@ -24,6 +24,7 @@ import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
+import CheckReturnBook from '../Screens/Contents/ReturnBook/CheckReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
 import Donation from '../Screens/Contents/Donation/Donation'
@@ -154,6 +155,9 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/ReturnBook'>
                                     <ReturnBook />
+                                </Route>
+                                <Route path='/CheckReturnBook'>
+                                    <CheckReturnBook />
                                 </Route>
                                 <Route path='/DonationManagement'>
                                     <DonationManagement />
