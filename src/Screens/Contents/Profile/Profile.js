@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from '../../../Instances/axios-instances';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 class Profile extends Component {
   constructor(props) {
@@ -199,6 +200,17 @@ class Profile extends Component {
         return "-"
     } else {
         return moment.utc(date).format('MMM Do, YYYY')
+    }
+  }
+
+  dateLog = (date) => {
+    var relativeTime = require('dayjs/plugin/relativeTime');
+    dayjs.extend(relativeTime);
+
+    if (date === null) {
+      return "-"
+    } else {
+        return dayjs().to(dayjs(date));
     }
   }
   render() {
@@ -436,7 +448,7 @@ class Profile extends Component {
                     <div>
                       <i className="fas fa-user bg-green"></i>
                       <div className="timeline-item">
-                        <span className="time"><i class="fas fa-clock"></i> {this.convertToTime(data.dateTime)}</span>
+                        <span className="time"><i class="fas fa-clock"></i> {this.dateLog(data.dateTime)}</span>
                         <small style={{ margin : "10px"}}>Your Activity : {data.action}</small>
                         <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
                       </div>

@@ -189,31 +189,33 @@ class SlideShowManagement extends Component {
       }
       Axios.post('slideshow/add-slideshow', slideshow, config)
           .then((response) => {
-            console.log(response)
-          })
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your Data has been Added',
-        confirmButtonText: `OK`
-      }).then((result) => {
-          if(result.isConfirmed) {
-            this.fetchData();
-          }
-      }).catch((error) => {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Sorry !',
-          text: 'You Must Fill The Requirement !',
-          confirmButtonText: `OK`
-        }).then((result) => {
-            if(result.isConfirmed) {
-              console.log(result);
-            }
-        })
-     })  
-    }
-  }
+            console.log(response);
+            $('.modal-backdrop').remove();
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Your Data has been Added',
+              confirmButtonText: `OK`,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                  this.fetchData();
+                }
+              });
+            }).catch((error) => 
+              Swal.fire({
+                icon: 'warning',
+                title: 'Sorry !',
+                text: 'You Must Fill The Requirement !',
+                confirmButtonText: `OK`
+              }).then((result) => {
+                  if(result.isConfirmed) {
+                    console.log(result);
+                  }
+              })
+            )
+        }
+      }
+    
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
