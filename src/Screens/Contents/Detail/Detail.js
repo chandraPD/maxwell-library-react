@@ -259,6 +259,7 @@ class Detail extends Component {
                 </div>
               </div>
               <p className="date">{data.publishDate}</p>
+              <p className="date">Available Stock: {data.qty}</p>
               <div className="row">
                 <div className="col-sm-8">
                   <p className="content">
