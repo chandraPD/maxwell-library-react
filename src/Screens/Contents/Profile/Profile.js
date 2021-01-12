@@ -418,15 +418,19 @@ class Profile extends Component {
               </form>
             </div>
           </section>
-
+        
+        {/* Log Activity User */}
+        <section className = "content-user" sytle={{ margin : "20px"}}>
+          <h3 className="logTitle" style={{ paddingLeft : "20px"}}>Your Activity</h3>
         {dataLogUser.map((data) => {
           return(
+            /* timeline */
             <div className="row" style={{marginLeft : "20px", paddingBottom :"0px", marginBottom : "0px"}}>
-              <div className="col-md-11" style={{paddingBottom : "0px", marginBottom : "0px"}}>
+              <div className="col-md-12" style={{paddingBottom : "0px", marginBottom : "0px"}}>
                 <div className="timeline" style={{marginBottom : "0px"}}>
-                  
+                  {/* timeline-label */}
                     <div className="time-label" style={{marginTop : "0px"}}>
-                      <span className="bg-read">{this.convertToDate(data.dateTime)}</span>
+                      {/* <span className="bg-read">{this.convertToDate(data.dateTime)}</span> */}
                     </div>
                 
                     <div>
@@ -445,47 +449,8 @@ class Profile extends Component {
           )
         })}
 
-        {/* Log Activity User */}
-        <section>
-          {/* timeline */}
-        <div className="row" style={{margin : "20px"}}>
-          <div className="col-md-12">
-            <div className="timeline">
-              {/* timeline-label */}
-              <div className="time-label">
-                <span className="bg-read">10 Feb 2021</span>
-              </div>
-            
-            <div>
-              <i className="fas fa-user bg-green"></i>
-              <div className="timeline-item">
-                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
-                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-              </div>
-            </div>
-
-            <div>
-              <i className="fas fa-user bg-green"></i>
-              <div className="timeline-item">
-                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
-                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-              </div>
-            </div>
-
-            <div>
-              <i className="fas fa-user bg-green"></i>
-              <div className="timeline-item">
-                <span className="time"><i class="fas fa-clock"></i> 5 mins ago</span>
-                <h3 className="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-              </div>
-            </div>
-
-            </div>
-
-          </div>
-
-        </div>       
         </section>
+        
         </div>
       </Fragment>
     );

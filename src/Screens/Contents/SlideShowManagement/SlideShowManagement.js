@@ -200,8 +200,7 @@ class SlideShowManagement extends Component {
           if(result.isConfirmed) {
             this.fetchData();
           }
-      });
-      } else {
+      }).catch((error) => {
         Swal.fire({
           icon: 'warning',
           title: 'Sorry !',
@@ -210,8 +209,9 @@ class SlideShowManagement extends Component {
         }).then((result) => {
             if(result.isConfirmed) {
               console.log(result);
-        }
-      })
+            }
+        })
+     })  
     }
   }
 
