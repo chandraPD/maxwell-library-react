@@ -132,13 +132,37 @@ class SlideShowManagement extends Component {
       errors["slideshowSubTitle"] = "Slideshow Subtitle cannot be empty";
     }
 
-    // //Image
-    // if (!fields["slideshowImage"]) {
-    //   formIsValid = false;
-    //   errors["slideshowImage"] = "Image cannot be empty";
-    // }
+    //Image
+    if(this.state.img === ""){
+      formIsValid = false;
+      errors["slideshowImage"] = "Image cannot be empty"
+    }
 
     this.setState({ errors: errors });
+    return formIsValid;
+  }
+
+  handleUpdateValidation(){
+    let errors = {};
+    let formIsValid = true;
+
+    if(this.state.title === ""){
+      formIsValid = false;
+      errors["slideshowTitle"] = "Title cannot be empty" 
+    }
+      
+
+    if(this.state.subTitle === ""){
+      formIsValid = false;
+      errors["slideshowSubTitle"] = "Sub Title cannot be empty"
+    }
+
+    if(this.state.img === ""){
+      formIsValid = false;
+      errors["slideshowImage"] = "Image cannot be empty"
+    }
+
+    this.setState({ errors : errors});
     return formIsValid;
   }
 
@@ -165,32 +189,33 @@ class SlideShowManagement extends Component {
       }
       Axios.post('slideshow/add-slideshow', slideshow, config)
           .then((response) => {
-            console.log(response)
-          })
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your Data has been Added',
-        confirmButtonText: `OK`
-      }).then((result) => {
-          if(result.isConfirmed) {
-            console.log(result);
-            window.location.reload();
-          }
-      });
-      } else {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Sorry !',
-          text: 'You Must Fill The Requirement !',
-          confirmButtonText: `OK`
-        }).then((result) => {
-            if(result.isConfirmed) {
-              console.log(result);
+            console.log(response);
+            $('.modal-backdrop').remove();
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Your Data has been Added',
+              confirmButtonText: `OK`,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                  this.fetchData();
+                }
+              });
+            }).catch((error) => 
+              Swal.fire({
+                icon: 'warning',
+                title: 'Sorry !',
+                text: 'You Must Fill The Requirement !',
+                confirmButtonText: `OK`
+              }).then((result) => {
+                  if(result.isConfirmed) {
+                    console.log(result);
+                  }
+              })
+            )
         }
-      })
-    }
-  }
+      }
+    
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
@@ -209,7 +234,7 @@ class SlideShowManagement extends Component {
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
           subTitle : response.data.data.subTitle,
-          img : response.data.data.uploadImage
+          img : response.data.data.img
         })
       })
   }
@@ -222,7 +247,7 @@ class SlideShowManagement extends Component {
       subTitle : this.state.subTitle,
       img : this.state.uploadImage
     }
-    console.log(slideshow);
+    console.log(slideshow.img);
 
     let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
@@ -232,7 +257,8 @@ class SlideShowManagement extends Component {
         headers : { Authorization : `Bearer ${userToken}`}
       }
 
-    Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
+    if(this.handleUpdateValidation()){
+      Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
     }).then($("#modal-edit").modal("toggle"));
@@ -243,10 +269,21 @@ class SlideShowManagement extends Component {
         confirmButtonText: `OK`
       }).then((result) => {
           if(result.isConfirmed) {
-            console.log(result);
-            window.location.reload();
+            this.fetchData();
           }
       })
+    } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sorry !',
+          text: 'You Must Fill The Requirement !',
+          confirmButtonText: `OK`
+        }).then((result) => {
+            if(result.isConfirmed) {
+              console.log(result);
+        }
+      });
+    }
 }
 
 
@@ -270,7 +307,6 @@ class SlideShowManagement extends Component {
       this.setState({
         [event.target.name] : event.target.value
       });
-
   }
 
   handleChange(field, e) {
@@ -305,7 +341,9 @@ class SlideShowManagement extends Component {
   // Handle Upload Slide Show Image
   handleUploadImage = (e) => {
     const file = e.target.files[0];
-    this.setState({chooseFile : file.name});
+    this.setState({
+      chooseFile : file.name
+    });
     console.log(this.state.chooseFile);
 
     const reader = new FileReader();
@@ -318,7 +356,7 @@ class SlideShowManagement extends Component {
       this.setState({
         uploadImage : base64ImageStrip
       });
-      console.log(this.state.uploadImage);
+      // console.log(this.state.uploadImage);
       
     }
   }
@@ -353,7 +391,7 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href='/'>Home</a>
+                    <a href='index.html'>Home</a>
                   </li>
                   <li className="breadcrumb-item active">Slideshow</li>
                 </ol>
@@ -424,15 +462,15 @@ class SlideShowManagement extends Component {
                   <label for="addSlideshowImg">Choose Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="slideshowImage" onChange={this.handleUploadImage}
+                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="img" onChange={this.handleUploadImage}
                       value={this.state.fields["slideshowImage"]}/>
-                      <label class="custom-file-label" for="exampleInputFile">{this.state.chooseFile}</label>                   
+                      <label class="custom-file-label" for="exampleInputFile" style={{overflow : "hidden"}}>{this.state.chooseFile}</label>                   
                     </div>
                   </div>
                   <span class="text-danger">Minimum size is 300x100 px</span> <br/>
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
-                      </span>
+                  </span>
                 </div>
 
               </div>
@@ -465,36 +503,37 @@ class SlideShowManagement extends Component {
                   <label for="editTitle">Title</label>
                   <input type="text" class="form-control" name="title" id="editTitle" value ={this.state.title} 
                   onChange={this.slideShowChange}/>
-                  {/* <span style={{ color: "red" }}>
+                  <span style={{ color: "red" }}>
                         {this.state.errors["slideshowTitle"]}
-                  </span> */}
+                  </span>
                 </div>
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
                   <input type="text" class="form-control" name="subTitle" id="inputCategoryName"
                     value={this.state.subTitle} 
                     onChange={this.slideShowChange}/>
-                  {/* <span style={{ color: "red" }}>
+                  <span style={{ color: "red" }}>
                         {this.state.errors["slideshowSubTitle"]}
-                  </span> */}
+                  </span>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputFile">Change Image</label>
                   <div class="input-group">
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" id="exampleInputFile" name="img" 
-                      onChange={this.slideShowChange}/>
-                      {/* <span style={{ color: "red" }}>
-                        {this.state.errors["slideshowImage"]}
-                      </span> */}
-                      <label class="custom-file-label" for="exampleInputFile">Choose File</label>
+                      onChange={this.handleUploadImage}/>
+                      <label class="custom-file-label" for="exampleInputFile" style={{ overflow : "hidden"}}>{this.state.img}</label>
                     </div>
                   </div>
+                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
+                  <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowImage"]}
+                  </span>
                 </div>
               </div>
             </div>
             <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" onClick={() => this.resetModal()}>Cancel</button>
               <button id="submitEdit" type="button" onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
             </div>
           </form>

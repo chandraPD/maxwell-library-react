@@ -9,13 +9,15 @@ class Catalogue extends Component {
     this.state = {
       dataTop: [],
       category: [],
-      fields: {}
+      fields: {},
+      year: []
     };
   }
 
   componentDidMount() {
     this.getAllBooks();
     this.getAllCategory();
+    this.getYear();
     let user = JSON.parse(localStorage.getItem("user"));
     const userToken = user.token;
     console.log(userToken);
@@ -37,6 +39,13 @@ class Catalogue extends Component {
       const categoryData = fetchCategory.data;
       this.setState({category: categoryData})
       console.log(this.state.category)
+  }
+
+  async getYear() {
+    let fetchYear = await Axios.get('/book/get-year')
+    const yearData = fetchYear.data
+    this.setState({year: yearData})
+    console.log(this.state.year)
   }
 
   handleChange = (field, e) => {
@@ -74,7 +83,7 @@ class Catalogue extends Component {
   }
 
   render() {
-    const { dataTop, category } = this.state;
+    const { dataTop, category, year } = this.state;
 
     return (
       <div className="content-wrapper">
@@ -125,13 +134,13 @@ class Catalogue extends Component {
                         onChange={this.handleChange.bind(this, "year")}
                       >
                         <option value="All" selected>All Year</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                        <option value="2019">2019</option>
-                        <option value="2018">2018</option>
-                        <option value="2017">2017</option>
-                        <option value="2016">2016</option>
-                        <option value="2015">2015</option>
+                        {year.map((year) => {
+                          return(
+                            <option value={year}>
+                              {year}
+                            </option>
+                          )
+                        })}
                       </select>
                     </div>
 

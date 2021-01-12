@@ -4,6 +4,7 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Axios from '../../../Instances/axios-instances';
+import moment from 'moment';
 
 class LogManagement extends Component {
 
@@ -22,7 +23,15 @@ class LogManagement extends Component {
   async fetchData(){
     // $("#example1").DataTable.destroy();
 
-    await Axios.get('log/get-log-lastActivity')
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+
+    await Axios.get('log/get-log-lastActivity', config)
     .then((fetchedData) => {
       console.log(fetchedData);
       const resultLog = fetchedData.data;
@@ -42,10 +51,21 @@ class LogManagement extends Component {
 
         row.push(
           <td>
-            {log.dateTime}
+            {this.convertToDate(log.dateTime)}
           </td>
         );
 
+        row.push(
+          <td>
+            {log.name}
+          </td>
+        );
+
+        row.push(
+          <td>
+            {log.email}
+          </td>
+        );
         row.push(
           <td>
             {log.action}
@@ -71,11 +91,21 @@ class LogManagement extends Component {
     });
   }
 
+  convertToDate = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('DD-MM-YYYY HH:mm')
+    }
+}
+
     render() {
         const { rows } = this.state
         const headings = [
                 "No.",
                 "Time",
+                "FullName",
+                "Email",
                 "Action",
                 "Description"
             ]

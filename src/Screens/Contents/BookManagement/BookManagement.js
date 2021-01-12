@@ -6,6 +6,7 @@ import "datatables.net-responsive/js/dataTables.responsive";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import Swal from "sweetalert2";
 import Axios from '../../../Instances/axios-instances';
+import moment from 'moment'
 
 class BookManagement extends Component {
   constructor() {
@@ -97,7 +98,7 @@ class BookManagement extends Component {
             row.push(<td className="text-center">{book.authorEntity.authorName}</td>);
             row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
             row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
-            row.push(<td className="text-center">{book.publishDate}</td>);
+            row.push(<td className="text-center">{this.convertToDate(book.publishDate)}</td>);
             row.push(<td className="text-center">{book.qty}</td>);
             row.push(<td className="text-center">{book.categoryEntity.category}</td>);
             results.push(row);
@@ -116,12 +117,13 @@ class BookManagement extends Component {
       [event.target.name]: event.target.value,
     });
     let errors = {}
-
     errors["title"] = ""
     errors["author"] = ""
+    errors["categoryId"] = ""
+    errors["statusBook"] = ""
     errors["description"] = ""
     errors["publishDate"] = ""
-    errors["categoryId"] = ""
+    errors["statusBook"] = ""
     errors["imgBanner"] = ""
     errors["imgDetail"] = ""
     this.setState({errors: errors})
@@ -150,14 +152,13 @@ class BookManagement extends Component {
     errors["statusBook"] = ""
     errors["imgBanner"] = ""
     errors["imgDetail"] = ""
-    errors["title"] = ""
 
     this.setState({fields: fields})
     this.setState({errors: errors})
-    this.setState({imgDetail: ""})
     this.setState({imgBanner: ""})
-    this.setState({chooseFileDetail: "Choose Image Detail"})
-    this.setState({chooseFileBanner: "Choose Image Banner"})
+    this.setState({imgDetail: ""})
+    this.setState({chooseFileBanner: ""})
+    this.setState({chooseFileDetail: ""})
   }
 
   getBook = (id) => {
@@ -245,7 +246,6 @@ class BookManagement extends Component {
   handleChange(field, e) {
     let fields = this.state.fields;
     let errors = {}
-
     errors["title"] = ""
     errors["author"] = ""
     errors["description"] = ""
@@ -276,10 +276,16 @@ class BookManagement extends Component {
     }
   }
 
+  convertToDate = (date) => {
+    if(date === null) {
+      return "-"
+    } else {
+      return moment.utc(date).format("D MMMM yyyy")
+    }
+  }
+
   handleImageBanner = (e) => {
     const fileImg = e.target.files[0]
-    let errors = {}
-    errors["imgBanner"] = ""
     this.setState({chooseFileBanner: fileImg.name})
     console.log(this.state.chooseFileBanner)
     const fileReader = new FileReader();
@@ -293,7 +299,6 @@ class BookManagement extends Component {
       this.setState({imgBanner: base64ImageStrip})
       console.log(this.state.imgBanner)
     }
-    this.setState({errors: errors})
   }
 
 
@@ -368,6 +373,16 @@ class BookManagement extends Component {
     if(this.state.description === "") {
       formIsValid = false;
       errors["description"] = "Description cannot be empty";
+    }
+
+    if(this.state.imgBanner === "") {
+      formIsValid = false;
+      errors["imgBanner"] = "Image Banner cannot be empty!";
+    }
+
+    if(this.state.imgDetail === "") {
+      formIsValid = false;
+      errors["imgDetail"] = "Image Detail cannot be empty!";
     }
 
     this.setState({ errors: errors });
@@ -522,7 +537,7 @@ class BookManagement extends Component {
                     <div className="row">
                       <div className="col-sm-6">
                         <div className="form-group">
-                          <label htmlFor="inputTitle">Title</label>
+                          <label htmlFor="inputTitle">Title <small className="red-asterisk">*</small></label>
                           <input
                             type="text"
                             className="form-control"
@@ -540,7 +555,7 @@ class BookManagement extends Component {
 
                       <div className="col-sm-6">
                       <div className="form-group">
-                      <label htmlFor="inputAuthor">Author</label>
+                      <label htmlFor="inputAuthor">Author <small className="red-asterisk">*</small></label>
                       <select
                         name="authorId"
                         className="form-control"
@@ -567,7 +582,7 @@ class BookManagement extends Component {
                     
 
                     <div className="form-group">
-                      <label htmlFor="inputCategoryId">Category</label>
+                      <label htmlFor="inputCategoryId">Category <small className="red-asterisk">*</small></label>
                       <select
                         name="categoryId"
                         className="form-control"
@@ -590,7 +605,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputDescription">Description</label>
+                      <label htmlFor="inputDescription">Description <small className="red-asterisk">*</small></label>
                       <textarea
                         className="form-control"
                         id="inputDescription"
@@ -607,7 +622,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                    <label htmlFor="inputImgBanner">Image Banner</label>
+                    <label htmlFor="inputImgBanner">Image Banner <small className="red-asterisk">*</small></label>
                       <div className="input-group">
                         <div className="custom-file">
                           <input type="file" accept="image/*" className="custom-file-input" id="inputImgBanner" name="imgBanner" onChange={this.handleImageBanner}
@@ -621,7 +636,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputImgDetail">Image Detail</label>
+                      <label htmlFor="inputImgDetail">Image Detail <small className="red-asterisk">*</small></label>
                       <div className="input-group">
                         <div className="custom-file">
                           <input type="file" accept="image/*" className="custom-file-input" id="inputImgDetail" name="imgDetail" onChange={this.handleImageDetail}
@@ -635,7 +650,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputPublishDate">Publish Date</label>
+                      <label htmlFor="inputPublishDate">Publish Date <small className="red-asterisk">*</small></label>
                       <input
                         type="date"
                         className="form-control"
@@ -650,6 +665,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
+                    <small><span className="red-asterisk">*</span> Required</small>    
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">

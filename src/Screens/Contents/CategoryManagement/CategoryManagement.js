@@ -299,7 +299,7 @@ class CategoryManagement extends Component {
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
-                      <label htmlFor="inputCategoryName">Category Name</label>
+                      <label htmlFor="inputCategoryName">Category Name <small className="red-asterisk">*</small></label>
                       <input
                         type="text"
                         className="form-control"
@@ -313,7 +313,9 @@ class CategoryManagement extends Component {
                         {this.state.errors["CategoryName"]}
                       </span>
                     </div>
+                    <small><span className="red-asterisk">*</span> Required</small> 
                   </div>
+                  
                 </div>
                 <div className="modal-footer justify-content-between">
                   <button
