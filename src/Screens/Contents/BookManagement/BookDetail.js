@@ -333,7 +333,7 @@ class BookDetail extends Component {
                   <div className="card-body">
 
                     <div className="form-group">
-                      <label htmlFor="inputTypeofDamage">Type of Damage</label>
+                      <label htmlFor="inputTypeofDamage">Type of Damage <small className="red-asterisk">*</small></label>
                       <select
                         name="typeOfDamage"
                         className="form-control"
@@ -352,7 +352,7 @@ class BookDetail extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputDescofDamage">Description of Damage</label>
+                      <label htmlFor="inputDescofDamage">Description</label>
                       <input
                         type="text"
                         className="form-control"
@@ -383,6 +383,8 @@ class BookDetail extends Component {
                         {this.state.errors["statusBookDetail"]}
                       </span>
                     </div>
+
+                    <small><span className="red-asterisk">*</span> Required</small> 
 
                   </div>
                 </div>
@@ -445,7 +447,7 @@ class BookDetail extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="editDescOfDamage">Description Of Damage</label>
+                      <label htmlFor="editDescOfDamage">Description</label>
                       <input
                         type="text"
                         className="form-control"
