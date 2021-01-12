@@ -313,17 +313,31 @@ class Detail extends Component {
 
       console.log(book);    
       if (this.state.status2 == true) {
-        Axios2.post('wishlist/post/' + this.state.bookId)
+        Swal.fire({
+          icon: 'warning',
+          title: 'Warning!',
+          showCancelButton: false,
+          text: 'Ini akan update data review anda sebelumnya,apakah anda yakin?',
+        }).then((isConfirmed) => {
+          if (isConfirmed) {                
+            Axios2.post('review/post/' + this.state.bookId,book)
           .then((res) => {
             console.log(res);
             this.getStatus2(this.state.bookId);
+            this.getData();                        
+                $('#RateModal').modal('hide');  
+                $('.modal-backdrop').remove(); 
+                this.refresh();
             Swal.fire({
-              icon: 'warning',
-              title: 'Warning!',
+              icon: 'success',
+              title: 'Success!',
               showCancelButton: false,
-              text: 'Data sudah ada',
+              text: 'Data Terupdate',
             })
           })
+          }
+        })
+        
       } else {
         Axios2.post('review/post/' + this.state.bookId,book)
           .then((res) => {
@@ -337,7 +351,7 @@ class Detail extends Component {
             })
             .then((isConfirmed) => {
               if (isConfirmed) {                
-                this.getData();                
+                this.getData();                        
                 $('#RateModal').modal('hide');  
                 $('.modal-backdrop').remove(); 
                 this.refresh();
