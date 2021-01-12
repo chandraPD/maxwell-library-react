@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormGroup, FormText, Input, Label } from 'reactstrap';
+import { MDBIcon } from "mdbreact";
 
 const FormInput = ({
   input,
@@ -8,18 +9,18 @@ const FormInput = ({
   inputPlaceHolder,
   maxDate,
   minDate,
-  meta: { error, touched }
+  meta: { touched,error }
 }) => (
   <FormGroup>
     <Label>{label}</Label>
     <Input
       {...input}
       type={type}
-      placeholder={inputPlaceHolder}
-      max={maxDate}
-      min={minDate}
+      placeholder={inputPlaceHolder}      
     />
-    {touched && <FormText className="help-block error-color">{error}</FormText>}
+    <div>    
+      {touched && error &&<span><MDBIcon icon="exclamation-circle"/> {error}</span>}
+    </div>    
   </FormGroup>
 );
 

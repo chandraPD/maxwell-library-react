@@ -7,8 +7,19 @@ import {
 } from 'reactstrap';
 import { ProgressBar } from 'react-bootstrap';
 import validate from './Validate'
+import { MDBIcon } from "mdbreact";
+import $ from 'jquery'
 
-const TopUp1 = (props) => {
+
+const refresh = ()  =>{
+  console.log("test")
+  $('input[type="radio"]').prop('checked', false);
+}
+
+const renderError = ({ meta: { touched, error } }) =>
+  touched && error ? <span><MDBIcon icon="exclamation-circle"/> {error}</span> : false;
+
+const TopUp1 = (props) => {  
   console.log(props)
   const { handlekeyup, handleSubmit, pristine, previousPage, submitting } = props;
   return (
@@ -69,17 +80,12 @@ const TopUp1 = (props) => {
                   <Field name="nominal" component="input" type="radio" value="200000" />
                   {' '}
             Rp 200.000
-          </label>
+          </label>                
               </div>
+              <Field name="nominal" component={renderError}/>
             </div>            
           </div>
           
-          {/* <div className="input-group" style={{ marginTop: '1rem' }}>
-            <div className="input-group-prepend">
-              <span className="input-group-text"><Field name="nominal" component="input" type="radio" value=""/></span>
-            </div>
-            <Field name="nominalany" component="input" type="text" />
-          </div> */}
         </div> <Button color="dark" className="btn-pill pull-right action-button" type="submit" style={{}}>
           Next &nbsp;
               <i className="fa fa-chevron-right" />
@@ -99,5 +105,5 @@ export default reduxForm({
   form: 'TopUpForm',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
-  validate
+  validate  
 })(TopUp1);

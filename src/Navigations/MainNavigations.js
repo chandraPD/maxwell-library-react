@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import Footer from '../Screens/Footer/Footer'
 import NavBar from '../Screens/NavBar/NavBar'
@@ -16,7 +16,7 @@ import SlideShowManagement from '../Screens/Contents/SlideShowManagement/SlideSh
 import Payment from '../Screens/Contents/Payment/Payment'
 import PaymentInvoicePrint from "../Screens/Contents/Payment/PaymentInvoicePrint"
 import PaymentInvoicePrintPaid from "../Screens/Contents/Payment/PaymentInvoicePrintPaid"
-import History from '../Screens/Contents/History/History';
+import History from '../Screens/Contents/History/History'
 import TopUpManagement from "../Screens/Contents/TopUpManagement/TopUpManagement"
 import AdminProfile from '../Screens/Contents/Profile/AdminProfile'
 import UserManagement from '../Screens/Contents/UserManagement/UserManagement'
@@ -25,14 +25,55 @@ import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
+import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
+import Donation from '../Screens/Contents/Donation/Donation'
+import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
+import LogManagement from "../Screens/Contents/LogManagement/LogManagement";
+import Author from "../Screens/Contents/Author/Author"
+import Catalogue from '../Screens/Contents/Catalogue/Catalogue'
+import PrivateRoute from './PrivateRoute'
+import Search from '../Screens/Contents/Search/Search'
+import AuthRoute from './AuthRoute'
+import Axios from '../Instances/axios-instances';
+
 
 class MainNavigation extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            isAuthenticated :  localStorage.getItem('user')
+        };
+      }
+      interval = null;
+
+      componentDidMount() {
+        this.interval = setInterval(this.getBalance, 30000);
+        this.getBalance();
+      }
+  
+      componentWillUnmount() {
+         clearInterval(this.interval);
+      }
+      getBalance = () => {
+        if(JSON.parse(localStorage.getItem('user')) != null){
+            let user = JSON.parse(localStorage.getItem('user'))
+            Axios.get('top_up_management/getBalance')
+            .then((balance) => {
+                localStorage.setItem('balance', JSON.stringify(balance.data));
+            })
+        }else{
+            localStorage.setItem('balance', 0);
+        }
+      }
+
     render() {
-        return ( <Router>
+        return ( <Router >
                 <Switch>
-                    <Route path='/auth'>
-                        <Auth />
-                    </Route>
+                    <AuthRoute path='/auth'
+                    authenticated={this.state.isAuthenticated}
+                    component={Auth}>
+                    </AuthRoute>
                     <Route path='/PaymentPrint'>
                         <PaymentInvoicePrint />
                     </Route>
@@ -43,9 +84,10 @@ class MainNavigation extends Component {
                             <NavBar />
                             <SideBar />
                             <Switch>
-                                <Route exact path='/'>
-                                    <Home />
-                                </Route>
+                                <PrivateRoute exact path='/'
+                                authenticated={this.state.isAuthenticated}
+                                component={Home}>
+                                </PrivateRoute>
                                 <Route path='/Profile'>
                                     <Profile />
                                 </Route>
@@ -55,11 +97,17 @@ class MainNavigation extends Component {
                                 <Route path='/AdminProfile'>
                                     <AdminProfile/>
                                 </Route>
-                                <Route path='/Detail'>
+                                <Route path='/Detail/:bookId'>
                                     <Detail />
+                                </Route>
+                                <Route path='/Search/:title'>
+                                    <Search />
                                 </Route>
                                 <Route path='/RentManagement'>
                                     <RentManagement />
+                                </Route>
+                                <Route path='/Author'>
+                                    <Author />
                                 </Route>
                                 <Route path='/FineManagement'>
                                     <FineManagement />
@@ -70,13 +118,16 @@ class MainNavigation extends Component {
                                 <Route path='/CategoryManagement'>
                                     <CategoryManagement />
                                 </Route>
+                                <Route path='/Catalogue'>
+                                    <Catalogue />
+                                </Route>
                                 <Route path='/TopUpManagement'>
                                     <TopUpManagement />
                                 </Route>
                                 <Route path='/SlideShowManagement'>
                                     <SlideShowManagement />
                                 </Route>
-                                <Route path='/Payment'>
+                                <Route path='/Payment/:invoiceId?'>
                                     <Payment />
                                 </Route>
                                 <Route path='/PaymentDetail/:userId'>
@@ -91,11 +142,23 @@ class MainNavigation extends Component {
                                 <Route path='/bookmanagement'>
                                     <BookManagement />
                                 </Route>
-                                <Route path='/DetailInvoice'>
+                                <Route path='/bookdetail/:bookId'>
+                                    <BookDetail />
+                                </Route>
+                                <Route path='/DetailInvoice/:invoiceId'>
                                     <DetailInvoice />
                                 </Route>
                                 <Route path='/ReturnBook'>
                                     <ReturnBook />
+                                </Route>
+                                <Route path='/DonationManagement'>
+                                    <DonationManagement />
+                                </Route>
+                                 <Route path='/Donation'>
+                                    <Donation />
+                                </Route>
+                                <Route path='/LogManagement'>
+                                    <LogManagement />
                                 </Route>
                             </Switch>
                             <Footer />
