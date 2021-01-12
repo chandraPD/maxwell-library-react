@@ -261,7 +261,9 @@ class SlideShowManagement extends Component {
       Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
-    }).then($("#modal-edit").modal("toggle"));
+        $("#modal-edit").modal("toggle");
+        $('.modal-backdrop').remove();
+    });
       Swal.fire({
         icon: 'success',
         title: 'Success',
