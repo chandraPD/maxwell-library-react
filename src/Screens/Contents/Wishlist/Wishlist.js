@@ -47,26 +47,39 @@ class Wishlist extends Component {
                   <h4 className="title-container">
                     This is where your favorite book place
                   </h4>
+                  <hr></hr>
                 </div>
-                <div className="filter-container p-0 row custom-flex">
 
                   {allBook.map((data) => {
                     console.log(data)
                     return (
-                      <div className="top-seller">
-                        <div className="filtr-item list-book" />
-                        <Link to={`Detail/${data.bookEntity.bookId}`}>
-                          <img
-                            src={data.bookEntity.imgDetail}
-                            className="img-fluid img-book"
-                            alt="white sample"
-                          />                          
-                        </Link>
+                      
+                      <div className="panel-body wishlist-card">
+                      <div className="row">
+                        <div className="col-md-1"><Link to={`/Detail/${data.bookEntity.bookId}`}><img src={data.bookEntity.imgDetail} alt="media-object" className="img-fluid" style={{borderRadius: "5px"}} /> </Link></div>
+                        <div className="col-md-11">
+                          <div className="row">
+                            <div className="col-md-12">
+                             <Link to={`/Detail/${data.bookEntity.bookId}`}>
+                              <span><strong>{data.bookEntity.title}</strong></span>
+                              </Link>
+                              <span className="label label-info-custom">{data.bookEntity.categoryEntity.category}</span>
+                              <br />
+                              <div className="book-description">
+                                <br/>
+                                <span>{data.bookEntity.description}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br></br>
                     </div>
+                   
+                   
                     )
                   })}
-                  
-                </div>
+
                 <div className="books-nf" style={{ display: 'none' }}>
                   <h3 className="book-not-found">Oops, Book Not Found</h3>
                 </div>
