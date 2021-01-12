@@ -7,6 +7,7 @@ import "datatables.net-dt/css/jquery.dataTables.css";
 import Swal from "sweetalert2";
 import Axios from '../../../Instances/axios-instances';
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 class BookManagement extends Component {
   constructor() {
@@ -469,9 +470,7 @@ class BookManagement extends Component {
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
-                  </li>
+                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                   <li className="breadcrumb-item active">Book Management</li>
                 </ol>
               </div>

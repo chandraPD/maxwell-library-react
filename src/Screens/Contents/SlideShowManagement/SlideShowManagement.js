@@ -6,6 +6,7 @@ import $ from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
 import Axios from '../../../Instances/axios-instances';
+import { Link } from 'react-router-dom'
 
 class SlideShowManagement extends Component {
   constructor(props) {
@@ -390,9 +391,7 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6"><h3>Slideshow Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <a href='index.html'>Home</a>
-                  </li>
+                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                   <li className="breadcrumb-item active">Slideshow</li>
                 </ol>
               </div>
