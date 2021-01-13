@@ -554,46 +554,50 @@ class Detail extends Component {
                         
                         
                         <div className="p-2 hover">              
-                        {data3.map((person) => {
+
+                          {data3.length > 0 ? data3.map((person) => {
                             if(person.userEntity.email === this.state.emailToken) {
                               return(
                                 <div className="row">
-    
+
                                   <div className="col-sm-6">
                                     <div className="font-weight-bold text-dark">{person.userEntity.email}</div>
                                     <hr className="divider" />
                                     <div className="text-dark mb-5"><i className="nav-icon fas fa-star"></i> {person.rate} : {person.comment}</div>
                                   </div>
-    
+
                                   <div className="col-sm-6">
                                     
                                     <button type="button" className="btn btn-danger float-right" onClick={() => {this.delete(person.bookEntity.bookId)}}>Delete</button>
                                     
                                   </div>
-    
+
                                 </div>
                                 ) 
                             } else {
                               return(
                                 <div className="row">
-    
+
                                   <div className="col-sm-6">
                                     <div className="font-weight-bold text-dark">{person.userEntity.email}</div>
                                     <hr className="divider" />
                                     <div className="text-dark mb-5"><i className="nav-icon fas fa-star"></i> {person.rate} : {person.comment}</div>
                                   </div>
-    
                                   <div className="col-sm-6">
-                                    
-                                    
-                                    
                                   </div>
-    
                                 </div>
                                 ) 
                             }
-                          }
-                        )}                                                                  
+                          }) : <div className="row">
+
+                          <div className="col-sm-6">
+                            <div className="font-weight-bold text-dark">No User Review Yet</div>
+                            <hr className="divider" />
+                            <div className="text-dark mb-5"><i className="nav-icon fas fa-star"></i> 0</div>
+                          </div>
+                          <div className="col-sm-6">
+                          </div>
+                        </div> }                                                               
                         
                           <hr className="divider" />
                         </div>            
