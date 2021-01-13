@@ -391,7 +391,7 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6"><h3>Slideshow Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                   <li className="breadcrumb-item active">Slideshow</li>
                 </ol>
               </div>

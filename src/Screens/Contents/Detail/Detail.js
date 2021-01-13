@@ -117,15 +117,11 @@ class Detail extends Component {
   }
 
   borrow = (id) => {
-    console.log(this.state.startDate);
-    console.log(this.state.endDate);
-    // console.log(Date.getStart());
     const dataBorrow = {
       bookId: id,
       borrowedDate: this.state.startDate,
       returnedDate: this.state.endDate,
     }
-    console.log(dataBorrow);
     Axios.post("borrow/save", dataBorrow)
       .then((data) => {
         const result = data.data;
@@ -136,10 +132,10 @@ class Detail extends Component {
             'warning'
           )
         } else {
-
+          this.fetchData(id);
           Swal.fire({
-            title: "Success Borrow Book!",
-            text: "Borrowed Book Success!",
+            title: "Berhasil",
+            text: result.message,
             icon: "success",
             buttons: true,
           })
@@ -619,10 +615,10 @@ class Detail extends Component {
               </div>
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-md-3">
-                    <label className="title-module">Date Borrow:</label>
+                  <div className="col-md-4">
+                    <label className="title-module">Date Borrow </label>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-8">
                     <div className="input-group date" id="datetimepicker5" data-target-input="nearest">
                       <Date startDateCallback={this.getStartDate} endDateCallBack={this.getEndDate} />
                     </div>

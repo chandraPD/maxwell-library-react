@@ -102,11 +102,11 @@ class FineManagement extends Component {
                         }
                         row.push(<td>{rent.noInvoice}</td>);
                         row.push(<td>{this.formatRupiah(rent.grandTotal)}</td>);
-                        row.push(<td>{this.convertToDate(rent.invoiceDate)}</td>);
+                        row.push(<td className="text-center text-nowrap" >{this.convertToDate(rent.invoiceDate)}</td>);
                         if (rent.paymentDate === null) {
                             row.push(<td>-</td>);
                         } else {
-                            row.push(<td>{this.convertToDate(rent.paymentDate)}</td>);
+                            row.push(<td className="text-center text-nowrap" >{this.convertToDate(rent.paymentDate)}</td>);
                         }
                         row.push(<td className="text-center" >{statusVal}</td>);
                         results.push(row);
@@ -161,7 +161,7 @@ class FineManagement extends Component {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Fine Management</li>
                                 </ol>
                             </div>

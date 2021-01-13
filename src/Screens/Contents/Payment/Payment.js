@@ -84,7 +84,8 @@ class Payment extends Component {
    }
 
    confirmPaid = () => {
-
+      console.log(this.state.grandTotal);
+      console.log(this.state.balance);
       if (this.state.grandTotal <= this.state.balance) {
          Axios.put('invoice/pay/' + this.state.invoiceId)
             .then((data) => {

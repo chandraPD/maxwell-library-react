@@ -238,7 +238,7 @@ class CheckReturnBook extends Component {
                                 <input type="text" className="form-control" name="late_by[]" value={val.lateBy} readOnly />
                             </div>
                             <div className="form-group col-sm-2">
-                                <span>Estimated Cost</span>
+                                <span>Cost</span>
                                 <input type="text" className="form-control" name="fine[]" value={val.fine} readOnly />
                             </div>
                         </div>
@@ -251,7 +251,7 @@ class CheckReturnBook extends Component {
                             </div>
                             <div className="form-group col-sm-5">
                                 <span>Cost</span>
-                                <input type="text" data-id={index} data-index={i} data-name="total" className="form-control cost" name="cost[]" />
+                                <input type="number" data-id={index} data-index={i} data-name="total" className="form-control cost" name="cost[]" />
                             </div>
                             <div className="form-group col-sm-2">
                                 <button type="button" className="btn bg-gradient-danger" data-id={index} value="remove" onClick={(e) => this.removeRow(i, e)}>Remove</button>
