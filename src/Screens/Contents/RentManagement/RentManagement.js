@@ -110,21 +110,15 @@ class RentManagement extends Component {
                         actVal = "-";
                         statusVal = <Status type="orange" val="Need Immediate Returns" />
                     } else if (rent.statusBook === "Waiting Taken By Librarian") {
-                        if (this.state.role === "ROLE_ADMIN") {
-                            actVal = <div className="btn-group btn-group-sm">
-                                <Action type="primary" onClick={() => this.acceptRent(rent.borrowedBookId)} title="Accept" icon="check-square" />
-                            </div>
-                        } else {
                             actVal = "-";
-                        }
                         statusVal = <Status type="primary" val="Waiting Taken By Librarian" />
                     } else if (rent.statusBook === "Waiting for Payment of Fines") {
                         if (this.state.role === "ROLE_USER") {
-                            actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link={`/PaymentDetail/${rent.rent_id}`} title="Payment" icon="file-invoice" /></div>
+                            actVal = <div className="btn-group btn-group-sm"><Action type="secondary" link={`/Payment/${rent.invoiceId}`} title="Payment" icon="file-invoice" /></div>
                         } else {
                             actVal = "-";
                         }
-                        statusVal = <Status type="warning" val="Waiting for Payment of Fines" idUser={rent.rent_id} />
+                        statusVal = <Status type="warning" val="Waiting for Payment of Fines" />
                     } else if (rent.statusBook === "Returned" || rent.statusBook == "Canceled") {
                         actVal = "-";
                         if (rent.statusBook === "Returned") {
@@ -169,17 +163,17 @@ class RentManagement extends Component {
 
     async getRole() {
         if (this.state.role === "ROLE_ADMIN") {
-            this.setState({ headings: ['No', 'Action', 'Rent ID', 'Borrower', 'Book Code', 'Title', 'Given By', 'Date Borrowed', 'Due On', 'Date of Return', 'Given By', 'Fine', 'Status'] });
+            this.setState({ headings: ['No', 'Action', 'Rent ID', 'Borrower', 'Book Code', 'Title', 'Given By', 'Date Borrowed', 'Due On', 'Date of Return', 'Taken By', 'Fine', 'Status'] });
         } else {
-            this.setState({ headings: ['No', 'Action', 'Rent ID', 'Book Code', 'Title', 'Given By', 'Date Borrowed', 'Due On', 'Date of Return', 'Given By', 'Fine', 'Status'] })
+            this.setState({ headings: ['No', 'Action', 'Rent ID', 'Book Code', 'Title', 'Given By', 'Date Borrowed', 'Due On', 'Date of Return', 'Taken By', 'Fine', 'Status'] })
         }
     }
 
     showButtonReturn = () => {
         if (this.state.role === "ROLE_USER") {
             return <Link to="ReturnBook" className="btn-xs btn-block bg-gradient-primary">Return</Link>
-        } else {
-            // nothing
+        } else if (this.state.role === "ROLE_ADMIN") {
+            return <Link to="CheckReturnBook" className="btn-xs btn-block bg-gradient-primary">Check Return Book</Link>
         }
     }
 
@@ -196,7 +190,7 @@ class RentManagement extends Component {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                                     <li className="breadcrumb-item active">Rent Management</li>
                                 </ol>
                             </div>

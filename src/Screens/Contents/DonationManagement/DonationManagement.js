@@ -6,6 +6,7 @@ import $, { error, event } from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
  
 class DonationManagement extends Component {
@@ -184,7 +185,7 @@ class DonationManagement extends Component {
                   </div>
                   <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                                     <li className="breadcrumb-item active">Donation Management</li>
                                 </ol>
                             </div>

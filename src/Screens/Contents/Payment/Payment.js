@@ -115,7 +115,22 @@ class Payment extends Component {
             });
 
       } else {
-
+         Swal.fire({
+            icon: 'warning',
+            title: 'Declined',
+            text: 'Sorry, Your Current Balance is Insufficient.',
+            showDenyButton: true,
+            showConfirmButton: true,
+            confirmButtonText: `Top Up`,
+            denyButtonText: `OK`
+         }).then((val) => {
+            if (val.isConfirmed) {
+               this.props.history.push('/TopUp')
+            }
+            else {
+               // nothing
+            }
+         })
       }
 
    }
@@ -193,7 +208,7 @@ class Payment extends Component {
                      </div>
                      {/* <!-- /.col --> */}
                      <div className="col-sm-4 invoice-col">
-                        <b>Invoice {dataInvoice.noInvoice}</b><br />
+                        <b>Invoice {dataInvoice.noInvoice} <font color="orange" >({dataInvoice.typeInvoice})</font></b><br />
                         <br />
                         {this.printStatusPaid()}
                      </div>
@@ -207,10 +222,13 @@ class Payment extends Component {
                      <div className="col-12 table-responsive">
                         <table className="table table-striped">
                            <thead>
-                              <tr>
+                              <tr className="text-nowrap text-center">
                                  <th>No.</th>
+                                 <th>Rent ID</th>
+                                 <th>Book Code</th>
                                  <th>Book Title</th>
                                  <th>Borrowed On</th>
+                                 <th>Returned Date</th>
                                  <th>Due On</th>
                                  <th>Type</th>
                                  <th>Fine Amount</th>
@@ -221,12 +239,15 @@ class Payment extends Component {
                                  dataDetailInvoice.map((val, index) => {
                                     return (
                                        <tr key={index}>
-                                          <td>{index + 1}</td>
-                                          <td>{val.title}</td>
-                                          <td>{this.convertToDate(val.borrowedDate)}</td>
-                                          <td>{this.convertToDate(val.threshold)}</td>
-                                          <td>{val.type}</td>
-                                          <td>{val.grandTotal}</td>
+                                          <td className="text-nowrap" >{index + 1}</td>
+                                          <td className="text-nowrap text-center" >{val.borrowedBookCode}</td>
+                                          <td className="text-nowrap text-center" >{val.bookDetailCode}</td>
+                                          <td className="text-nowrap text-center" >{val.title}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.borrowedDate)}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.returnDate)}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.threshold)}</td>
+                                          <td className="text-nowrap" >{val.type}</td>
+                                          <td className="text-nowrap" >{this.formatRupiah(val.total)}</td>
                                        </tr>
                                     )
                                  })

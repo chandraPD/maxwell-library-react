@@ -47,6 +47,10 @@ class DetailInvoice extends Component {
     printStatusPaid = () => {
         if (this.state.dataInvoice.statusInvoice === "Paid") {
             return <h2><font color="green">PAID</font></h2>
+        }else if (this.state.dataInvoice.statusInvoice === "Waiting For Payment"){
+            return <h2><font color="blue">Waiting For Payment</font></h2>
+        }else if (this.state.dataInvoice.statusInvoice === "Canceled"){
+            return <h2><font color="red">Canceled</font></h2>
         }
     }
 
@@ -96,7 +100,7 @@ class DetailInvoice extends Component {
                             </div>
                             {/* <!-- /.col --> */}
                             <div className="col-sm-4 invoice-col">
-                                <b>Invoice {dataInvoice.noInvoice}</b><br />
+                                <b>Invoice {dataInvoice.noInvoice} <font color="orange" >({dataInvoice.typeInvoice})</font></b><br />
                                 <br />
                                 {this.printStatusPaid()}
                             </div>
@@ -110,10 +114,13 @@ class DetailInvoice extends Component {
                             <div className="col-12 table-responsive">
                                 <table className="table table-striped">
                                     <thead>
-                                        <tr>
+                                        <tr className="text-nowrap text-center">
                                             <th>No.</th>
+                                            <th>Rent ID</th>
+                                            <th>Book Code</th>
                                             <th>Book Title</th>
                                             <th>Borrowed On</th>
+                                            <th>Returned Date</th>
                                             <th>Due On</th>
                                             <th>Type</th>
                                             <th>Fine Amount</th>
@@ -122,14 +129,18 @@ class DetailInvoice extends Component {
                                     <tbody>
                                         {
                                             dataDetailInvoice.map((val, index) => {
+                                                console.log(val);
                                                 return (
                                                     <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td>{val.title}</td>
-                                                        <td>{this.convertToDate(val.borrowedDate)}</td>
-                                                        <td>{this.convertToDate(val.threshold)}</td>
-                                                        <td>{val.type}</td>
-                                                        <td>{val.grandTotal}</td>
+                                                        <td className="text-nowrap" >{index + 1}</td>
+                                                        <td className="text-nowrap text-center" >{val.borrowedBookCode}</td>
+                                                        <td className="text-nowrap text-center" >{val.bookDetailCode}</td>
+                                                        <td className="text-nowrap text-center" >{val.title}</td>
+                                                        <td className="text-nowrap text-center" >{this.convertToDate(val.borrowedDate)}</td>
+                                                        <td className="text-nowrap text-center" >{this.convertToDate(val.returnDate)}</td>
+                                                        <td className="text-nowrap text-center" >{this.convertToDate(val.threshold)}</td>
+                                                        <td className="text-nowrap" >{val.type}</td>
+                                                        <td className="text-nowrap" >{this.formatRupiah(val.total)}</td>
                                                     </tr>
                                                 )
                                             })

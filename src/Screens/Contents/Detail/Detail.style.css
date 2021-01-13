@@ -57,8 +57,17 @@ p.content{
 
 h1.titletext{
     color: black;
-    margin-left: 70px;
+    margin-left: 50px;
     font-weight: bold;
+}
+
+.star-review {
+    margin-top: 10px;
+    margin-left: 50px;
+    color: #f0f023;
+    font-size: 1.5rem;
+    text-shadow: #000 0px 1px 1px;
+    -webkit-font-smoothing: antialiased;
 }
 
 h1.title-text{
@@ -79,7 +88,7 @@ h1.title-text{
 }
 
 button#button_borrow{
-    position: absolute;   
+    position: initial;   
     top: 50%; 
     left: 75%;
     color: white;
@@ -259,7 +268,7 @@ a#toggle{
 
     } */
     button#button_borrow{
-        position: absolute;
+        position: initial;
         top: 50%;
         left: 80%;
         color: white;
@@ -324,7 +333,7 @@ a#toggle{
     }
 
     button#button_borrow{
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 75%;
         color: white;
@@ -434,7 +443,7 @@ a#toggle{
     }
 
     button#button_borrow{
-        position: absolute;
+        position: initial;
         top: 16%;
         left: 65%;
         color: white;
