@@ -300,6 +300,30 @@ class Detail extends Component {
   $('#editDescription').val('');  
   }
 
+  delete(id) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Warning!',
+          showCancelButton: true,
+          text: 'Are you sure want to Delete this?',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            Axios2.put('review/delete/' + id,result)
+              .then((response) => {
+                console.log(response);
+              })
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              showCancelButton: false,
+              text: 'Delete Review Already Success!',
+            })
+          }
+        })
+      
+  }
+
 
   contactSubmit(e) {
     let fields = this.state.fields;
@@ -521,7 +545,7 @@ class Detail extends Component {
     
                                   <div className="col-sm-6">
                                     
-                                    <button type="button" className="btn btn-danger float-right">Delete</button>
+                                    <button type="button" className="btn btn-danger float-right" onClick={() => {this.delete(person.bookEntity.bookId)}}>Delete</button>
                                     
                                   </div>
     
