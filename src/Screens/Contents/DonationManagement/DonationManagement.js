@@ -185,7 +185,7 @@ class DonationManagement extends Component {
                   </div>
                   <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Donation Management</li>
                                 </ol>
                             </div>
