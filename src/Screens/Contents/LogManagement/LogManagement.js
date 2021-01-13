@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import DataTable from "../../../Components/Datatable/Table";
-import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Axios from '../../../Instances/axios-instances';
@@ -21,8 +20,6 @@ class LogManagement extends Component {
   }
 
   async fetchData(){
-    // $("#example1").DataTable.destroy();
-
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
@@ -95,7 +92,7 @@ class LogManagement extends Component {
     if (date === null) {
         return "-"
     } else {
-        return moment.utc(date).format('DD-MM-YYYY HH:mm')
+        return moment.utc(date).format('DD-MM-YYYY | HH:mm')
     }
 }
 
@@ -119,7 +116,7 @@ class LogManagement extends Component {
                   <div className="col-sm-6">
                     <ol className="breadcrumb float-sm-right">
                       <li className="breadcrumb-item">
-                        <a href='/'>Home</a>
+                        <a href='index.html'>Home</a>
                       </li>
                       <li className="breadcrumb-item active">Log</li>
                     </ol>

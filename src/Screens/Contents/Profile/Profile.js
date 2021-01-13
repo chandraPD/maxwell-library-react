@@ -187,22 +187,6 @@ class Profile extends Component {
     }
   }
 
-  convertToTime = (date) => {
-    if (date === null) {
-        return "-"
-    } else {
-        return moment.utc(date).format('HH:mm')
-    }
-  }
-
-  convertToDate = (date) => {
-    if (date === null) {
-        return "-"
-    } else {
-        return moment.utc(date).format('MMM Do, YYYY')
-    }
-  }
-
   dateLog = (date) => {
     var relativeTime = require('dayjs/plugin/relativeTime');
     dayjs.extend(relativeTime);

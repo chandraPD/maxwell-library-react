@@ -200,7 +200,9 @@ class SlideShowManagement extends Component {
               confirmButtonText: `OK`,
             }).then((result) => {
                 if(result.isConfirmed) {
+                  this.resetModal();
                   this.fetchData();
+                  
                 }
               });
             })
@@ -350,7 +352,7 @@ class SlideShowManagement extends Component {
     this.setState({
       chooseFile : file.name
     });
-    console.log(this.state.chooseFile);
+    console.log(file);
 
     const reader = new FileReader();
     console.log(reader);
@@ -360,6 +362,7 @@ class SlideShowManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
 
       this.setState({
+        //setState dalam bentuk Base64
         uploadImage : base64ImageStrip
       });
       // console.log(this.state.uploadImage);
@@ -382,6 +385,7 @@ class SlideShowManagement extends Component {
 
     this.setState({fields: fields})
     this.setState({errors: errors})
+    this.setState({chooseFile: "Choose File"})
   }
 
   render() {
@@ -393,13 +397,13 @@ class SlideShowManagement extends Component {
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
-              <div className="col-sm-6"><h3>Slideshow Management</h3></div>
+              <div className="col-sm-6"><h3>Slide Show Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href='index.html'>Home</a>
                   </li>
-                  <li className="breadcrumb-item active">Slideshow</li>
+                  <li className="breadcrumb-item active">Slide Show</li>
                 </ol>
               </div>
             </div>
@@ -417,7 +421,7 @@ class SlideShowManagement extends Component {
                   <button type="button" className="btn btn-primary add-btn" data-toggle="modal" data-target="#modal-add"
                     style={{float:"right"}}>
                     <i className="nav-icon fas fa-plus"></i>
-                      Add Slideshow Photo
+                      Add Slide Show Photo
                   </button>
                 </div>
               </div>
@@ -435,7 +439,7 @@ class SlideShowManagement extends Component {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Add New Slideshow Image</h4>
+            <h4 class="modal-title">Add New Slide Show Image</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
