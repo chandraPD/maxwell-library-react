@@ -1,7 +1,7 @@
 import React from 'react';
 import './TopUp.style.css'
 import PropTypes from 'prop-types';
-import { reduxForm ,Field} from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import {
   Button
 } from 'reactstrap';
@@ -16,7 +16,7 @@ const TopUp4 = (props) => {
       {/* fieldsets */}
       <fieldset>
         <div>
-          <ProgressBar variant="dark" now={100} animated/>
+          <ProgressBar variant="dark" now={100} animated />
         </div>
         <div className="form-card">
           <div className="row">
@@ -30,30 +30,30 @@ const TopUp4 = (props) => {
           <div className="row row-cols-1 row-cols-md-1">
             <div className="form-group">
               <div className="row">
-              <div className="col-md-4">
-              <label style={{marginLeft: "1rem"}}>
-                Password
+                <div className="col-md-4">
+                  <label style={{ marginLeft: "1rem" }}>
+                    Password
                 {' '}
-              </label>
-              </div>
-              <div className="col-sm-8 float-right">
-              <Field name="passwordconfirm" component={FormInput} type="password"  />
-              </div>
+                  </label>
+                </div>
+                <div className="col-sm-8 float-right">
+                  <Field name="passwordconfirm" component={FormInput} type="password" />
+                </div>
               </div>
             </div>
 
             <div className="form-group">
               <div className="row">
-              <div className="col-md-4">
-              <label style={{marginLeft: "1rem"}}>
-                Confirm Password
-                {' '}     
-              </label>
-              </div>
+                <div className="col-md-4">
+                  <label style={{ marginLeft: "1rem" }}>
+                    Confirm Password
+                {' '}
+                  </label>
+                </div>
 
-              <div className="col-md-8 float-right">
-              <Field name="passwordconfirm2" component={FormInput} type="password" />
-              </div>
+                <div className="col-md-8 float-right">
+                  <Field name="passwordconfirm2" component={FormInput} type="password" />
+                </div>
               </div>
             </div>
 
