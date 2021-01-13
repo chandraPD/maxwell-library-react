@@ -11,7 +11,9 @@ class Donation extends Component {
     super(props);
     
     this.state = {
-      fields: {},     
+      fields: {
+        DonationType: "person"
+      },     
     };
 
     this.postDonate = this.postDonate.bind(this)
@@ -84,7 +86,7 @@ class Donation extends Component {
 
   render() {
     return (
-      <div className="content-wrapper">
+      <div>
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid"></div>

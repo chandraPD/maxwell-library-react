@@ -82,6 +82,10 @@ class MainNavigation extends Component {
                     <Route exact path='/PaymentPrintPaid'>
                         <PaymentInvoicePrintPaid />
                     </Route>
+                    <Route path='/Donation'>
+                         <Donation />
+                    <Footer />
+                    </Route>
                     <Route path='/'>
                             <NavBar />
                             <SideBar />
@@ -161,9 +165,6 @@ class MainNavigation extends Component {
                                 </Route>
                                 <Route path='/DonationManagement'>
                                     <DonationManagement />
-                                </Route>
-                                 <Route path='/Donation'>
-                                    <Donation />
                                 </Route>
                                 <Route path='/LogManagement'>
                                     <LogManagement />

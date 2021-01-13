@@ -7,6 +7,7 @@ import 'bootstrap'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Status from '../../../Components/Datatable/Status';
 
  
 class DonationManagement extends Component {
@@ -55,54 +56,73 @@ class DonationManagement extends Component {
       var row = [];
 
       row.push(<td className="text-center">{donate.donateId}</td>);
-      row.push(
-        <td className="text-center py-0 align-middle">
-          <div className="btn-group btn-group-sm">
-                <Action type="success" title="Edit" icon="fas fa-check" onClick={() => 
-                
-                Swal.fire({
- 
-                    icon: 'warning',
-                    title: 'Warning!',
-                    showCancelButton: true,
-                    text: 'Are you sure want to accept this?',
-                    }).then((result) => {
- 
-                    if (result.isConfirmed) {
-                    this.acceptDonate(donate.donateId)
-                    Swal.fire(
-                        'Success!',
-                        'Accept Donation Already Success!',
-                        'success'
-                    )
-                    }
-                    })} />
-                <Action type="danger" title="Delete" icon="fas fa-ban" onClick={() => Swal.fire({
- 
-                    icon: 'warning',
-                    title: 'Warning!',
-                    showCancelButton: true,
-                    text: 'Are you sure want to cancel this?',
-                    }).then((result) => {
- 
-                    if (result.isConfirmed) {
-                    this.rejecttDonate(donate.donateId)
-                    Swal.fire(
-                        'Success!',
-                        'Cancel Donation Already Success!',
-                        'success'
-                    )
-                    }
-                    })} />
-          </div>
-        </td>
-      );
+    
+      if(donate.statusDonate == "Accepted" || donate.statusDonate == "Rejected") {
+        row.push( <td className="text-center py-0 align-middle"></td>)
+      }
+      else {
+        row.push(
+          <td className="text-center py-0 align-middle">
+            <div className="btn-group btn-group-sm">
+                  <Action type="success" title="Edit" icon="fas fa-check" onClick={() => 
+                  
+                  Swal.fire({
+   
+                      icon: 'warning',
+                      title: 'Warning!',
+                      showCancelButton: true,
+                      text: 'Are you sure want to accept this?',
+                      }).then((result) => {
+   
+                      if (result.isConfirmed) {
+                      this.acceptDonate(donate.donateId)
+                      Swal.fire(
+                          'Success!',
+                          'Accept Donation Already Success!',
+                          'success'
+                      )
+                      }
+                      })} />
+                  <Action type="danger" title="Delete" icon="fas fa-ban" onClick={() => Swal.fire({
+   
+                      icon: 'warning',
+                      title: 'Warning!',
+                      showCancelButton: true,
+                      text: 'Are you sure want to cancel this?',
+                      }).then((result) => {
+   
+                      if (result.isConfirmed) {
+                      this.rejecttDonate(donate.donateId)
+                      Swal.fire(
+                          'Success!',
+                          'Cancel Donation Already Success!',
+                          'success'
+                      )
+                      }
+                      })} />
+            </div>
+          </td>
+        );
+      }
+     
       row.push(<td>{donate.email}</td>);
       row.push(<td>{donate.name}</td>);
       row.push(<td>{donate.donationType}</td>);
       row.push(<td>{donate.phoneNumber}</td>);
       row.push(<td>{donate.totalBook}</td>);
-      row.push(<td>{donate.statusDonate}</td>);
+
+      
+
+
+      if (donate.statusDonate == "Accepted"){
+        row.push( <td><small class="badge badge-success">Accepted</small></td>)
+      }
+      else if (donate.statusDonate == "Rejected"){
+        row.push( <td><small class="badge badge-danger">Rejected</small></td>)
+      }
+      else {
+        row.push( <td><small class="badge badge-warning">Waiting</small></td>)
+      }
       results.push(row);
     });
     this.setState({ rows: results });
