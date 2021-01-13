@@ -62,8 +62,7 @@ class Author extends Component {
                     />
                   </div>
                 </td>
-              );
-              row.push(<td>{author.authorId}</td>);
+              );              
               row.push(<td>{author.authorName}</td>);
               results.push(row);
             })
@@ -90,7 +89,7 @@ class Author extends Component {
           authorId: id,
           name: response.data.authorName
         });
-      });
+      });      
   };
 
   updateAuthor = (id) => {
@@ -107,40 +106,54 @@ class Author extends Component {
       .get("/author/getAuthor/" + author.authorName)
       .then((response) => {
         const result2= response.data;
-        console.log(result2)
-          if(author.authorName==name){
-            Swal.fire({
-              icon: "warning",
-              title: "Warning",
-              text: "You Enter the same Name",
-              confirmButtonText: `OK`,
-            })
-          } else if(author.authorName==result2){
-            Swal.fire({
-              icon: "warning",
-              title: "Warning",
-              text: "Name Already saved",
-              confirmButtonText: `OK`,
-            })
-          } else{
-            Axios
-          .put("/author/update/" + id, author)
-          .then((response) => {
-            console.log(response);
-            $("#modal-edit").modal("toggle");
-            $('.modal-backdrop').remove();
-            Swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Your Data has been Updated",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.fetchData()
-              }
-            });
+        Axios
+      .get("/author/getCount/" + id)
+      .then((response) => {
+        console.log(response);
+        if(author.authorName==name){
+          Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: "You Enter the same Name",
+            confirmButtonText: `OK`,
+          })
+        } else if(author.authorName==result2){
+          Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: "Name Already saved",
+            confirmButtonText: `OK`,
+          })
+        } else if(response.data>0){
+          Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: "You can't update Data already used",
+            confirmButtonText: `OK`,
+          })
+        } else{
+          Axios
+        .put("/author/update/" + id, author)
+        .then((response) => {
+          console.log(response);
+          $("#modal-edit").modal("toggle");
+          $('.modal-backdrop').remove();
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Your Data has been Updated",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.fetchData()
+            }
           });
-          }
+        });
+        }
+      });
+        
+        console.log(result2)
+         
           
          
       })
@@ -162,20 +175,35 @@ class Author extends Component {
 
   deleteAuthor = (id) => {
     Axios
-      .put("/author/delete/" + id)
+      .get("/author/getCount/" + id)
       .then((response) => {
         console.log(response);
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Deleted",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-          }
-        });
+         if(response.data>0){
+          Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: "You can't delete Data already used",
+            confirmButtonText: `OK`,
+          })
+        } else{
+          Axios
+          .put("/author/delete/" + id)
+          .then((response) => {
+            console.log(response);
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Your Data has been Deleted",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.fetchData()
+              }
+            });
+          });
+        }
       });
+    
   };
 
   authorChange = (event) => {    
@@ -260,7 +288,7 @@ class Author extends Component {
 
   render() {
     const { rows } = this.state;
-    const headings = ["No", "Action", "Author ID(s)", "Author Name"];
+    const headings = ["No", "Action", "Author Name"];
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}

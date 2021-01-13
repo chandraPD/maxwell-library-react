@@ -87,8 +87,8 @@ class TopUpManagement extends Component {
           paymentMethod: res.data.paymentMethod
         })
         Swal.fire({
-          icon: 'warning',
-          title: 'Warning!',
+          icon: 'question',
+          title: 'Are you sure?',
           showCancelButton: true,
           text: 'Are you sure want to confirm this?',
         }).then((result) => {
@@ -203,7 +203,7 @@ class TopUpManagement extends Component {
         row.push(<td className="text-center" >{this.convertToDate(topup.dateAcc)}</td>);
       }
       // row.push(<td className="text-center" >{actVal}</td>);
-      if (topup.paymentMethod=="Debit"){
+      if (topup.paymentMethod.startsWith("Debit")){
         row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'- Rp. '} />}</td>);
       } else{
         row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'+ Rp. '} />}</td>);
