@@ -9,18 +9,18 @@ const FormInput = ({
   inputPlaceHolder,
   maxDate,
   minDate,
-  meta: { touched,error }
+  meta: { touched, error }
 }) => (
   <FormGroup>
     <Label>{label}</Label>
     <Input
       {...input}
       type={type}
-      placeholder={inputPlaceHolder}      
+      placeholder={inputPlaceHolder}
     />
-    <div>    
-      {touched && error &&<span><MDBIcon icon="exclamation-circle"/> {error}</span>}
-    </div>    
+    <div>
+      {touched && error && <span><MDBIcon icon="exclamation-circle" /> {error}</span>}
+    </div>
   </FormGroup>
 );
 
