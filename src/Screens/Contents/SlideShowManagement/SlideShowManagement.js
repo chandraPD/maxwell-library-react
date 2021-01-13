@@ -18,7 +18,6 @@ class SlideShowManagement extends Component {
       data: [],
       rows: [],
       results: [],
-      isLoading : true,
       statusShow : "",
       chooseFile: "Choose File",
       uploadImage : ""
@@ -44,7 +43,10 @@ class SlideShowManagement extends Component {
         result.map((slideshow) => {
               var row = [];
         
-              row.push(<td className="text-center">{number++}</td>);
+              //UNTUK KOLOM NOMER
+              row.push(
+                <td className="text-center">{number++}</td>
+                );
 
               //UNTUK TOMBOL EDIT DAN DELETE
               row.push(
@@ -199,23 +201,27 @@ class SlideShowManagement extends Component {
               confirmButtonText: `OK`,
             }).then((result) => {
                 if(result.isConfirmed) {
+                  this.resetModal();
                   this.fetchData();
+                  
                 }
               });
-            }).catch((error) => 
-              Swal.fire({
-                icon: 'warning',
-                title: 'Sorry !',
-                text: 'You Must Fill The Requirement !',
-                confirmButtonText: `OK`
-              }).then((result) => {
-                  if(result.isConfirmed) {
-                    console.log(result);
-                  }
-              })
-            )
-        }
+            })
+            
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sorry !',
+          text: 'You Must Fill The Requirement !',
+          confirmButtonText: `OK`
+        }).then((result) => {
+            if(result.isConfirmed) {
+              console.log(result);
+            }
+        })
+
       }
+    }
     
 
   //METHOD UNTUK GET-BY-ID
@@ -230,7 +236,7 @@ class SlideShowManagement extends Component {
 
     Axios.get('slideshow/get-slideshow-byId/' + id, config)
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response);
         this.setState({
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
@@ -262,7 +268,9 @@ class SlideShowManagement extends Component {
       Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
-    }).then($("#modal-edit").modal("toggle"));
+        $("#modal-edit").modal("toggle");
+        $('.modal-backdrop').remove();
+    });
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -345,7 +353,7 @@ class SlideShowManagement extends Component {
     this.setState({
       chooseFile : file.name
     });
-    console.log(this.state.chooseFile);
+    console.log(file);
 
     const reader = new FileReader();
     console.log(reader);
@@ -355,6 +363,7 @@ class SlideShowManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
 
       this.setState({
+        //setState dalam bentuk Base64
         uploadImage : base64ImageStrip
       });
       // console.log(this.state.uploadImage);
@@ -377,6 +386,7 @@ class SlideShowManagement extends Component {
 
     this.setState({fields: fields})
     this.setState({errors: errors})
+    this.setState({chooseFile: "Choose File"})
   }
 
   render() {
@@ -388,11 +398,18 @@ class SlideShowManagement extends Component {
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
-              <div className="col-sm-6"><h3>Slideshow Management</h3></div>
+              <div className="col-sm-6"><h3>Slide Show Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
+<<<<<<< HEAD
+                  <li className="breadcrumb-item">
+                    <a href='index.html'>Home</a>
+                  </li>
+                  <li className="breadcrumb-item active">Slide Show</li>
+=======
                   <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                   <li className="breadcrumb-item active">Slideshow</li>
+>>>>>>> 787d1e38cb77660232a3466b8d97263c6e1ced80
                 </ol>
               </div>
             </div>
@@ -405,14 +422,12 @@ class SlideShowManagement extends Component {
           <div className="card">
             <div className="card-header">
               <div className="row">
-                <div className="col-md-6">
-
-                </div>
+                <div className="col-md-6"></div>
                 <div className="col-md-6 ctm-responsive">
                   <button type="button" className="btn btn-primary add-btn" data-toggle="modal" data-target="#modal-add"
                     style={{float:"right"}}>
                     <i className="nav-icon fas fa-plus"></i>
-                      Add Slideshow Photo
+                      Add Slide Show Photo
                   </button>
                 </div>
               </div>
@@ -430,7 +445,7 @@ class SlideShowManagement extends Component {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Add New Slideshow Image</h4>
+            <h4 class="modal-title">Add New Slide Show Image</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
