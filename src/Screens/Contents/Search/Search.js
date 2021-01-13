@@ -47,7 +47,7 @@ class Search extends Component {
     }
 
     showCountBook() {
-        if(this.state.countBook === 1) {
+        if(this.state.countBook <= 1) {
             return <h4>{this.state.countBook} Book</h4>
         } else if(this.state.countBook > 1) {
             return <h4>{this.state.countBook} Books</h4>
@@ -84,7 +84,7 @@ class Search extends Component {
                         {this.showCountBook()}
                         <div className="book-list-search">
 
-                            {dataSearch.slice(0, visible).map((data) => {
+                            {dataSearch.length > 0 ? dataSearch.slice(0, visible).map((data) => {
                                 return(
                                     <div className="book-content">
                                         <div className="content-cover">
@@ -99,7 +99,7 @@ class Search extends Component {
                                         <span className="badge badge-success category-book">{data.categoryEntity.category}</span>
                                     </div>
                                 )
-                            })}
+                            }) : <img src="https://www.drcycle.in/assets/images/NoRecordFound.png"/>}
 
                             {visible < dataSearch.length &&
                                 <button onClick={this.loadMore} type="button" className="btn btn-dark">Load More</button>
