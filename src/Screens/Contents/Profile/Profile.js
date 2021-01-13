@@ -187,22 +187,6 @@ class Profile extends Component {
     }
   }
 
-  convertToTime = (date) => {
-    if (date === null) {
-        return "-"
-    } else {
-        return moment.utc(date).format('HH:mm')
-    }
-  }
-
-  convertToDate = (date) => {
-    if (date === null) {
-        return "-"
-    } else {
-        return moment.utc(date).format('MMM Do, YYYY')
-    }
-  }
-
   dateLog = (date) => {
     var relativeTime = require('dayjs/plugin/relativeTime');
     dayjs.extend(relativeTime);
@@ -449,7 +433,7 @@ class Profile extends Component {
                       <i className="fas fa-user bg-green"></i>
                       <div className="timeline-item">
                         <span className="time"><i class="fas fa-clock"></i> {this.dateLog(data.dateTime)}</span>
-                        <small style={{ margin : "10px"}}>Your Activity : {data.action}</small>
+                        <small style={{ marginLeft : "10px"}}>Your Activity : {data.action}</small>
                         <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
                       </div>
                     </div>
