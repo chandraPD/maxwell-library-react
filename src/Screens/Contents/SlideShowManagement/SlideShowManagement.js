@@ -5,7 +5,8 @@ import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
-import axios from 'axios'
+import Axios from '../../../Instances/axios-instances';
+import { Link } from 'react-router-dom'
 
 class SlideShowManagement extends Component {
   constructor(props) {
@@ -17,8 +18,9 @@ class SlideShowManagement extends Component {
       data: [],
       rows: [],
       results: [],
-      isLoading : true,
-      statusShow : ""
+      statusShow : "",
+      chooseFile: "Choose File",
+      uploadImage : ""
     };
   }
 
@@ -27,33 +29,9 @@ class SlideShowManagement extends Component {
     this.fetchData();
   }
 
-
-  // SAVE STATUS ACTIVE OR INACTIVE
-  handleDropdownChange = (id, event) => {
-    
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    console.log(userToken);
-
-    console.log(id);
-    
-    const status = event.target.value;
-    console.log(status);
-    const config = {
-      headers : { Authorization : `Bearer ${userToken}`}
-    }
-
-    axios.put(`http://localhost:8080/slideshow/update-status/${id}/${status}`,null, config)
-    .then((response) => {
-      console.log(response);
-      this.fetchData();
-    })
-
-  }
-
   async fetchData() {
     $('#example1').DataTable().destroy();
-    await axios.get('http://localhost:8080/slideshow/get-all-slideshow')
+    await Axios.get('slideshow/get-all-slideshow')
       .then((fetchedData)=> { 
         console.log(fetchedData);
         const resultSlideShow = fetchedData.data;
@@ -65,7 +43,10 @@ class SlideShowManagement extends Component {
         result.map((slideshow) => {
               var row = [];
         
-              row.push(<td className="text-center">{number++}</td>);
+              //UNTUK KOLOM NOMER
+              row.push(
+                <td className="text-center">{number++}</td>
+                );
 
               //UNTUK TOMBOL EDIT DAN DELETE
               row.push(
@@ -116,15 +97,16 @@ class SlideShowManagement extends Component {
         });
   }
 
+ 
   //FUNGSI TOMBOL SUBMIT PADA MODAL ADD SLIDESHOW
   submitSlideShow = () => {
     const slideshow = {
         title : this.state.title,
         subTitle : this.state.subTitle,
-        img : this.state.img
+        img : this.state.uploadImage
       };
 
-    axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
+    Axios.post('slideshow/add-slideshow', slideshow)
       .then((response) => {
         console.log(response)
       })
@@ -134,21 +116,7 @@ class SlideShowManagement extends Component {
       autoWidth: false,
     });
   }
-
-  //FUNGSI TOMBOL SUBMIT PADA MODAL ADD SLIDESHOW
-  submitSlideShow = () => {
-    const slideshow = {
-        title : this.state.title,
-        subTitle : this.state.subTitle,
-        img : this.state.img
-      };
-
-    axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow)
-      .then((response) => {
-        console.log(response)
-      })
-  }
-
+  
   //VALIDASI UNTUK ADD SLIDESHOW
   handleValidation() {
     let fields = this.state.fields;
@@ -168,17 +136,41 @@ class SlideShowManagement extends Component {
     }
 
     //Image
-    if (!fields["slideshowImage"]) {
+    if(this.state.img === ""){
       formIsValid = false;
-      errors["slideshowImage"] = "Image cannot be empty";
+      errors["slideshowImage"] = "Image cannot be empty"
     }
 
     this.setState({ errors: errors });
     return formIsValid;
   }
 
+  handleUpdateValidation(){
+    let errors = {};
+    let formIsValid = true;
+
+    if(this.state.title === ""){
+      formIsValid = false;
+      errors["slideshowTitle"] = "Title cannot be empty" 
+    }
+      
+
+    if(this.state.subTitle === ""){
+      formIsValid = false;
+      errors["slideshowSubTitle"] = "Sub Title cannot be empty"
+    }
+
+    if(this.state.img === ""){
+      formIsValid = false;
+      errors["slideshowImage"] = "Image cannot be empty"
+    }
+
+    this.setState({ errors : errors});
+    return formIsValid;
+  }
+
   //FUNGSI UNTUK TOMBOL SUMBIT SAAT ADD-SLIDESHOW DITEKAN
-  contactSubmit(e) {
+  contactSubmit(e){
     e.preventDefault();
     const fields = this.state.fields;
     if (this.handleValidation()) {
@@ -187,7 +179,7 @@ class SlideShowManagement extends Component {
       const slideshow = {
         title : fields["slideshowTitle"], 
         subTitle : fields["slideshowSubTitle"],
-        img : fields["slideshowImage"]
+        img : this.state.uploadImage
       }
       console.log(slideshow)
 
@@ -198,24 +190,39 @@ class SlideShowManagement extends Component {
       const config = {
         headers : { Authorization : `Bearer ${userToken}`}
       }
-      axios.post('http://localhost:8080/slideshow/add-slideshow', slideshow, config)
+      Axios.post('slideshow/add-slideshow', slideshow, config)
           .then((response) => {
-            console.log(response)
-          })
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your Data has been Added',
-        confirmButtonText: `OK`
-      }).then((result) => {
-          if(result.isConfirmed) {
-            console.log(result);
-            window.location.reload();
-          }
-      })
-      //TADINYA ADA ELSE
+            console.log(response);
+            $('.modal-backdrop').remove();
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Your Data has been Added',
+              confirmButtonText: `OK`,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                  this.resetModal();
+                  this.fetchData();
+                  
+                }
+              });
+            })
+            
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sorry !',
+          text: 'You Must Fill The Requirement !',
+          confirmButtonText: `OK`
+        }).then((result) => {
+            if(result.isConfirmed) {
+              console.log(result);
+            }
+        })
+
+      }
     }
-  }
+    
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
@@ -227,9 +234,9 @@ class SlideShowManagement extends Component {
       headers : { Authorization : `Bearer ${userToken}`}
     }
 
-    axios.get('http://localhost:8080/slideshow/get-slideshow-byId/' + id, config)
+    Axios.get('slideshow/get-slideshow-byId/' + id, config)
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response);
         this.setState({
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
@@ -241,12 +248,13 @@ class SlideShowManagement extends Component {
 
   //METHOD UNTUK UPDATE
   editSlideShow = (id) => {
+    
     const slideshow = {
       title : this.state.title,
       subTitle : this.state.subTitle,
-      img : this.state.img
+      img : this.state.uploadImage
     }
-    console.log(slideshow);
+    console.log(slideshow.img);
 
     let user = JSON.parse(localStorage.getItem('user'))
       const userToken = user.token;
@@ -256,10 +264,13 @@ class SlideShowManagement extends Component {
         headers : { Authorization : `Bearer ${userToken}`}
       }
 
-    axios.put('http://localhost:8080/slideshow/update-slideshow/' + id, slideshow, config)
+    if(this.handleUpdateValidation()){
+      Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
       .then((response) => {
         console.log(response);
-    }).then($("#modal-edit").modal("toggle"));
+        $("#modal-edit").modal("toggle");
+        $('.modal-backdrop').remove();
+    });
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -267,27 +278,23 @@ class SlideShowManagement extends Component {
         confirmButtonText: `OK`
       }).then((result) => {
           if(result.isConfirmed) {
-            console.log(result);
-            window.location.reload();
+            this.fetchData();
           }
       })
+    } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sorry !',
+          text: 'You Must Fill The Requirement !',
+          confirmButtonText: `OK`
+        }).then((result) => {
+            if(result.isConfirmed) {
+              console.log(result);
+        }
+      });
+    }
 }
 
-  //METHOD DELETE MENGGUNAKAN SOFTDELETE
-  // deleteSlideShow = (id) => {
-  //     let user = JSON.parse(localStorage.getItem('user'))
-  //     const userToken = user.token;
-  //     console.log(userToken);
-
-  //     const config = {
-  //       headers : { Authorization : `Bearer ${userToken}`}
-  //     }
-  //   axios.put('http://localhost:8080/slideshow/delete-slideshow/'+ id,config)
-  //     .then((response) => {
-  //       console.log(response);
-  //       window.location.reload();
-  //       })
-  // }
 
   //METHOD DELETE DATA
   deleteDataSlideShow = (id) => {
@@ -298,23 +305,88 @@ class SlideShowManagement extends Component {
       const config = {
         headers : { Authorization : `Bearer ${userToken}`}
       }
-    axios.delete('http://localhost:8080/slideshow/delete-data-slideshow/'+ id, config)
+    Axios.delete('slideshow/delete-data-slideshow/'+ id, config)
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        this.fetchData();
       })
   }
   //METHOD Perubahan Inputan di SlideShow
   slideShowChange = (event) => {
-    this.setState({
-      [event.target.name] : event.target.value
-    })
+      this.setState({
+        [event.target.name] : event.target.value
+      });
   }
 
   handleChange(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
+  }
+
+   // SAVE STATUS ACTIVE OR INACTIVE
+  handleDropdownChange = (id, event) => {
+    
+    let user = JSON.parse( localStorage.getItem('user'))
+    const userToken = user.token;
+    console.log(userToken);
+
+    console.log(id);
+    
+    const status = event.target.value;
+    console.log(status);
+    const config = {
+      headers : { Authorization : `Bearer ${userToken}`}
+    }
+
+    Axios.put(`slideshow/update-status/${id}/${status}`,null, config)
+    .then((response) => {
+      console.log(response);
+      this.fetchData();
+    })
+
+  }
+
+  // Handle Upload Slide Show Image
+  handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    this.setState({
+      chooseFile : file.name
+    });
+    console.log(file);
+
+    const reader = new FileReader();
+    console.log(reader);
+    reader.readAsDataURL(file);
+    reader.onload = e => {
+      let base64Image = e.target.result;
+      let base64ImageStrip = base64Image.split("base64,")[1];
+
+      this.setState({
+        //setState dalam bentuk Base64
+        uploadImage : base64ImageStrip
+      });
+      // console.log(this.state.uploadImage);
+      
+    }
+  }
+
+  resetModal() {
+    let fields = this.state.fields
+    fields["slideshowTitle"] = ""
+    fields["slideshowSubTitle"] = ""
+    fields["slideshowImage"] = ""
+   
+
+    let errors = {}
+    errors["slideshowTitle"] = ""
+    errors["slideshowSubTitle"] = ""
+    errors["slideshowImage"] = ""
+
+
+    this.setState({fields: fields})
+    this.setState({errors: errors})
+    this.setState({chooseFile: "Choose File"})
   }
 
   render() {
@@ -326,12 +398,10 @@ class SlideShowManagement extends Component {
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
-              <div className="col-sm-6"><h3>Slideshow Management</h3></div>
+              <div className="col-sm-6"><h3>Slide Show Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <a href='/'>Home</a>
-                  </li>
+                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                   <li className="breadcrumb-item active">Slideshow</li>
                 </ol>
               </div>
@@ -345,14 +415,12 @@ class SlideShowManagement extends Component {
           <div className="card">
             <div className="card-header">
               <div className="row">
-                <div className="col-md-6">
-
-                </div>
+                <div className="col-md-6"></div>
                 <div className="col-md-6 ctm-responsive">
                   <button type="button" className="btn btn-primary add-btn" data-toggle="modal" data-target="#modal-add"
                     style={{float:"right"}}>
                     <i className="nav-icon fas fa-plus"></i>
-                      Add Slideshow Photo
+                      Add Slide Show Photo
                   </button>
                 </div>
               </div>
@@ -370,7 +438,7 @@ class SlideShowManagement extends Component {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Add New Slideshow Image</h4>
+            <h4 class="modal-title">Add New Slide Show Image</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -401,21 +469,21 @@ class SlideShowManagement extends Component {
                   <label for="addSlideshowImg">Choose Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="slideshowImage" onChange={this.handleChange.bind(this, "slideshowImage")}
-                    value={this.state.fields["slideshowImage"]}/>
-                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>                   
+                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="img" onChange={this.handleUploadImage}
+                      value={this.state.fields["slideshowImage"]}/>
+                      <label class="custom-file-label" for="exampleInputFile" style={{overflow : "hidden"}}>{this.state.chooseFile}</label>                   
                     </div>
                   </div>
                   <span class="text-danger">Minimum size is 300x100 px</span> <br/>
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
-                      </span>
+                  </span>
                 </div>
 
               </div>
             </div>
             <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetModal()">Close</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" onClick={() => this.resetModal()}>Close</button>
               <button type="submit" class="btn btn-warning">Add</button>
             </div>
           </form>
@@ -435,31 +503,44 @@ class SlideShowManagement extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form id="editSlideshow">
+          <form role="form" id="editSlideshow">
             <div class="modal-body">
               <div class="card-body">
                 <div class="form-group">
                   <label for="editTitle">Title</label>
-                  <input type="text" class="form-control" name="title" id="editTitle" value ={this.state.title} onChange={this.slideShowChange}/>
+                  <input type="text" class="form-control" name="title" id="editTitle" value ={this.state.title} 
+                  onChange={this.slideShowChange}/>
+                  <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowTitle"]}
+                  </span>
                 </div>
                 <div class="form-group">
                   <label for="inputSubTitle">Sub Title</label>
                   <input type="text" class="form-control" name="subTitle" id="inputCategoryName"
-                    value={this.state.subTitle} onChange={this.slideShowChange}/>
+                    value={this.state.subTitle} 
+                    onChange={this.slideShowChange}/>
+                  <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowSubTitle"]}
+                  </span>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputFile">Change Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="exampleInputFile" name="img" onChange={this.slideShowChange}/>
-                      <label class="custom-file-label" for="exampleInputFile">choose file</label>
+                      <input type="file" class="custom-file-input" id="exampleInputFile" name="img" 
+                      onChange={this.handleUploadImage}/>
+                      <label class="custom-file-label" for="exampleInputFile" style={{ overflow : "hidden"}}>{this.state.img}</label>
                     </div>
                   </div>
+                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
+                  <span style={{ color: "red" }}>
+                        {this.state.errors["slideshowImage"]}
+                  </span>
                 </div>
               </div>
             </div>
             <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" onClick={() => this.resetModal()}>Cancel</button>
               <button id="submitEdit" type="button" onClick={() => this.editSlideShow(this.state.slideShowId)} class="btn btn-warning">Save changes</button>
             </div>
           </form>

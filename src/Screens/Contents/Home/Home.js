@@ -5,7 +5,7 @@ import secondtHero from '../../../Assets/Media/books/hero2.png';
 import thirdHero from '../../../Assets/Media/books/hero3.png';
 import Flickity from 'react-flickity-component';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
+import Axios from '../../../Instances/axios-instances';
 
 class Home extends Component {
 
@@ -15,7 +15,10 @@ class Home extends Component {
     this.state = {
        dataTop: [],
        dataOld: [],
-       allBook: []
+       allBook: [],
+       slideShowActive : [],
+       recommendedBook: [],
+       recommendedCat: ""
     }
   }
   
@@ -24,26 +27,39 @@ class Home extends Component {
     this.getTopFive();
     this.getAllBook();
     this.getOldestFive();
+    this.getSlideShowActive();
+    this.getRecommendedBook();
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
     console.log(userToken);
   }
 
   async getTopFive() {
-    let fetchTop = await Axios.get('http://localhost:8080/book/get-recent-five')
+    let fetchTop = await Axios.get('/book/get-recent-five')
     const resultTop = fetchTop.data      
     this.setState({dataTop: resultTop})      
   }
 
   async getOldestFive() {
-    let fetchOld = await Axios.get('http://localhost:8080/book/get-oldest-five')
+    let fetchOld = await Axios.get('/book/get-oldest-five')
     const resultOld = fetchOld.data
     this.setState({dataOld: resultOld})
   }
 
   async getAllBook() {
-    let fetchBook = await Axios.get('http://localhost:8080/book/get-all')
+    let fetchBook = await Axios.get('/book/get-all')
     this.setState({allBook: fetchBook.data})
+  }
+
+  async getSlideShowActive() {
+    let fetchSlideShowActive = await Axios.get('/slideshow/get-all-active');
+    this.setState({ slideShowActive : fetchSlideShowActive.data});
+  }
+
+  async getRecommendedBook() {
+    let fetchRecommended = await Axios.get('/book/get-max-qty')
+    console.log(fetchRecommended)
+    this.setState({recommendedBook: fetchRecommended.data})
   }
 
   render() {
@@ -54,7 +70,7 @@ class Home extends Component {
       initialIndex: 2,
     };
 
-    const { dataTop, allBook, dataOld } = this.state
+    const { dataTop, allBook, dataOld, slideShowActive, recommendedBook, recommendedCat } = this.state
 
     return (
       <div className="content-wrapper">
@@ -68,45 +84,26 @@ class Home extends Component {
               static={true}
               reloadOnUpdate={true}
             >
-              <div
-                className="carousel-cell"
-                style={{
-                  backgroundImage: `url(${firstHero})`,
-                }}
-              >
-                <div className="carousel-info">
-                  <div className="carousel-text">
-                    <h2>After Wedding</h2>
-                    <h3>Raditya Dika</h3>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="carousel-cell"
-                style={{
-                  backgroundImage: `url(${secondtHero})`,
-                }}
-              >
-                <div className="carousel-info">
-                  <div className="carousel-text">
-                    <h2>After Wedding</h2>
-                    <h3>Raditya Dika</h3>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="carousel-cell"
-                style={{
-                  backgroundImage: `url(${thirdHero})`,
-                }}
-              >
-                <div className="carousel-info">
-                  <div className="carousel-text">
-                    <h2>After Wedding</h2>
-                    <h3>Raditya Dika</h3>
-                  </div>
-                </div>
-              </div>
+              {slideShowActive.map((data) => {
+                    return (
+                          <div
+                          className="carousel-cell"
+                          style={{
+                            backgroundImage: `url(${data.img})`,
+                            borderRadius: '30px'
+                          }}
+                        >
+                          <div className="carousel-info">
+                            <div className="carousel-text">
+                              <h2>{data.title}</h2>
+                              <h3>{data.subTitle}</h3>
+                            </div>
+                          </div>
+                        </div>
+                    )
+                  })}
+              
+
             </Flickity>
           </div>
           {/* Flickity ends */}
@@ -156,33 +153,26 @@ class Home extends Component {
               </div>
               <div className="hero-book">
                 <div className="hero-book-cover">
-                  <Link to="Detail/25">
+                  <Link to={`Detail/${recommendedBook.bookId}`}>
                     <img
-                      src="https://img.wattpad.com/cover/235119477-416-k713259.jpg"
-                      alt="Conquer Dream, With Bos! cover"
+                      src={recommendedBook.imgDetail}
+                      alt={recommendedBook.title}
                     />
                   </Link>
                 </div>
                 <div>
                   <Link
                     className="title"
-                    to='Detail/25'
-                    aria-label="Read Conquer Dream, With Bos!"
+                    to={`Detail/${recommendedBook.bookId}`}
+                    aria-label={recommendedBook.title}
                   >
-                    Conquer Dream, With Bos!
+                    {recommendedBook.title}
                   </Link>
                   <br />
                   <p className="description">
-                    Penangkapan mendadak kedua orang tua yang terseret di sebuah
-                    kasus korupsi besar membuat takdir hidup jatuh miskin.
-                    Chalya Ailen Hadinata, mati-matian mencari uang untuk
-                    menghidupi dua adiknya ketika kedua orang tuanya mendekam di
-                    dalam penjara. Chalya seakan kehilangan pegangan hidupnya.
-                    Sekian lama termenung dari kesedihan, Chayla mencoba kembali
-                    bangkit untuk adik-adiknya. Chayla berusaha mengembalikan
-                    takdir...
+                    {recommendedBook.description}
                   </p>
-                  <span className="badge category-book">Romance</span>
+                  
                 </div>
               </div>
             </div>
@@ -216,8 +206,9 @@ class Home extends Component {
           <div className="list-book-content">
             <div className="col-12">
               <div className="custom-flex2">
-                <h2 className="title-container">Book List</h2>
+                <Link to='/Catalogue' ><h2 className="title-container">View Book List </h2></Link>
                 <h4 className="title-container">Find your best reads</h4>
+
               </div>
               <Flickity
                 className={'carousel carousel-main book-list-bottom'}

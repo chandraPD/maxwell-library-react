@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from '../../../Instances/axios-instances';
+import moment from 'moment';
+import dayjs from 'dayjs';
 
 class Profile extends Component {
   constructor(props) {
@@ -23,11 +25,14 @@ class Profile extends Component {
       updateBirthDate: '',
       updateAddress: '',
       updatePhoneNumber: '',
+
+      dataLogUser : [],
     };
   }
 
   componentDidMount() {
     this.fetchDataUser();
+    this.getLogUser();
   }
 
   handleChangeProfile(e) {
@@ -97,12 +102,15 @@ class Profile extends Component {
 
   async fetchDataUser() {
     let balance = JSON.parse(localStorage.getItem('balance'));
+    let date = null
     await axios
       .get('/profile')
       .then((response) => {
         const dataProfile = response.data;
 
-        let date = new Date(dataProfile.dateOfBirth).toISOString().slice(0, 10);
+        if(dataProfile.dateOfBirth) {
+          date = new Date(dataProfile.dateOfBirth).toISOString().slice(0, 10);
+        }
 
         this.setState({
           firstname: dataProfile.firstName,
@@ -127,6 +135,13 @@ class Profile extends Component {
         console.log(error);
       });
   }
+
+  async getLogUser() {
+      let fetchLogUser = await axios.get('log/get-log-user')
+      this.setState({ dataLogUser : fetchLogUser.data});
+      console.log(this.state.dataLogUser);
+  }
+
 
   displayEditForm() {
     const editForm = document.querySelector('#container-editform');
@@ -171,7 +186,20 @@ class Profile extends Component {
       document.getElementById('phonenumber').innerHTML = phoneNumber;
     }
   }
+
+  dateLog = (date) => {
+    var relativeTime = require('dayjs/plugin/relativeTime');
+    dayjs.extend(relativeTime);
+
+    if (date === null) {
+      return "-"
+    } else {
+        return dayjs().to(dayjs(date));
+    }
+  }
   render() {
+
+    const { dataLogUser } = this.state;
     return (
       <Fragment>
         <div className="content-wrapper">
@@ -248,8 +276,8 @@ class Profile extends Component {
                 </div>
               </div>
             </div>
-          </section>
-
+          </section>             
+        
           {/* Edit Form  */}
           <section className="padding-editform">
             <div id="container-editform">
@@ -265,6 +293,7 @@ class Profile extends Component {
                         className="input-value"
                         id="user-image"
                         type="file"
+                        accept="image/*"
                         name="profileimage"
                         onChange={this.handleAddFile.bind(this)}
                       />
@@ -283,6 +312,7 @@ class Profile extends Component {
                         id="user-firstname"
                         type="text"
                         name="updateFirstName"
+                        placeholder="Input firstname"
                         value={this.state.updateFirstName}
                         onChange={this.handleChangeProfile.bind(this)}
                       />
@@ -302,6 +332,7 @@ class Profile extends Component {
                         id="user-lastname"
                         type="text"
                         name="updateLastName"
+                        placeholder="Input lastname"
                         onChange={this.handleChangeProfile.bind(this)}
                       />
                     </div>
@@ -313,12 +344,14 @@ class Profile extends Component {
                     <div className="col-lg-8">
                       <label className="input-title">Date of Birth</label>
                     </div>
-                    <div className="col-lg-12">
+                    <div className="col-lg-12 input-group date">
                       <input
                         value={this.state.updateBirthDate}
                         className="input-value"
                         id="date-birth"
                         type="date"
+                        min='1900-01-01'
+                        max='2015-12-12'
                         name="updateBirthDate"
                         onChange={this.handleChangeProfile.bind(this)}
                       />
@@ -338,6 +371,7 @@ class Profile extends Component {
                         id="user-address"
                         type="text"
                         name="updateAddress"
+                        placeholder="Input address"
                         onChange={this.handleChangeProfile.bind(this)}
                       />
                     </div>
@@ -356,7 +390,7 @@ class Profile extends Component {
                         id="user-number"
                         type="text"
                         name="updatePhoneNumber"
-                        placeholder="+62-812-345-6789"
+                        placeholder="0858868999"
                         onChange={this.handleChangeProfile.bind(this)}
                       />
                     </div>
@@ -380,6 +414,39 @@ class Profile extends Component {
               </form>
             </div>
           </section>
+        
+        {/* Log Activity User */}
+        <section className = "content-user" sytle={{ margin : "20px"}}>
+          <h3 className="logTitle" style={{ paddingLeft : "20px"}}>Your Activity</h3>
+        {dataLogUser.map((data) => {
+          return(
+            /* timeline */
+            <div className="row" style={{marginLeft : "20px", paddingBottom :"0px", marginBottom : "0px"}}>
+              <div className="col-md-12" style={{paddingBottom : "0px", marginBottom : "0px"}}>
+                <div className="timeline" style={{marginBottom : "0px"}}>
+                  {/* timeline-label */}
+                    <div className="time-label" style={{marginTop : "0px"}}>
+                      {/* <span className="bg-read">{this.convertToDate(data.dateTime)}</span> */}
+                    </div>
+                
+                    <div>
+                      <i className="fas fa-user bg-green"></i>
+                      <div className="timeline-item">
+                        <span className="time"><i class="fas fa-clock"></i> {this.dateLog(data.dateTime)}</span>
+                        <small style={{ marginLeft : "10px"}}>Your Activity : {data.action}</small>
+                        <h3 className="timeline-header no-border" style={{ marginTop : "0px"}}><a href="#">{data.name}</a> - {data.description}</h3>
+                      </div>
+                    </div>
+
+                                 
+                </div>
+              </div>
+            </div>
+          )
+        })}
+
+        </section>
+        
         </div>
       </Fragment>
     );

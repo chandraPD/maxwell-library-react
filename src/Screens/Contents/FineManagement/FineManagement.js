@@ -8,21 +8,31 @@ import Axios from '../../../Instances/axios-instances';
 import $ from 'jquery'
 import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
+import moment from "moment";
+import NumberFormat from 'react-number-format';
 class FineManagement extends Component {
 
     constructor() {
-        super();
+
         let user = JSON.parse(localStorage.getItem('user'))
-        const userToken = user.token;
+        let activeRole
+        if (user) {
+            activeRole = JSON.parse(localStorage.getItem('user')).userInfo.activeRole
+        } else {
+            activeRole = false;
+        }
+        super();
         this.state = {
             data: [],
             rows: [],
             results: [],
-            userToken: userToken
+            headings: [],
+            role: activeRole
         };
     }
     componentDidMount() {
         this.fetchData();
+        this.getRole();
     }
 
     acceptRent() {
@@ -42,66 +52,105 @@ class FineManagement extends Component {
     }
 
     async fetchData() {
-        $('#example1').DataTable().destroy();
-        await Axios.get('invoice/user/get-all')
+        let linkAxios = "";
+        if (this.state.role === "ROLE_ADMIN") {
+            linkAxios = "invoice/admin/get-all";
+        } else {
+            linkAxios = "invoice/user/get-all";
+        }
+        await Axios.get(linkAxios)
             .then((getData) => {
-                const resultInvoice = getData.data.data;
-                this.setState({ data: resultInvoice });
-                let results = [];
-                let result = this.state.data;
-                var no = 1;
-                result.forEach(rent => {
-                    var row = [];
-                    var actVal, statusVal = '';
-                    if (rent.statusInvoice === 'Waiting For Payment') {
-                        actVal = <div className="btn-group btn-group-sm">
-                            <Action link={`Payment/${rent.invoiceId}`} type="primary" title="Pay" icon="check-square" />
-                            <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
-                        statusVal = <Status type="primary" val="Waiting For Payment" />
-                    } else if (rent.statusInvoice === 'Paid') {
-                        actVal = <div className="btn-group btn-group-sm"><Action link="DetailInvoice" type="info" title="Detail" icon="eye" /></div>
-                        statusVal = <Status type="info" val="Paid" />
-                    } else {
-                        actVal = '-';
-                        statusVal = '';
-                    }
+                const res = getData.data;
+                console.log(res);
+                if (getData.status === 200) {
+                    $('#example1').DataTable().destroy();
+                    let results = [];
+                    let result = res.data;;
+                    var no = 1;
 
-                    row.push(<td className="text-center" >{no++}</td>);
-                    row.push(<td className="text-center" >{actVal}</td>);
-                    row.push(<td className="text-center" >{rent.borrower}</td>);
-                    row.push(<td>{rent.noInvoice}</td>);
-                    row.push(<td>{rent.grandTotal}</td>);
-                    row.push(<td>{rent.email}</td>);
-                    if (rent.paymentDate === null) {
-                        row.push(<td>-</td>);
-                    } else {
-                        row.push(<td>{rent.paymentDate}</td>);
-                    }
-                    row.push(<td className="text-center" >{statusVal}</td>);
-                    results.push(row);
-                });
-                this.setState({ rows: results });
-                
+                    result.forEach(rent => {
+                        var row = [];
+                        var actVal, statusVal = '';
+                        if (rent.statusInvoice === 'Waiting For Payment') {
+                            if (this.state.role === "ROLE_USER") {
+                                actVal = <div className="btn-group btn-group-sm">
+                                    <Action link={`Payment/${rent.invoiceId}`} type="primary" title="Pay" icon="check-square" />
+                                    <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
+                            } else {
+                                actVal = <div className="btn-group btn-group-sm">
+                                    <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
+                            }
+                            statusVal = <Status type="primary" val="Waiting For Payment" />
+                        } else if (rent.statusInvoice === 'Paid') {
+                            actVal = <div className="btn-group btn-group-sm"><Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" /></div>
+                            statusVal = <Status type="info" val="Paid" />
+                        } else if (rent.statusInvoice === "Canceled") {
+                            actVal = <div className="btn-group btn-group-sm"><Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" /></div>
+                            statusVal = <Status type="Danger" val="Canceled" />
+                        } else if (rent.statusInvoice === "Waiting Check By Librarian") {
+                            actVal = '-';
+                            statusVal = <Status type="warning" val="Waiting Check By Librarian" />
+                        } else {
+                            actVal = '-';
+                            statusVal = '';
+                        }
+
+                        row.push(<td className="text-center" >{no++}</td>);
+                        row.push(<td className="text-center" >{actVal}</td>);
+                        if (this.state.role === "ROLE_ADMIN") {
+                            row.push(<td className="text-center" >{rent.borrower}</td>);
+                        }
+                        row.push(<td>{rent.noInvoice}</td>);
+                        row.push(<td>{this.formatRupiah(rent.grandTotal)}</td>);
+                        row.push(<td>{this.convertToDate(rent.invoiceDate)}</td>);
+                        if (rent.paymentDate === null) {
+                            row.push(<td>-</td>);
+                        } else {
+                            row.push(<td>{this.convertToDate(rent.paymentDate)}</td>);
+                        }
+                        row.push(<td className="text-center" >{statusVal}</td>);
+                        results.push(row);
+                    });
+                    this.setState({ rows: results });
+                }
+
                 $("#example1").DataTable({
                     responsive: true,
                     autoWidth: false,
                 });
+
             });
     }
 
-    render() {
-        const { rows } = this.state;
-        const headings = [
-            'No',
-            'Action',
-            'Borrower',
-            'No Invoice',
-            'Fine Ammount',
-            'Librarian',
-            'Payment Date',
-            'Status',
-        ];
+    async getRole() {
+        if (this.state.role === "ROLE_ADMIN") {
+            this.setState({ headings: ['No', 'Action', 'Borrower', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
+        } else {
+            this.setState({ headings: ['No', 'Action', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
+        }
+    }
 
+    showButtonPay = () => {
+        if (this.state.role === "ROLE_USER") {
+            return <Link to="Payment" className="btn-xs btn-block bg-gradient-primary">Pay</Link>
+        } else {
+            // nothing
+        }
+    }
+
+    convertToDate = (date) => {
+        if (date === null) {
+            return "-"
+        } else {
+            return moment.utc(date).format('DD-MM-YYYY hh:mm')
+        }
+    }
+
+    formatRupiah = (nilai) => {
+        return <NumberFormat value={nilai} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />
+    }
+    render() {
+        const { rows, headings } = this.state;
         return (
             <div className="content-wrapper">
                 <section className="content-header">
@@ -112,7 +161,7 @@ class FineManagement extends Component {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
                                     <li className="breadcrumb-item active">Fine Management</li>
                                 </ol>
                             </div>
@@ -128,7 +177,7 @@ class FineManagement extends Component {
                                     <div className="card-header">
                                         <h3 className="card-title">Fine List</h3>
                                         <div className="card-tools">
-                                            <Link to="Payment" className="btn-xs btn-block bg-gradient-primary">Pay</Link>
+                                            {this.showButtonPay()}
                                         </div>
                                     </div>
                                     {/* /.card-header */}

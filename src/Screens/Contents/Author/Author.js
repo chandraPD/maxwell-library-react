@@ -8,7 +8,7 @@ import "bootstrap";
 import Swal from "sweetalert2";
 import Axios from '../../../Instances/axios-instances';
 
-class CategoryManagement extends Component {
+class Author extends Component {
   constructor(props) {
     super(props);
 
@@ -20,7 +20,7 @@ class CategoryManagement extends Component {
       results: [],
     };
 
-    this.categoryChange = this.categoryChange.bind(this);
+    this.authorChange = this.authorChange.bind(this);
   }
 
   componentDidMount() {
@@ -30,176 +30,174 @@ class CategoryManagement extends Component {
   async fetchData() {
     $('#example1').DataTable().destroy();
     const results = [];
-    
+
     var no = 1;
 
-    await Axios.get('/category/get-all-active')
-          .then((response) => {
-            const result = response.data;
-            this.setState({data: result})
-            result.map((category) => {
-              console.log(category)
-              var row = [];
-              row.push(<td className="text-center">{no++}</td>);
-              row.push(
-                <td className="text-center py-0 align-middle">
-                  <div className="btn-group btn-group-sm">
-                    <Action
-                      type="success"
-                      title="Edit"
-                      icon="pen"
-                      dataToggle="modal"
-                      dataTarget="#modal-edit"
-                      onClick={() => this.getCategory(category.categoryId)}
-                    />
-                    <Action
-                      type="danger"
-                      title="Delete"
-                      icon="trash"
-                      dataToggle="modal"
-                      dataTarget="#modal-delete"
-                      onClick={() => this.getCategory(category.categoryId)}
-                    />
-                  </div>
-                </td>
-              );
-              row.push(<td>{category.categoryId}</td>);
-              row.push(<td>{category.category}</td>);
-              results.push(row);
-            })
-            this.setState({ rows: results });
+    await Axios.get('/author/getAll')
+      .then((response) => {
+        const result = response.data;
+        this.setState({ data: result })
+        result.map((author) => {
+          var row = [];
+          row.push(<td className="text-center">{no++}</td>);
+          row.push(
+            <td className="text-center py-0 align-middle">
+              <div className="btn-group btn-group-sm">
+                <Action
+                  type="success"
+                  title="Edit"
+                  icon="pen"
+                  dataToggle="modal"
+                  dataTarget="#modal-edit"
+                  onClick={() => this.getAuthor(author.authorId)}
+                />
+                <Action
+                  type="danger"
+                  title="Delete"
+                  icon="trash"
+                  dataToggle="modal"
+                  dataTarget="#modal-delete"
+                  onClick={() => this.getAuthor(author.authorId)}
+                />
+              </div>
+            </td>
+          );
+          row.push(<td>{author.authorName}</td>);
+          results.push(row);
+        })
+        this.setState({ rows: results });
 
-            $("#example1").DataTable({
-              responsive: true,
-              autoWidth: false,
-              });
-          })
+        $("#example1").DataTable({
+          responsive: true,
+          autoWidth: false,
+        });
+      })
   }
 
-  getCategory = (id) => {
+  getAuthor(id) {
+    let errors = {}
+    errors["AuthorName"] = "";
+    this.setState({ errors: errors });
+
     Axios
-      .get("/category/get-by-id/" + id)
+      .get("/author/getid/" + id)
       .then((response) => {
-        console.log(response);
         this.setState({
-          category: response.data.category,
-          categoryId: id,
-          categoryValid: response.data.category
+          authorName: response.data.authorName,
+          authorId: id,
+          name: response.data.authorName
         });
       });
   };
 
-  updateCategory = (id) => {
-    var categoryValid = this.state.categoryValid
-    const category = {
-      category: this.state.category,
+  updateAuthor = (id) => {
+    var name = this.state.name
+    const author = {
+      authorName: this.state.authorName,
+
     };
 
-    console.log(categoryValid)
-    console.log(category.category)
-
-    if(this.handleValidationUpdate()) {
-      Axios.get('/category/get-by-category/' + category.category)
-          .then((response) => {
-            const resultCategory = response.data
-            console.log(response)
-            Axios.get('/category/count-category/' + id)
+    if (this.handleValidationUpdate()) {
+      Axios
+        .get("/author/getAuthor/" + author.authorName)
+        .then((response) => {
+          const result2 = response.data;
+          Axios
+            .get("/author/getCount/" + id)
+            .then((response) => {
+              if (author.authorName == name) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Warning",
+                  text: "You Enter the same Name",
+                  confirmButtonText: `OK`,
+                })
+              } else if (author.authorName == result2) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Warning",
+                  text: "Name Already saved",
+                  confirmButtonText: `OK`,
+                })
+              } else if (response.data > 0) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Warning",
+                  text: "You can't update Data already used",
+                  confirmButtonText: `OK`,
+                })
+              } else {
+                Axios
+                  .put("/author/update/" + id, author)
                   .then((response) => {
-                    console.log(category.category)
-                    
-
-                    if(category.category === categoryValid) {
-                      Swal.fire({
-                        icon: "warning",
-                        title: "Warning",
-                        text: "You Enter the same Name",
-                        confirmButtonText: `OK`,
-                      })
-                    } else if(category.category === resultCategory.category) {
-                      Swal.fire({
-                        icon: "warning",
-                        title: "Warning",
-                        text: "Name Already saved",
-                        confirmButtonText: `OK`,
-                      })
-                    } else if(response.data > 0) {
-                      Swal.fire({
-                        icon: "warning",
-                        title: "Warning",
-                        text: "You can't update Data already used",
-                        confirmButtonText: `OK`,
-                      })
-                    } else {
-                      Axios
-                    .put("/category/update-category/" + id, category)
-                    .then((response) => {
-                      console.log(response);
-                      $("#modal-edit").modal("toggle");
-                      $('.modal-backdrop').remove();
-                      Swal.fire({
-                        icon: "success",
-                        title: "Success",
-                        text: "Your Data has been Updated",
-                        confirmButtonText: `OK`,
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          this.fetchData()
-                        }
-                      });
+                    $("#modal-edit").modal("toggle");
+                    $('.modal-backdrop').remove();
+                    Swal.fire({
+                      icon: "success",
+                      title: "Success",
+                      text: "Your Data has been Updated",
+                      confirmButtonText: `OK`,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.fetchData()
+                      }
                     });
-                    }
-                  })
-          })
-    } 
+                  });
+              }
+            });
 
+
+
+
+        })
+    }
   };
 
   handleValidationUpdate() {
     let errors = {};
     let formIsValid = true;
 
-    if(this.state.category === "") {
+    if (this.state.authorName === "") {
       formIsValid = false;
-      errors["categoryName"] = "Category cannot be empty";
+      errors["AuthorName"] = "Author Name cannot be empty";
     }
 
-    this.setState({errors: errors})
+    this.setState({ errors: errors })
     return formIsValid
   }
 
-  deleteCategory = (id) => {
-    Axios.get('/category/count-category/' + id)
-          .then((response) => {
-
-            if(response.data > 0) {
-              Swal.fire({
-                icon: "warning",
-                title: "Warning",
-                text: "You can't delete Data already used",
-                confirmButtonText: `OK`,
-              })
-            } else {
-                Axios
-                .put("/category/delete-category/" + id)
-                .then((response) => {
-                  console.log(response);
-                  Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: "Your Data has been Deleted",
-                    confirmButtonText: `OK`,
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      this.fetchData()
-                    }
-                  });
-                });
-            }
-
+  deleteAuthor = (id) => {
+    Axios
+      .get("/author/getCount/" + id)
+      .then((response) => {
+        if (response.data > 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: "You can't delete Data already used",
+            confirmButtonText: `OK`,
           })
+        } else {
+          Axios
+            .put("/author/delete/" + id)
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Your Data has been Deleted",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.fetchData()
+                }
+              });
+            });
+        }
+      });
+
   };
 
-  categoryChange = (event) => {
+  authorChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
@@ -208,11 +206,11 @@ class CategoryManagement extends Component {
   resetModal() {
     let fields = this.state.fields;
     let errors = {}
-    fields["CategoryName"] = "";
-    errors["CategoryName"] = "";
+    fields["AuthorName"] = "";
+    errors["AuthorName"] = "";
 
-    this.setState({fields: fields});
-    this.setState({errors: errors});
+    this.setState({ fields: fields });
+    this.setState({ errors: errors });
   }
 
   handleValidation() {
@@ -220,10 +218,10 @@ class CategoryManagement extends Component {
     let errors = {};
     let formIsValid = true;
 
-    //Category Name
-    if (!fields["CategoryName"]) {
+    //Author Name
+    if (!fields["AuthorName"]) {
       formIsValid = false;
-      errors["CategoryName"] = "Category Name cannot be empty";
+      errors["AuthorName"] = "Author Name cannot be empty";
     }
 
     this.setState({ errors: errors });
@@ -236,14 +234,12 @@ class CategoryManagement extends Component {
     if (this.handleValidation()) {
       $("#modal-add").modal("hide");
       $('.modal-backdrop').remove();
-      const category = {
-        category: fields["CategoryName"],
+      const author = {
+        authorName: fields["AuthorName"],
       };
-      console.log(category);
       Axios
-        .post("/category/add-category", category)
+        .post("/author/post", author)
         .then((response) => {
-          console.log(response);
           Swal.fire({
             icon: "success",
             title: "Success",
@@ -260,7 +256,7 @@ class CategoryManagement extends Component {
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: "Category already exist!",
+            text: "Author already exist!",
           }).then((result) => {
             if (result.isConfirmed) {
               $("#modal-add").modal("toggle");
@@ -273,15 +269,15 @@ class CategoryManagement extends Component {
   handleChange(field, e) {
     let fields = this.state.fields;
     let errors = {}
-    errors["CategoryName"] = "";
+    errors["AuthorName"] = "";
     fields[field] = e.target.value;
     this.setState({ fields });
-    this.setState({ errors: errors})
+    this.setState({ errors: errors })
   }
 
   render() {
     const { rows } = this.state;
-    const headings = ["No", "Action", "Category ID(s)", "Category Name"];
+    const headings = ["No", "Action", "Author Name"];
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}
@@ -289,14 +285,14 @@ class CategoryManagement extends Component {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h3>Category Management</h3>
+                <h3>Author Management</h3>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="/">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">Category</li>
+                  <li className="breadcrumb-item active">Author</li>
                 </ol>
               </div>
             </div>
@@ -315,10 +311,11 @@ class CategoryManagement extends Component {
                       className="btn btn-primary add-btn"
                       data-toggle="modal"
                       data-target="#modal-add"
+                      onClick={() => { this.resetModal() }}
                       style={{ float: "right" }}
                     >
                       <i className="nav-icon fas fa-plus"></i>
-                      &nbsp; Add Category
+                      &nbsp; Add Author
                     </button>
                   </div>
                 </div>
@@ -336,7 +333,7 @@ class CategoryManagement extends Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Add Category</h4>
+                <h4 className="modal-title">Add Author</h4>
                 <button
                   type="button"
                   className="close"
@@ -346,27 +343,25 @@ class CategoryManagement extends Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form id="addCategory" onSubmit={this.contactSubmit.bind(this)}>
+              <form id="addAuthor" onSubmit={this.contactSubmit.bind(this)}>
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
-                      <label htmlFor="inputCategoryName">Category Name <small className="red-asterisk">*</small></label>
+                      <label htmlFor="inputAuthorName">Author Name</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="inputCategoryName"
-                        name="category"
-                        placeholder="Enter Category"
-                        onChange={this.handleChange.bind(this, "CategoryName")}
-                        value={this.state.fields["CategoryName"]}
+                        id="inputAuthorName"
+                        name="author"
+                        placeholder="Enter Author Name"
+                        onChange={this.handleChange.bind(this, "AuthorName")}
+                        value={this.state.fields["AuthorName"]}
                       />
                       <span style={{ color: "red" }}>
-                        {this.state.errors["CategoryName"]}
+                        {this.state.errors["AuthorName"]}
                       </span>
                     </div>
-                    <small><span className="red-asterisk">*</span> Required</small> 
                   </div>
-                  
                 </div>
                 <div className="modal-footer justify-content-between">
                   <button
@@ -394,7 +389,7 @@ class CategoryManagement extends Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Edit Category</h4>
+                <h4 className="modal-title">Edit Author</h4>
                 <button
                   type="button"
                   className="close"
@@ -404,22 +399,22 @@ class CategoryManagement extends Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form id="editCategory">
+              <form id="editAuthor">
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
-                      <label htmlFor="editCategoryName">Category Name</label>
+                      <label htmlFor="editAuthorName">Author Name</label>
                       <input
                         type="text"
                         className="form-control"
-                        name="category"
-                        id="editCategoryName"
-                        value={this.state.category}
-                        onChange={this.categoryChange}
+                        name="authorName"
+                        id="editAuthorName"
+                        value={this.state.authorName}
+                        onChange={this.authorChange}
                       />
                       <span style={{ color: "red" }}>
-                            {this.state.errors["categoryName"]}
-                          </span>
+                        {this.state.errors["AuthorName"]}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -433,7 +428,7 @@ class CategoryManagement extends Component {
                   </button>
                   <button
                     type="button"
-                    onClick={() => this.updateCategory(this.state.categoryId)}
+                    onClick={() => this.updateAuthor(this.state.authorId)}
                     className="btn btn-warning"
                   >
                     Save changes
@@ -452,7 +447,7 @@ class CategoryManagement extends Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Delete Category</h4>
+                <h4 className="modal-title">Delete Author</h4>
                 <button
                   type="button"
                   className="close"
@@ -477,7 +472,7 @@ class CategoryManagement extends Component {
                   type="button"
                   className="btn btn-warning"
                   data-dismiss="modal"
-                  onClick={() => this.deleteCategory(this.state.categoryId)}
+                  onClick={() => this.deleteAuthor(this.state.authorId)}
                 >
                   Delete
                 </button>
@@ -488,10 +483,10 @@ class CategoryManagement extends Component {
           {/* <!-- /.modal-dialog --> */}
         </div>
         {/* <!-- /.modal --> */}
-        
+
       </div>
     );
   }
 }
 
-export default CategoryManagement;
+export default Author;

@@ -5,9 +5,10 @@ import { Link, withRouter } from "react-router-dom";
 import Swal from 'sweetalert2'
 import Axios from '../../../Instances/axios-instances';
 import NumberFormat from 'react-number-format';
+import moment from 'moment';
 
 class Payment extends Component {
-   
+
    interval = null;
    constructor() {
       super();
@@ -32,7 +33,7 @@ class Payment extends Component {
       } else {
          this.setState({ invoiceId: "" });
       }
-      this.interval = setInterval(this.reNewBalance, 5000);
+      this.interval = setInterval(this.reNewBalance, 30000);
    }
 
    formatRupiah = (nilai) => {
@@ -84,49 +85,68 @@ class Payment extends Component {
 
    confirmPaid = () => {
 
-      console.log(this.state.grandTotal);
-      console.log(this.state.balance);
       if (this.state.grandTotal <= this.state.balance) {
-         Axios.put()
-         Swal.fire("Success", "Your Payment has been Accepted", "success")
+         Axios.put('invoice/pay/' + this.state.invoiceId)
+            .then((data) => {
+               const result = data.data;
+               if (result.status === 200) {
+                  Swal.fire("Success", "Your Payment has been Accepted", "success")
+                  this.props.history.push('/FineManagement')
+               } else if (result.message === "Sorry, Your Current Balance is Insufficient.") {
+                  Swal.fire({
+                     icon: 'warning',
+                     title: 'Declined',
+                     text: 'Sorry, Your Current Balance is Insufficient.',
+                     showDenyButton: true,
+                     showConfirmButton: true,
+                     confirmButtonText: `Top Up`,
+                     denyButtonText: `OK`
+                  }).then((val) => {
+                     if (val.isConfirmed) {
+                        this.props.history.push('/TopUp')
+                     }
+                     else {
+                        // nothing
+                     }
+                  })
+               } else {
+                  Swal.fire("Ups..", result.message, "warning")
+               }
+            });
+
       } else {
          Swal.fire({
-            icon: 'error',
+            icon: 'warning',
             title: 'Declined',
             text: 'Sorry, Your Current Balance is Insufficient.',
             showDenyButton: true,
             showConfirmButton: true,
             confirmButtonText: `Top Up`,
             denyButtonText: `OK`
-         }).then((result) => {
-            if (result.isConfirmed) {
-               // this.props.history.push('/TopUp')
+         }).then((val) => {
+            if (val.isConfirmed) {
+               this.props.history.push('/TopUp')
             }
             else {
-
+               // nothing
             }
          })
       }
 
    }
 
-   paymentDeclined() {
-      Swal.fire({
-         icon: 'error',
-         title: 'Declined',
-         text: 'Sorry, Your Current Balance is Insufficient.',
-         showDenyButton: true,
-         showConfirmButton: true,
-         confirmButtonText: `Top Up`,
-         denyButtonText: `OK`
-      }).then((result) => {
-         if (result.isConfirmed) {
-            this.props.history.push('/TopUp')
-         }
-         else {
+   convertToDate = (date) => {
+      if (date === null) {
+         return "-"
+      } else {
+         return moment.utc(date).format('DD-MM-YYYY hh:mm')
+      }
+   }
 
-         }
-      })
+   printStatusPaid = () => {
+      if (this.state.dataInvoice.statusInvoice === "Paid") {
+         return <h2><font color="green">PAID</font></h2>
+      }
    }
 
    render() {
@@ -155,7 +175,7 @@ class Payment extends Component {
                   <div className="row">
                      <div className="col-12">
                         <h4>
-                           <img src={MaxIcon} style={{ height: '2rem' }} /> Maxwell Library <small className="float-right">Date: {dataInvoice.invoiceDate}</small>
+                           <img src={MaxIcon} style={{ height: '2rem' }} /> Maxwell Library <small className="float-right">Date: {this.convertToDate(dataInvoice.invoiceDate)}</small>
                         </h4>
                      </div>
                      {/* <!-- /.col --> */}
@@ -188,10 +208,12 @@ class Payment extends Component {
                      </div>
                      {/* <!-- /.col --> */}
                      <div className="col-sm-4 invoice-col">
-                        <b>Invoice {dataInvoice.noInvoice}</b><br />
+                        <b>Invoice {dataInvoice.noInvoice} <font color="orange" >({dataInvoice.typeInvoice})</font></b><br />
                         <br />
+                        {this.printStatusPaid()}
                      </div>
                      {/* <!-- /.col --> */}
+
                   </div>
                   {/* <!-- /.row --> */}
 
@@ -200,13 +222,15 @@ class Payment extends Component {
                      <div className="col-12 table-responsive">
                         <table className="table table-striped">
                            <thead>
-                              <tr>
+                              <tr className="text-nowrap text-center">
                                  <th>No.</th>
+                                 <th>Rent ID</th>
+                                 <th>Book Code</th>
                                  <th>Book Title</th>
                                  <th>Borrowed On</th>
+                                 <th>Returned Date</th>
                                  <th>Due On</th>
                                  <th>Type</th>
-                                 <th>Late By</th>
                                  <th>Fine Amount</th>
                               </tr>
                            </thead>
@@ -215,13 +239,15 @@ class Payment extends Component {
                                  dataDetailInvoice.map((val, index) => {
                                     return (
                                        <tr key={index}>
-                                          <td>{index + 1}</td>
-                                          <td>{val.title}</td>
-                                          <td>{val.borrowedDate}</td>
-                                          <td>{val.treshold}</td>
-                                          <td>{val.type}</td>
-                                          <td>{val.late} Days</td>
-                                          <td>{val.grandTotal}</td>
+                                          <td className="text-nowrap" >{index + 1}</td>
+                                          <td className="text-nowrap text-center" >{val.borrowedBookCode}</td>
+                                          <td className="text-nowrap text-center" >{val.bookDetailCode}</td>
+                                          <td className="text-nowrap text-center" >{val.title}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.borrowedDate)}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.returnDate)}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.threshold)}</td>
+                                          <td className="text-nowrap" >{val.type}</td>
+                                          <td className="text-nowrap" >{this.formatRupiah(val.total)}</td>
                                        </tr>
                                     )
                                  })
@@ -238,7 +264,7 @@ class Payment extends Component {
                      <div className="col-6"></div>
                      {/* <!-- /.col --> */}
                      <div className="col-6">
-                        <p className="lead" style={{ float: 'right' }}>Amount Due {dataInvoice.treshold}</p>
+                        <p className="lead" style={{ float: 'right' }}>Amount Due {this.convertToDate(dataInvoice.threshold)}</p>
                         <div className="table-responsive">
                            <table className="table">
                               <thead>
