@@ -82,16 +82,6 @@ class Search extends Component {
 
                     <div className="hero-book-search">
                         {this.showCountBook()}
-                        <div className="input-group-prepend">
-                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                style={{backgroundColor: "transparent", border: "0px"}}>
-                                Sort by
-                            </button>
-                            <div className="dropdown-menu">
-                                <a className="dropdown-item" href="#">Last Updated</a>
-                                <a className="dropdown-item" href="#">Popular</a>
-                            </div>
-                        </div>
                         <div className="book-list-search">
 
                             {dataSearch.slice(0, visible).map((data) => {
