@@ -229,8 +229,8 @@ class Detail extends Component {
 
   getId = (id) => {
     Swal.fire({
-      icon: 'warning',
-      title: 'Warning!',
+      icon: 'question',
+      title: 'Are you sure?',
       showCancelButton: true,
       text: 'Are you sure want to confirm this?',
     })
@@ -269,6 +269,12 @@ class Detail extends Component {
 
   getId2 = (id) => {
     $('#RateModal').modal('show');
+    let errors = {}
+    errors["rate"] = ""
+    errors["description"] = ""        
+    this.setState({errors: errors})
+    this.setState({fields:[],userId:"",errors:[]})  
+  $('#editDescription').val('');  
 
   }
   printStatusBook = (statusBook) => {
@@ -293,8 +299,7 @@ class Detail extends Component {
   refresh() {        
     let errors = {}
     errors["rate"] = ""
-    errors["description"] = ""    
-    this.setState({star:""})
+    errors["description"] = ""        
     this.setState({errors: errors})
     this.setState({fields:[],userId:"",errors:[]})  
   $('#editDescription').val('');  
@@ -318,6 +323,13 @@ class Detail extends Component {
               title: 'Success!',
               showCancelButton: false,
               text: 'Delete Review Already Success!',
+            }).then((isConfirmed) => {
+              if (isConfirmed) {                
+                this.getData2(this.state.bookId)                                     
+                $('#RateModal').modal('hide');  
+                $('.modal-backdrop').remove(); 
+                this.refresh();
+              }
             })
           }
         })
@@ -347,7 +359,7 @@ class Detail extends Component {
       if (this.state.status2 == true) {
         Swal.fire({
           icon: 'warning',
-          title: 'Warning!',
+          title: 'Ooops!',
           showCancelButton: false,
           text: 'Ini akan update data review anda sebelumnya,apakah anda yakin?',
         }).then((isConfirmed) => {
@@ -365,6 +377,13 @@ class Detail extends Component {
               title: 'Success!',
               showCancelButton: false,
               text: 'Data Terupdate',
+            }).then((isConfirmed) => {
+              if (isConfirmed) {                
+                this.getData2(this.state.bookId)                                     
+                $('#RateModal').modal('hide');  
+                $('.modal-backdrop').remove(); 
+                this.refresh();
+              }
             })
           })
           }
@@ -382,8 +401,8 @@ class Detail extends Component {
               text: 'Review Success!',
             })
             .then((isConfirmed) => {
-              if (isConfirmed) {                
-                this.getData();                        
+              if (isConfirmed) {       
+                this.getData2(this.state.bookId)                                       
                 $('#RateModal').modal('hide');  
                 $('.modal-backdrop').remove(); 
                 this.refresh();
@@ -398,7 +417,7 @@ class Detail extends Component {
     const rateStar = {
       size: 25,
       count: 5,
-      color: "black",
+      color: "black",      
       activeColor: "yellow",
       a11y: true,
       isHalf: true,
@@ -407,6 +426,7 @@ class Detail extends Component {
       filledIcon: <i className="fa fa-star" />,
       onChange: (newValue) => {
         this.setState({ star: newValue })
+        newValue=0;
       }
     };    
     const rateStar2 = {
@@ -494,8 +514,10 @@ class Detail extends Component {
                     {data.description}
                   </p>
                 </div>
+                <div>
+                  {show ? this.printBorrowButton(data.statusBook) : null}                 
+                </div>
                 
-                {this.printBorrowButton(data.statusBook)}
                 <div>
                   {show ? <button
                     type="button"
