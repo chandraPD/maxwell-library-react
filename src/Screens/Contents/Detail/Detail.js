@@ -437,7 +437,9 @@ class Detail extends Component {
                 </div>
                 <div className="row">
                   <div className="col-sm-12">
-                    <img className="big-preview" src={data.imgBanner} width="1600px" height="1200px" />
+                    <div className="fill-detail">
+                    <img src={data.imgBanner} alt="" />
+                    </div>
 
                     <div className="menu-right">
                       {/* <ul className="menuhead">
