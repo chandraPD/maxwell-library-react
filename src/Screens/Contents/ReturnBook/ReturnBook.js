@@ -46,12 +46,11 @@ class ReturnBook extends Component {
         this.setState((prevState) => ({
             borrowBooks: prevState.borrowBooks.filter((_, i) => i !== e),
             listDetail: prevState.listDetail.filter((_, i) => i !== e)
-        }), console.log(this.state.borrowBooks))
+        }))
 
     }
 
     handleChange = (e) => {
-        console.log(this.state.borrowBooks)
         if (["form-control borrowBookId"].includes(e.target.className)) {
             let borrowBooks = [...this.state.borrowBooks]
             // set value prev selected
@@ -60,7 +59,7 @@ class ReturnBook extends Component {
                 // sudah pernah ada
                 borrowBooks[e.target.dataset.id].denda = [];
                 borrowBooks[e.target.dataset.id].borrowBookId = "";
-                this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+                this.setState({ borrowBooks })
                 e.target.value ="";
                 Swal.fire('Ups..', "Tidak boleh memilih buku yang sama", 'warning')
             } else {
@@ -94,20 +93,19 @@ class ReturnBook extends Component {
                         borrowBooks[e.target.dataset.id].denda = [...borrowBooks[e.target.dataset.id].denda, detailInvoice];
                     }
                     borrowBooks[e.target.dataset.id].borrowBookId = e.target.value;
-                    this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+                    this.setState({ borrowBooks })
                 } else {
                     borrowBooks[e.target.dataset.id].denda = [];
                     borrowBooks[e.target.dataset.id].borrowBookId = "";
-                    this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+                    this.setState({ borrowBooks })
                 }
             }
         } else if (["form-control type", "form-control total"].includes(e.target.className)) {
             let borrowBooks = [...this.state.borrowBooks]
             borrowBooks[e.target.dataset.id][e.target.className] = e.target.value;
-            this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+            this.setState({ borrowBooks })
         } else {
             this.setState({ [e.target.name]: e.target.value });
-            console.log(this.state);
         }
     }
 

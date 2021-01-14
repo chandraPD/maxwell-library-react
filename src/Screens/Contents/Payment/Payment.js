@@ -81,13 +81,10 @@ class Payment extends Component {
          const getInvoiceDetail = await Axios.get(`invoice-detail/get-by-invoice-id/${invoiceId}`)
          this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data, grandTotal: getInvoice.data.data.grandTotal })
       } catch (err) {
-         console.log(err);
       }
    }
 
    confirmPaid = () => {
-      console.log(this.state.grandTotal);
-      console.log(this.state.balance);
       if (this.state.grandTotal <= this.state.balance) {
          Axios.put('invoice/pay/' + this.state.invoiceId)
             .then((data) => {

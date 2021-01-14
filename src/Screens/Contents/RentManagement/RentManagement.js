@@ -149,8 +149,6 @@ class RentManagement extends Component {
                     row.push(<td className="text-center" >{statusVal}</td>);
                     results.push(row);
                 });
-                console.log(results);
-                console.log(this.state.headings);
                 this.setState({ rows: results });
 
                 $("#example1").DataTable({

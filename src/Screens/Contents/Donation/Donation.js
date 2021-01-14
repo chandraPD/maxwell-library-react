@@ -46,11 +46,8 @@ class Donation extends Component {
           statusDonate : "waiting",
           phoneNumber : fields["PhoneNumber"]
         }
-        console.log(fields)
-        console.log(donate)
         Axios.post('/donate', donate)
              .then((response) => {
-               console.log(response)
              })
   
         Swal.fire({

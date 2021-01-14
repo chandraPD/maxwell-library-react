@@ -26,14 +26,12 @@ class DonationManagement extends Component {
  
   componentDidMount() {
     this.fetchDataDonate();
-    console.log(this.state.data);
   }
  
   async fetchDataDonate() {
     let fetchedData = await Axios.get(
       '/donate'
     );
-    console.log(fetchedData.data.data)
     this.setState.isLoading = false;
     const resultDonate = fetchedData.data.data;
     this.setState({ data: resultDonate});
@@ -132,7 +130,6 @@ class DonationManagement extends Component {
   acceptDonate = (id) => {
     Axios.post(`/donate/accept/${id}`)
       .then((response) => {
-        console.log(response)
         window.location.reload()
         
       })
@@ -142,7 +139,6 @@ class DonationManagement extends Component {
   rejecttDonate = (id) => {
     Axios.post(`/donate/reject/${id}`)
       .then((response) => {
-        console.log(response)
         window.location.reload()
         
       })

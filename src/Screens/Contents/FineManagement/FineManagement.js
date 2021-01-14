@@ -61,7 +61,6 @@ class FineManagement extends Component {
         await Axios.get(linkAxios)
             .then((getData) => {
                 const res = getData.data;
-                console.log(res);
                 if (getData.status === 200) {
                     $('#example1').DataTable().destroy();
                     let results = [];
