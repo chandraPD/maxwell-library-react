@@ -401,15 +401,8 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6"><h3>Slide Show Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-<<<<<<< HEAD
-                  <li className="breadcrumb-item">
-                    <a href='index.html'>Home</a>
-                  </li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                   <li className="breadcrumb-item active">Slide Show</li>
-=======
-                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
-                  <li className="breadcrumb-item active">Slideshow</li>
->>>>>>> 787d1e38cb77660232a3466b8d97263c6e1ced80
                 </ol>
               </div>
             </div>
@@ -539,7 +532,6 @@ class SlideShowManagement extends Component {
                       <label class="custom-file-label" for="exampleInputFile" style={{ overflow : "hidden"}}>{this.state.img}</label>
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
                   </span>

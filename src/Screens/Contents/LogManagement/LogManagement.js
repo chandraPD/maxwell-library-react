@@ -47,7 +47,7 @@ class LogManagement extends Component {
         );
 
         row.push(
-          <td>
+          <td className="text-center text-nowrap">
             {this.convertToDate(log.dateTime)}
           </td>
         );
@@ -92,7 +92,7 @@ class LogManagement extends Component {
     if (date === null) {
         return "-"
     } else {
-        return moment.utc(date).format('DD-MM-YYYY | HH:mm')
+        return moment.utc(date).format('DD-MM-YYYY HH:mm')
     }
 }
 
