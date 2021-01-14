@@ -33,6 +33,21 @@ img.big-preview{
 
 }
 
+.fill-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    height: 350px;
+    filter: brightness(0.2)
+}
+.fill-detail img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
+    
+}
+
 .category {
 	width:100px;
 	height:20px;

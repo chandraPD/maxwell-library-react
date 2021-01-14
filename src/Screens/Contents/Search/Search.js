@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './searchpage.css'
 import $ from 'jquery'
 import {Link, withRouter} from 'react-router-dom'
-import Axios from 'axios'
+import Axios from '../../../Instances/axios-instances'
 
 
 class Search extends Component {
@@ -32,7 +32,7 @@ class Search extends Component {
     }
 
     async fetchData(title) {
-        let fetchData = await Axios.get('http://localhost:8080/book/get-by-title/' + title)
+        let fetchData = await Axios.get('/book/get-by-title/' + title)
         console.log(fetchData)
         const length = fetchData.data.length
         this.setState({dataSearch: fetchData.data})
