@@ -21,7 +21,7 @@ class LogManagement extends Component {
 
   async fetchData(){
 
-    await Axios.get('log/get-log-lastActivity'
+    await Axios.get('log/get-log-lastActivity')
     .then((fetchedData) => {
       const resultLog = fetchedData.data;
       this.setState({
