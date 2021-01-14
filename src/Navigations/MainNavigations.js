@@ -76,7 +76,7 @@ class MainNavigation extends Component {
                     authenticated={this.state.isAuthenticated}
                     component={Auth}>
                     </AuthRoute>
-                    <Route path='/PaymentPrint'>
+                    <Route path='/PaymentPrint/:invoiceId'>
                         <PaymentInvoicePrint />
                     </Route>
                     <Route exact path='/PaymentPrintPaid'>

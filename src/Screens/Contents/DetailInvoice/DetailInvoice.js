@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NumberFormat from 'react-number-format';
 import { Link, withRouter } from 'react-router-dom'
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
-import Axios from 'axios';
+import Axios from '../../../Instances/axios-instances';
 import moment from 'moment';
 
 class DetailInvoice extends Component {
@@ -28,8 +28,8 @@ class DetailInvoice extends Component {
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         }
-        const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`, config)
-        const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
+        const getInvoice = await Axios.get(`/invoice/get-by-id/${invoiceId}`, config)
+        const getInvoiceDetail = await Axios.get(`/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
         console.log(getInvoiceDetail);
         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
     }
@@ -177,7 +177,7 @@ class DetailInvoice extends Component {
                         {/* <!-- this row will not appear when printing --> */}
                         <div className="row no-print">
                             <div className="col-12">
-                                <Link to="/PaymentPrint" target="_blank">
+                                <Link to={`/PaymentPrint/${this.props.match.params.invoiceId}`} target="_blank">
                                     <i className="fas fa-print"></i> Print
                            </Link>
                                 {action}

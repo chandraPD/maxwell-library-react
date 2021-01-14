@@ -204,7 +204,7 @@ class BookManagement extends Component {
     console.log(book)
 
     if(this.handleValidationUpdate()) {
-      Axios.get('/book/get-title-fix/' + book.title)
+      Axios.get('/book/get-title-fix/' + book.title + '/' + book.authorId)
             .then((response) => {
               const resultBook = response.data
               console.log(response)
