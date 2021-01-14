@@ -4,7 +4,7 @@ import photo1 from '../../../Assets/Media/books/donate2.jpg'
 import photo2 from '../../../Assets/Media/books/donate3.jpg'
 import Swal from 'sweetalert2'
 import Reactdom from 'react-dom'
-import Axios from '../../../Instances/axios-instances';'
+import Axios from '../../../Instances/axios-instances'
 
 class Donation extends Component {
   constructor(props) {
