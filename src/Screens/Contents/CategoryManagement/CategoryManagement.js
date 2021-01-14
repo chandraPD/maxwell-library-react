@@ -38,7 +38,7 @@ class CategoryManagement extends Component {
             const result = response.data;
             this.setState({data: result})
             result.map((category) => {
-              console.log(category)
+
               var row = [];
               row.push(<td className="text-center">{no++}</td>);
               row.push(
@@ -80,7 +80,7 @@ class CategoryManagement extends Component {
     Axios
       .get("/category/get-by-id/" + id)
       .then((response) => {
-        console.log(response);
+
         this.setState({
           category: response.data.category,
           categoryId: id,
@@ -95,17 +95,16 @@ class CategoryManagement extends Component {
       category: this.state.category,
     };
 
-    console.log(categoryValid)
-    console.log(category.category)
+
 
     if(this.handleValidationUpdate()) {
       Axios.get('/category/get-by-category/' + category.category)
           .then((response) => {
             const resultCategory = response.data
-            console.log(response)
+
             Axios.get('/category/count-category/' + id)
                   .then((response) => {
-                    console.log(category.category)
+  
                     
 
                     if(category.category === categoryValid) {
@@ -133,7 +132,7 @@ class CategoryManagement extends Component {
                       Axios
                     .put("/category/update-category/" + id, category)
                     .then((response) => {
-                      console.log(response);
+
                       $("#modal-edit").modal("toggle");
                       $('.modal-backdrop').remove();
                       Swal.fire({
@@ -182,7 +181,7 @@ class CategoryManagement extends Component {
                 Axios
                 .put("/category/delete-category/" + id)
                 .then((response) => {
-                  console.log(response);
+
                   Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -239,11 +238,11 @@ class CategoryManagement extends Component {
       const category = {
         category: fields["CategoryName"],
       };
-      console.log(category);
+
       Axios
         .post("/category/add-category", category)
         .then((response) => {
-          console.log(response);
+
           Swal.fire({
             icon: "success",
             title: "Success",
