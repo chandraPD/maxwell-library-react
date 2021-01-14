@@ -11,17 +11,24 @@ class Donation extends Component {
     super(props);
     
     this.state = {
-      fields: {},     
+      fields: {
+        DonationType: "person"
+      },     
     };
 
     this.postDonate = this.postDonate.bind(this)
   }
     submitdonate() {
 
-    var Email = document.getElementById('inputEmail').value;
-    var Name = document.getElementById('inputName').value;
-    var PhoneNumber = document.getElementById('inputPhone').value;
-    var DonationNumber = document.getElementById('inputBookbybook').value;
+   
+    }
+    postDonate(e) {
+      let fields = this.state.fields;
+      e.preventDefault();
+       var Email = document.getElementById('inputEmail').value;
+       var Name = document.getElementById('inputName').value;
+       var PhoneNumber = document.getElementById('inputPhone').value;
+       var DonationNumber = document.getElementById('inputBookbybook').value;
 
     if (Email === ''|| Name === ''|| PhoneNumber === ''|| DonationNumber === ''){
         Swal.fire(
@@ -30,17 +37,8 @@ class Donation extends Component {
             'error'
         );
     }else{
-        Swal.fire(
-            'Submitted !',
-            'You clicked the button!',
-            'success'
-        );
-    }
-    }
-    postDonate(e) {
-      let fields = this.state.fields;
-      e.preventDefault();
-        const donate = {
+      
+      const donate = {
           email : fields["Email"],
           name : fields["Name"],
           donationType : fields["DonationType"],
@@ -72,6 +70,9 @@ class Donation extends Component {
           confirmButtonText: `OK`
         })
         }) 
+    }
+
+        
           
     }
 
@@ -85,7 +86,7 @@ class Donation extends Component {
 
   render() {
     return (
-      <div className="content-wrapper">
+      <div>
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid"></div>
