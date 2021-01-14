@@ -28,7 +28,6 @@ class BookDetail extends Component {
 
   componentDidMount() {
     const bookId = this.props.match.params.bookId;
-    console.log(bookId);
     this.fetchData(bookId);
   }
 
@@ -85,7 +84,6 @@ class BookDetail extends Component {
 
             Axios.get('/book-detail/get-book-detail-count/Available/' + bookId)
                   .then((response) => {
-                    console.log(response.data)
 
                     const count = {
                       qty: response.data
@@ -93,7 +91,6 @@ class BookDetail extends Component {
 
                     Axios.put("/book/update-qty-book/" + bookId, count)
                     .then((response) => {
-                      console.log(response)
                     })  
 
                   })  
@@ -115,7 +112,6 @@ class BookDetail extends Component {
       fields[field] = e.target.value
       this.setState({fields})
       this.setState({errors: errors})
-      console.log(this.state.fields)
   }
 
   detailBookChange = (event) => {
@@ -134,7 +130,6 @@ class BookDetail extends Component {
 
       Axios.put('/book-detail/update-detail/' + id, detailBook)
         .then((response) => {
-            console.log(response)
             $("#modal-edit").modal("toggle");
             $('.modal-backdrop').remove();
             Swal.fire({
@@ -153,7 +148,6 @@ class BookDetail extends Component {
   deleteDetailBook = (id) => {
     Axios.put('/book-detail/delete-detail/' + id)
     .then((response) => {
-      console.log(response)
       Swal.fire({
         icon: "success",
         title: "Success",
@@ -170,7 +164,6 @@ class BookDetail extends Component {
   getDetailBook = (id) => {
       Axios.get("/book-detail/get-detail-book/" + id)
         .then((response) => {
-            console.log(response)
             this.setState({
                 typeOfDamage: response.data.typeOfDamage,
                 descOfDamage: response.data.descOfDamage,
@@ -218,11 +211,9 @@ class BookDetail extends Component {
             bookId: this.props.match.params.bookId
         }
 
-        console.log(detailBook)
 
         Axios.post("/book-detail/add-detail", detailBook)
             .then((response)=> {
-                console.log(response)
                 Swal.fire({
                   icon: "success",
                   title: "Success",

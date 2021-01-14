@@ -39,14 +39,12 @@ class BookManagement extends Component {
     let fetchCategory = await Axios.get(
       "/category/get-all-active"
     );
-    console.log(fetchCategory);
     const resultCategory = fetchCategory.data;
     this.setState({ category: resultCategory });
   }
 
   async getAuthor() {
     let fetchAuthor = await Axios.get('/author/getAll')
-    console.log(fetchAuthor)
     const resultAuthor = fetchAuthor.data
     this.setState({author: resultAuthor})
   }
@@ -60,7 +58,6 @@ class BookManagement extends Component {
     await Axios.get('/book/get-all-active')
         .then((response) => {
           const result = response.data
-          console.log(response)
           this.setState({data: result})
           result.map((book) => {
             let row = [];
@@ -164,7 +161,7 @@ class BookManagement extends Component {
 
   getBook = (id) => {
     Axios.get("/book/get-by-id/" + id).then((response) => {
-      console.log(response);
+
 
       this.setState({
         authorId: response.data.authorEntity.authorId,
@@ -184,7 +181,6 @@ class BookManagement extends Component {
   updateBook = (id) => {
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(token)
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -201,18 +197,15 @@ class BookManagement extends Component {
       categoryId: this.state.categoryId,
     };
 
-    console.log(book)
 
     if(this.handleValidationUpdate()) {
       Axios.get('/book/get-title-fix/' + book.title + '/' + book.authorId)
             .then((response) => {
               const resultBook = response.data
-              console.log(response)
-              console.log(response.data)
 
                 Axios.get('/book-detail/get-book-detail-count/Available/' + id)
                     .then((response) => {
-                      console.log(response)
+
                        if(response.data > 0) {
                         Swal.fire({
                           icon: "warning",
@@ -224,7 +217,7 @@ class BookManagement extends Component {
                         Axios
                         .put("/book/update-book/" + id, book, config)
                         .then((response) => {
-                          console.log(response);
+
                           $("#modal-edit").modal("toggle");
                           $('.modal-backdrop').remove();
                           Swal.fire({
@@ -261,7 +254,7 @@ class BookManagement extends Component {
               Axios
                 .put("/book/delete-book/" + id)
                 .then((response) => {
-                  console.log(response);
+
                   Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -297,7 +290,7 @@ class BookManagement extends Component {
   handleImageDetail = (e) => {
     const fileImg = e.target.files[0]
     this.setState({chooseFileDetail: fileImg.name})
-    console.log(this.state.chooseFileDetail)
+
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileImg)
@@ -307,7 +300,7 @@ class BookManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
       
       this.setState({imgDetail: base64ImageStrip})
-      console.log(this.state.imgDetail)
+
     }
   }
 
@@ -322,7 +315,7 @@ class BookManagement extends Component {
   handleImageBanner = (e) => {
     const fileImg = e.target.files[0]
     this.setState({chooseFileBanner: fileImg.name})
-    console.log(this.state.chooseFileBanner)
+
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileImg)
@@ -332,7 +325,7 @@ class BookManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
       
       this.setState({imgBanner: base64ImageStrip})
-      console.log(this.state.imgBanner)
+ 
     }
   }
 
@@ -448,12 +441,12 @@ class BookManagement extends Component {
         publishDate: fields["publishDate"],
       };
 
-      console.log(book);
+
 
       Axios
         .post("/book/add-book", book, config)
         .then((response) => {
-          console.log(response);
+ 
           Swal.fire({
             icon: "success",
             title: "Success",
