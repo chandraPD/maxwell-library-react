@@ -26,14 +26,14 @@ class DonationManagement extends Component {
  
   componentDidMount() {
     this.fetchDataDonate();
-    console.log(this.state.data);
+   
   }
  
   async fetchDataDonate() {
     let fetchedData = await axios.get(
       'http://localhost:8080/donate'
     );
-    console.log(fetchedData.data.data)
+    
     this.setState.isLoading = false;
     const resultDonate = fetchedData.data.data;
     this.setState({ data: resultDonate});
@@ -136,7 +136,7 @@ class DonationManagement extends Component {
     headers: { Authorization: `Bearer ${userToken}` }}
     axios.post(`http://localhost:8080/donate/accept/${id}`,null, config )
       .then((response) => {
-        console.log(response)
+        
         window.location.reload()
         
       })
@@ -150,7 +150,6 @@ class DonationManagement extends Component {
     headers: { Authorization: `Bearer ${userToken}` }}
     axios.post(`http://localhost:8080/donate/reject/${id}`,null, config )
       .then((response) => {
-        console.log(response)
         window.location.reload()
         
       })
