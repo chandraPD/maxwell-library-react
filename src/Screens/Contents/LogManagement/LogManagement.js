@@ -22,7 +22,6 @@ class LogManagement extends Component {
   async fetchData(){
     let user = JSON.parse( localStorage.getItem('user'))
     const userToken = user.token;
-    console.log(userToken);
 
     const config = {
       headers : { Authorization : `Bearer ${userToken}`}
@@ -30,7 +29,6 @@ class LogManagement extends Component {
 
     await Axios.get('log/get-log-lastActivity', config)
     .then((fetchedData) => {
-      console.log(fetchedData);
       const resultLog = fetchedData.data;
       this.setState({
         data : resultLog
@@ -47,7 +45,7 @@ class LogManagement extends Component {
         );
 
         row.push(
-          <td>
+          <td className="text-center text-nowrap">
             {this.convertToDate(log.dateTime)}
           </td>
         );
@@ -92,7 +90,7 @@ class LogManagement extends Component {
     if (date === null) {
         return "-"
     } else {
-        return moment.utc(date).format('DD-MM-YYYY | HH:mm')
+        return moment.utc(date).format('DD-MM-YYYY HH:mm')
     }
 }
 
