@@ -99,8 +99,9 @@ class FineManagement extends Component {
                         if (this.state.role === "ROLE_ADMIN") {
                             row.push(<td className="text-center" >{rent.borrower}</td>);
                         }
-                        row.push(<td>{rent.noInvoice}</td>);
-                        row.push(<td>{this.formatRupiah(rent.grandTotal)}</td>);
+                        row.push(<td className="text-center text-nowrap" >{rent.noInvoice}</td>);
+                        row.push(<td className="text-center text-nowrap" >{rent.typeInvoice}</td>);
+                        row.push(<td className="text-center text-nowrap" >{this.formatRupiah(rent.grandTotal)}</td>);
                         row.push(<td className="text-center text-nowrap" >{this.convertToDate(rent.invoiceDate)}</td>);
                         if (rent.paymentDate === null) {
                             row.push(<td>-</td>);
@@ -123,9 +124,9 @@ class FineManagement extends Component {
 
     async getRole() {
         if (this.state.role === "ROLE_ADMIN") {
-            this.setState({ headings: ['No', 'Action', 'Borrower', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
+            this.setState({ headings: ['No', 'Action', 'Borrower', 'No Invoice', 'Jenis', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
         } else {
-            this.setState({ headings: ['No', 'Action', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
+            this.setState({ headings: ['No', 'Action', 'No Invoice','Jenis',  'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
         }
     }
 
