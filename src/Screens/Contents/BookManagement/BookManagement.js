@@ -485,7 +485,7 @@ class BookManagement extends Component {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Book already exist!",
+          text: error,
         }).then((result) => {
           if (result.isConfirmed) {
             $("#modal-add").modal("toggle");

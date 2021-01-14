@@ -148,7 +148,6 @@ class Detail extends Component {
       const result = getData.data;
       $("#example1").DataTable().destroy();
       this.setState({ data2: result });
-      this.fetchData(this.state.role);
       $("#example1").DataTable({
         responsive: true,
         autoWidth: false,

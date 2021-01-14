@@ -5,8 +5,8 @@ import Action from "../../../Components/Datatable/Action";
 import $, { error, event } from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Axios from '../../../Instances/axios-instances';
 
  
 class DonationManagement extends Component {
@@ -29,8 +29,8 @@ class DonationManagement extends Component {
   }
  
   async fetchDataDonate() {
-    let fetchedData = await axios.get(
-      'http://localhost:8080/donate'
+    let fetchedData = await Axios.get(
+      '/donate'
     );
     console.log(fetchedData.data.data)
     this.setState.isLoading = false;
@@ -110,11 +110,7 @@ class DonationManagement extends Component {
 
 
   acceptDonate = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    const config = {
-    headers: { Authorization: `Bearer ${userToken}` }}
-    axios.post(`http://localhost:8080/donate/accept/${id}`,null, config )
+    Axios.post(`/donate/accept/${id}`)
       .then((response) => {
         console.log(response)
         window.location.reload()
@@ -124,11 +120,7 @@ class DonationManagement extends Component {
   }
 
   rejecttDonate = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    const config = {
-    headers: { Authorization: `Bearer ${userToken}` }}
-    axios.post(`http://localhost:8080/donate/reject/${id}`,null, config )
+    Axios.post(`/donate/reject/${id}`)
       .then((response) => {
         console.log(response)
         window.location.reload()

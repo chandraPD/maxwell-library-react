@@ -4,7 +4,7 @@ import photo1 from '../../../Assets/Media/books/donate2.jpg'
 import photo2 from '../../../Assets/Media/books/donate3.jpg'
 import Swal from 'sweetalert2'
 import Reactdom from 'react-dom'
-import axios from 'axios'
+import Axios from '../../../Instances/axios-instances';
 
 class Donation extends Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class Donation extends Component {
         }
         console.log(fields)
         console.log(donate)
-        axios.post('http://localhost:8080/donate', donate)
+        Axios.post('/donate', donate)
              .then((response) => {
                console.log(response)
              })

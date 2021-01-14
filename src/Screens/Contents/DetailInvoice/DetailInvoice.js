@@ -2,19 +2,16 @@ import React, { Component } from 'react'
 import NumberFormat from 'react-number-format';
 import { Link, withRouter } from 'react-router-dom'
 import MaxIcon from "../../Auth/Assets/Images/bookshelf.png";
-import Axios from 'axios';
+import Axios from '../../../Instances/axios-instances';
 import moment from 'moment';
 
 class DetailInvoice extends Component {
     constructor() {
         super();
-        let user = JSON.parse(localStorage.getItem('user'))
-        const userToken = user.token;
         this.state = {
             invoiceId: '',
             dataInvoice: [],
             dataDetailInvoice: [],
-            userToken: userToken
         };
     }
     componentDidMount() {
@@ -24,13 +21,8 @@ class DetailInvoice extends Component {
 
     async getDetailInvoice(invoiceId) {
 
-        const token = this.state.userToken;
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        const getInvoice = await Axios.get(`http://localhost:8080/invoice/get-by-id/${invoiceId}`, config)
-        const getInvoiceDetail = await Axios.get(`http://localhost:8080/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
-        console.log(getInvoiceDetail);
+        const getInvoice = await Axios.get(`/invoice/get-by-id/${invoiceId}`)
+        const getInvoiceDetail = await Axios.get(`/invoice-detail/get-by-invoice-id/${invoiceId}`)
         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
     }
 
