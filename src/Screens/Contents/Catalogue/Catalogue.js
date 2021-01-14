@@ -125,8 +125,8 @@ class Catalogue extends Component {
                         <option value="All" selected>All Year</option>
                         {year.map((year) => {
                           return(
-                            <option value={year}>
-                              {year}
+                            <option value={Number(year)}>
+                              {Number(year)}
                             </option>
                           )
                         })}
