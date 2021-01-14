@@ -158,8 +158,8 @@ class BookManagement extends Component {
     this.setState({errors: errors})
     this.setState({imgBanner: ""})
     this.setState({imgDetail: ""})
-    this.setState({chooseFileBanner: ""})
-    this.setState({chooseFileDetail: ""})
+    this.setState({chooseFileBanner: "Choose Image Banner"})
+    this.setState({chooseFileDetail: "Choose Image Detail"})
   }
 
   getBook = (id) => {
@@ -176,7 +176,7 @@ class BookManagement extends Component {
         statusBook: response.data.statusBook,
         title: response.data.title,
         categoryId: response.data.categoryEntity.categoryId,
-        bookId: id,
+        bookId: id
       });
     });
   };
@@ -204,44 +204,78 @@ class BookManagement extends Component {
     console.log(book)
 
     if(this.handleValidationUpdate()) {
-      Axios
-      .put("/book/update-book/" + id, book, config)
-      .then((response) => {
-        console.log(response);
-        $("#modal-edit").modal("toggle");
-        $('.modal-backdrop').remove();
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Updated",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-          }
-        });
-      });
+      Axios.get('/book/get-title-fix/' + book.title + '/' + book.authorId)
+            .then((response) => {
+              const resultBook = response.data
+              console.log(response)
+              console.log(response.data)
+
+                Axios.get('/book-detail/get-book-detail-count/Available/' + id)
+                    .then((response) => {
+                      console.log(response)
+                       if(response.data > 0) {
+                        Swal.fire({
+                          icon: "warning",
+                          title: "Warning",
+                          text: "You can't update Data already used",
+                          confirmButtonText: `OK`,
+                        })
+                      } else {
+                        Axios
+                        .put("/book/update-book/" + id, book, config)
+                        .then((response) => {
+                          console.log(response);
+                          $("#modal-edit").modal("toggle");
+                          $('.modal-backdrop').remove();
+                          Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: "Your Data has been Updated",
+                            confirmButtonText: `OK`,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              this.fetchData()
+                            }
+                          });
+                        });
+                      }
+
+                    })
+
+            })
     }
 
   };
 
   deleteBook = (id) => {
-    Axios
-      .put("/book/delete-book/" + id)
-      .then((response) => {
-        console.log(response);
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Deleted",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-            
-          }
-        });
-      });
+    Axios.get('/book-detail/get-book-detail-count/Available/' + id)
+          .then((response) => {
+            if(response.data > 0) {
+              Swal.fire({
+                icon: "warning",
+                title: "Warning",
+                text: "You can't delete Data already used",
+                confirmButtonText: `OK`,
+              })
+            } else {
+              Axios
+                .put("/book/delete-book/" + id)
+                .then((response) => {
+                  console.log(response);
+                  Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Your Data has been Deleted",
+                    confirmButtonText: `OK`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.fetchData()
+                      
+                    }
+                  });
+                });
+            }
+          })
   };
 
   handleChange(field, e) {

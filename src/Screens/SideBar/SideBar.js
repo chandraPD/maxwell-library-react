@@ -44,7 +44,6 @@ export default class SideBar extends Component {
   interval = null;
 
   async show() {
-    console.log(this.state.role)
     if (this.state.role == "ROLE_USER") {
       this.setState({ show: true, role2: "User", show2: false, role2: "User" })
     } else {
@@ -54,7 +53,6 @@ export default class SideBar extends Component {
 
   async getNama() {
     await Axios2.get('/name').then((getName) => {
-      console.log(getName)
       this.setState({ name: getName.data })
     })
   }
@@ -163,12 +161,13 @@ export default class SideBar extends Component {
                       </Link>
                     </li> : null}
                     <li className="nav-item">
-                      <Link to="/History" className="nav-link" id="history">
+                      {show ? <Link to="/History" className="nav-link" id="history">
                         <i className="nav-icon fas fa-history" />
                         <p>
                           History
                   </p>
-                      </Link>
+                      </Link> : null}
+
                     </li>
                     <li className="nav-item has-treeview menu-open">
                       <a href="#" className="nav-link">

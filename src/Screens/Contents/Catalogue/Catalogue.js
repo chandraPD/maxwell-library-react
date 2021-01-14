@@ -148,26 +148,26 @@ class Catalogue extends Component {
 
                   <div className="col-sm-10">
                     <div className="d-flex justify-content-start flex-wrap">
-                      {dataTop.map((data) => {
-                        return (
-                          <div className="top-seller">
-                            <div className="filtr-item list-book" />
-                            <Link to={`Detail/${data.bookId}`}>
-                              <img
-                                src={data.imgDetail}
-                                className="img-fluid img-book"
-                                alt="white sample"
-                              />
-                              <span
-                                className="badge category-book"
-                                style={{ marginBottom: "5%" }}
-                              >
-                                {data.categoryEntity.category}
-                              </span>
-                            </Link>
-                          </div>
-                        );
-                      })}
+                      {dataTop.length > 0 ? dataTop.map((data) => {
+                          return (
+                            <div className="top-seller">
+                              <div className="filtr-item list-book" />
+                              <Link to={`Detail/${data.bookId}`}>
+                                <img
+                                  src={data.imgDetail}
+                                  className="img-fluid img-book"
+                                  alt="white sample"
+                                />
+                                <span
+                                  className="badge category-book"
+                                  style={{ marginBottom: "5%" }}
+                                >
+                                  {data.categoryEntity.category}
+                                </span>
+                              </Link>
+                            </div>
+                          );
+                        }) : <img src="https://www.drcycle.in/assets/images/NoRecordFound.png" style={{display: "block", marginLeft:"auto", marginRight:"auto"}}/>}
                     </div>
                   </div>
                 </div>

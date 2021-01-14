@@ -5,40 +5,40 @@ import TopUp1 from '../TopUp/TopUp1'
 import TopUp2 from '../TopUp/TopUp2'
 import TopUp3 from '../TopUp/TopUp3'
 import TopUp4 from '../TopUp/TopUp4'
-import {reset} from 'redux-form';
+import { reset } from 'redux-form';
 
 class Card extends Component {
-    
 
-    constructor(props) {
-        super(props);
-        this.nextPage = this.nextPage.bind(this);
-        this.previousPage = this.previousPage.bind(this);
-        this.state = {
-          page: 0,
-          steps: [
-            {title: 'Nominal'},
-            {title: 'Payment'},
-            {title: 'Confirm'},
-            {title: 'Password'},
-          ]
-        };
-      }    
-    
-      nextPage() {
-        this.setState({ page: this.state.page + 1 });
-      }
-    
-      previousPage() {
-        this.setState({ page: this.state.page - 1 });
-      }
-    render () {
-        const { onSubmit } = this.props;
+
+  constructor(props) {
+    super(props);
+    this.nextPage = this.nextPage.bind(this);
+    this.previousPage = this.previousPage.bind(this);
+    this.state = {
+      page: 0,
+      steps: [
+        { title: 'Nominal' },
+        { title: 'Payment' },
+        { title: 'Confirm' },
+        { title: 'Password' },
+      ]
+    };
+  }
+
+  nextPage() {
+    this.setState({ page: this.state.page + 1 });
+  }
+
+  previousPage() {
+    this.setState({ page: this.state.page - 1 });
+  }
+  render() {
+    const { onSubmit } = this.props;
     const { page, steps } = this.state;
-    
-      return (
-        
-        <div className="content-wrapper ctm-wrap-tpup">          
+
+    return (
+
+      <div className="content-wrapper ctm-wrap-tpup">
         {/* {dispatch(reset('TopUpForm'))} */}
         <section className="signup-step-container">
           <div className="container-fluid">
@@ -47,26 +47,26 @@ class Card extends Component {
                 <div className="card px-4 pt-4 pb-4 mt-6 mb-6">
                   <h2 id="heading">Top Up Your User Account</h2>
                   <p>Fill all form field to go to next step</p>
-        <Stepper steps={ steps } activeStep={ page } />                               
-        {page === 0 && <TopUp1 onSubmit={this.nextPage}   /> }
-        {page === 1 && (
-          <TopUp2
-            previousPage={this.previousPage}
-            onSubmit={this.nextPage}
-          />
-        )}        
-        {page === 2 && (
-          <TopUp3
-            previousPage={this.previousPage}
-            onSubmit={this.nextPage}
-          />
-        )}
-        {page === 3 && (
-          <TopUp4
-            previousPage={this.previousPage}
-            onSubmit={onSubmit}
-          />
-        )}
+                  <Stepper steps={steps} activeStep={page} />
+                  {page === 0 && <TopUp1 onSubmit={this.nextPage} />}
+                  {page === 1 && (
+                    <TopUp2
+                      previousPage={this.previousPage}
+                      onSubmit={this.nextPage}
+                    />
+                  )}
+                  {page === 2 && (
+                    <TopUp3
+                      previousPage={this.previousPage}
+                      onSubmit={this.nextPage}
+                    />
+                  )}
+                  {page === 3 && (
+                    <TopUp4
+                      previousPage={this.previousPage}
+                      onSubmit={onSubmit}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -74,9 +74,9 @@ class Card extends Component {
         </section>
         {/* /.content */}
       </div>
-      )
-    }
+    )
   }
-  
+}
+
 
 export default Card;

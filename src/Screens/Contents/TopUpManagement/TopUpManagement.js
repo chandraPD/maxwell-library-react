@@ -52,8 +52,7 @@ class TopUpManagement extends Component {
 
   async getAll() {    
     await Axios2.get('top_up_management/getAll').then((getData) => {      
-      const result_topup = getData.data;
-      console.log(result_topup)
+      const result_topup = getData.data;      
       $("#example1").DataTable().destroy();
       this.setState({ data: result_topup });
       this.fetchData(this.state.role);
@@ -69,19 +68,16 @@ class TopUpManagement extends Component {
   }
 
   getUser() {
-    var a =Axios2.get('user').then((getData) => {
-      const result_topup = getData.data;
-      console.log(getData)
+    var a =Axios2.get('user').then((getData) => {      
+      const result_topup = getData.data;      
       this.setState({ user: result_topup });
 
-    })
-    console.log(a)
+    })    
   }
 
   getId = (id) => {
     Axios2.get('top_up_management/getId/' + id)
-      .then((res) => {
-        console.log(res);
+      .then((res) => {        
         this.setState({
           nominal: res.data.nominal,
           paymentMethod: res.data.paymentMethod
@@ -95,8 +91,7 @@ class TopUpManagement extends Component {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             Axios2.put('top_up/accept/' + id, res)
-              .then((response) => {
-                console.log(response);
+              .then((response) => {                
               })
             Swal.fire({
               icon: 'success',
@@ -115,8 +110,7 @@ class TopUpManagement extends Component {
 
   getId2 = (id) => {
     Axios2.get('top_up_management/getId/' + id)
-      .then((res) => {
-        console.log(res);
+      .then((res) => {        
         this.setState({
           nominal: res.data.nominal,
           paymentMethod: res.data.paymentMethod
@@ -130,8 +124,7 @@ class TopUpManagement extends Component {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             Axios2.put('top_up/cancel/' + id, res)
-              .then((response) => {
-                console.log(response);
+              .then((response) => {                
               })
             Swal.fire({
               icon: 'success',
@@ -157,8 +150,7 @@ class TopUpManagement extends Component {
 }
 
   fetchData(getRole) {
-    var role = getRole;
-    console.log(role.data)
+    var role = getRole;    
     let results = [];
     let result = this.state.data;
     var no = 1;
@@ -274,13 +266,11 @@ class TopUpManagement extends Component {
         paymentMethod: fields["Payment"],
         user_balance_id: this.state.userId,
         password: fields["PasswordConfirm"]
-      }
-      console.log(topup)
+      }      
       this.validatepass().then(x => {
         if (x == true) {
           Axios2.post('top_up/post2', topup)
-            .then((response) => {
-              console.log(response);
+            .then((response) => {              
             })
           Swal.fire({
             title: "Success Save Top Up Data!",
@@ -292,8 +282,7 @@ class TopUpManagement extends Component {
               if (isConfirmed) {                
                 this.getAll();                
                 $('#passwordModal').modal('hide');  
-                $('.modal-backdrop').remove(); 
-                this.refresh2();
+                $('.modal-backdrop').remove();                 
               }
             })
             
@@ -359,8 +348,7 @@ class TopUpManagement extends Component {
 
   handleChange3 = (event) => {    
 
-      var userId = event.target.value;
-    console.log(userId)
+      var userId = event.target.value;    
     this.setState({ userId: userId}); 
     
        
@@ -381,10 +369,8 @@ class TopUpManagement extends Component {
   }  
 
   render() {
-    var lol=JSON.parse(localStorage.getItem('user')).userInfo.activeRole;
-    console.log(lol)
-    const { rows, headings, show, user,userId } = this.state;
-    console.log(this.state.user)
+    var lol=JSON.parse(localStorage.getItem('user')).userInfo.activeRole;    
+    const { rows, headings, show, user,userId } = this.state;    
     return (
       <div className="wrapper">
         {/* Navbar */}

@@ -30,10 +30,12 @@ class Payment extends Component {
       if (invoiceId) {
          this.setState({ invoiceId: invoiceId });
          this.getDetailInvoiceByInvoiceId(invoiceId);
+         
       } else {
          this.setState({ invoiceId: "" });
       }
       this.interval = setInterval(this.reNewBalance, 30000);
+      
    }
 
    formatRupiah = (nilai) => {
@@ -200,7 +202,9 @@ class Payment extends Component {
                      <div className="col-sm-4 invoice-col">
                         To
                      <address>
+                     
                            <strong>{dataInvoice.borrower}</strong><br />
+                           <strong>Invoice Id: {dataInvoice.invoice_id}</strong><br />
                            {dataInvoice.address}<br />
          Phone: {dataInvoice.phone}<br />
          Email: {dataInvoice.email}
@@ -284,7 +288,7 @@ class Payment extends Component {
                   {/* <!-- this row will not appear when printing --> */}
                   <div className="row no-print">
                      <div className="col-12">
-                        <Link to="/PaymentPrint" target="_blank">
+                        <Link to={`/PaymentPrint/${dataInvoice.invoiceId}`} target="_blank">
                            <i className="fas fa-print"></i> Print
                         </Link>
                         {action}

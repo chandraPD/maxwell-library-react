@@ -5,12 +5,14 @@ import BookShelfImage from "./Assets/Images/bookshelf.png";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import AuthService from '../../Services/auth.service'
 import Swal from 'sweetalert2'
+import axios from '../../Instances/axios-instances'
 
 class Auth extends Component {
   constructor(props) {
     super(props)
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
+    this.handleLogin = this.handleLogin.bind(this)
+    this.handleRegister = this.handleRegister.bind(this)
+    this.handleForgotPass = this.handleForgotPass.bind(this)
 
     this.state = {
        fields: {},
@@ -103,12 +105,6 @@ class Auth extends Component {
     let errors = {};
     let formIsValid = true;
 
-    //username
-    if(!fields["userNameForgotPass"]) {
-      formIsValid = false;
-      errors["userNameForgotPass"] = "Username cannot be empty"
-    }
-
     //email
     if(!fields["emailForgotPass"]) {
       formIsValid = false
@@ -146,15 +142,6 @@ class Auth extends Component {
       this.props.history.push('/')
     } else {
 
-    }
-  }
-
-  contactSubmitForgotPass(e) {
-    e.preventDefault()
-
-    if(this.handleValidationForgotPass()){
-      alert("Success!")
-    } else {
     }
   }
 
@@ -206,6 +193,39 @@ class Auth extends Component {
     register.style.display = "none";
     forgotPassword.style.display = "block";
   }
+
+  handleForgotPass(e) {
+    e.preventDefault()
+
+    let email = {
+      email : this.state.fields["emailForgotPass"]
+    }
+
+    if (this.handleValidationForgotPass()) {
+      axios.post('user/password/forgot', email)
+      .then( () => {
+        Swal.fire({
+
+          icon: 'success',
+          title: 'Email sent!',
+          showCancelButton: false,
+          text: 'email sent to ' + email.email,
+          }).then((result) => {
+
+          if (result.isConfirmed) {
+          window.location.reload()
+          }
+          })
+      }
+      )
+      .catch((error) => Swal.fire(
+        'Failed !',
+        'Email is not registered',
+        'error'
+    ))
+    }
+  }
+
 
   handleRegister(e) {
     e.preventDefault()
@@ -482,7 +502,7 @@ class Auth extends Component {
               </div>
 
               {/* <!--Form Forgot Password--> */}
-              <div className="forgot-wrapper my-auto" id="forgotPassword" onSubmit={this.contactSubmitForgotPass.bind(this)}>
+              <div className="forgot-wrapper my-auto" id="forgotPassword" onSubmit={this.handleForgotPass}>
                 <h1 className="form-title">Forgot Password</h1>
                 <p className="form-subtitle">
                   Forgot your password? Don't worry, we got you covered.
@@ -490,22 +510,6 @@ class Auth extends Component {
 
                 <form action="#" id="formForgot">
                   <div className="container-form">
-                    <div className="login form-group bottom-label">
-                      <label for="inputUsername" className="label-login">
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        name="userNameForgotPass"
-                        className="form-control custom-form"
-                        id="inputUsername"
-                        placeholder="Enter username"
-                        autocomplete="off"
-                        onChange={this.handleChangeSignUp.bind(this, "userNameForgotPass")}
-                        value={this.state.fields["userNameForgotPass"]}
-                      />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["userNameForgotPass"]}</span>
-                    </div>
                     <div className="login form-group bottom-label">
                       <label for="inputEmail" className="label-login">
                         Email address

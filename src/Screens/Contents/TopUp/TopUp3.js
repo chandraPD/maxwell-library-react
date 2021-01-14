@@ -15,7 +15,7 @@ const TopUp3 = (props) => {
       {/* fieldsets */}
       <fieldset>
         <div>
-          <ProgressBar variant="dark" now={75} animated/>
+          <ProgressBar variant="dark" now={75} animated />
         </div>
         <div className="form-card">
           <div className="row">
@@ -28,17 +28,17 @@ const TopUp3 = (props) => {
           </div>
           <div className="row row-cols-1 row-cols-md-1">
             <div className="form-group">
-              <label style={{marginLeft: "1rem"}}>
+              <label style={{ marginLeft: "1rem" }}>
                 Nominal
                 {' '}
-                <Field name="confirmnominal" component="input" type="text" disabled  />                                
+                <Field name="confirmnominal" component="input" type="text" disabled />
               </label>
             </div>
             <div className="form-group">
-              <label style={{marginLeft: "1rem"}}>
+              <label style={{ marginLeft: "1rem" }}>
                 Payment
                 {' '}
-                <Field name="confirmpayment" component="input" type="text" disabled  />                
+                <Field name="confirmpayment" component="input" type="text" disabled />
               </label>
             </div>
           </div>

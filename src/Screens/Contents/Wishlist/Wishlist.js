@@ -10,33 +10,31 @@ class Wishlist extends Component {
 
   constructor(props) {
     super(props)
-  
+
     this.state = {
-       
-       allBook: []
-       
+
+      allBook: []
+
     }
   }
-  
 
-  componentDidMount() {    
+
+  componentDidMount() {
     this.getAllWish();
-    let user = JSON.parse( localStorage.getItem('user'))
+    let user = JSON.parse(localStorage.getItem('user'))
     const userToken = user.token;
-    console.log(userToken);
   }
   async getAllWish() {
     let fetchBook = await Axios.get('/wishlist/getAll')
-    console.log(fetchBook);
-    this.setState({allBook: fetchBook.data})
+    this.setState({ allBook: fetchBook.data })
   }
 
   render() {
-    const { allBook} = this.state
+    const { allBook } = this.state
 
     return (
       <div className="content-wrapper">
-        <section className="content">        
+        <section className="content">
 
           {/* Top picks init */}
           <div className="container-fluid book-list">
@@ -50,23 +48,22 @@ class Wishlist extends Component {
                   <hr></hr>
                 </div>
 
-                  {allBook.map((data) => {
-                    console.log(data)
-                    return (
-                      
-                      <div className="panel-body wishlist-card">
+                {allBook.map((data) => {
+                  return (
+
+                    <div className="panel-body wishlist-card">
                       <div className="row">
-                        <div className="col-md-1"><Link to={`/Detail/${data.bookEntity.bookId}`}><img src={data.bookEntity.imgDetail} alt="media-object" className="img-fluid" style={{borderRadius: "5px"}} /> </Link></div>
+                        <div className="col-md-1"><Link to={`/Detail/${data.bookEntity.bookId}`}><img src={data.bookEntity.imgDetail} alt="media-object" className="img-fluid" style={{ borderRadius: "5px" }} /> </Link></div>
                         <div className="col-md-11">
                           <div className="row">
                             <div className="col-md-12">
-                             <Link to={`/Detail/${data.bookEntity.bookId}`}>
-                              <span><strong>{data.bookEntity.title}</strong></span>
+                              <Link to={`/Detail/${data.bookEntity.bookId}`}>
+                                <span><strong>{data.bookEntity.title}</strong></span>
                               </Link>
                               <span className="label label-info-custom">{data.bookEntity.categoryEntity.category}</span>
                               <br />
                               <div className="book-description">
-                                <br/>
+                                <br />
                                 <span>{data.bookEntity.description}</span>
                               </div>
                             </div>
@@ -75,10 +72,10 @@ class Wishlist extends Component {
                       </div>
                       <br></br>
                     </div>
-                   
-                   
-                    )
-                  })}
+
+
+                  )
+                })}
 
                 <div className="books-nf" style={{ display: 'none' }}>
                   <h3 className="book-not-found">Oops, Book Not Found</h3>
@@ -86,7 +83,7 @@ class Wishlist extends Component {
               </div>
             </div>
           </div>
-          {/* Top picks ends */}        
+          {/* Top picks ends */}
         </section>
       </div>
 
