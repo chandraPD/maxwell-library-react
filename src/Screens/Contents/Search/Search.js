@@ -25,19 +25,15 @@ class Search extends Component {
     componentDidMount() {
 
         const titleSearch = this.props.match.params.title;
-  
         this.setState({title: titleSearch})
-    
         this.fetchData(titleSearch)
     }
 
     async fetchData(title) {
-        let fetchData = await Axios.get('/book/get-by-title/' + title)
-    
+        let fetchData = await Axios.get('book/get-by-title/' + title)
         const length = fetchData.data.length
         this.setState({dataSearch: fetchData.data})
         this.setState({countBook: length})
-     
     }
 
     loadMore() {

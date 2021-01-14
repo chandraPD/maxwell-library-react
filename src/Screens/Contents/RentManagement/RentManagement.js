@@ -149,8 +149,6 @@ class RentManagement extends Component {
                     row.push(<td className="text-center" >{statusVal}</td>);
                     results.push(row);
                 });
-                console.log(results);
-                console.log(this.state.headings);
                 this.setState({ rows: results });
 
                 $("#example1").DataTable({
@@ -190,7 +188,7 @@ class RentManagement extends Component {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Rent Management</li>
                                 </ol>
                             </div>

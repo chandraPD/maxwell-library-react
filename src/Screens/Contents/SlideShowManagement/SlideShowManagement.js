@@ -179,14 +179,8 @@ class SlideShowManagement extends Component {
         subTitle : fields["slideshowSubTitle"],
         img : this.state.uploadImage
       }
-
-      let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
-
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
-      Axios.post('slideshow/add-slideshow', slideshow, config)
+     
+      Axios.post('slideshow/add-slideshow', slideshow)
           .then((response) => {
             $('.modal-backdrop').remove();
             Swal.fire({
@@ -220,14 +214,8 @@ class SlideShowManagement extends Component {
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-
-    const config = {
-      headers : { Authorization : `Bearer ${userToken}`}
-    }
-
-    Axios.get('slideshow/get-slideshow-byId/' + id, config)
+  
+    Axios.get('slideshow/get-slideshow-byId/' + id)
       .then((response) => {
         this.setState({
           slideShowId : response.data.data.slideShowId,
@@ -247,15 +235,9 @@ class SlideShowManagement extends Component {
       img : this.state.uploadImage
     }
 
-    let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
-
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
 
     if(this.handleUpdateValidation()){
-      Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
+      Axios.put('slideshow/update-slideshow/' + id, slideshow)
       .then((response) => {
         $("#modal-edit").modal("toggle");
         $('.modal-backdrop').remove();
@@ -286,13 +268,8 @@ class SlideShowManagement extends Component {
 
   //METHOD DELETE DATA
   deleteDataSlideShow = (id) => {
-      let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
-
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
-    Axios.delete('slideshow/delete-data-slideshow/'+ id, config)
+     
+    Axios.delete('slideshow/delete-data-slideshow/'+ id)
       .then((response) => {
         this.fetchData();
       })
@@ -312,17 +289,10 @@ class SlideShowManagement extends Component {
 
    // SAVE STATUS ACTIVE OR INACTIVE
   handleDropdownChange = (id, event) => {
-    
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
 
-    
     const status = event.target.value;
-    const config = {
-      headers : { Authorization : `Bearer ${userToken}`}
-    }
-
-    Axios.put(`slideshow/update-status/${id}/${status}`,null, config)
+  
+    Axios.put(`slideshow/update-status/${id}/${status}`)
     .then((response) => {
       this.fetchData();
     })
@@ -346,7 +316,6 @@ class SlideShowManagement extends Component {
         //setState dalam bentuk Base64
         uploadImage : base64ImageStrip
       });
-      
       
     }
   }

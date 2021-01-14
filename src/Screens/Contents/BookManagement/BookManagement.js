@@ -162,7 +162,6 @@ class BookManagement extends Component {
   getBook = (id) => {
     Axios.get("/book/get-by-id/" + id).then((response) => {
 
-
       this.setState({
         authorId: response.data.authorEntity.authorId,
         description: response.data.description,
@@ -205,7 +204,6 @@ class BookManagement extends Component {
 
                 Axios.get('/book-detail/get-book-detail-count/Available/' + id)
                     .then((response) => {
-
                        if(response.data > 0) {
                         Swal.fire({
                           icon: "warning",
@@ -217,7 +215,6 @@ class BookManagement extends Component {
                         Axios
                         .put("/book/update-book/" + id, book, config)
                         .then((response) => {
-
                           $("#modal-edit").modal("toggle");
                           $('.modal-backdrop').remove();
                           Swal.fire({
@@ -254,7 +251,6 @@ class BookManagement extends Component {
               Axios
                 .put("/book/delete-book/" + id)
                 .then((response) => {
-
                   Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -290,7 +286,6 @@ class BookManagement extends Component {
   handleImageDetail = (e) => {
     const fileImg = e.target.files[0]
     this.setState({chooseFileDetail: fileImg.name})
-
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileImg)
@@ -300,7 +295,6 @@ class BookManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
       
       this.setState({imgDetail: base64ImageStrip})
-
     }
   }
 
@@ -315,7 +309,6 @@ class BookManagement extends Component {
   handleImageBanner = (e) => {
     const fileImg = e.target.files[0]
     this.setState({chooseFileBanner: fileImg.name})
-
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileImg)
@@ -325,7 +318,6 @@ class BookManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
       
       this.setState({imgBanner: base64ImageStrip})
- 
     }
   }
 
@@ -442,11 +434,9 @@ class BookManagement extends Component {
       };
 
 
-
       Axios
         .post("/book/add-book", book, config)
         .then((response) => {
- 
           Swal.fire({
             icon: "success",
             title: "Success",
@@ -462,7 +452,7 @@ class BookManagement extends Component {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Book already exist!",
+          text: error,
         }).then((result) => {
           if (result.isConfirmed) {
             $("#modal-add").modal("toggle");
@@ -497,7 +487,7 @@ class BookManagement extends Component {
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                   <li className="breadcrumb-item active">Book Management</li>
                 </ol>
               </div>
