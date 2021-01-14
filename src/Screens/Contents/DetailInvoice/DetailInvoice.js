@@ -169,7 +169,7 @@ class DetailInvoice extends Component {
                         {/* <!-- this row will not appear when printing --> */}
                         <div className="row no-print">
                             <div className="col-12">
-                                <Link to="/PaymentPrint" target="_blank">
+                                <Link to={`/PaymentPrint/${this.props.match.params.invoiceId}`} target="_blank">
                                     <i className="fas fa-print"></i> Print
                            </Link>
                                 {action}

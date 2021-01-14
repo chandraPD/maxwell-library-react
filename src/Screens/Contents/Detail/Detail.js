@@ -40,7 +40,7 @@ class Detail extends Component {
       recommendedData: [],
       data3: [],
       star: "",
-      rate: 1,
+      rate: 0,
       bookId: this.props.match.params.bookId
     }
   }
@@ -529,7 +529,7 @@ class Detail extends Component {
 
 
                       <div className="p-2 hover">
-                        {data3.map((person) => {
+                        {data3.length > 0 ? data3.map((person) => {
                           if (person.userEntity.email === this.state.emailToken) {
                             return (
                               <div className="row">
@@ -559,16 +559,24 @@ class Detail extends Component {
                                 </div>
 
                                 <div className="col-sm-6">
-
-
-
                                 </div>
 
                               </div>
                             )
                           }
                         }
-                        )}
+                        ) : <div className="row">
+
+                        <div className="col-sm-6">
+                          <div className="font-weight-bold text-dark">No Reviews</div>
+                          <hr className="divider" />
+                          <div className="text-dark mb-5"><i className="nav-icon fas fa-star"></i> 0.0</div>
+                        </div>
+
+                        <div className="col-sm-6">
+                        </div>
+
+                      </div>}
 
                         <hr className="divider" />
                       </div>

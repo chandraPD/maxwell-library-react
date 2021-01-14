@@ -176,8 +176,7 @@ class BookManagement extends Component {
         statusBook: response.data.statusBook,
         title: response.data.title,
         categoryId: response.data.categoryEntity.categoryId,
-        bookId: id,
-        titleValid: response.data.title
+        bookId: id
       });
     });
   };
@@ -189,8 +188,6 @@ class BookManagement extends Component {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-
-    var titleValid = this.state.titleValid
 
     const book = {
       authorId: this.state.authorId,
@@ -207,29 +204,16 @@ class BookManagement extends Component {
     console.log(book)
 
     if(this.handleValidationUpdate()) {
-      Axios.get('/book/get-by-title/' + book.title)
+      Axios.get('/book/get-title-fix/' + book.title + '/' + book.authorId)
             .then((response) => {
-              const resultBook = response.data.length
-              console.log(response.data.length)
+              const resultBook = response.data
+              console.log(response)
+              console.log(response.data)
 
                 Axios.get('/book-detail/get-book-detail-count/Available/' + id)
                     .then((response) => {
                       console.log(response)
-                      if(book.title === titleValid) {
-                        Swal.fire({
-                          icon: "warning",
-                          title: "Warning",
-                          text: "You Enter the same Name",
-                          confirmButtonText: `OK`,
-                        })
-                      } else if(resultBook > 0) {
-                        Swal.fire({
-                          icon: "warning",
-                          title: "Warning",
-                          text: "Name Already saved",
-                          confirmButtonText: `OK`,
-                        })
-                      } else if(response.data > 0) {
+                       if(response.data > 0) {
                         Swal.fire({
                           icon: "warning",
                           title: "Warning",
