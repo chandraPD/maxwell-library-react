@@ -13,7 +13,7 @@ class NavBar extends Component {
     }
 
     onChange = (e) => {
-        this.setState({search: e.target.value}, () => console.log(this.state.search))
+        this.setState({search: e.target.value})
     }
 
     onSubmitHandler = (e) => {

@@ -8,13 +8,10 @@ import moment from 'moment';
 class DetailInvoice extends Component {
     constructor() {
         super();
-        let user = JSON.parse(localStorage.getItem('user'))
-        const userToken = user.token;
         this.state = {
             invoiceId: '',
             dataInvoice: [],
             dataDetailInvoice: [],
-            userToken: userToken
         };
     }
     componentDidMount() {
@@ -24,13 +21,8 @@ class DetailInvoice extends Component {
 
     async getDetailInvoice(invoiceId) {
 
-        const token = this.state.userToken;
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        const getInvoice = await Axios.get(`/invoice/get-by-id/${invoiceId}`, config)
-        const getInvoiceDetail = await Axios.get(`/invoice-detail/get-by-invoice-id/${invoiceId}`, config)
-        console.log(getInvoiceDetail);
+        const getInvoice = await Axios.get(`/invoice/get-by-id/${invoiceId}`)
+        const getInvoiceDetail = await Axios.get(`/invoice-detail/get-by-invoice-id/${invoiceId}`)
         this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data })
     }
 
@@ -129,7 +121,6 @@ class DetailInvoice extends Component {
                                     <tbody>
                                         {
                                             dataDetailInvoice.map((val, index) => {
-                                                console.log(val);
                                                 return (
                                                     <tr key={index}>
                                                         <td className="text-nowrap" >{index + 1}</td>

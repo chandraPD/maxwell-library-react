@@ -37,7 +37,6 @@ class History extends Component {
       this.setState({
         borroweddata: response.data.data
       })
-     
 
     })
 
@@ -50,7 +49,6 @@ class History extends Component {
       this.setState({
         currentreaddata: response.data.data
       })
-      
 
     })
 

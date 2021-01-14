@@ -29,9 +29,6 @@ class Home extends Component {
     this.getOldestFive();
     this.getSlideShowActive();
     this.getRecommendedBook();
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-
   }
 
   async getTopFive() {
@@ -58,7 +55,6 @@ class Home extends Component {
 
   async getRecommendedBook() {
     let fetchRecommended = await Axios.get('/book/get-max-qty')
-
     this.setState({recommendedBook: fetchRecommended.data})
   }
 

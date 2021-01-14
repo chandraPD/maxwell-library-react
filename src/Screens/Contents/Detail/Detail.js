@@ -110,7 +110,6 @@ class Detail extends Component {
   }
 
   borrow = (id) => {
-
     const dataBorrow = {
       bookId: id,
       borrowedDate: this.state.startDate,
@@ -126,10 +125,10 @@ class Detail extends Component {
             'warning'
           )
         } else {
-
+          this.fetchData(id);
           Swal.fire({
-            title: "Success Borrow Book!",
-            text: "Borrowed Book Success!",
+            title: "Berhasil",
+            text: result.message,
             icon: "success",
             buttons: true,
           })
@@ -149,7 +148,6 @@ class Detail extends Component {
       const result = getData.data;
       $("#example1").DataTable().destroy();
       this.setState({ data2: result });
-      this.fetchData(this.state.role);
       $("#example1").DataTable({
         responsive: true,
         autoWidth: false,
@@ -634,10 +632,10 @@ class Detail extends Component {
               </div>
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-md-3">
-                    <label className="title-module">Date Borrow:</label>
+                  <div className="col-md-4">
+                    <label className="title-module">Date Borrow </label>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-8">
                     <div className="input-group date" id="datetimepicker5" data-target-input="nearest">
                       <Date startDateCallback={this.getStartDate} endDateCallBack={this.getEndDate} />
                     </div>
