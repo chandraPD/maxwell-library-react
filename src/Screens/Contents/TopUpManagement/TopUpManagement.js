@@ -68,7 +68,7 @@ class TopUpManagement extends Component {
   }
 
   getUser() {
-    var a =Axios2.get('user').then((getData) => {
+    var a =Axios2.get('user').then((getData) => {      
       const result_topup = getData.data;      
       this.setState({ user: result_topup });
 
