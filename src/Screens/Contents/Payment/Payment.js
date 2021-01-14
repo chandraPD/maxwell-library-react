@@ -30,10 +30,12 @@ class Payment extends Component {
       if (invoiceId) {
          this.setState({ invoiceId: invoiceId });
          this.getDetailInvoiceByInvoiceId(invoiceId);
+         
       } else {
          this.setState({ invoiceId: "" });
       }
       this.interval = setInterval(this.reNewBalance, 30000);
+      
    }
 
    formatRupiah = (nilai) => {
@@ -79,18 +81,17 @@ class Payment extends Component {
          const getInvoiceDetail = await Axios.get(`invoice-detail/get-by-invoice-id/${invoiceId}`)
          this.setState({ dataInvoice: getInvoice.data.data, dataDetailInvoice: getInvoiceDetail.data.data, grandTotal: getInvoice.data.data.grandTotal })
       } catch (err) {
-         console.log(err);
       }
    }
 
    confirmPaid = () => {
-
       if (this.state.grandTotal <= this.state.balance) {
          Axios.put('invoice/pay/' + this.state.invoiceId)
             .then((data) => {
                const result = data.data;
                if (result.status === 200) {
                   Swal.fire("Success", "Your Payment has been Accepted", "success")
+                  this.props.history.push('/FineManagement')
                } else if (result.message === "Sorry, Your Current Balance is Insufficient.") {
                   Swal.fire({
                      icon: 'warning',
@@ -109,33 +110,29 @@ class Payment extends Component {
                      }
                   })
                } else {
-                  Swal.fire("Ups.", result.message, "warning")
+                  Swal.fire("Ups..", result.message, "warning")
                }
             });
 
       } else {
-
+         Swal.fire({
+            icon: 'warning',
+            title: 'Declined',
+            text: 'Sorry, Your Current Balance is Insufficient.',
+            showDenyButton: true,
+            showConfirmButton: true,
+            confirmButtonText: `Top Up`,
+            denyButtonText: `OK`
+         }).then((val) => {
+            if (val.isConfirmed) {
+               this.props.history.push('/TopUp')
+            }
+            else {
+               // nothing
+            }
+         })
       }
 
-   }
-
-   paymentDeclined() {
-      Swal.fire({
-         icon: 'error',
-         title: 'Declined',
-         text: 'Sorry, Your Current Balance is Insufficient.',
-         showDenyButton: true,
-         showConfirmButton: true,
-         confirmButtonText: `Top Up`,
-         denyButtonText: `OK`
-      }).then((result) => {
-         if (result.isConfirmed) {
-            this.props.history.push('/TopUp')
-         }
-         else {
-
-         }
-      })
    }
 
    convertToDate = (date) => {
@@ -203,7 +200,9 @@ class Payment extends Component {
                      <div className="col-sm-4 invoice-col">
                         To
                      <address>
+                     
                            <strong>{dataInvoice.borrower}</strong><br />
+                           <strong>Invoice Id: {dataInvoice.invoice_id}</strong><br />
                            {dataInvoice.address}<br />
          Phone: {dataInvoice.phone}<br />
          Email: {dataInvoice.email}
@@ -211,7 +210,7 @@ class Payment extends Component {
                      </div>
                      {/* <!-- /.col --> */}
                      <div className="col-sm-4 invoice-col">
-                        <b>Invoice {dataInvoice.noInvoice}</b><br />
+                        <b>Invoice {dataInvoice.noInvoice} <font color="orange" >({dataInvoice.typeInvoice})</font></b><br />
                         <br />
                         {this.printStatusPaid()}
                      </div>
@@ -225,10 +224,13 @@ class Payment extends Component {
                      <div className="col-12 table-responsive">
                         <table className="table table-striped">
                            <thead>
-                              <tr>
+                              <tr className="text-nowrap text-center">
                                  <th>No.</th>
+                                 <th>Rent ID</th>
+                                 <th>Book Code</th>
                                  <th>Book Title</th>
                                  <th>Borrowed On</th>
+                                 <th>Returned Date</th>
                                  <th>Due On</th>
                                  <th>Type</th>
                                  <th>Fine Amount</th>
@@ -239,12 +241,15 @@ class Payment extends Component {
                                  dataDetailInvoice.map((val, index) => {
                                     return (
                                        <tr key={index}>
-                                          <td>{index + 1}</td>
-                                          <td>{val.title}</td>
-                                          <td>{this.convertToDate(val.borrowedDate)}</td>
-                                          <td>{this.convertToDate(val.threshold)}</td>
-                                          <td>{val.type}</td>
-                                          <td>{val.grandTotal}</td>
+                                          <td className="text-nowrap" >{index + 1}</td>
+                                          <td className="text-nowrap text-center" >{val.borrowedBookCode}</td>
+                                          <td className="text-nowrap text-center" >{val.bookDetailCode}</td>
+                                          <td className="text-nowrap text-center" >{val.title}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.borrowedDate)}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.returnDate)}</td>
+                                          <td className="text-nowrap text-center" >{this.convertToDate(val.threshold)}</td>
+                                          <td className="text-nowrap" >{val.type}</td>
+                                          <td className="text-nowrap" >{this.formatRupiah(val.total)}</td>
                                        </tr>
                                     )
                                  })
@@ -281,7 +286,7 @@ class Payment extends Component {
                   {/* <!-- this row will not appear when printing --> */}
                   <div className="row no-print">
                      <div className="col-12">
-                        <Link to="/PaymentPrint" target="_blank">
+                        <Link to={`/PaymentPrint/${dataInvoice.invoiceId}`} target="_blank">
                            <i className="fas fa-print"></i> Print
                         </Link>
                         {action}

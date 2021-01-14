@@ -9,21 +9,21 @@ class Catalogue extends Component {
     this.state = {
       dataTop: [],
       category: [],
-      fields: {}
+      fields: {},
+      year: []
     };
   }
 
   componentDidMount() {
     this.getAllBooks();
     this.getAllCategory();
+    this.getYear();
     let user = JSON.parse(localStorage.getItem("user"));
     const userToken = user.token;
-    console.log(userToken);
     let fields = {};
     fields["category"] = "All"
     fields["year"] = "All"
     this.setState({fields})
-    console.log(fields)
   }
 
   async getAllBooks() {
@@ -36,7 +36,12 @@ class Catalogue extends Component {
       let fetchCategory = await Axios.get("/category/get-all-active")
       const categoryData = fetchCategory.data;
       this.setState({category: categoryData})
-      console.log(this.state.category)
+  }
+
+  async getYear() {
+    let fetchYear = await Axios.get('/book/get-year')
+    const yearData = fetchYear.data
+    this.setState({year: yearData})
   }
 
   handleChange = (field, e) => {
@@ -44,37 +49,30 @@ class Catalogue extends Component {
       fields[field] = e.target.value
 
       this.setState({fields})
-      console.log(fields["category"] + " " + fields["year"])
 
     if(fields["category"] === "All" && fields["year"] === "All") {
         this.getAllBooks()
     } else if(fields["category"] !== "All" && fields["year"] === "All") {
         Axios.get('/book/get-by-category/' + fields["category"])
             .then((response) => {
-                console.log(response)
                 this.setState({dataTop: response.data})
-                console.log(this.state.dataTop)
             })
     }  else if(fields["category"] === "All" && fields["year"] !== "All" ) {
         Axios.get('/book/get-by-year/' + fields["year"])
             .then((response) => {
-                console.log(response)
                 this.setState({dataTop: response.data})
-                console.log(this.state.dataTop)
             })
     } else if(fields["category"] !== "All" && fields["year"] !== "All") {
         Axios.get('/book/get-by-category-year/' + fields["category"] + "/" + fields["year"])
             .then((response) => {
-                console.log(response)
                 this.setState({dataTop: response.data})
-                console.log(this.state.dataTop)
             })
     }
 
   }
 
   render() {
-    const { dataTop, category } = this.state;
+    const { dataTop, category, year } = this.state;
 
     return (
       <div className="content-wrapper">
@@ -125,13 +123,13 @@ class Catalogue extends Component {
                         onChange={this.handleChange.bind(this, "year")}
                       >
                         <option value="All" selected>All Year</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                        <option value="2019">2019</option>
-                        <option value="2018">2018</option>
-                        <option value="2017">2017</option>
-                        <option value="2016">2016</option>
-                        <option value="2015">2015</option>
+                        {year.map((year) => {
+                          return(
+                            <option value={Number(year)}>
+                              {Number(year)}
+                            </option>
+                          )
+                        })}
                       </select>
                     </div>
 
@@ -139,26 +137,26 @@ class Catalogue extends Component {
 
                   <div className="col-sm-10">
                     <div className="d-flex justify-content-start flex-wrap">
-                      {dataTop.map((data) => {
-                        return (
-                          <div className="top-seller">
-                            <div className="filtr-item list-book" />
-                            <Link to={`Detail/${data.bookId}`}>
-                              <img
-                                src={data.imgDetail}
-                                className="img-fluid img-book"
-                                alt="white sample"
-                              />
-                              <span
-                                className="badge category-book"
-                                style={{ marginBottom: "5%" }}
-                              >
-                                {data.categoryEntity.category}
-                              </span>
-                            </Link>
-                          </div>
-                        );
-                      })}
+                      {dataTop.length > 0 ? dataTop.map((data) => {
+                          return (
+                            <div className="top-seller">
+                              <div className="filtr-item list-book" />
+                              <Link to={`Detail/${data.bookId}`}>
+                                <img
+                                  src={data.imgDetail}
+                                  className="img-fluid img-book"
+                                  alt="white sample"
+                                />
+                                <span
+                                  className="badge category-book"
+                                  style={{ marginBottom: "5%" }}
+                                >
+                                  {data.categoryEntity.category}
+                                </span>
+                              </Link>
+                            </div>
+                          );
+                        }) : <img src="https://www.drcycle.in/assets/images/NoRecordFound.png" style={{display: "block", marginLeft:"auto", marginRight:"auto"}}/>}
                     </div>
                   </div>
                 </div>

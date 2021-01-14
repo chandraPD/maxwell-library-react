@@ -6,6 +6,8 @@ import "datatables.net-responsive/js/dataTables.responsive";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import Swal from "sweetalert2";
 import Axios from '../../../Instances/axios-instances';
+import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 class BookManagement extends Component {
   constructor() {
@@ -37,14 +39,12 @@ class BookManagement extends Component {
     let fetchCategory = await Axios.get(
       "/category/get-all-active"
     );
-    console.log(fetchCategory);
     const resultCategory = fetchCategory.data;
     this.setState({ category: resultCategory });
   }
 
   async getAuthor() {
     let fetchAuthor = await Axios.get('/author/getAll')
-    console.log(fetchAuthor)
     const resultAuthor = fetchAuthor.data
     this.setState({author: resultAuthor})
   }
@@ -58,7 +58,6 @@ class BookManagement extends Component {
     await Axios.get('/book/get-all-active')
         .then((response) => {
           const result = response.data
-          console.log(response)
           this.setState({data: result})
           result.map((book) => {
             let row = [];
@@ -97,7 +96,7 @@ class BookManagement extends Component {
             row.push(<td className="text-center">{book.authorEntity.authorName}</td>);
             row.push(<td className="text-center"><img src={book.imgBanner} alt="placeholder" style={{width: 146, height: 100}} /></td>);
             row.push(<td className="text-center"><img src={book.imgDetail} alt="placeholder" style={{width: 100, height: 146}} /></td>);
-            row.push(<td className="text-center">{book.publishDate}</td>);
+            row.push(<td className="text-center">{this.convertToDate(book.publishDate)}</td>);
             row.push(<td className="text-center">{book.qty}</td>);
             row.push(<td className="text-center">{book.categoryEntity.category}</td>);
             results.push(row);
@@ -115,6 +114,17 @@ class BookManagement extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+    let errors = {}
+    errors["title"] = ""
+    errors["author"] = ""
+    errors["categoryId"] = ""
+    errors["statusBook"] = ""
+    errors["description"] = ""
+    errors["publishDate"] = ""
+    errors["statusBook"] = ""
+    errors["imgBanner"] = ""
+    errors["imgDetail"] = ""
+    this.setState({errors: errors})
   };
 
   resetModal() {
@@ -140,21 +150,17 @@ class BookManagement extends Component {
     errors["statusBook"] = ""
     errors["imgBanner"] = ""
     errors["imgDetail"] = ""
-    errors["title"] = ""
 
     this.setState({fields: fields})
     this.setState({errors: errors})
+    this.setState({imgBanner: ""})
+    this.setState({imgDetail: ""})
+    this.setState({chooseFileBanner: "Choose Image Banner"})
+    this.setState({chooseFileDetail: "Choose Image Detail"})
   }
 
   getBook = (id) => {
     Axios.get("/book/get-by-id/" + id).then((response) => {
-      console.log(response);
-
-      let imgBannerConvert = this.base64Converter(response.data.imgBanner)
-      console.log("Convert Base64 Banner: " + imgBannerConvert)
-
-      let imgDetailConvert = this.base64Converter(response.data.imgDetail)
-      console.log(imgDetailConvert)
 
       this.setState({
         authorId: response.data.authorEntity.authorId,
@@ -166,7 +172,7 @@ class BookManagement extends Component {
         statusBook: response.data.statusBook,
         title: response.data.title,
         categoryId: response.data.categoryEntity.categoryId,
-        bookId: id,
+        bookId: id
       });
     });
   };
@@ -174,7 +180,6 @@ class BookManagement extends Component {
   updateBook = (id) => {
     let user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(token)
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -191,47 +196,75 @@ class BookManagement extends Component {
       categoryId: this.state.categoryId,
     };
 
-    console.log(book)
 
     if(this.handleValidationUpdate()) {
-      Axios
-      .put("/book/update-book/" + id, book, config)
-      .then((response) => {
-        console.log(response);
-        $("#modal-edit").modal("toggle");
-        $('.modal-backdrop').remove();
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Updated",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-          }
-        });
-      });
+      Axios.get('/book/get-title-fix/' + book.title + '/' + book.authorId)
+            .then((response) => {
+              const resultBook = response.data
+
+                Axios.get('/book-detail/get-book-detail-count/Available/' + id)
+                    .then((response) => {
+                       if(response.data > 0) {
+                        Swal.fire({
+                          icon: "warning",
+                          title: "Warning",
+                          text: "You can't update Data already used",
+                          confirmButtonText: `OK`,
+                        })
+                      } else {
+                        Axios
+                        .put("/book/update-book/" + id, book, config)
+                        .then((response) => {
+                          $("#modal-edit").modal("toggle");
+                          $('.modal-backdrop').remove();
+                          Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: "Your Data has been Updated",
+                            confirmButtonText: `OK`,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              this.fetchData()
+                            }
+                          });
+                        });
+                      }
+
+                    })
+
+            })
     }
 
   };
 
   deleteBook = (id) => {
-    Axios
-      .put("/book/delete-book/" + id)
-      .then((response) => {
-        console.log(response);
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Deleted",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-            
-          }
-        });
-      });
+    Axios.get('/book-detail/get-book-detail-count/Available/' + id)
+          .then((response) => {
+            if(response.data > 0) {
+              Swal.fire({
+                icon: "warning",
+                title: "Warning",
+                text: "You can't delete Data already used",
+                confirmButtonText: `OK`,
+              })
+            } else {
+              Axios
+                .put("/book/delete-book/" + id)
+                .then((response) => {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Your Data has been Deleted",
+                    confirmButtonText: `OK`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.fetchData()
+                      
+                    }
+                  });
+                });
+            }
+          })
   };
 
   handleChange(field, e) {
@@ -253,7 +286,6 @@ class BookManagement extends Component {
   handleImageDetail = (e) => {
     const fileImg = e.target.files[0]
     this.setState({chooseFileDetail: fileImg.name})
-    console.log(this.state.chooseFileDetail)
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileImg)
@@ -263,20 +295,20 @@ class BookManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
       
       this.setState({imgDetail: base64ImageStrip})
-      console.log(this.state.imgDetail)
     }
   }
 
-  base64Converter = (fileImg) =>{
-    const data = fileImg
-    var base64Convert = btoa(data)
-    return base64Convert
+  convertToDate = (date) => {
+    if(date === null) {
+      return "-"
+    } else {
+      return moment.utc(date).format("D MMMM yyyy")
+    }
   }
 
   handleImageBanner = (e) => {
     const fileImg = e.target.files[0]
     this.setState({chooseFileBanner: fileImg.name})
-    console.log(this.state.chooseFileBanner)
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileImg)
@@ -286,7 +318,6 @@ class BookManagement extends Component {
       let base64ImageStrip = base64Image.split("base64,")[1];
       
       this.setState({imgBanner: base64ImageStrip})
-      console.log(this.state.imgBanner)
     }
   }
 
@@ -402,12 +433,10 @@ class BookManagement extends Component {
         publishDate: fields["publishDate"],
       };
 
-      console.log(book);
 
       Axios
         .post("/book/add-book", book, config)
         .then((response) => {
-          console.log(response);
           Swal.fire({
             icon: "success",
             title: "Success",
@@ -423,7 +452,7 @@ class BookManagement extends Component {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Book already exist!",
+          text: error,
         }).then((result) => {
           if (result.isConfirmed) {
             $("#modal-add").modal("toggle");
@@ -458,9 +487,7 @@ class BookManagement extends Component {
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
-                  </li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                   <li className="breadcrumb-item active">Book Management</li>
                 </ol>
               </div>
@@ -526,7 +553,7 @@ class BookManagement extends Component {
                     <div className="row">
                       <div className="col-sm-6">
                         <div className="form-group">
-                          <label htmlFor="inputTitle">Title</label>
+                          <label htmlFor="inputTitle">Title <small className="red-asterisk">*</small></label>
                           <input
                             type="text"
                             className="form-control"
@@ -544,7 +571,7 @@ class BookManagement extends Component {
 
                       <div className="col-sm-6">
                       <div className="form-group">
-                      <label htmlFor="inputAuthor">Author</label>
+                      <label htmlFor="inputAuthor">Author <small className="red-asterisk">*</small></label>
                       <select
                         name="authorId"
                         className="form-control"
@@ -571,7 +598,7 @@ class BookManagement extends Component {
                     
 
                     <div className="form-group">
-                      <label htmlFor="inputCategoryId">Category</label>
+                      <label htmlFor="inputCategoryId">Category <small className="red-asterisk">*</small></label>
                       <select
                         name="categoryId"
                         className="form-control"
@@ -594,7 +621,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputDescription">Description</label>
+                      <label htmlFor="inputDescription">Description <small className="red-asterisk">*</small></label>
                       <textarea
                         className="form-control"
                         id="inputDescription"
@@ -611,7 +638,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                    <label htmlFor="inputImgBanner">Image Banner</label>
+                    <label htmlFor="inputImgBanner">Image Banner <small className="red-asterisk">*</small></label>
                       <div className="input-group">
                         <div className="custom-file">
                           <input type="file" accept="image/*" className="custom-file-input" id="inputImgBanner" name="imgBanner" onChange={this.handleImageBanner}
@@ -625,7 +652,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputImgDetail">Image Detail</label>
+                      <label htmlFor="inputImgDetail">Image Detail <small className="red-asterisk">*</small></label>
                       <div className="input-group">
                         <div className="custom-file">
                           <input type="file" accept="image/*" className="custom-file-input" id="inputImgDetail" name="imgDetail" onChange={this.handleImageDetail}
@@ -639,7 +666,7 @@ class BookManagement extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputPublishDate">Publish Date</label>
+                      <label htmlFor="inputPublishDate">Publish Date <small className="red-asterisk">*</small></label>
                       <input
                         type="date"
                         className="form-control"
@@ -654,6 +681,7 @@ class BookManagement extends Component {
                       </span>
                     </div>
 
+                    <small><span className="red-asterisk">*</span> Required</small>    
                   </div>
                 </div>
                 <div className="modal-footer justify-content-between">

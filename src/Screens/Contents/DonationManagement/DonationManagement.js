@@ -5,7 +5,9 @@ import Action from "../../../Components/Datatable/Action";
 import $, { error, event } from 'jquery'
 import 'bootstrap'
 import Swal from 'sweetalert2'
-import axios from 'axios'
+import { Link } from 'react-router-dom'
+import Axios from '../../../Instances/axios-instances';
+import Status from '../../../Components/Datatable/Status';
 
  
 class DonationManagement extends Component {
@@ -24,14 +26,12 @@ class DonationManagement extends Component {
  
   componentDidMount() {
     this.fetchDataDonate();
-    console.log(this.state.data);
   }
  
   async fetchDataDonate() {
-    let fetchedData = await axios.get(
-      'http://localhost:8080/donate'
+    let fetchedData = await Axios.get(
+      '/donate'
     );
-    console.log(fetchedData.data.data)
     this.setState.isLoading = false;
     const resultDonate = fetchedData.data.data;
     this.setState({ data: resultDonate});
@@ -54,54 +54,73 @@ class DonationManagement extends Component {
       var row = [];
 
       row.push(<td className="text-center">{donate.donateId}</td>);
-      row.push(
-        <td className="text-center py-0 align-middle">
-          <div className="btn-group btn-group-sm">
-                <Action type="success" title="Edit" icon="fas fa-check" onClick={() => 
-                
-                Swal.fire({
- 
-                    icon: 'warning',
-                    title: 'Warning!',
-                    showCancelButton: true,
-                    text: 'Are you sure want to accept this?',
-                    }).then((result) => {
- 
-                    if (result.isConfirmed) {
-                    this.acceptDonate(donate.donateId)
-                    Swal.fire(
-                        'Success!',
-                        'Accept Donation Already Success!',
-                        'success'
-                    )
-                    }
-                    })} />
-                <Action type="danger" title="Delete" icon="fas fa-ban" onClick={() => Swal.fire({
- 
-                    icon: 'warning',
-                    title: 'Warning!',
-                    showCancelButton: true,
-                    text: 'Are you sure want to cancel this?',
-                    }).then((result) => {
- 
-                    if (result.isConfirmed) {
-                    this.rejecttDonate(donate.donateId)
-                    Swal.fire(
-                        'Success!',
-                        'Cancel Donation Already Success!',
-                        'success'
-                    )
-                    }
-                    })} />
-          </div>
-        </td>
-      );
+    
+      if(donate.statusDonate == "Accepted" || donate.statusDonate == "Rejected") {
+        row.push( <td className="text-center py-0 align-middle"></td>)
+      }
+      else {
+        row.push(
+          <td className="text-center py-0 align-middle">
+            <div className="btn-group btn-group-sm">
+                  <Action type="success" title="Edit" icon="fas fa-check" onClick={() => 
+                  
+                  Swal.fire({
+   
+                      icon: 'warning',
+                      title: 'Warning!',
+                      showCancelButton: true,
+                      text: 'Are you sure want to accept this?',
+                      }).then((result) => {
+   
+                      if (result.isConfirmed) {
+                      this.acceptDonate(donate.donateId)
+                      Swal.fire(
+                          'Success!',
+                          'Accept Donation Already Success!',
+                          'success'
+                      )
+                      }
+                      })} />
+                  <Action type="danger" title="Delete" icon="fas fa-ban" onClick={() => Swal.fire({
+   
+                      icon: 'warning',
+                      title: 'Warning!',
+                      showCancelButton: true,
+                      text: 'Are you sure want to cancel this?',
+                      }).then((result) => {
+   
+                      if (result.isConfirmed) {
+                      this.rejecttDonate(donate.donateId)
+                      Swal.fire(
+                          'Success!',
+                          'Cancel Donation Already Success!',
+                          'success'
+                      )
+                      }
+                      })} />
+            </div>
+          </td>
+        );
+      }
+     
       row.push(<td>{donate.email}</td>);
       row.push(<td>{donate.name}</td>);
       row.push(<td>{donate.donationType}</td>);
       row.push(<td>{donate.phoneNumber}</td>);
       row.push(<td>{donate.totalBook}</td>);
-      row.push(<td>{donate.statusDonate}</td>);
+
+      
+
+
+      if (donate.statusDonate == "Accepted"){
+        row.push( <td><small className="badge badge-success">Accepted</small></td>)
+      }
+      else if (donate.statusDonate == "Rejected"){
+        row.push( <td><small className="badge badge-danger">Rejected</small></td>)
+      }
+      else {
+        row.push( <td><small className="badge badge-warning">Waiting</small></td>)
+      }
       results.push(row);
     });
     this.setState({ rows: results });
@@ -109,13 +128,8 @@ class DonationManagement extends Component {
 
 
   acceptDonate = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    const config = {
-    headers: { Authorization: `Bearer ${userToken}` }}
-    axios.post(`http://localhost:8080/donate/accept/${id}`,null, config )
+    Axios.post(`/donate/accept/${id}`)
       .then((response) => {
-        console.log(response)
         window.location.reload()
         
       })
@@ -123,13 +137,8 @@ class DonationManagement extends Component {
   }
 
   rejecttDonate = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    const config = {
-    headers: { Authorization: `Bearer ${userToken}` }}
-    axios.post(`http://localhost:8080/donate/reject/${id}`,null, config )
+    Axios.post(`/donate/reject/${id}`)
       .then((response) => {
-        console.log(response)
         window.location.reload()
         
       })
@@ -184,7 +193,7 @@ class DonationManagement extends Component {
                   </div>
                   <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Donation Management</li>
                                 </ol>
                             </div>

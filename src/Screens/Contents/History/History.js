@@ -37,7 +37,6 @@ class History extends Component {
       this.setState({
         borroweddata: response.data.data
       })
-      console.log(this.state.borroweddata)
 
     })
 
@@ -50,7 +49,6 @@ class History extends Component {
       this.setState({
         currentreaddata: response.data.data
       })
-      console.log(this.state.currentreaddata)
 
     })
 
@@ -120,7 +118,7 @@ class History extends Component {
 
                   <div className="panel-body borrowed" id="borrowed-books">
                     {borroweddata.map(item => <div className="row">
-                      <div className="col-md-1"><img src={photo} alt="media-object" /></div>
+                      <div className="col-md-1"><img src={item.bookDetailEntity.bookEntity.imgDetail} alt="media-object" /></div>
                       <div className="col-md-11">
                         <div className="row">
                           <div className="col-md-12">
@@ -145,7 +143,7 @@ class History extends Component {
                   {/* Current Read */}
                   <div className="panel-body current" id="current-books">
                    {currentreaddata.map(item => <div className="row">
-                      <div className="col-md-1"><img src={photo} alt="media-object" /></div>
+                      <div className="col-md-1"><img src={item.bookDetailEntity.bookEntity.imgDetail} alt="media-object" /></div>
                       <div className="col-md-11">
                         <div className="row">
                           <div className="col-md-12">

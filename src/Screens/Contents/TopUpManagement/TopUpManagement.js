@@ -12,6 +12,7 @@ import { MDBIcon } from "mdbreact";
 import NumberFormat from 'react-number-format';
 import AuthService from '../../../Services/auth.service';
 import Axios2 from '../../../Instances/axios-instances';
+import moment from 'moment';
 
 class TopUpManagement extends Component {
 
@@ -43,16 +44,15 @@ class TopUpManagement extends Component {
 
   async getRole() {    
     if (this.state.role == "ROLE_ADMIN") {
-      this.setState({ headings: ["No", "Action", "Email", "Total Nominal (Rp)", "Payment Method", "Status"] })
+      this.setState({ headings: ["No", "Action", "Email", "Date Input", "Date Accept","Total Nominal (Rp)", "Payment Method", "Status"] })
     } else {
-      this.setState({ headings: ["No", "Total Nominal (Rp)", "Payment Method", "Status"] })
+      this.setState({ headings: ["No","Date Input", "Date Accept", "Total Nominal (Rp)", "Payment Method", "Status"] })
     }
   }
 
   async getAll() {    
     await Axios2.get('top_up_management/getAll').then((getData) => {      
-      const result_topup = getData.data;
-      console.log(result_topup)
+      const result_topup = getData.data;      
       $("#example1").DataTable().destroy();
       this.setState({ data: result_topup });
       this.fetchData(this.state.role);
@@ -68,34 +68,30 @@ class TopUpManagement extends Component {
   }
 
   getUser() {
-    var a =Axios2.get('user').then((getData) => {
-      const result_topup = getData.data;
-      console.log(getData)
+    var a =Axios2.get('user').then((getData) => {      
+      const result_topup = getData.data;      
       this.setState({ user: result_topup });
 
-    })
-    console.log(a)
+    })    
   }
 
   getId = (id) => {
     Axios2.get('top_up_management/getId/' + id)
-      .then((res) => {
-        console.log(res);
+      .then((res) => {        
         this.setState({
           nominal: res.data.nominal,
           paymentMethod: res.data.paymentMethod
         })
         Swal.fire({
-          icon: 'warning',
-          title: 'Warning!',
+          icon: 'question',
+          title: 'Are you sure?',
           showCancelButton: true,
           text: 'Are you sure want to confirm this?',
         }).then((result) => {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             Axios2.put('top_up/accept/' + id, res)
-              .then((response) => {
-                console.log(response);
+              .then((response) => {                
               })
             Swal.fire({
               icon: 'success',
@@ -114,8 +110,7 @@ class TopUpManagement extends Component {
 
   getId2 = (id) => {
     Axios2.get('top_up_management/getId/' + id)
-      .then((res) => {
-        console.log(res);
+      .then((res) => {        
         this.setState({
           nominal: res.data.nominal,
           paymentMethod: res.data.paymentMethod
@@ -129,8 +124,7 @@ class TopUpManagement extends Component {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             Axios2.put('top_up/cancel/' + id, res)
-              .then((response) => {
-                console.log(response);
+              .then((response) => {                
               })
             Swal.fire({
               icon: 'success',
@@ -147,15 +141,23 @@ class TopUpManagement extends Component {
       })
   }
 
+  convertToDate = (date) => {
+    if (date === null) {
+        return "-"
+    } else {
+        return moment.utc(date).format('DD-MM-YYYY HH:mm')
+    }
+}
+
   fetchData(getRole) {
-    var role = getRole;
-    console.log(role.data)
+    var role = getRole;    
     let results = [];
     let result = this.state.data;
     var no = 1;
 
 
     result.forEach(topup => {
+      var date=topup.dateAcc;
       var row = [];
       var actVal, statusVal = '';
       if (topup.statusPayment == 'Success') {
@@ -186,8 +188,14 @@ class TopUpManagement extends Component {
         row.push(<td className="text-center" >{actVal}</td>);
         row.push(<td className="text-center" >{topup.userBalanceEntity.userEntity.email}</td>);
       }
+      row.push(<td className="text-center" >{this.convertToDate(topup.dateTopup)}</td>);
+      if (date==""){
+        row.push(<td className="text-center" > - </td>);
+      } else{
+        row.push(<td className="text-center" >{this.convertToDate(topup.dateAcc)}</td>);
+      }
       // row.push(<td className="text-center" >{actVal}</td>);
-      if (topup.paymentMethod=="Debit"){
+      if (topup.paymentMethod.startsWith("Debit")){
         row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'- Rp. '} />}</td>);
       } else{
         row.push(<td>{<NumberFormat value={topup.nominal} displayType={'text'} thousandSeparator={true} prefix={'+ Rp. '} />}</td>);
@@ -258,13 +266,11 @@ class TopUpManagement extends Component {
         paymentMethod: fields["Payment"],
         user_balance_id: this.state.userId,
         password: fields["PasswordConfirm"]
-      }
-      console.log(topup)
+      }      
       this.validatepass().then(x => {
         if (x == true) {
           Axios2.post('top_up/post2', topup)
-            .then((response) => {
-              console.log(response);
+            .then((response) => {              
             })
           Swal.fire({
             title: "Success Save Top Up Data!",
@@ -276,8 +282,7 @@ class TopUpManagement extends Component {
               if (isConfirmed) {                
                 this.getAll();                
                 $('#passwordModal').modal('hide');  
-                $('.modal-backdrop').remove(); 
-                this.refresh2();
+                $('.modal-backdrop').remove();                 
               }
             })
             
@@ -341,11 +346,10 @@ class TopUpManagement extends Component {
     }
   }
 
-  handleChange3 = (event) => {    
-
-      var userId = event.target.value;
-    console.log(userId)
-    this.setState({ userId: userId}); 
+  handleChange3 = (event) => {        
+      var userId = event.target.value; 
+      var email = event.target.selectedOptions[0].innerHTML  
+    this.setState({ userId: userId,email:email}); 
     
        
  }
@@ -353,21 +357,9 @@ class TopUpManagement extends Component {
  refresh(){  
   this.setState({fields:[],userId:"",errors:[]})
   $('input[type="radio"]').prop('checked', false);
+  $('input[type="password"]').val('');  
   $('#topupModal').modal('show');
  
- }
-
- refresh2(){
-  let errors = {};
-  let fields = this.state.fields;
-  $('input[type="password"]').val('');
-  $('#checkModal').modal('hide');
-  $('#passwordModal').modal('show');  
-  fields["PasswordConfirm"]=""
-  fields["PasswordConfirm2"]=""
-  errors["PasswordConfirm"] = "";
-  errors["PasswordConfirm2"] = "";
-  this.setState({ errors: errors });
  }
 
   handleChange(field, e) {
@@ -377,10 +369,8 @@ class TopUpManagement extends Component {
   }  
 
   render() {
-    var lol=JSON.parse(localStorage.getItem('user')).userInfo.activeRole;
-    console.log(lol)
-    const { rows, headings, show, user,userId } = this.state;
-    console.log(this.state.user)
+    var lol=JSON.parse(localStorage.getItem('user')).userInfo.activeRole;    
+    const { rows, headings, show, user,userId } = this.state;    
     return (
       <div className="wrapper">
         {/* Navbar */}
@@ -550,10 +540,10 @@ class TopUpManagement extends Component {
                 <div className="modal-body">
                   <div className="row">
                     <div className="col-md-5">
-                      <label className="title-module">ID User:</label>
+                      <label className="title-module">Email User:</label>
                     </div>
                     <div className="col-md-7">
-                      <input type="text" id="checkuser" name="name" className="form-control" value={this.state.userId} readOnly placeholder />
+                      <input type="text" id="checkuser" name="name" className="form-control" value={this.state.email} readOnly placeholder />
                     </div>
                   </div>
                   <hr className="divider" />
@@ -579,7 +569,7 @@ class TopUpManagement extends Component {
                   <button className="btn btn-secondary" type="button" data-dismiss="modal" data-target="#topupModal" data-toggle="modal">
                     Back
                   </button>
-                  <a className="btn btn-primary" id="btn-delete" href="#" onClick={()=>{this.refresh2()}}>Next</a>
+                  <a className="btn btn-primary" id="btn-delete" href="#" data-dismiss="modal" data-target="#passwordModal" data-toggle="modal">Next</a>
                 </div>
               </div>
             </div>

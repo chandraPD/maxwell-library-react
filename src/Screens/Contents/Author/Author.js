@@ -30,61 +30,58 @@ class Author extends Component {
   async fetchData() {
     $('#example1').DataTable().destroy();
     const results = [];
-    
+
     var no = 1;
 
     await Axios.get('/author/getAll')
-          .then((response) => {
-            const result = response.data;
-            this.setState({data: result})
-            result.map((author) => {
-              console.log(author)
-              var row = [];
-              row.push(<td className="text-center">{no++}</td>);
-              row.push(
-                <td className="text-center py-0 align-middle">
-                  <div className="btn-group btn-group-sm">
-                    <Action
-                      type="success"
-                      title="Edit"
-                      icon="pen"
-                      dataToggle="modal"
-                      dataTarget="#modal-edit"
-                      onClick={() => this.getAuthor(author.authorId)}
-                    />
-                    <Action
-                      type="danger"
-                      title="Delete"
-                      icon="trash"
-                      dataToggle="modal"
-                      dataTarget="#modal-delete"
-                      onClick={() => this.getAuthor(author.authorId)}
-                    />
-                  </div>
-                </td>
-              );
-              row.push(<td>{author.authorId}</td>);
-              row.push(<td>{author.authorName}</td>);
-              results.push(row);
-            })
-            this.setState({ rows: results });
+      .then((response) => {
+        const result = response.data;
+        this.setState({ data: result })
+        result.map((author) => {
+          var row = [];
+          row.push(<td className="text-center">{no++}</td>);
+          row.push(
+            <td className="text-center py-0 align-middle">
+              <div className="btn-group btn-group-sm">
+                <Action
+                  type="success"
+                  title="Edit"
+                  icon="pen"
+                  dataToggle="modal"
+                  dataTarget="#modal-edit"
+                  onClick={() => this.getAuthor(author.authorId)}
+                />
+                <Action
+                  type="danger"
+                  title="Delete"
+                  icon="trash"
+                  dataToggle="modal"
+                  dataTarget="#modal-delete"
+                  onClick={() => this.getAuthor(author.authorId)}
+                />
+              </div>
+            </td>
+          );
+          row.push(<td>{author.authorName}</td>);
+          results.push(row);
+        })
+        this.setState({ rows: results });
 
-            $("#example1").DataTable({
-              responsive: true,
-              autoWidth: false,
-              });
-          })
+        $("#example1").DataTable({
+          responsive: true,
+          autoWidth: false,
+        });
+      })
   }
 
-  getAuthor(id) {    
-    let errors = {}    
+  getAuthor(id) {
+    let errors = {}
     errors["AuthorName"] = "";
-    this.setState({errors: errors});
-    
+    this.setState({ errors: errors });
+
     Axios
       .get("/author/getid/" + id)
       .then((response) => {
-        console.log(response);
         this.setState({
           authorName: response.data.authorName,
           authorId: id,
@@ -94,56 +91,65 @@ class Author extends Component {
   };
 
   updateAuthor = (id) => {
-    var name=this.state.name
-    console.log(name)
+    var name = this.state.name
     const author = {
       authorName: this.state.authorName,
 
     };
-    console.log(author.authorName)
-    console.log(author)
-    if(this.handleValidationUpdate()) {
-    Axios
-      .get("/author/getAuthor/" + author.authorName)
-      .then((response) => {
-        const result2= response.data;
-        console.log(result2)
-          if(author.authorName==name){
-            Swal.fire({
-              icon: "warning",
-              title: "Warning",
-              text: "You Enter the same Name",
-              confirmButtonText: `OK`,
-            })
-          } else if(author.authorName==result2){
-            Swal.fire({
-              icon: "warning",
-              title: "Warning",
-              text: "Name Already saved",
-              confirmButtonText: `OK`,
-            })
-          } else{
-            Axios
-          .put("/author/update/" + id, author)
-          .then((response) => {
-            console.log(response);
-            $("#modal-edit").modal("toggle");
-            $('.modal-backdrop').remove();
-            Swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Your Data has been Updated",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.fetchData()
+
+    if (this.handleValidationUpdate()) {
+      Axios
+        .get("/author/getAuthor/" + author.authorName)
+        .then((response) => {
+          const result2 = response.data;
+          Axios
+            .get("/author/getCount/" + id)
+            .then((response) => {
+              if (author.authorName == name) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Warning",
+                  text: "You Enter the same Name",
+                  confirmButtonText: `OK`,
+                })
+              } else if (author.authorName == result2) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Warning",
+                  text: "Name Already saved",
+                  confirmButtonText: `OK`,
+                })
+              } else if (response.data > 0) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Warning",
+                  text: "You can't update Data already used",
+                  confirmButtonText: `OK`,
+                })
+              } else {
+                Axios
+                  .put("/author/update/" + id, author)
+                  .then((response) => {
+                    $("#modal-edit").modal("toggle");
+                    $('.modal-backdrop').remove();
+                    Swal.fire({
+                      icon: "success",
+                      title: "Success",
+                      text: "Your Data has been Updated",
+                      confirmButtonText: `OK`,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.fetchData()
+                      }
+                    });
+                  });
               }
             });
-          });
-          }
-          
-         
-      })
+
+
+
+
+        })
     }
   };
 
@@ -151,37 +157,50 @@ class Author extends Component {
     let errors = {};
     let formIsValid = true;
 
-    if(this.state.authorName === "") {
+    if (this.state.authorName === "") {
       formIsValid = false;
       errors["AuthorName"] = "Author Name cannot be empty";
     }
 
-    this.setState({errors: errors})
+    this.setState({ errors: errors })
     return formIsValid
   }
 
   deleteAuthor = (id) => {
     Axios
-      .put("/author/delete/" + id)
+      .get("/author/getCount/" + id)
       .then((response) => {
-        console.log(response);
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Deleted",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-          }
-        });
+        if (response.data > 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: "You can't delete Data already used",
+            confirmButtonText: `OK`,
+          })
+        } else {
+          Axios
+            .put("/author/delete/" + id)
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Your Data has been Deleted",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.fetchData()
+                }
+              });
+            });
+        }
       });
+
   };
 
-  authorChange = (event) => {    
+  authorChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
-    });    
+    });
   };
 
   resetModal() {
@@ -190,8 +209,8 @@ class Author extends Component {
     fields["AuthorName"] = "";
     errors["AuthorName"] = "";
 
-    this.setState({fields: fields});
-    this.setState({errors: errors});
+    this.setState({ fields: fields });
+    this.setState({ errors: errors });
   }
 
   handleValidation() {
@@ -203,7 +222,7 @@ class Author extends Component {
     if (!fields["AuthorName"]) {
       formIsValid = false;
       errors["AuthorName"] = "Author Name cannot be empty";
-    }   
+    }
 
     this.setState({ errors: errors });
     return formIsValid;
@@ -217,12 +236,10 @@ class Author extends Component {
       $('.modal-backdrop').remove();
       const author = {
         authorName: fields["AuthorName"],
-      };      
-      console.log(author)
+      };
       Axios
         .post("/author/post", author)
         .then((response) => {
-          console.log(response);
           Swal.fire({
             icon: "success",
             title: "Success",
@@ -255,12 +272,12 @@ class Author extends Component {
     errors["AuthorName"] = "";
     fields[field] = e.target.value;
     this.setState({ fields });
-    this.setState({ errors: errors})
+    this.setState({ errors: errors })
   }
 
   render() {
     const { rows } = this.state;
-    const headings = ["No", "Action", "Author ID(s)", "Author Name"];
+    const headings = ["No", "Action", "Author Name"];
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}
@@ -294,7 +311,7 @@ class Author extends Component {
                       className="btn btn-primary add-btn"
                       data-toggle="modal"
                       data-target="#modal-add"
-                      onClick={()=>{this.resetModal()}}
+                      onClick={() => { this.resetModal() }}
                       style={{ float: "right" }}
                     >
                       <i className="nav-icon fas fa-plus"></i>
@@ -396,8 +413,8 @@ class Author extends Component {
                         onChange={this.authorChange}
                       />
                       <span style={{ color: "red" }}>
-                            {this.state.errors["AuthorName"]}
-                          </span>
+                        {this.state.errors["AuthorName"]}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -466,7 +483,7 @@ class Author extends Component {
           {/* <!-- /.modal-dialog --> */}
         </div>
         {/* <!-- /.modal --> */}
-        
+
       </div>
     );
   }

@@ -4,14 +4,13 @@ import { Link, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2';
 import moment from 'moment';
 
-class ReturnBook extends Component {
+class CheckReturnBook extends Component {
 
     constructor() {
         super();
         this.state = {
+            listBorrower: [],
             listBook: [],
-            listItem: [],
-            listDetail: [],
             borrowBooks: [{ borrowBookId: "", denda: [] }],
         }
 
@@ -19,6 +18,21 @@ class ReturnBook extends Component {
 
     componentDidMount() {
         this.getListBorrowedBook();
+        this.getListBorrower();
+    }
+
+    getListBorrower = () => {
+        Axios.get("borrow/get-all-borrower-book")
+            .then((data) => {
+                const result = data.data;
+                if (result.status === 200) {
+                    result.data.map((val, index) => {
+                        this.setState((prevState) => ({
+                            listBorrower: [...prevState.listBorrower, val]
+                        }));
+                    });
+                }
+            })
     }
 
     getListBorrowedBook = () => {
@@ -35,36 +49,79 @@ class ReturnBook extends Component {
             })
     }
 
+
+    getListBorrowedBookByUserId = (id) => {
+
+        // set all state
+        this.setState({
+            borrowBooks: [{ borrowBookId: "", denda: [] }],
+        })
+
+        Axios.get("borrow/get-all-borrowed-by-userid/" + id)
+            .then((data) => {
+                const result = data.data;
+                if (result.status === 200) {
+                    result.data.map((val, index) => {
+                        this.setState((prevState) => ({
+                            listBook: [...prevState.listBook, val]
+                        }));
+                    });
+                }
+            })
+    }
+
+
+
     addBorrowBook = (e) => {
         this.setState((prevState) => ({
             borrowBooks: [...prevState.borrowBooks, { borrowBookId: "", denda: [] }],
-            listDetail: [...this.state.listDetail, '']
         }))
     }
 
     deleteRow = (e) => {
         this.setState((prevState) => ({
             borrowBooks: prevState.borrowBooks.filter((_, i) => i !== e),
-            listDetail: prevState.listDetail.filter((_, i) => i !== e)
         }))
+    }
+
+    removeRow = (index, e) => {
+        let borrowBooks = [...this.state.borrowBooks]
+        borrowBooks[e.target.dataset.id].denda = borrowBooks[e.target.dataset.id].denda.filter((_, i) => i !== index);
+        this.setState({ borrowBooks })
+    }
+
+    addRowDenda = (e) => {
+        let borrowBooks = [...this.state.borrowBooks]
+        let detailInvoice = {
+            type: "",
+            total: ""
+        };
+        if (borrowBooks[e].denda.length == 0) {
+            Swal.fire('Ups..', "Harap memilih buku terlebih dahulu", 'warning')
+        } else {
+            borrowBooks[e].denda = [...borrowBooks[e].denda, detailInvoice];
+            this.setState({ borrowBooks })
+        }
 
     }
 
     handleChange = (e) => {
-        if (["form-control borrowBookId"].includes(e.target.className)) {
+
+        if (["form-control borrowBookId"].includes(e.target.className)) { // Jika yang dipilih buku nya
             let borrowBooks = [...this.state.borrowBooks]
             // set value prev selected
             let a = this.state.borrowBooks.findIndex(obj => obj.borrowBookId == e.target.value);
-            if (a !== -1) {
+            if (a != -1) {
                 // sudah pernah ada
                 borrowBooks[e.target.dataset.id].denda = [];
                 borrowBooks[e.target.dataset.id].borrowBookId = "";
                 this.setState({ borrowBooks })
-                e.target.value ="";
+                e.target.value = "";
                 Swal.fire('Ups..', "Tidak boleh memilih buku yang sama", 'warning')
             } else {
-                // Belum pernah ada
                 if (e.target.value !== "") {
+
+                    // Belum pernah ada
                     let indexBookSelected = this.state.listBook.findIndex(obj => obj.borrowedBookId == e.target.value);
                     var startDate = moment(this.state.listBook[indexBookSelected].threshold);
                     var endDate = moment();
@@ -88,7 +145,7 @@ class ReturnBook extends Component {
                         fine: fine
                     };
                     if (borrowBooks[e.target.dataset.id].denda[0]) {
-                        borrowBooks[e.target.dataset.id].denda[0] = detailInvoice;
+                        borrowBooks[e.target.dataset.id].denda = [detailInvoice];
                     } else {
                         borrowBooks[e.target.dataset.id].denda = [...borrowBooks[e.target.dataset.id].denda, detailInvoice];
                     }
@@ -100,10 +157,26 @@ class ReturnBook extends Component {
                     this.setState({ borrowBooks })
                 }
             }
-        } else if (["form-control type", "form-control total"].includes(e.target.className)) {
-            let borrowBooks = [...this.state.borrowBooks]
-            borrowBooks[e.target.dataset.id][e.target.className] = e.target.value;
+        } else if (["form-control borrower"].includes(e.target.className)) { // jika yang dipilih select borrower nya
+            // choose borrower
+            // Reset Form
+            this.setState({
+                listBook: [],
+                borrowBooks: [{ borrowBookId: "", denda: [] }],
+            })
+            if (e.target.value !== "") {
+                this.getListBorrowedBookByUserId(e.target.value);
+            }
+
+
+        } else if (["form-control description", "form-control cost"].includes(e.target.className)) { // jika yang berubah adalah inputan
+
+            let borrowBooks = [...this.state.borrowBooks];
+
+            borrowBooks[e.target.dataset.id].denda[e.target.dataset.index][e.target.dataset.name] = e.target.value;
+
             this.setState({ borrowBooks })
+
         } else {
             this.setState({ [e.target.name]: e.target.value });
         }
@@ -138,34 +211,51 @@ class ReturnBook extends Component {
         let data = this.state.borrowBooks[index].denda;
         if (data != undefined) {
             return <div className="return-book-list-detail">
-                {data.map((val, index) => {
-                    return <div className="form-group row col-sm-12">
-                        <div className="form-group col-sm-2">
-                            <span className="info">Book Title</span>
-                            <input type="text" className="form-control" name="book_title[]" value={val.title + " " + val.borrowedBookCode} readOnly />
+                {data.map((val, i) => {
+                    if (i === 0) {
+                        return <div className="form-group row col-sm-12">
+                            <div className="form-group col-sm-2">
+                                <span className="info">Book Title</span>
+                                <input type="text" className="form-control" name="book_title[]" value={val.title + " " + val.borrowedBookCode} readOnly />
+                            </div>
+                            <div className="form-group col-sm-2">
+                                <span>Borrowed On</span>
+                                <input type="text" className="form-control" name="borrow_date[]" value={this.convertToDate(val.borrowedDate)} readOnly />
+                            </div>
+                            <div className="form-group col-sm-2">
+                                <span>Due On</span>
+                                <input type="text" className="form-control" name="due_on[]" value={this.convertToDate(val.threshold)} readOnly />
+                            </div>
+                            <div className="form-group col-sm-2">
+                                <span className="info">Date Of Return</span>
+                                <input type="text" className="form-control" name="return_date[]" value={this.convertToDate(val.returnDate)} readOnly />
+                            </div>
+                            <div className="form-group col-sm-2">
+                                <span>Late By (Days)</span>
+                                <input type="text" className="form-control" name="late_by[]" value={val.lateBy} readOnly />
+                            </div>
+                            <div className="form-group col-sm-2">
+                                <span>Cost</span>
+                                <input type="text" className="form-control" name="fine[]" value={val.fine} readOnly />
+                            </div>
                         </div>
-                        <div className="form-group col-sm-2">
-                            <span>Borrowed On</span>
-                            <input type="text" className="form-control" name="borrow_date[]" value={this.convertToDate(val.borrowedDate)} readOnly />
-                        </div>
-                        <div className="form-group col-sm-2">
-                            <span>Due On</span>
-                            <input type="text" className="form-control" name="due_on[]" value={this.convertToDate(val.threshold)} readOnly />
-                        </div>
-                        <div className="form-group col-sm-2">
-                            <span className="info">Date Of Return</span>
-                            <input type="text" className="form-control" name="return_date[]" value={this.convertToDate(val.returnDate)} readOnly />
-                        </div>
-                        <div className="form-group col-sm-2">
-                            <span>Late By (Days)</span>
-                            <input type="text" className="form-control" name="late_by[]" value={val.lateBy} readOnly />
-                        </div>
-                        <div className="form-group col-sm-2">
-                            <span>Estimated Cost</span>
-                            <input type="text" className="form-control" name="fine[]" value={val.fine} readOnly />
-                        </div>
-                    </div>
 
+                    } else {
+                        return <div className="form-group row col-sm-12">
+                            <div className="form-group col-sm-5">
+                                <span>Description</span>
+                                <input type="text" data-id={index} data-index={i} data-name="type" className="form-control description" name="type[]" />
+                            </div>
+                            <div className="form-group col-sm-5">
+                                <span>Cost</span>
+                                <input type="number" data-id={index} data-index={i} data-name="total" className="form-control cost" name="cost[]" />
+                            </div>
+                            <div className="form-group col-sm-2">
+                                <button type="button" className="btn bg-gradient-danger" data-id={index} value="remove" onClick={(e) => this.removeRow(i, e)}>Remove</button>
+                            </div>
+                        </div>
+
+                    }
                 })}
             </div>
         }
@@ -174,7 +264,7 @@ class ReturnBook extends Component {
 
     handleSubmit = (e) => { e.preventDefault() }
     render() {
-        const { listBook, listItem, listDetail, borrowBooks } = this.state;
+        const { listBorrower, listBook, borrowBooks } = this.state;
         return (
             <div className="content-wrapper">
                 {/* Content Header (Page header) */}
@@ -208,7 +298,19 @@ class ReturnBook extends Component {
                                     <form onSubmit={this.handleSubmit} onChange={this.handleChange} className="form-horizontal">
                                         <div className="card-body">
                                             <div className="form-group row">
-                                                <button type="button" className="btn bg-gradient-primary" onClick={this.addBorrowBook}>Add</button>
+                                                <div className="col-3">
+                                                    <button type="button" className="btn bg-gradient-primary" onClick={this.addBorrowBook}>Add</button>
+                                                </div>
+                                                <div className="col-3">
+                                                    <select name="borrower" className="form-control borrower">
+                                                        <option value="">Choose Borrower</option>
+                                                        {listBorrower.map((val, index) => {
+                                                            return (
+                                                                <option key={index} value={val.id}>{val.fullName}</option>
+                                                            )
+                                                        })}
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div className="return-book-list">
                                                 {borrowBooks.map((val, index) => {
@@ -228,7 +330,8 @@ class ReturnBook extends Component {
                                                                     </select>
                                                                 </div>
                                                                 <div className="col-3">
-                                                                    <button type="button" className="btn bg-gradient-danger" value="delete" onClick={() => this.deleteRow(index)}>Delete</button>
+                                                                    <button type="button" className="btn bg-gradient-danger mr-3" value="delete" onClick={() => this.deleteRow(index)}>Delete</button>
+                                                                    <button type="button" className="btn bg-gradient-info" value="add" onClick={() => this.addRowDenda(index)}>Add</button>
                                                                 </div>
                                                             </div>
                                                             {this.printListDetail(index)}
@@ -260,4 +363,4 @@ class ReturnBook extends Component {
 
 }
 
-export default withRouter(ReturnBook)
+export default withRouter(CheckReturnBook)

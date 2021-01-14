@@ -4,24 +4,31 @@ import photo1 from '../../../Assets/Media/books/donate2.jpg'
 import photo2 from '../../../Assets/Media/books/donate3.jpg'
 import Swal from 'sweetalert2'
 import Reactdom from 'react-dom'
-import axios from 'axios'
+import Axios from '../../../Instances/axios-instances';
 
 class Donation extends Component {
   constructor(props) {
     super(props);
     
     this.state = {
-      fields: {},     
+      fields: {
+        DonationType: "person"
+      },     
     };
 
     this.postDonate = this.postDonate.bind(this)
   }
     submitdonate() {
 
-    var Email = document.getElementById('inputEmail').value;
-    var Name = document.getElementById('inputName').value;
-    var PhoneNumber = document.getElementById('inputPhone').value;
-    var DonationNumber = document.getElementById('inputBookbybook').value;
+   
+    }
+    postDonate(e) {
+      let fields = this.state.fields;
+      e.preventDefault();
+       var Email = document.getElementById('inputEmail').value;
+       var Name = document.getElementById('inputName').value;
+       var PhoneNumber = document.getElementById('inputPhone').value;
+       var DonationNumber = document.getElementById('inputBookbybook').value;
 
     if (Email === ''|| Name === ''|| PhoneNumber === ''|| DonationNumber === ''){
         Swal.fire(
@@ -30,17 +37,8 @@ class Donation extends Component {
             'error'
         );
     }else{
-        Swal.fire(
-            'Submitted !',
-            'You clicked the button!',
-            'success'
-        );
-    }
-    }
-    postDonate(e) {
-      let fields = this.state.fields;
-      e.preventDefault();
-        const donate = {
+      
+      const donate = {
           email : fields["Email"],
           name : fields["Name"],
           donationType : fields["DonationType"],
@@ -48,11 +46,8 @@ class Donation extends Component {
           statusDonate : "waiting",
           phoneNumber : fields["PhoneNumber"]
         }
-        console.log(fields)
-        console.log(donate)
-        axios.post('http://localhost:8080/donate', donate)
+        Axios.post('/donate', donate)
              .then((response) => {
-               console.log(response)
              })
   
         Swal.fire({
@@ -72,6 +67,9 @@ class Donation extends Component {
           confirmButtonText: `OK`
         })
         }) 
+    }
+
+        
           
     }
 
@@ -85,7 +83,7 @@ class Donation extends Component {
 
   render() {
     return (
-      <div className="content-wrapper">
+      <div>
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid"></div>

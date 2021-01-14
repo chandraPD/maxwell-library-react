@@ -28,7 +28,6 @@ class BookDetail extends Component {
 
   componentDidMount() {
     const bookId = this.props.match.params.bookId;
-    console.log(bookId);
     this.fetchData(bookId);
   }
 
@@ -83,16 +82,18 @@ class BookDetail extends Component {
             autoWidth: false,
             });
 
-            var jumlah = response.data.length
+            Axios.get('/book-detail/get-book-detail-count/Available/' + bookId)
+                  .then((response) => {
 
-            const count = {
-              qty: jumlah
-            }
+                    const count = {
+                      qty: response.data
+                    }
 
-            Axios.put("/book/update-qty-book/" + bookId, count)
-              .then((response) => {
-                console.log(response)
-              })  
+                    Axios.put("/book/update-qty-book/" + bookId, count)
+                    .then((response) => {
+                    })  
+
+                  })  
         })
   }
 
@@ -111,7 +112,6 @@ class BookDetail extends Component {
       fields[field] = e.target.value
       this.setState({fields})
       this.setState({errors: errors})
-      console.log(this.state.fields)
   }
 
   detailBookChange = (event) => {
@@ -130,7 +130,6 @@ class BookDetail extends Component {
 
       Axios.put('/book-detail/update-detail/' + id, detailBook)
         .then((response) => {
-            console.log(response)
             $("#modal-edit").modal("toggle");
             $('.modal-backdrop').remove();
             Swal.fire({
@@ -149,7 +148,6 @@ class BookDetail extends Component {
   deleteDetailBook = (id) => {
     Axios.put('/book-detail/delete-detail/' + id)
     .then((response) => {
-      console.log(response)
       Swal.fire({
         icon: "success",
         title: "Success",
@@ -166,7 +164,6 @@ class BookDetail extends Component {
   getDetailBook = (id) => {
       Axios.get("/book-detail/get-detail-book/" + id)
         .then((response) => {
-            console.log(response)
             this.setState({
                 typeOfDamage: response.data.typeOfDamage,
                 descOfDamage: response.data.descOfDamage,
@@ -214,11 +211,9 @@ class BookDetail extends Component {
             bookId: this.props.match.params.bookId
         }
 
-        console.log(detailBook)
 
         Axios.post("/book-detail/add-detail", detailBook)
             .then((response)=> {
-                console.log(response)
                 Swal.fire({
                   icon: "success",
                   title: "Success",
@@ -333,7 +328,7 @@ class BookDetail extends Component {
                   <div className="card-body">
 
                     <div className="form-group">
-                      <label htmlFor="inputTypeofDamage">Type of Damage</label>
+                      <label htmlFor="inputTypeofDamage">Type of Damage <small className="red-asterisk">*</small></label>
                       <select
                         name="typeOfDamage"
                         className="form-control"
@@ -352,7 +347,7 @@ class BookDetail extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="inputDescofDamage">Description of Damage</label>
+                      <label htmlFor="inputDescofDamage">Description</label>
                       <input
                         type="text"
                         className="form-control"
@@ -383,6 +378,8 @@ class BookDetail extends Component {
                         {this.state.errors["statusBookDetail"]}
                       </span>
                     </div>
+
+                    <small><span className="red-asterisk">*</span> Required</small> 
 
                   </div>
                 </div>
@@ -445,7 +442,7 @@ class BookDetail extends Component {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="editDescOfDamage">Description Of Damage</label>
+                      <label htmlFor="editDescOfDamage">Description</label>
                       <input
                         type="text"
                         className="form-control"

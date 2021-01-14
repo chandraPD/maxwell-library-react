@@ -18,7 +18,6 @@ class Payment extends Component {
 
   componentDidMount() {
     const userId = this.props.match.params.userId
-    console.log(userId)
     this.getDetailUser(userId)
   }
 
@@ -165,7 +164,6 @@ class Payment extends Component {
     }]
     var userData = result[userId - 1]
     this.setState({detailUser: userData})
-    console.log(userData)
   }
 
   paymentSuccessful() {

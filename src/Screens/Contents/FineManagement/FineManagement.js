@@ -60,53 +60,58 @@ class FineManagement extends Component {
         }
         await Axios.get(linkAxios)
             .then((getData) => {
-                $('#example1').DataTable().destroy();
-                const resultInvoice = getData.data.data;
-                this.setState({ data: resultInvoice });
-                let results = [];
-                let result = this.state.data;
-                var no = 1;
-                result.forEach(rent => {
-                    var row = [];
-                    var actVal, statusVal = '';
-                    if (rent.statusInvoice === 'Waiting For Payment') {
-                        if (this.state.role === "ROLE_USER") {
-                            actVal = <div className="btn-group btn-group-sm">
-                                <Action link={`Payment/${rent.invoiceId}`} type="primary" title="Pay" icon="check-square" />
-                                <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
-                        } else {
-                            actVal = <div className="btn-group btn-group-sm">
-                                <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
-                        }
-                        statusVal = <Status type="primary" val="Waiting For Payment" />
-                    } else if (rent.statusInvoice === 'Paid') {
-                        actVal = <div className="btn-group btn-group-sm"><Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" /></div>
-                        statusVal = <Status type="info" val="Paid" />
-                    } else if(rent.statusInvoice === "Canceled"){
-                        actVal = '-';
-                        statusVal = <Status type="Danger" val="Canceled" />
-                    }else{
-                        actVal = '-';
-                        statusVal = '';
-                    }
+                const res = getData.data;
+                if (getData.status === 200) {
+                    $('#example1').DataTable().destroy();
+                    let results = [];
+                    let result = res.data;;
+                    var no = 1;
 
-                    row.push(<td className="text-center" >{no++}</td>);
-                    row.push(<td className="text-center" >{actVal}</td>);
-                    if (this.state.role === "ROLE_ADMIN") {
-                        row.push(<td className="text-center" >{rent.borrower}</td>);
-                    }
-                    row.push(<td>{rent.noInvoice}</td>);
-                    row.push(<td>{this.formatRupiah(rent.grandTotal)}</td>);
-                    row.push(<td>{this.convertToDate(rent.invoiceDate)}</td>);
-                    if (rent.paymentDate === null) {
-                        row.push(<td>-</td>);
-                    } else {
-                        row.push(<td>{this.convertToDate(rent.paymentDate)}</td>);
-                    }
-                    row.push(<td className="text-center" >{statusVal}</td>);
-                    results.push(row);
-                });
-                this.setState({ rows: results });
+                    result.forEach(rent => {
+                        var row = [];
+                        var actVal, statusVal = '';
+                        if (rent.statusInvoice === 'Waiting For Payment') {
+                            if (this.state.role === "ROLE_USER") {
+                                actVal = <div className="btn-group btn-group-sm">
+                                    <Action link={`Payment/${rent.invoiceId}`} type="primary" title="Pay" icon="check-square" />
+                                    <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
+                            } else {
+                                actVal = <div className="btn-group btn-group-sm">
+                                    <Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" id={rent.invoiceId} /></div>
+                            }
+                            statusVal = <Status type="primary" val="Waiting For Payment" />
+                        } else if (rent.statusInvoice === 'Paid') {
+                            actVal = <div className="btn-group btn-group-sm"><Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" /></div>
+                            statusVal = <Status type="info" val="Paid" />
+                        } else if (rent.statusInvoice === "Canceled") {
+                            actVal = <div className="btn-group btn-group-sm"><Action link={`DetailInvoice/${rent.invoiceId}`} type="info" title="Detail" icon="eye" /></div>
+                            statusVal = <Status type="Danger" val="Canceled" />
+                        } else if (rent.statusInvoice === "Waiting Check By Librarian") {
+                            actVal = '-';
+                            statusVal = <Status type="warning" val="Waiting Check By Librarian" />
+                        } else {
+                            actVal = '-';
+                            statusVal = '';
+                        }
+
+                        row.push(<td className="text-center" >{no++}</td>);
+                        row.push(<td className="text-center" >{actVal}</td>);
+                        if (this.state.role === "ROLE_ADMIN") {
+                            row.push(<td className="text-center" >{rent.borrower}</td>);
+                        }
+                        row.push(<td>{rent.noInvoice}</td>);
+                        row.push(<td>{this.formatRupiah(rent.grandTotal)}</td>);
+                        row.push(<td className="text-center text-nowrap" >{this.convertToDate(rent.invoiceDate)}</td>);
+                        if (rent.paymentDate === null) {
+                            row.push(<td>-</td>);
+                        } else {
+                            row.push(<td className="text-center text-nowrap" >{this.convertToDate(rent.paymentDate)}</td>);
+                        }
+                        row.push(<td className="text-center" >{statusVal}</td>);
+                        results.push(row);
+                    });
+                    this.setState({ rows: results });
+                }
 
                 $("#example1").DataTable({
                     responsive: true,
@@ -120,14 +125,14 @@ class FineManagement extends Component {
         if (this.state.role === "ROLE_ADMIN") {
             this.setState({ headings: ['No', 'Action', 'Borrower', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
         } else {
-            this.setState({ headings: ['No','Action', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
+            this.setState({ headings: ['No', 'Action', 'No Invoice', 'Fine Ammount', 'Invoice Date', 'Payment Date', 'Status'] })
         }
     }
 
-    showButtonPay = () => { 
-        if (this.state.role === "ROLE_USER"){
+    showButtonPay = () => {
+        if (this.state.role === "ROLE_USER") {
             return <Link to="Payment" className="btn-xs btn-block bg-gradient-primary">Pay</Link>
-        }else{
+        } else {
             // nothing
         }
     }
@@ -155,7 +160,7 @@ class FineManagement extends Component {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Fine Management</li>
                                 </ol>
                             </div>

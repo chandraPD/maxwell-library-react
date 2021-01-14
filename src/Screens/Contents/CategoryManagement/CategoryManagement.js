@@ -38,7 +38,6 @@ class CategoryManagement extends Component {
             const result = response.data;
             this.setState({data: result})
             result.map((category) => {
-              console.log(category)
               var row = [];
               row.push(<td className="text-center">{no++}</td>);
               row.push(
@@ -80,41 +79,70 @@ class CategoryManagement extends Component {
     Axios
       .get("/category/get-by-id/" + id)
       .then((response) => {
-        console.log(response);
         this.setState({
           category: response.data.category,
           categoryId: id,
+          categoryValid: response.data.category
         });
       });
   };
 
   updateCategory = (id) => {
-
+    var categoryValid = this.state.categoryValid
     const category = {
       category: this.state.category,
     };
 
-    console.log(category)
-
     if(this.handleValidationUpdate()) {
-      Axios
-      .put("/category/update-category/" + id, category)
-      .then((response) => {
-        console.log(response);
-        $("#modal-edit").modal("toggle");
-        $('.modal-backdrop').remove();
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Updated",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-          }
-        });
-      });
-    }
+      Axios.get('/category/get-by-category/' + category.category)
+          .then((response) => {
+            const resultCategory = response.data
+            Axios.get('/category/count-category/' + id)
+                  .then((response) => {
+
+                    if(category.category === categoryValid) {
+                      Swal.fire({
+                        icon: "warning",
+                        title: "Warning",
+                        text: "You Enter the same Name",
+                        confirmButtonText: `OK`,
+                      })
+                    } else if(category.category === resultCategory.category) {
+                      Swal.fire({
+                        icon: "warning",
+                        title: "Warning",
+                        text: "Name Already saved",
+                        confirmButtonText: `OK`,
+                      })
+                    } else if(response.data > 0) {
+                      Swal.fire({
+                        icon: "warning",
+                        title: "Warning",
+                        text: "You can't update Data already used",
+                        confirmButtonText: `OK`,
+                      })
+                    } else {
+                      Axios
+                    .put("/category/update-category/" + id, category)
+                    .then((response) => {
+                      $("#modal-edit").modal("toggle");
+                      $('.modal-backdrop').remove();
+                      Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: "Your Data has been Updated",
+                        confirmButtonText: `OK`,
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          this.fetchData()
+                        }
+                      });
+                    });
+                    }
+                  })
+          })
+    } 
+
   };
 
   handleValidationUpdate() {
@@ -131,21 +159,34 @@ class CategoryManagement extends Component {
   }
 
   deleteCategory = (id) => {
-    Axios
-      .put("/category/delete-category/" + id)
-      .then((response) => {
-        console.log(response);
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Your Data has been Deleted",
-          confirmButtonText: `OK`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.fetchData()
-          }
-        });
-      });
+    Axios.get('/category/count-category/' + id)
+          .then((response) => {
+
+            if(response.data > 0) {
+              Swal.fire({
+                icon: "warning",
+                title: "Warning",
+                text: "You can't delete Data already used",
+                confirmButtonText: `OK`,
+              })
+            } else {
+                Axios
+                .put("/category/delete-category/" + id)
+                .then((response) => {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Your Data has been Deleted",
+                    confirmButtonText: `OK`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.fetchData()
+                    }
+                  });
+                });
+            }
+
+          })
   };
 
   categoryChange = (event) => {
@@ -188,11 +229,9 @@ class CategoryManagement extends Component {
       const category = {
         category: fields["CategoryName"],
       };
-      console.log(category);
       Axios
         .post("/category/add-category", category)
         .then((response) => {
-          console.log(response);
           Swal.fire({
             icon: "success",
             title: "Success",
@@ -299,7 +338,7 @@ class CategoryManagement extends Component {
                 <div className="modal-body">
                   <div className="card-body">
                     <div className="form-group">
-                      <label htmlFor="inputCategoryName">Category Name</label>
+                      <label htmlFor="inputCategoryName">Category Name <small className="red-asterisk">*</small></label>
                       <input
                         type="text"
                         className="form-control"
@@ -313,7 +352,9 @@ class CategoryManagement extends Component {
                         {this.state.errors["CategoryName"]}
                       </span>
                     </div>
+                    <small><span className="red-asterisk">*</span> Required</small> 
                   </div>
+                  
                 </div>
                 <div className="modal-footer justify-content-between">
                   <button

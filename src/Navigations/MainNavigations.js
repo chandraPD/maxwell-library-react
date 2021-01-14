@@ -24,12 +24,14 @@ import BookManagement from '../Screens/Contents/BookManagement/BookManagement'
 import FineManagement from '../Screens/Contents/FineManagement/FineManagement'
 import DetailInvoice from '../Screens/Contents/DetailInvoice/DetailInvoice'
 import ReturnBook from '../Screens/Contents/ReturnBook/ReturnBook'
+import CheckReturnBook from '../Screens/Contents/ReturnBook/CheckReturnBook'
 import PaymentDetail from '../Screens/Contents/Payment/PaymentDetail'
 import DonationManagement from '../Screens/Contents/DonationManagement/DonationManagement'
 import Donation from '../Screens/Contents/Donation/Donation'
 import BookDetail from '../Screens/Contents/BookManagement/BookDetail'
 import LogManagement from "../Screens/Contents/LogManagement/LogManagement";
 import Author from "../Screens/Contents/Author/Author"
+import Wishlist from "../Screens/Contents/Wishlist/Wishlist"
 import Catalogue from '../Screens/Contents/Catalogue/Catalogue'
 import PrivateRoute from './PrivateRoute'
 import Search from '../Screens/Contents/Search/Search'
@@ -74,11 +76,15 @@ class MainNavigation extends Component {
                     authenticated={this.state.isAuthenticated}
                     component={Auth}>
                     </AuthRoute>
-                    <Route path='/PaymentPrint'>
+                    <Route path='/PaymentPrint/:invoiceId'>
                         <PaymentInvoicePrint />
                     </Route>
                     <Route exact path='/PaymentPrintPaid'>
                         <PaymentInvoicePrintPaid />
+                    </Route>
+                    <Route path='/Donation'>
+                         <Donation />
+                    <Footer />
                     </Route>
                     <Route path='/'>
                             <NavBar />
@@ -130,6 +136,9 @@ class MainNavigation extends Component {
                                 <Route path='/Payment/:invoiceId?'>
                                     <Payment />
                                 </Route>
+                                <Route path='/Wishlist'>
+                                    <Wishlist/>
+                                </Route>
                                 <Route path='/PaymentDetail/:userId'>
                                     <PaymentDetail />
                                 </Route>
@@ -151,11 +160,11 @@ class MainNavigation extends Component {
                                 <Route path='/ReturnBook'>
                                     <ReturnBook />
                                 </Route>
+                                <Route path='/CheckReturnBook'>
+                                    <CheckReturnBook />
+                                </Route>
                                 <Route path='/DonationManagement'>
                                     <DonationManagement />
-                                </Route>
-                                 <Route path='/Donation'>
-                                    <Donation />
                                 </Route>
                                 <Route path='/LogManagement'>
                                     <LogManagement />

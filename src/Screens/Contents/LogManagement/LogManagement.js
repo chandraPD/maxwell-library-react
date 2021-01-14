@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import DataTable from "../../../Components/Datatable/Table";
-import Action from "../../../Components/Datatable/Action";
 import $ from 'jquery'
 import 'bootstrap'
 import Axios from '../../../Instances/axios-instances';
@@ -21,19 +20,9 @@ class LogManagement extends Component {
   }
 
   async fetchData(){
-    // $("#example1").DataTable.destroy();
 
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    console.log(userToken);
-
-    const config = {
-      headers : { Authorization : `Bearer ${userToken}`}
-    }
-
-    await Axios.get('log/get-log-lastActivity', config)
+    await Axios.get('log/get-log-lastActivity')
     .then((fetchedData) => {
-      console.log(fetchedData);
       const resultLog = fetchedData.data;
       this.setState({
         data : resultLog
@@ -50,7 +39,7 @@ class LogManagement extends Component {
         );
 
         row.push(
-          <td>
+          <td className="text-center text-nowrap">
             {this.convertToDate(log.dateTime)}
           </td>
         );
@@ -119,7 +108,7 @@ class LogManagement extends Component {
                   <div className="col-sm-6">
                     <ol className="breadcrumb float-sm-right">
                       <li className="breadcrumb-item">
-                        <a href='/'>Home</a>
+                        <a href='index.html'>Home</a>
                       </li>
                       <li className="breadcrumb-item active">Log</li>
                     </ol>
