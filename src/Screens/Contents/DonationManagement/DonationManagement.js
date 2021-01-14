@@ -115,13 +115,13 @@ class DonationManagement extends Component {
 
 
       if (donate.statusDonate == "Accepted"){
-        row.push( <td><small class="badge badge-success">Accepted</small></td>)
+        row.push( <td><small className="badge badge-success">Accepted</small></td>)
       }
       else if (donate.statusDonate == "Rejected"){
-        row.push( <td><small class="badge badge-danger">Rejected</small></td>)
+        row.push( <td><small className="badge badge-danger">Rejected</small></td>)
       }
       else {
-        row.push( <td><small class="badge badge-warning">Waiting</small></td>)
+        row.push( <td><small className="badge badge-warning">Waiting</small></td>)
       }
       results.push(row);
     });
