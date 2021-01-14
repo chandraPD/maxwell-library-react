@@ -308,6 +308,8 @@ class Detail extends Component {
             $('#RateModal').modal('hide');
             $('.modal-backdrop').remove();
             this.refresh();
+            this.getRate(this.state.bookId);
+            this.getStatus2(this.state.bookId);
           }
         })
       }
@@ -332,9 +334,9 @@ class Detail extends Component {
         rate: this.state.star,
         comment: fields["description"],
         book_id: this.state.bookId
-      };
-
+      };      
       if (this.state.status2 == true) {
+        
         Swal.fire({
           icon: 'warning',
           title: 'Ooops!',
@@ -358,8 +360,10 @@ class Detail extends Component {
                   if (isConfirmed) {
                     this.getData2(this.state.bookId)
                     $('#RateModal').modal('hide');
+                    this.getStatus2(this.state.bookId);                    
                     $('.modal-backdrop').remove();
                     this.refresh();
+                    this.getRate(this.state.bookId);
                   }
                 })
               })
@@ -381,7 +385,9 @@ class Detail extends Component {
                   this.getData2(this.state.bookId)
                   $('#RateModal').modal('hide');
                   $('.modal-backdrop').remove();
+                  this.getStatus2(this.state.bookId);
                   this.refresh();
+                  this.getRate(this.state.bookId);
                 }
               })
           })
@@ -435,7 +441,9 @@ class Detail extends Component {
                 </div>
                 <div className="row">
                   <div className="col-sm-12">
-                    <img className="big-preview" src={data.imgBanner} width="1600px" height="1200px" />
+                    <div className="fill-detail">
+                    <img src={data.imgBanner} alt="" />
+                    </div>
 
                     <div className="menu-right">
                       {/* <ul className="menuhead">

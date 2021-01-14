@@ -161,12 +161,13 @@ export default class SideBar extends Component {
                       </Link>
                     </li> : null}
                     <li className="nav-item">
-                      <Link to="/History" className="nav-link" id="history">
+                      {show ? <Link to="/History" className="nav-link" id="history">
                         <i className="nav-icon fas fa-history" />
                         <p>
                           History
                   </p>
-                      </Link>
+                      </Link> : null}
+
                     </li>
                     <li className="nav-item has-treeview menu-open">
                       <a href="#" className="nav-link">

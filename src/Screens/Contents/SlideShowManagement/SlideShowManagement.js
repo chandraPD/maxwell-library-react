@@ -481,7 +481,6 @@ class SlideShowManagement extends Component {
                       <label class="custom-file-label" for="exampleInputFile" style={{ overflow : "hidden"}}>{this.state.img}</label>
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
                   </span>

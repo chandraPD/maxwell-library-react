@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './searchpage.css'
 import $ from 'jquery'
 import {Link, withRouter} from 'react-router-dom'
-import Axios from 'axios'
+import Axios from '../../../Instances/axios-instances'
 
 
 class Search extends Component {

@@ -68,7 +68,7 @@ class TopUpManagement extends Component {
   }
 
   getUser() {
-    var a =Axios2.get('user').then((getData) => {
+    var a =Axios2.get('user').then((getData) => {      
       const result_topup = getData.data;      
       this.setState({ user: result_topup });
 
@@ -346,10 +346,10 @@ class TopUpManagement extends Component {
     }
   }
 
-  handleChange3 = (event) => {    
-
-      var userId = event.target.value;    
-    this.setState({ userId: userId}); 
+  handleChange3 = (event) => {        
+      var userId = event.target.value; 
+      var email = event.target.selectedOptions[0].innerHTML  
+    this.setState({ userId: userId,email:email}); 
     
        
  }
@@ -540,10 +540,10 @@ class TopUpManagement extends Component {
                 <div className="modal-body">
                   <div className="row">
                     <div className="col-md-5">
-                      <label className="title-module">ID User:</label>
+                      <label className="title-module">Email User:</label>
                     </div>
                     <div className="col-md-7">
-                      <input type="text" id="checkuser" name="name" className="form-control" value={this.state.userId} readOnly placeholder />
+                      <input type="text" id="checkuser" name="name" className="form-control" value={this.state.email} readOnly placeholder />
                     </div>
                   </div>
                   <hr className="divider" />
