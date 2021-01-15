@@ -201,7 +201,7 @@ h2.title-container {
 
 h4.title-container {
     font-size: 18px;
-    line-height: 0;
+    /* line-height: 0; */
     color: rgba(18, 18, 18, 0.64);
     font-weight: 400;
     margin-bottom: 1.5rem;
