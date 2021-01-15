@@ -38,7 +38,6 @@ class CategoryManagement extends Component {
             const result = response.data;
             this.setState({data: result})
             result.map((category) => {
-
               var row = [];
               row.push(<td className="text-center">{no++}</td>);
               row.push(
@@ -80,7 +79,6 @@ class CategoryManagement extends Component {
     Axios
       .get("/category/get-by-id/" + id)
       .then((response) => {
-
         this.setState({
           category: response.data.category,
           categoryId: id,
@@ -95,17 +93,12 @@ class CategoryManagement extends Component {
       category: this.state.category,
     };
 
-
-
     if(this.handleValidationUpdate()) {
       Axios.get('/category/get-by-category/' + category.category)
           .then((response) => {
             const resultCategory = response.data
-
             Axios.get('/category/count-category/' + id)
                   .then((response) => {
-  
-                    
 
                     if(category.category === categoryValid) {
                       Swal.fire({
@@ -132,7 +125,6 @@ class CategoryManagement extends Component {
                       Axios
                     .put("/category/update-category/" + id, category)
                     .then((response) => {
-
                       $("#modal-edit").modal("toggle");
                       $('.modal-backdrop').remove();
                       Swal.fire({
@@ -181,7 +173,6 @@ class CategoryManagement extends Component {
                 Axios
                 .put("/category/delete-category/" + id)
                 .then((response) => {
-
                   Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -238,11 +229,9 @@ class CategoryManagement extends Component {
       const category = {
         category: fields["CategoryName"],
       };
-
       Axios
         .post("/category/add-category", category)
         .then((response) => {
-
           Swal.fire({
             icon: "success",
             title: "Success",

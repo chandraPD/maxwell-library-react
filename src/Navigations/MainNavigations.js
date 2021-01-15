@@ -44,136 +44,161 @@ class MainNavigation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isAuthenticated :  localStorage.getItem('user')
+            isAuthenticated: localStorage.getItem('user')
         };
-      }
-      interval = null;
+    }
+    interval = null;
 
-      componentDidMount() {
+    componentDidMount() {
         this.interval = setInterval(this.getBalance, 30000);
         this.getBalance();
-      }
-  
-      componentWillUnmount() {
-         clearInterval(this.interval);
-      }
-      getBalance = () => {
-        if(JSON.parse(localStorage.getItem('user')) != null){
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+    getBalance = () => {
+        if (JSON.parse(localStorage.getItem('user')) != null) {
             let user = JSON.parse(localStorage.getItem('user'))
             Axios.get('top_up_management/getBalance')
-            .then((balance) => {
-                localStorage.setItem('balance', JSON.stringify(balance.data));
-            })
-        }else{
+                .then((balance) => {
+                    localStorage.setItem('balance', JSON.stringify(balance.data));
+                })
+        } else {
             localStorage.setItem('balance', 0);
         }
-      }
+    }
 
     render() {
-        return ( <Router >
-                <Switch>
-                    <AuthRoute path='/auth'
+        return (<Router >
+            <Switch>
+                <AuthRoute path='/auth'
                     authenticated={this.state.isAuthenticated}
                     component={Auth}>
-                    </AuthRoute>
-                    <Route path='/PaymentPrint/:invoiceId'>
-                        <PaymentInvoicePrint />
-                    </Route>
-                    <Route exact path='/PaymentPrintPaid'>
-                        <PaymentInvoicePrintPaid />
-                    </Route>
-                    <Route path='/Donation'>
-                         <Donation />
+                </AuthRoute>
+                <Route path='/PaymentPrint/:invoiceId'>
+                    <PaymentInvoicePrint />
+                </Route>
+                <Route exact path='/PaymentPrintPaid'>
+                    <PaymentInvoicePrintPaid />
+                </Route>
+                <Route path='/Donation'>
+                    <Donation />
                     <Footer />
-                    </Route>
-                    <Route path='/'>
-                            <NavBar />
-                            <SideBar />
-                            <Switch>
-                                <PrivateRoute exact path='/'
-                                authenticated={this.state.isAuthenticated}
-                                component={Home}>
-                                </PrivateRoute>
-                                <Route path='/Profile'>
-                                    <Profile />
-                                </Route>
-                                <Route path='/ChangePassword'>
-                                    <ChangePassword/>
-                                </Route>
-                                <Route path='/AdminProfile'>
-                                    <AdminProfile/>
-                                </Route>
-                                <Route path='/Detail/:bookId'>
-                                    <Detail />
-                                </Route>
-                                <Route path='/Search/:title'>
-                                    <Search />
-                                </Route>
-                                <Route path='/RentManagement'>
-                                    <RentManagement />
-                                </Route>
-                                <Route path='/Author'>
-                                    <Author />
-                                </Route>
-                                <Route path='/FineManagement'>
-                                    <FineManagement />
-                                </Route>
-                                <Route path='/TopUp'>
-                                    <TopUp />
-                                </Route>
-                                <Route path='/CategoryManagement'>
-                                    <CategoryManagement />
-                                </Route>
-                                <Route path='/Catalogue'>
-                                    <Catalogue />
-                                </Route>
-                                <Route path='/TopUpManagement'>
-                                    <TopUpManagement />
-                                </Route>
-                                <Route path='/SlideShowManagement'>
-                                    <SlideShowManagement />
-                                </Route>
-                                <Route path='/Payment/:invoiceId?'>
-                                    <Payment />
-                                </Route>
-                                <Route path='/Wishlist'>
-                                    <Wishlist/>
-                                </Route>
-                                <Route path='/PaymentDetail/:userId'>
-                                    <PaymentDetail />
-                                </Route>
-                                <Route path='/History'>
-                                    <History />
-                                </Route>
-                                <Route path='/usermanagement'>
-                                    <UserManagement />
-                                </Route>
-                                <Route path='/bookmanagement'>
-                                    <BookManagement />
-                                </Route>
-                                <Route path='/bookdetail/:bookId'>
-                                    <BookDetail />
-                                </Route>
-                                <Route path='/DetailInvoice/:invoiceId'>
-                                    <DetailInvoice />
-                                </Route>
-                                <Route path='/ReturnBook'>
-                                    <ReturnBook />
-                                </Route>
-                                <Route path='/CheckReturnBook'>
-                                    <CheckReturnBook />
-                                </Route>
-                                <Route path='/DonationManagement'>
-                                    <DonationManagement />
-                                </Route>
-                                <Route path='/LogManagement'>
-                                    <LogManagement />
-                                </Route>
-                            </Switch>
-                            <Footer />
-                    </Route>
-                </Switch>
-            </Router>
+                </Route>
+                <Route path='/'>
+                    <NavBar />
+                    <SideBar />
+                    <Switch>
+                        <PrivateRoute exact path='/'
+                            authenticated={this.state.isAuthenticated}
+                            component={Home}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Profile'
+                            authenticated={this.state.isAuthenticated}
+                            component={Profile}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/ChangePassword'
+                            authenticated={this.state.isAuthenticated}
+                            component={ChangePassword}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/AdminProfile'
+                            authenticated={this.state.isAuthenticated}
+                            component={AdminProfile}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Detail/:bookId'
+                            authenticated={this.state.isAuthenticated}
+                            component={Detail}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Search/:title'
+                            authenticated={this.state.isAuthenticated}
+                            component={Search}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/RentManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={RentManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Author'
+                            authenticated={this.state.isAuthenticated}
+                            component={Author}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/FineManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={FineManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/TopUp'
+                            authenticated={this.state.isAuthenticated}
+                            component={TopUp}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/CategoryManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={CategoryManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Catalogue'
+                            authenticated={this.state.isAuthenticated}
+                            component={Catalogue}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/TopUpManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={TopUpManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/SlideShowManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={SlideShowManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Payment/:invoiceId?'
+                            authenticated={this.state.isAuthenticated}
+                            component={Payment}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/Wishlist'
+                            authenticated={this.state.isAuthenticated}
+                            component={Wishlist}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/PaymentDetail/:userId'
+                            authenticated={this.state.isAuthenticated}
+                            component={PaymentDetail}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/History'
+                            authenticated={this.state.isAuthenticated}
+                            component={History}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/usermanagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={UserManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/bookmanagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={BookManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/bookdetail/:bookId'
+                            authenticated={this.state.isAuthenticated}
+                            component={BookDetail}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/DetailInvoice/:invoiceId'
+                            authenticated={this.state.isAuthenticated}
+                            component={DetailInvoice}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/ReturnBook'
+                            authenticated={this.state.isAuthenticated}
+                            component={ReturnBook}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/CheckReturnBook'
+                            authenticated={this.state.isAuthenticated}
+                            component={CheckReturnBook}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/DonationManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={DonationManagement}>
+                        </PrivateRoute>
+                        <PrivateRoute path='/LogManagement'
+                            authenticated={this.state.isAuthenticated}
+                            component={LogManagement}>
+                        </PrivateRoute>
+                    </Switch>
+                    <Footer />
+                </Route>
+            </Switch>
+        </Router>
         )
     }
 }

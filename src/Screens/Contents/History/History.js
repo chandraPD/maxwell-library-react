@@ -37,7 +37,6 @@ class History extends Component {
       this.setState({
         borroweddata: response.data.data
       })
-      console.log(this.state.borroweddata)
 
     })
 
@@ -50,7 +49,6 @@ class History extends Component {
       this.setState({
         currentreaddata: response.data.data
       })
-      console.log(this.state.currentreaddata)
 
     })
 
@@ -106,13 +104,14 @@ class History extends Component {
                       </div>
                       <div className="col-md-10">
                         <div className="btn-group">
-                          <button type="button" className="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                            View History
-                     </button>
-                          <div className="dropdown-menu">
-                            <button className="dropdown-item" href="#" onClick={() => this.displayBorrowedBooks()}>Borrowed</button>
-                            <button className="dropdown-item" href="#" onClick={() => this.displayCurrentRead()}>Current Read</button>
-                          </div>
+                          <button type="button" className="btn btn-warning" onClick={() => this.displayCurrentRead()}>
+                    Current Read
+                  </button>
+                  <button type="button" className="btn btn-warning" onClick={() => this.displayBorrowedBooks()}>
+                    Borrowed Book
+                  </button>
+                        
+                          
                         </div>
                       </div>
                     </div>

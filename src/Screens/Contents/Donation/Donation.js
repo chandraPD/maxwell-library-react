@@ -4,7 +4,7 @@ import photo1 from '../../../Assets/Media/books/donate2.jpg'
 import photo2 from '../../../Assets/Media/books/donate3.jpg'
 import Swal from 'sweetalert2'
 import Reactdom from 'react-dom'
-import axios from 'axios'
+import Axios from '../../../Instances/axios-instances'
 
 class Donation extends Component {
   constructor(props) {
@@ -46,11 +46,9 @@ class Donation extends Component {
           statusDonate : "waiting",
           phoneNumber : fields["PhoneNumber"]
         }
-        console.log(fields)
-        console.log(donate)
-        axios.post('http://localhost:8080/donate', donate)
+       
+        Axios.post('donate', donate)
              .then((response) => {
-               console.log(response)
              })
   
         Swal.fire({
@@ -120,14 +118,12 @@ class Donation extends Component {
                 />
                 <div className="card-body">
                   <h5 className="list-reason">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Donating Good Books Gives Them Extra Purpose
                   </h5>
                   <p className="card-text">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Voluptate exercitationem reiciendis ipsa? Nihil laborum
-                    recusandae, vero voluptate incidunt quas? Dolor ab enim
-                    exercitationem sit quam reiciendis officiis sed sapiente
-                    aspernatur.
+                    When you donate your books, you allow the opportunity to let those texts have new life. 
+                    Whether they end up in the hands of a young teen looking for an exciting new story to read, 
+                    or they become part of a collection on someone else’s shelf, donating your books expands their purpose and influence in a fascinating way.
                   </p>
                 </div>
               </div>
@@ -141,14 +137,13 @@ class Donation extends Component {
                 />
                 <div className="card-body">
                   <h5 className="list-reason">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                   You Can Support Your Local Library System
                   </h5>
                   <p className="card-text">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Voluptate exercitationem reiciendis ipsa? Nihil laborum
-                    recusandae, vero voluptate incidunt quas? Dolor ab enim
-                    exercitationem sit quam reiciendis officiis sed sapiente
-                    aspernatur.
+                  We collect these books in support of early childhood literacy, technology, education and other programs 
+                  that held at various libraries in our system. And for those that are rare collectibles or vintage books,
+                  we are happy to lend our rare collection that you can booked online via our website maxwell Library.
+                  Come join us!
                   </p>
                 </div>
               </div>
@@ -161,13 +156,13 @@ class Donation extends Component {
                   alt="donate3"
                 />
                 <div className="card-body">
-                  <h5 className="list-reason">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h5>
+                  <h5 className="list-reason">It’s Time for Spring Cleaning.</h5>
                   <p className="card-text">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Voluptate exercitationem reiciendis ipsa? Nihil laborum
-                    recusandae, vero voluptate incidunt quas? Dolor ab enim
-                    exercitationem sit quam reiciendis officiis sed sapiente
-                    aspernatur.
+                   Have a few (or a bunch) of great books sitting on a shelf?  
+                   Clear out the space by bringing in books by the box-load at our maxwell library!
+                   Or if you’re downsizing into a new home and don't have enough space to store all of your favorite books, 
+                   consider going through your book cases to see which ones you think others will love reading as much as you did.
+
                   </p>
                 </div>
               </div>

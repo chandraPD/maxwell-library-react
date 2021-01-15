@@ -39,7 +39,6 @@ class Profile extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(this.state);
   }
 
   handleAddFile(e) {
@@ -132,14 +131,12 @@ class Profile extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
   async getLogUser() {
       let fetchLogUser = await axios.get('log/get-log-user')
       this.setState({ dataLogUser : fetchLogUser.data});
-      console.log(this.state.dataLogUser);
   }
 
 

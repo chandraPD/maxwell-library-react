@@ -140,7 +140,6 @@ class PaymentInvoicePrint extends Component {
                 </thead>
                 <tbody>
                   {dataDetailInvoice.map((val, index) => {
-                    console.log(val);
                     return (
                       <tr key={index}>
                         <td className="text-nowrap">{index + 1}</td>
