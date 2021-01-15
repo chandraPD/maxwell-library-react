@@ -173,11 +173,7 @@ class Detail extends Component {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
-
-    if (!fields["description"]) {
-      formIsValid = false;
-      errors["description"] = "Description cannot be empty";
-    }
+   
 
     if (this.state.star == "") {
       formIsValid = false;
