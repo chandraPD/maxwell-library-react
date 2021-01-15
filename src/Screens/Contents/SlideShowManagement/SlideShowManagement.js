@@ -134,7 +134,7 @@ class SlideShowManagement extends Component {
     }
 
     //Image
-    if(this.state.img === ""){
+    if(this.state.uploadImage === ""){
       formIsValid = false;
       errors["slideshowImage"] = "Image cannot be empty"
     }
@@ -196,9 +196,8 @@ class SlideShowManagement extends Component {
               confirmButtonText: `OK`,
             }).then((result) => {
                 if(result.isConfirmed) {
-                  this.resetModal();
                   this.fetchData();
-                  
+                  this.resetModal();
                 }
               });
             })
@@ -297,7 +296,7 @@ class SlideShowManagement extends Component {
         this.fetchData();
       })
   }
-  //METHOD Perubahan Inputan di SlideShow
+  //METHOD Perubahan Inputan di SlideShow (edit modal)
   slideShowChange = (event) => {
       this.setState({
         [event.target.name] : event.target.value
@@ -449,12 +448,12 @@ class SlideShowManagement extends Component {
                   <label for="addSlideshowImg">Choose Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="img" onChange={this.handleUploadImage}
+                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="slideshowImage" onChange={this.handleUploadImage}
                       value={this.state.fields["slideshowImage"]}/>
                       <label class="custom-file-label" for="exampleInputFile" style={{overflow : "hidden"}}>{this.state.chooseFile}</label>                   
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
+                  
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
                   </span>
