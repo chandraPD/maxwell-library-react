@@ -9,6 +9,7 @@ import $ from 'jquery'
 import "datatables.net-responsive/js/dataTables.responsive"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 import moment from 'moment'
+import NumberFormat from 'react-number-format';
 class RentManagement extends Component {
 
     constructor() {
@@ -80,6 +81,10 @@ class RentManagement extends Component {
         }
     }
 
+    formatRupiah = (nilai) => {
+        return <NumberFormat value={nilai} displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />
+    }
+
     async fetchData() {
         const results = [];
         var no = 1;
@@ -104,13 +109,15 @@ class RentManagement extends Component {
                         statusVal = <Status type="primary" val="Waiting Given By Librarian" />
 
                     } else if (rent.statusBook === "Waiting For Return") {
+                        const now = moment().format();
                         actVal = "-";
-                        statusVal = <Status type="info" val="Waiting For Return" />
-                    } else if (rent.statusBook === "Need Immediate Returns") {
-                        actVal = "-";
-                        statusVal = <Status type="orange" val="Need Immediate Returns" />
+                        if (now <= rent.threshold) {
+                            statusVal = <Status type="info" val="Waiting For Return" />
+                        } else {
+                            statusVal = <Status type="orange" val="Need Immediate Returns" />
+                        }
                     } else if (rent.statusBook === "Waiting Taken By Librarian") {
-                            actVal = "-";
+                        actVal = "-";
                         statusVal = <Status type="primary" val="Waiting Taken By Librarian" />
                     } else if (rent.statusBook === "Waiting for Payment of Fines") {
                         if (this.state.role === "ROLE_USER") {
@@ -139,18 +146,16 @@ class RentManagement extends Component {
                         // nothing
                     }
                     row.push(<td>{rent.bookDetailCode}</td>);
-                    row.push(<td>{rent.title}</td>);
-                    row.push(<td>{rent.givenBy}</td>);
+                    row.push(<td className="text-center text-nowrap" >{rent.title}</td>);
+                    row.push(<td className="text-center text-nowrap" >{rent.givenBy}</td>);
                     row.push(<td className="text-center text-nowrap">{this.convertToDate(rent.borrowedDate)}</td>);
                     row.push(<td className="text-center text-nowrap">{this.convertToDate(rent.threshold)}</td>);
                     row.push(<td className="text-center text-nowrap">{this.convertToDate(rent.returnedDate)}</td>);
-                    row.push(<td className="text-center" >{rent.takenBy}</td>);
-                    row.push(<td>{rent.grandTotal}</td>);
-                    row.push(<td className="text-center" >{statusVal}</td>);
+                    row.push(<td className="text-center text-nowrap" >{rent.takenBy}</td>);
+                    row.push(<td className="text-center text-nowrap" >{this.formatRupiah(rent.grandTotal)}</td>);
+                    row.push(<td className="text-center text-nowrap" >{statusVal}</td>);
                     results.push(row);
                 });
-                console.log(results);
-                console.log(this.state.headings);
                 this.setState({ rows: results });
 
                 $("#example1").DataTable({
@@ -190,7 +195,7 @@ class RentManagement extends Component {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Rent Management</li>
                                 </ol>
                             </div>

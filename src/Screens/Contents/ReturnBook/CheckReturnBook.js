@@ -81,13 +81,13 @@ class CheckReturnBook extends Component {
     deleteRow = (e) => {
         this.setState((prevState) => ({
             borrowBooks: prevState.borrowBooks.filter((_, i) => i !== e),
-        }), console.log(this.state.borrowBooks))
+        }))
     }
 
     removeRow = (index, e) => {
         let borrowBooks = [...this.state.borrowBooks]
         borrowBooks[e.target.dataset.id].denda = borrowBooks[e.target.dataset.id].denda.filter((_, i) => i !== index);
-        this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+        this.setState({ borrowBooks })
     }
 
     addRowDenda = (e) => {
@@ -96,12 +96,11 @@ class CheckReturnBook extends Component {
             type: "",
             total: ""
         };
-        console.log(borrowBooks[e].denda);
         if (borrowBooks[e].denda.length == 0) {
             Swal.fire('Ups..', "Harap memilih buku terlebih dahulu", 'warning')
         } else {
             borrowBooks[e].denda = [...borrowBooks[e].denda, detailInvoice];
-            this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+            this.setState({ borrowBooks })
         }
 
     }
@@ -116,7 +115,7 @@ class CheckReturnBook extends Component {
                 // sudah pernah ada
                 borrowBooks[e.target.dataset.id].denda = [];
                 borrowBooks[e.target.dataset.id].borrowBookId = "";
-                this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+                this.setState({ borrowBooks })
                 e.target.value = "";
                 Swal.fire('Ups..', "Tidak boleh memilih buku yang sama", 'warning')
             } else {
@@ -151,11 +150,11 @@ class CheckReturnBook extends Component {
                         borrowBooks[e.target.dataset.id].denda = [...borrowBooks[e.target.dataset.id].denda, detailInvoice];
                     }
                     borrowBooks[e.target.dataset.id].borrowBookId = e.target.value;
-                    this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+                    this.setState({ borrowBooks })
                 } else {
                     borrowBooks[e.target.dataset.id].denda = [];
                     borrowBooks[e.target.dataset.id].borrowBookId = "";
-                    this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+                    this.setState({ borrowBooks })
                 }
             }
         } else if (["form-control borrower"].includes(e.target.className)) { // jika yang dipilih select borrower nya
@@ -165,7 +164,6 @@ class CheckReturnBook extends Component {
                 listBook: [],
                 borrowBooks: [{ borrowBookId: "", denda: [] }],
             })
-            console.log(e.target.value);
             if (e.target.value !== "") {
                 this.getListBorrowedBookByUserId(e.target.value);
             }
@@ -177,7 +175,7 @@ class CheckReturnBook extends Component {
 
             borrowBooks[e.target.dataset.id].denda[e.target.dataset.index][e.target.dataset.name] = e.target.value;
 
-            this.setState({ borrowBooks }, () => console.log(this.state.borrowBooks))
+            this.setState({ borrowBooks })
 
         } else {
             this.setState({ [e.target.name]: e.target.value });
@@ -212,7 +210,6 @@ class CheckReturnBook extends Component {
     printListDetail = (index) => {
         let data = this.state.borrowBooks[index].denda;
         if (data != undefined) {
-            console.log(data);
             return <div className="return-book-list-detail">
                 {data.map((val, i) => {
                     if (i === 0) {
@@ -238,7 +235,7 @@ class CheckReturnBook extends Component {
                                 <input type="text" className="form-control" name="late_by[]" value={val.lateBy} readOnly />
                             </div>
                             <div className="form-group col-sm-2">
-                                <span>Estimated Cost</span>
+                                <span>Cost</span>
                                 <input type="text" className="form-control" name="fine[]" value={val.fine} readOnly />
                             </div>
                         </div>
@@ -251,7 +248,7 @@ class CheckReturnBook extends Component {
                             </div>
                             <div className="form-group col-sm-5">
                                 <span>Cost</span>
-                                <input type="text" data-id={index} data-index={i} data-name="total" className="form-control cost" name="cost[]" />
+                                <input type="number" data-id={index} data-index={i} data-name="total" className="form-control cost" name="cost[]" />
                             </div>
                             <div className="form-group col-sm-2">
                                 <button type="button" className="btn bg-gradient-danger" data-id={index} value="remove" onClick={(e) => this.removeRow(i, e)}>Remove</button>

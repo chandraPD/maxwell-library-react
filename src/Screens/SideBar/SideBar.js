@@ -126,7 +126,7 @@ export default class SideBar extends Component {
                     <Link to="Profile" className="d-block user-name">{this.state.name}</Link>
                     <p style={{ fontSize: '1.3rem', fontWeight: 'normal', marginBottom: 0, color: '#000' }}>{this.formatRupiah(this.state.balance)}</p>
                     <p className="p-role">{this.state.role2}</p>
-                    {show ? <Link onClick={() => window.location.href = "/TopUp"} className="btn btn-sm btn-primary" style={{ color: 'white' }}>
+                    {show ? <Link to="" onClick={() => window.location.href = "/TopUp"} className="btn btn-sm btn-primary" style={{ color: 'white' }}>
                       <i style={{ color: 'white' }} className="fas fa-plus-square" /> &nbsp; Top Up
               </Link> : null}
                   </div>
