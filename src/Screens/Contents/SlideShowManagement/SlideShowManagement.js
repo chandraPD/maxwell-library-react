@@ -33,7 +33,6 @@ class SlideShowManagement extends Component {
     $('#example1').DataTable().destroy();
     await Axios.get('slideshow/get-all-slideshow')
       .then((fetchedData)=> { 
-        console.log(fetchedData);
         const resultSlideShow = fetchedData.data;
         this.setState({ data : resultSlideShow });
         const results = [];
@@ -108,7 +107,6 @@ class SlideShowManagement extends Component {
 
     Axios.post('slideshow/add-slideshow', slideshow)
       .then((response) => {
-        console.log(response)
       })
    
     $('#example1').DataTable({
@@ -136,7 +134,7 @@ class SlideShowManagement extends Component {
     }
 
     //Image
-    if(this.state.img === ""){
+    if(this.state.uploadImage === ""){
       formIsValid = false;
       errors["slideshowImage"] = "Image cannot be empty"
     }
@@ -181,18 +179,9 @@ class SlideShowManagement extends Component {
         subTitle : fields["slideshowSubTitle"],
         img : this.state.uploadImage
       }
-      console.log(slideshow)
-
-      let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
-      console.log(userToken);
-
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
-      Axios.post('slideshow/add-slideshow', slideshow, config)
+     
+      Axios.post('slideshow/add-slideshow', slideshow)
           .then((response) => {
-            console.log(response);
             $('.modal-backdrop').remove();
             Swal.fire({
               icon: 'success',
@@ -201,9 +190,8 @@ class SlideShowManagement extends Component {
               confirmButtonText: `OK`,
             }).then((result) => {
                 if(result.isConfirmed) {
-                  this.resetModal();
                   this.fetchData();
-                  
+                  this.resetModal();
                 }
               });
             })
@@ -216,7 +204,6 @@ class SlideShowManagement extends Component {
           confirmButtonText: `OK`
         }).then((result) => {
             if(result.isConfirmed) {
-              console.log(result);
             }
         })
 
@@ -226,17 +213,9 @@ class SlideShowManagement extends Component {
 
   //METHOD UNTUK GET-BY-ID
   getSlideShowById = (id) => {
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    console.log(userToken);
-
-    const config = {
-      headers : { Authorization : `Bearer ${userToken}`}
-    }
-
-    Axios.get('slideshow/get-slideshow-byId/' + id, config)
+  
+    Axios.get('slideshow/get-slideshow-byId/' + id)
       .then((response) => {
-        console.log(response);
         this.setState({
           slideShowId : response.data.data.slideShowId,
           title : response.data.data.title,
@@ -254,20 +233,11 @@ class SlideShowManagement extends Component {
       subTitle : this.state.subTitle,
       img : this.state.uploadImage
     }
-    console.log(slideshow.img);
 
-    let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
-      console.log(userToken);
-
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
 
     if(this.handleUpdateValidation()){
-      Axios.put('slideshow/update-slideshow/' + id, slideshow, config)
+      Axios.put('slideshow/update-slideshow/' + id, slideshow)
       .then((response) => {
-        console.log(response);
         $("#modal-edit").modal("toggle");
         $('.modal-backdrop').remove();
     });
@@ -289,7 +259,6 @@ class SlideShowManagement extends Component {
           confirmButtonText: `OK`
         }).then((result) => {
             if(result.isConfirmed) {
-              console.log(result);
         }
       });
     }
@@ -298,20 +267,13 @@ class SlideShowManagement extends Component {
 
   //METHOD DELETE DATA
   deleteDataSlideShow = (id) => {
-      let user = JSON.parse(localStorage.getItem('user'))
-      const userToken = user.token;
-      console.log(userToken);
-
-      const config = {
-        headers : { Authorization : `Bearer ${userToken}`}
-      }
-    Axios.delete('slideshow/delete-data-slideshow/'+ id, config)
+     
+    Axios.delete('slideshow/delete-data-slideshow/'+ id)
       .then((response) => {
-        console.log(response);
         this.fetchData();
       })
   }
-  //METHOD Perubahan Inputan di SlideShow
+  //METHOD Perubahan Inputan di SlideShow (edit modal)
   slideShowChange = (event) => {
       this.setState({
         [event.target.name] : event.target.value
@@ -326,22 +288,11 @@ class SlideShowManagement extends Component {
 
    // SAVE STATUS ACTIVE OR INACTIVE
   handleDropdownChange = (id, event) => {
-    
-    let user = JSON.parse( localStorage.getItem('user'))
-    const userToken = user.token;
-    console.log(userToken);
 
-    console.log(id);
-    
     const status = event.target.value;
-    console.log(status);
-    const config = {
-      headers : { Authorization : `Bearer ${userToken}`}
-    }
-
-    Axios.put(`slideshow/update-status/${id}/${status}`,null, config)
+  
+    Axios.put(`slideshow/update-status/${id}/${status}`)
     .then((response) => {
-      console.log(response);
       this.fetchData();
     })
 
@@ -353,10 +304,8 @@ class SlideShowManagement extends Component {
     this.setState({
       chooseFile : file.name
     });
-    console.log(file);
 
     const reader = new FileReader();
-    console.log(reader);
     reader.readAsDataURL(file);
     reader.onload = e => {
       let base64Image = e.target.result;
@@ -366,7 +315,6 @@ class SlideShowManagement extends Component {
         //setState dalam bentuk Base64
         uploadImage : base64ImageStrip
       });
-      // console.log(this.state.uploadImage);
       
     }
   }
@@ -401,8 +349,8 @@ class SlideShowManagement extends Component {
               <div className="col-sm-6"><h3>Slide Show Management</h3></div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><Link to="/index">Home</Link></li>
-                  <li className="breadcrumb-item active">Slideshow</li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                  <li className="breadcrumb-item active">Slide Show</li>
                 </ol>
               </div>
             </div>
@@ -469,12 +417,12 @@ class SlideShowManagement extends Component {
                   <label for="addSlideshowImg">Choose Image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="img" onChange={this.handleUploadImage}
+                      <input type="file" accept="image/*" class="custom-file-input" id="addSlideshowImg" name="slideshowImage" onChange={this.handleUploadImage}
                       value={this.state.fields["slideshowImage"]}/>
                       <label class="custom-file-label" for="exampleInputFile" style={{overflow : "hidden"}}>{this.state.chooseFile}</label>                   
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
+                  
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
                   </span>
@@ -532,7 +480,6 @@ class SlideShowManagement extends Component {
                       <label class="custom-file-label" for="exampleInputFile" style={{ overflow : "hidden"}}>{this.state.img}</label>
                     </div>
                   </div>
-                  <span class="text-danger">Minimum size is 300x100 px</span> <br/>
                   <span style={{ color: "red" }}>
                         {this.state.errors["slideshowImage"]}
                   </span>

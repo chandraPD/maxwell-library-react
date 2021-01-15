@@ -20,7 +20,8 @@ function Dates(e) {
   return (
 
     <>
-      <DatePicker
+      <DatePicker 
+      className="form-control w-100"
         selected={startDate}
         onChange={onChangeStart}
         selectsStart
@@ -29,18 +30,19 @@ function Dates(e) {
         minDate={new Date()}
         maxDate={addDays(new Date(), 5)}
         timeInputLabel="Time:"
-        placeholderText="Select a date between today and 5 days in the future"
+        placeholderText="Date Borrow"
         showTimeInput
         dateFormat="MMMM d, yyyy h:mm aa"
       />
       <DatePicker
+      className="form-control"
         selected={endDate}
         onChange={onChangeEnd}
         endDate={endDate}
         minDate={startDate}
         maxDate={addDays(new Date(), 5)}
         timeInputLabel="Time:"
-        placeholderText="Select a date between today and 5 days in the future"
+        placeholderText="Date Return"
         showTimeInput
         dateFormat="MMMM d, yyyy h:mm aa"
         selectsEnd
