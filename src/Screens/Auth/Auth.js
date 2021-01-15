@@ -15,8 +15,8 @@ class Auth extends Component {
     this.handleForgotPass = this.handleForgotPass.bind(this)
 
     this.state = {
-       fields: {},
-       errors: {}
+      fields: {},
+      errors: {}
     }
   }
 
@@ -26,47 +26,47 @@ class Auth extends Component {
     let formIsValid = true;
 
     //firstname
-    if(!fields["firstNameSignUp"]) {
+    if (!fields["firstNameSignUp"]) {
       formIsValid = false
       errors["firstNameSignUp"] = "Cannot be empty"
     }
 
-     //lastname
-     if(!fields["lastNameSignUp"]) {
+    //lastname
+    if (!fields["lastNameSignUp"]) {
       formIsValid = false
       errors["lastNameSignUp"] = "Cannot be empty"
     }
 
     //email
-    if(!fields["emailSignUp"]) {
+    if (!fields["emailSignUp"]) {
       formIsValid = false
       errors["emailSignUp"] = "Cannot be empty"
     }
 
-    if(typeof fields["emailSignUp"] !== "undefined") {
+    if (typeof fields["emailSignUp"] !== "undefined") {
       let lastAtPos = fields["emailSignUp"].lastIndexOf('@')
       let lastDotPos = fields["emailSignUp"].lastIndexOf('.')
 
-      if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailSignUp"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailSignUp"].length - lastDotPos) > 2)) {
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailSignUp"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailSignUp"].length - lastDotPos) > 2)) {
         formIsValid = false;
         errors["emailSignUp"] = "Email is not valid"
       }
     }
 
-    if(fields["PasswordSignUp"] != null) {
+    if (fields["PasswordSignUp"] != null) {
       let lengthPass = fields["PasswordSignUp"].length
-      if(lengthPass < 8) {
+      if (lengthPass < 8) {
         formIsValid = false
         errors["PasswordSignUp"] = "Your password must be at least 8 characters long"
       }
     }
 
-    if(!fields["PasswordSignUp"]) {
+    if (!fields["PasswordSignUp"]) {
       formIsValid = false
       errors["PasswordSignUp"] = "Password cannot be empty"
     }
 
-    this.setState({errors: errors})
+    this.setState({ errors: errors })
     return formIsValid
   }
 
@@ -76,27 +76,27 @@ class Auth extends Component {
     let formIsValid = true;
 
     //email
-    if(!fields["emailSignIn"]) {
+    if (!fields["emailSignIn"]) {
       formIsValid = false
       errors["emailSignIn"] = "Email cannot be empty"
     }
 
-    if(typeof fields["emailSignIn"] !== "undefined") {
+    if (typeof fields["emailSignIn"] !== "undefined") {
       let lastAtPos = fields["emailSignIn"].lastIndexOf('@')
       let lastDotPos = fields["emailSignIn"].lastIndexOf('.')
 
-      if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailSignIn"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailSignIn"].length - lastDotPos) > 2)) {
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailSignIn"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailSignIn"].length - lastDotPos) > 2)) {
         formIsValid = false;
         errors["emailSignIn"] = "Email is not valid"
       }
     }
 
-    if(!fields["PasswordSignIn"]) {
+    if (!fields["PasswordSignIn"]) {
       formIsValid = false
       errors["PasswordSignIn"] = "Password cannot be empty"
     }
 
-    this.setState({errors: errors})
+    this.setState({ errors: errors })
     return formIsValid
   }
 
@@ -106,29 +106,29 @@ class Auth extends Component {
     let formIsValid = true;
 
     //email
-    if(!fields["emailForgotPass"]) {
+    if (!fields["emailForgotPass"]) {
       formIsValid = false
       errors["emailForgotPass"] = "Cannot be empty"
     }
 
-    if(typeof fields["emailForgotPass"] !== "undefined") {
+    if (typeof fields["emailForgotPass"] !== "undefined") {
       let lastAtPos = fields["emailForgotPass"].lastIndexOf('@')
       let lastDotPos = fields["emailForgotPass"].lastIndexOf('.')
 
-      if(!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailForgotPass"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailForgotPass"].length - lastDotPos) > 2)) {
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["emailForgotPass"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["emailForgotPass"].length - lastDotPos) > 2)) {
         formIsValid = false;
         errors["emailForgotPass"] = "Email is not valid"
       }
     }
 
-    this.setState({errors: errors})
+    this.setState({ errors: errors })
     return formIsValid
   }
 
   contactSubmitSignUp(e) {
     e.preventDefault()
 
-    if(this.handleValidationSignUp()){
+    if (this.handleValidationSignUp()) {
       alert("Success!")
     } else {
 
@@ -138,7 +138,7 @@ class Auth extends Component {
   contactSubmitSignIn(e) {
     e.preventDefault()
 
-    if(this.handleValidationSignIn()){
+    if (this.handleValidationSignIn()) {
       this.props.history.push('/')
     } else {
 
@@ -148,30 +148,30 @@ class Auth extends Component {
   handleChangeSignUp(field, e) {
     let fields = this.state.fields
     fields[field] = e.target.value
-    this.setState({fields})
+    this.setState({ fields })
   }
 
   handleChangeSignIn(field, e) {
     let fields = this.state.fields
     fields[field] = e.target.value
-    this.setState({fields})
+    this.setState({ fields })
   }
 
   handleChangeForgotPass(field, e) {
     let fields = this.state.fields
     fields[field] = e.target.value
-    this.setState({fields})
+    this.setState({ fields })
   }
 
 
   displaySignUp() {
-      var login = document.getElementById("login")
-      var register = document.getElementById("register")
-      var forgotPassword = document.getElementById("forgotPassword")
+    var login = document.getElementById("login")
+    var register = document.getElementById("register")
+    var forgotPassword = document.getElementById("forgotPassword")
 
-      login.style.display = "none"
-      register.style.display = "block"
-      forgotPassword.style.display = "none"
+    login.style.display = "none"
+    register.style.display = "block"
+    forgotPassword.style.display = "none"
   }
 
   displayLogIn() {
@@ -198,31 +198,31 @@ class Auth extends Component {
     e.preventDefault()
 
     let email = {
-      email : this.state.fields["emailForgotPass"]
+      email: this.state.fields["emailForgotPass"]
     }
 
     if (this.handleValidationForgotPass()) {
       axios.post('user/password/forgot', email)
-      .then( () => {
-        Swal.fire({
+        .then(() => {
+          Swal.fire({
 
-          icon: 'success',
-          title: 'Email sent!',
-          showCancelButton: false,
-          text: 'email sent to ' + email.email,
+            icon: 'success',
+            title: 'Email sent!',
+            showCancelButton: false,
+            text: 'email sent to ' + email.email,
           }).then((result) => {
 
-          if (result.isConfirmed) {
-          window.location.reload()
-          }
+            if (result.isConfirmed) {
+              window.location.reload()
+            }
           })
-      }
-      )
-      .catch((error) => Swal.fire(
-        'Failed !',
-        'Email is not registered',
-        'error'
-    ))
+        }
+        )
+        .catch((error) => Swal.fire(
+          'Failed !',
+          'Email is not registered',
+          'error'
+        ))
     }
   }
 
@@ -230,14 +230,14 @@ class Auth extends Component {
   handleRegister(e) {
     e.preventDefault()
 
-     let firstName = this.state.fields["firstNameSignUp"]
-     let lastName = this.state.fields["lastNameSignUp"]
-     let email = this.state.fields["emailSignUp"]
-     let password = this.state.fields["PasswordSignUp"]
-     let confirmPassword = this.state.fields["ConfirmPasswordSignUp"]
+    let firstName = this.state.fields["firstNameSignUp"]
+    let lastName = this.state.fields["lastNameSignUp"]
+    let email = this.state.fields["emailSignUp"]
+    let password = this.state.fields["PasswordSignUp"]
+    let confirmPassword = this.state.fields["ConfirmPasswordSignUp"]
 
     if (this.handleValidationSignUp()) {
-    	AuthService.register(firstName, lastName, email, password, confirmPassword).then(
+      AuthService.register(firstName, lastName, email, password, confirmPassword).then(
         () => {
           Swal.fire({
 
@@ -245,41 +245,41 @@ class Auth extends Component {
             title: 'Register Success!',
             showCancelButton: false,
             text: 'Please continue to login',
-            }).then((result) => {
+          }).then((result) => {
 
             if (result.isConfirmed) {
-            window.location.reload()
+              window.location.reload()
             }
-            })
+          })
         }
       )
-      .catch(error => Swal.fire(
-        'Register Failed !',
-        'Either email is taken or password is incorrect',
-        'error'
-    ))
-  }
-      this.handleValidationSignUp()
+        .catch(error => Swal.fire(
+          'Register Failed !',
+          'Either email is taken or password is incorrect',
+          'error'
+        ))
+    }
+    this.handleValidationSignUp()
   }
 
   handleLogin(e) {
     e.preventDefault()
 
-    if(this.handleValidationSignIn()){
+    if (this.handleValidationSignIn()) {
       let email = this.state.fields["emailSignIn"]
       let password = this.state.fields["PasswordSignIn"]
 
 
-    AuthService.login(email, password).then(
-      () => {
-        this.props.history.push("/");
-        window.location.reload();
-      }
-    ).catch(error => Swal.fire(
-      'Login Failed !',
-      'Either email or password is incorrect',
-      'error'
-  ))
+      AuthService.login(email, password).then(
+        () => {
+          this.props.history.push("/");
+          window.location.reload();
+        }
+      ).catch(error => Swal.fire(
+        'Login Failed !',
+        'Either email or password is incorrect',
+        'error'
+      ))
     } else {
 
     }
@@ -328,7 +328,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignIn.bind(this, "emailSignIn")}
                         value={this.state.fields["emailSignIn"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignIn"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["emailSignIn"]}</span>
                     </div>
                     <div className="login form-group bottom-label">
                       <label
@@ -346,7 +346,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignIn.bind(this, "PasswordSignIn")}
                         value={this.state.fields["PasswordSignIn"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignIn"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["PasswordSignIn"]}</span>
                     </div>
                   </div>
                   <div className="pass-manager">
@@ -400,7 +400,7 @@ class Auth extends Component {
 
                     <div className="login form-group bottom-label">
                       <label for="firstName" className="label-login">
-                       First Name
+                        First Name
                       </label>
                       <input
                         type="text"
@@ -412,12 +412,12 @@ class Auth extends Component {
                         onChange={this.handleChangeSignUp.bind(this, "firstNameSignUp")}
                         value={this.state.fields["firstNameSignUp"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["firstNameSignUp"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["firstNameSignUp"]}</span>
                     </div>
 
                     <div className="login form-group bottom-label">
                       <label for="lastname" className="label-login">
-                       Last Name
+                        Last Name
                       </label>
                       <input
                         type="text"
@@ -429,7 +429,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignUp.bind(this, "lastNameSignUp")}
                         value={this.state.fields["lastNameSignUp"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["lastNameSignUp"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["lastNameSignUp"]}</span>
                     </div>
 
                     <div className="login form-group bottom-label">
@@ -446,7 +446,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignUp.bind(this, "emailSignUp")}
                         value={this.state.fields["emailSignUp"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailSignUp"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["emailSignUp"]}</span>
                     </div>
                     <div className="login form-group bottom-label">
                       <label for="inputPassword" className="label-login">
@@ -461,7 +461,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignUp.bind(this, "PasswordSignUp")}
                         value={this.state.fields["PasswordSignUp"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignUp"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["PasswordSignUp"]}</span>
                     </div>
                     <div className="login form-group bottom-label">
                       <label for="inputPassword" className="label-login">
@@ -476,7 +476,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignUp.bind(this, "ConfirmPasswordSignUp")}
                         value={this.state.fields["ConfirmPasswordSignUp"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["PasswordSignUp"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["PasswordSignUp"]}</span>
                     </div>
                   </div>
                   <div className="container-btn">
@@ -524,7 +524,7 @@ class Auth extends Component {
                         onChange={this.handleChangeSignUp.bind(this, "emailForgotPass")}
                         value={this.state.fields["emailForgotPass"]}
                       />
-                      <span style={{color: "red", marginLeft: "15px", fontSize: "13px"}}>{this.state.errors["emailForgotPass"]}</span>
+                      <span style={{ color: "red", marginLeft: "15px", fontSize: "13px" }}>{this.state.errors["emailForgotPass"]}</span>
                     </div>
                   </div>
                   <div className="container-btn">
@@ -549,10 +549,21 @@ class Auth extends Component {
                 </form>
               </div>
 
-              <p className="terms">
-                By signing up, you agree to Book’s <br />
+
+              <div className="row">
+                <div className="col-sm-8" >
+                  <p className="terms">
+                    By signing up, you agree to Book’s <br />
                 Terms and Conditions & Privacy Policy
               </p>
+
+                </div>
+                <div className="col-sm-4">
+                  <Link
+                  to="/Donation"
+                   ><font color="brown" >Want to Donate Books??? Click Me ^_^</font></Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
